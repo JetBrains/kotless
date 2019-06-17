@@ -1,0 +1,37 @@
+# Kotless roadmap
+
+## 0.1.0 - UNRELEASED
+* (+) Explicitly declared permissions, e.g. `@S3Bucket(bucket = "my_bucket", mode = Mode.Read`
+    * (+) Works for functions, classes and objects
+    * (+) Taken from routes and global actions (like `LambdaWarming`,
+          `LambdaInit` and so on)
+* (+) `LambdaWarming` sequences - functions to execute each warming cycle
+* (+) `LambdaInit` sequences - functions to execute on initialization of lambda
+* (+) `HttpRequestInterceptor` - interceptors for HTTP requests, maybe chained
+* (+) Possibility to extend serialization and deserialization
+* (+) Links built-in support -- base links and links with parameters
+* Create separate Terraform DSL
+
+## 0.1.*
+* Extension for Cognito authentication
+* DSL libraries for S3, DynamoDB, SSM at least
+* Event handlers - functions as handlers for different AWS events
+
+## 0.2.*
+* IDEA plugin
+    * Inspections on permissions granting - detect usage of AWS SDK functions that are
+      not permitted explicitly
+    * Deployed functions logs - possibility to attach IDEA console to CloudWatch log of
+      specific lambda
+
+## To discuss
+* Implicit permissions flow - possibility to deduce permissions from AWS SDK functions
+  only.
+
+## Later plans
+* Async calls of other lambdas via `async { ... }`. Other lambda will be 
+  generated from body of `async` function.
+* Async batch calls of other lambdas via `asyncBatching(list, max = N) { ... }`.
+ Will use FireHose to batch passed elements from different calls of lambda into
+ N elements packs and pass them to body for batch execution.
+* Implementation of Kotlin/Native and Kotlin/JS dispatchers

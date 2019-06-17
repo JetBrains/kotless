@@ -1,0 +1,7 @@
+.idea
+.terraform
+out
+build
+.gradle
+*.iml
+gradle.properties
