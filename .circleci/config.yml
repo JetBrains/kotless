@@ -7,8 +7,6 @@ jobs:
     steps:
       - checkout
       - run: ./gradlew build
-      - store:
-          path: build
   release:
     docker:
       - image: circleci/openjdk:8-jdk
