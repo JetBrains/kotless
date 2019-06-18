@@ -105,10 +105,8 @@ Kotless is in active development, so we are working on extending this list with 
 
 ## Want to know more?
 
-You may take a look at the `docs` folder with the client documentation on Kotless.
+You may take a look at [Wiki](https://github.com/JetBrains/kotless/wiki) where the client documentation on Kotless is located.
 
-Apart from that, Kotless code itself is widely documented, and you can take a look into its interfaces 
-to get to know Kotless better. 
+Apart from that, Kotless code itself is widely documented, and you can take a look into its interfaces to get to know Kotless better. 
 
-If you still have questions that we weren't able to answer in this README, feel free to contact us at your
-convenience!
+If you still have questions that we weren't able to answer in this README, feel free to contact us at your convenience!
