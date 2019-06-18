@@ -1,16 +1,5 @@
 # Kotless roadmap
 
-## 0.1.0 - UNRELEASED
-* (+) Explicitly declared permissions, e.g. `@S3Bucket(bucket = "my_bucket", mode = Mode.Read`
-    * (+) Works for functions, classes and objects
-    * (+) Taken from routes and global actions (like `LambdaWarming`,
-          `LambdaInit` and so on)
-* (+) `LambdaWarming` sequences - functions to execute each warming cycle
-* (+) `LambdaInit` sequences - functions to execute on initialization of lambda
-* (+) `HttpRequestInterceptor` - interceptors for HTTP requests, maybe chained
-* (+) Possibility to extend serialization and deserialization
-* (+) Links built-in support -- base links and links with parameters
-
 ## 0.1.*
 * Create separate Terraform DSL
 * Extension for Cognito authentication
