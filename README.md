@@ -22,7 +22,15 @@ Basically, if you already use Gradle, you will only need to do two things.
 
 Firstly, add Kotless DSL as a library to your application:
 
-`compile("io.kotless", "lang", "0.1.0-SNAPSHOT")`
+```kotlin
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile("io.kotless", "lang", "0.1.0")
+}
+```
 
 It will give you access to Kotless DSL annotations in your code and will set up Lambda dispatcher inside of your application.
 
@@ -30,7 +38,7 @@ Secondly, set up Kotless Gradle plugin. You will need to apply the plugin:
 
 ```kotlin
 plugins {
-    id("io.kotless") version "0.1.0-SNAPSHOT" apply true
+    id("io.kotless") version "0.1.0" apply true
 }
 ```
 
