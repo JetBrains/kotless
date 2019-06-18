@@ -1,7 +1,6 @@
 # Kotless
 
 [![JetBrains incubator project](https://jb.gg/badges/incubator-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-
 [![CircleCI](https://circleci.com/gh/JetBrains/kotless.svg?style=svg)](https://circleci.com/gh/JetBrains/kotless)
 
 Kotless stands for Kotlin serverless framework. 

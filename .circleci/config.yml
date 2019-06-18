@@ -14,22 +14,18 @@ jobs:
     steps:
       - checkout
       - run: ./gradlew bintrayUpload
-
 workflows:
   version: 2
-  build-test-and-release:
+  build:
+    jobs:
+      - build
+  release:
     jobs:
       - build
       - approve-release:
           type: approval
           requires:
             - build
-          filters:
-            branches:
-              only: master
       - release:
           requires:
             - approve-release
-          filters:
-            branches:
-              only: master
