@@ -28,7 +28,7 @@ class TfLambdaApiGatewayPermission(tfName: String, lambda: TfLambda, restApi: Tf
         |    source_arn = "$sourceArn"
         """
 
-    override val group = io.kotless.engine.terraform.synthesizer.TfGroup.Lambda
+    override val group = TfGroup.Lambda
 }
 
 /**

@@ -16,20 +16,20 @@ import kotlin.collections.HashSet
 object TfSynthesizer {
     data class TfFile(val name: String, val content: String)
 
-    fun synthesize(): List<TfSynthesizer.TfFile> {
+    fun synthesize(): List<TfFile> {
         val entitiesByGroup = TfEntity.instantiatedEntities.values.groupBy { it.group }
 
         val sortedEntitiesByGroup = entitiesByGroup.map { (group, entities) ->
-            group to TfSynthesizer.sortTopEntities(group, entities)
+            group to sortTopEntities(group, entities)
         }
 
-        return sortedEntitiesByGroup.map { TfSynthesizer.TfFile(it.first.name.toTfName() + ".tf", it.second.joinToString(separator = "\n\n") { it.render() }) }
+        return sortedEntitiesByGroup.map { TfFile(it.first.name.toTfName() + ".tf", it.second.joinToString(separator = "\n\n") { it.render() }) }
     }
 
     /** Topological sorting of tf resources in a file. */
     private fun sortTopEntities(tfGroup: TfGroup, entities: List<TfEntity>): List<TfEntity> {
-        val groups = TfSynthesizer.getConnectedGroups(entities)
-        val sortedGroups = groups.map { TfSynthesizer.topSort(it) }.map { tfGroup.resort(it) }
+        val groups = getConnectedGroups(entities)
+        val sortedGroups = groups.map { topSort(it) }.map { tfGroup.resort(it) }
         return sortedGroups.flatten()
     }
 
@@ -97,7 +97,7 @@ object TfSynthesizer {
         var zeroQueue: MutableList<TfEntity> = ArrayList()
 
         val usesEntities = entities.map { it to it.uses.filter { it in entities }.toMutableList() }.toMap().toMutableMap()
-        val usedEntities = TfSynthesizer.usedByTransClosure(entities)
+        val usedEntities = usedByTransClosure(entities)
 
         usesEntities.filter { it.value.isEmpty() && !(zeroQueue.contains(it.key) || resultList.contains(it.key)) }.forEach {
             zeroQueue.add(it.key)

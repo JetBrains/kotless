@@ -1,11 +1,15 @@
 package io.kotless.engine
 
 import io.kotless.*
+import io.kotless.Webapp.ApiGateway.DynamicRoute
+import io.kotless.Webapp.ApiGateway.StaticRoute
 import io.kotless.engine.optimization.LambdaMergeOptimization
 import io.kotless.engine.template.LambdaWarmer
 import io.kotless.engine.terraform.TfEntity
 import io.kotless.engine.terraform.aws.acm.TfAcmCertificateData
+import io.kotless.engine.terraform.aws.apigateway.*
 import io.kotless.engine.terraform.aws.data.AwsInformation
+import io.kotless.engine.terraform.aws.iam.*
 import io.kotless.engine.terraform.aws.infra.TfAwsProvider
 import io.kotless.engine.terraform.aws.infra.TfConfig
 import io.kotless.engine.terraform.aws.lambda.TfLambda
@@ -14,13 +18,6 @@ import io.kotless.engine.terraform.aws.route53.TfRoute53ZoneData
 import io.kotless.engine.terraform.aws.s3.TfS3BucketData
 import io.kotless.engine.terraform.aws.s3.TfS3Object
 import io.kotless.engine.terraform.synthesizer.TfSynthesizer
-import io.kotless.Webapp.ApiGateway.DynamicRoute
-import io.kotless.Webapp.ApiGateway.StaticRoute
-import io.kotless.engine.optimization.LambdaMergeOptimization.cleanup
-import io.kotless.engine.terraform.TfEntity.Companion.cleanup
-import io.kotless.engine.terraform.aws.apigateway.*
-import io.kotless.engine.terraform.aws.data.AwsInformation.cleanup
-import io.kotless.engine.terraform.aws.iam.*
 import io.kotless.engine.terraform.synthesizer.TfSynthesizer.TfFile
 import io.kotless.engine.terraform.utils.*
 import java.io.File

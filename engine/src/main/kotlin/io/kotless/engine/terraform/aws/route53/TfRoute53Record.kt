@@ -13,7 +13,7 @@ import io.kotless.engine.terraform.utils.tf
 class TfRoute53Record(tfName: String, name: String, zone: TfRoute53ZoneData,
                       type: String,
                       records: List<String>? = null,
-                      aliases: List<TfRoute53Record.AliasRecord>? = null) : TfResource("aws_route53_record", tfName) {
+                      aliases: List<AliasRecord>? = null) : TfResource("aws_route53_record", tfName) {
     data class AliasRecord(val name: TfFieldValue, val zoneId: TfFieldValue, val evaluateTargetHealth: Boolean = false)
 
     override val resourceDef: String = """

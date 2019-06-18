@@ -9,7 +9,7 @@ import io.kotless.engine.terraform.synthesizer.TfGroup
  *
  * @see <a href="https://www.terraform.io/docs/providers/aws/d/iam_policy_document.html">aws_iam_policy_document</a>
  */
-class TfPolicyDocument(tfName: String, statements: Set<TfPolicyDocument.Statement>) : TfData("aws_iam_policy_document", tfName) {
+class TfPolicyDocument(tfName: String, statements: Set<Statement>) : TfData("aws_iam_policy_document", tfName) {
     val json = "$tfFullName.json"
 
     data class Principals(val identifiers: List<String>, val type: String) {
@@ -22,7 +22,7 @@ class TfPolicyDocument(tfName: String, statements: Set<TfPolicyDocument.Statemen
     }
 
     data class Statement(val effect: String, val sid: String? = null,
-                         val principals: Set<TfPolicyDocument.Principals>? = null, val resources: Set<String>? = null,
+                         val principals: Set<Principals>? = null, val resources: Set<String>? = null,
                          val actions: Set<String>) {
         fun render() = """
         |    statement {

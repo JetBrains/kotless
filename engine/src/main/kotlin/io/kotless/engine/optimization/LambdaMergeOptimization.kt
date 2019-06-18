@@ -36,16 +36,16 @@ object LambdaMergeOptimization {
      * @param level -- level of merge optimization
      * @return list of MergedLambda
      */
-    fun merge(lambdas: LinkedHashSet<Lambda>, level: Optimization.MergeLambda): List<io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda> = when (level) {
-        Optimization.MergeLambda.None -> lambdas.map { io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda(it, level, linkedSetOf(it)) }
+    fun merge(lambdas: LinkedHashSet<Lambda>, level: Optimization.MergeLambda): List<MergedLambda> = when (level) {
+        Optimization.MergeLambda.None -> lambdas.map { MergedLambda(it, level, linkedSetOf(it)) }
         Optimization.MergeLambda.PerPermissions -> {
             lambdas.groupBy { listOf(it.config, it.entrypoint, it.file, it.permissions) }.map {
                 if (it.value.size > 1) {
                     val fst = it.value.first()
-                    val merged = Lambda("merged_${io.kotless.engine.optimization.LambdaMergeOptimization.globalMergeIndex++}", fst.file, fst.entrypoint, fst.config, fst.permissions)
-                    io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda(merged, level, LinkedHashSet(it.value))
+                    val merged = Lambda("merged_${globalMergeIndex++}", fst.file, fst.entrypoint, fst.config, fst.permissions)
+                    MergedLambda(merged, level, LinkedHashSet(it.value))
                 } else {
-                    io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda(it.value.single(), level, linkedSetOf(it.value.single()))
+                    MergedLambda(it.value.single(), level, linkedSetOf(it.value.single()))
                 }
             }
         }
@@ -54,16 +54,16 @@ object LambdaMergeOptimization {
                 if (it.value.size > 1) {
                     val fst = it.value.first()
                     val mergedPermissions = it.value.flatMap { it.permissions }.toSet()
-                    val merged = Lambda("merged_${io.kotless.engine.optimization.LambdaMergeOptimization.globalMergeIndex++}", fst.file, fst.entrypoint, fst.config, mergedPermissions)
-                    io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda(merged, level, LinkedHashSet(it.value))
+                    val merged = Lambda("merged_${globalMergeIndex++}", fst.file, fst.entrypoint, fst.config, mergedPermissions)
+                    MergedLambda(merged, level, LinkedHashSet(it.value))
                 } else {
-                    io.kotless.engine.optimization.LambdaMergeOptimization.MergedLambda(it.value.single(), level, linkedSetOf(it.value.single()))
+                    MergedLambda(it.value.single(), level, linkedSetOf(it.value.single()))
                 }
             }
         }
     }
 
     fun cleanup() {
-        io.kotless.engine.optimization.LambdaMergeOptimization.globalMergeIndex = 0
+        globalMergeIndex = 0
     }
 }

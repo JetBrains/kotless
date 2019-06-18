@@ -11,7 +11,7 @@ import io.kotless.engine.terraform.utils.tf
  *
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/lambda_function.html">aws_lambda_function</a>
  */
-class TfLambda(tfName: String, val awsName: String, runtime: TfLambda.LambdaRuntime,
+class TfLambda(tfName: String, val awsName: String, runtime: LambdaRuntime,
                s3Object: TfS3Object, role: TfRole) : TfResource("aws_lambda_function", tfName) {
 
     val arn = "$tfFullName.arn"

@@ -8,8 +8,8 @@ import io.kotless.engine.terraform.utils.filterBlankLines
  * Each instantiated terraform entity is added into `instantiatedEntities`
  * static val and will be rendered by `TfSynthesizer`.
  */
-abstract class TfEntity(type: TfEntity.EntityType, tfType: String, tfName: String) {
-    val descriptor = TfEntity.TfDescriptor(type, tfType, tfName)
+abstract class TfEntity(type: EntityType, tfType: String, tfName: String) {
+    val descriptor = TfDescriptor(type, tfType, tfName)
 
     /** Name with type -- (data.)?aws_*.name */
     val tfFullName = descriptor.fullName
@@ -24,20 +24,20 @@ abstract class TfEntity(type: TfEntity.EntityType, tfType: String, tfName: Strin
     }
 
 
-    data class TfDescriptor(val type: TfEntity.EntityType, val tfType: String, val tfName: String) {
+    data class TfDescriptor(val type: EntityType, val tfType: String, val tfName: String) {
         val fullType = when (type) {
-            TfEntity.EntityType.data -> "data.$tfType"
-            TfEntity.EntityType.resource -> tfType
+            EntityType.data -> "data.$tfType"
+            EntityType.resource -> tfType
         }
 
         val fullName = "$fullType.$tfName"
 
         companion object {
-            operator fun invoke(fullName: String): TfEntity.TfDescriptor {
+            operator fun invoke(fullName: String): TfDescriptor {
                 return if (fullName.startsWith("data")) {
-                    TfEntity.TfDescriptor(TfEntity.EntityType.data, fullName.split(".")[1], fullName.split(".")[2])
+                    TfDescriptor(EntityType.data, fullName.split(".")[1], fullName.split(".")[2])
                 } else {
-                    TfEntity.TfDescriptor(TfEntity.EntityType.resource, fullName.split(".")[0], fullName.split(".")[1])
+                    TfDescriptor(EntityType.resource, fullName.split(".")[0], fullName.split(".")[1])
                 }
             }
         }
@@ -46,18 +46,18 @@ abstract class TfEntity(type: TfEntity.EntityType, tfType: String, tfName: Strin
     companion object {
         var resourcePrefix = ""
 
-        val instantiatedEntities = HashMap<TfEntity.TfDescriptor, TfEntity>()
+        val instantiatedEntities = HashMap<TfDescriptor, TfEntity>()
 
-        operator fun get(descriptor: TfEntity.TfDescriptor) = TfEntity.Companion.instantiatedEntities[descriptor]
+        operator fun get(descriptor: TfDescriptor) = TfEntity.instantiatedEntities[descriptor]
 
         fun cleanup() {
-            TfEntity.Companion.instantiatedEntities.clear()
-            TfEntity.Companion.resourcePrefix = ""
+            TfEntity.instantiatedEntities.clear()
+            TfEntity.resourcePrefix = ""
         }
     }
 
     init {
-        TfEntity.Companion.instantiatedEntities[this.descriptor] = this
+        TfEntity.instantiatedEntities[this.descriptor] = this
     }
 
     /** Optional comment for this entity */
@@ -91,7 +91,7 @@ abstract class TfEntity(type: TfEntity.EntityType, tfType: String, tfName: Strin
 }
 
 /** Representation of terraform resource. Based on TfEntity */
-abstract class TfResource(tfType: String, tfName: String) : TfEntity(TfEntity.EntityType.resource, tfType, tfName) {
+abstract class TfResource(tfType: String, tfName: String) : TfEntity(EntityType.resource, tfType, tfName) {
     val dependsOn = HashSet<TfResource>()
 
     abstract val resourceDef: String
@@ -104,7 +104,7 @@ abstract class TfResource(tfType: String, tfName: String) : TfEntity(TfEntity.En
 }
 
 /** Representation of terraform data. Based on TfEntity */
-abstract class TfData(tfType: String, tfName: String) : TfEntity(TfEntity.EntityType.data, tfType, tfName) {
+abstract class TfData(tfType: String, tfName: String) : TfEntity(EntityType.data, tfType, tfName) {
     abstract val dataDef: String
 
     override val body: String

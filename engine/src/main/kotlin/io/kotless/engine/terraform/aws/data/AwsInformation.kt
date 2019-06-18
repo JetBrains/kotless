@@ -42,13 +42,13 @@ object AwsInformation {
     @Suppress("ObjectPropertyName")
     private var _tfAccount: TfAwsCallerIdentity? = null
     val tfAccount: TfAwsCallerIdentity
-        get() = AwsInformation._tfAccount ?: run {
-            AwsInformation._tfAccount = TfAwsCallerIdentity("current")
-            AwsInformation._tfAccount!!
+        get() = _tfAccount ?: run {
+            _tfAccount = TfAwsCallerIdentity("current")
+            _tfAccount!!
         }
 
     fun cleanup() {
-        AwsInformation._tfAccount = null
+        _tfAccount = null
         _tfRegion = null
     }
 }

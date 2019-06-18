@@ -37,14 +37,14 @@ internal class LambdaHandler {
             logger.info("Started handling request")
             logger.debug("Request is {}", jsonRequest)
 
-            io.kotless.dsl.Application.init()
+            Application.init()
 
             if (jsonRequest.contains("Scheduled Event")) {
                 try {
                     val map = Json.parse(CloudWatch.serializer(), jsonRequest)
                     if (map.`detail-type` == "Scheduled Event" && map.source == "aws.events") {
                         logger.info("Request is Scheduled Event for Warming sequence")
-                        io.kotless.dsl.Application.startWarmingSequence()
+                        Application.startWarmingSequence()
                         return
                     }
                 } catch (e: Exception) {

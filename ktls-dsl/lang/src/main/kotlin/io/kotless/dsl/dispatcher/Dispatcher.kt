@@ -51,7 +51,7 @@ internal object Dispatcher {
         logger.info("Route returned result")
         return when (result) {
             is HttpResponse -> result
-            else -> okResponse(result?.let { ConversionService.convertTo(it) }, resourceKey.mimeType)
+            else -> okResponse(result?.toString(), resourceKey.mimeType)
         }
     }
 }
