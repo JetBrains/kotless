@@ -13,7 +13,7 @@ jobs:
     working_directory: ~
     steps:
       - checkout
-      - run: ./gradlew bintrayUpload
+      - run: ./gradlew bintrayUpload publishPlugins
 workflows:
   version: 2
   build:

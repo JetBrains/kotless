@@ -8,6 +8,13 @@ publishPlugin {
     displayName = "kotless"
     implementationClass = "io.kotless.plugin.gradle.KotlessPlugin"
     version = project.version.toString()
+
+    info {
+        website = "https://github.com/JetBrains/kotless"
+        vcsUrl = "https://github.com/JetBrains/kotless"
+        description = "Kotlin Serverless Framework"
+        tags.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
+    }
 }
 
 dependencies {
