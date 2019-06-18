@@ -10,9 +10,9 @@
 * (+) `HttpRequestInterceptor` - interceptors for HTTP requests, maybe chained
 * (+) Possibility to extend serialization and deserialization
 * (+) Links built-in support -- base links and links with parameters
-* Create separate Terraform DSL
 
 ## 0.1.*
+* Create separate Terraform DSL
 * Extension for Cognito authentication
 * DSL libraries for S3, DynamoDB, SSM at least
 * Event handlers - functions as handlers for different AWS events

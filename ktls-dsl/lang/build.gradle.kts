@@ -1,3 +1,5 @@
+import tanvd.kosogor.proxy.publishJar
+
 group = rootProject.group
 version = rootProject.version
 
@@ -30,3 +32,17 @@ dependencies {
     compile("log4j", "log4j", "1.2.17")
     compile("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
 }
+
+publishJar {
+    bintray {
+        username = "tanvd"
+        repository = "io.kotless"
+        info {
+            description = "Kotless DSL"
+            githubRepo = "https://github.com/JetBrains/kotless"
+            vcsUrl = "https://github.com/JetBrains/kotless"
+            labels.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
+        }
+    }
+}
+
