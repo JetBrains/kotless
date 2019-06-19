@@ -1,0 +1,86 @@
+body {
+    padding-top: 5rem;
+}
+
+.input-group {
+    margin-bottom: 1em;
+}
+
+.img-label {
+    width: 2.5rem;
+    margin-right: 1rem;
+}
+
+.doc p, .doc li {
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.doc kbd {
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: 300;
+    display: inline-block;
+}
+
+.doc h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.doc h2, .doc h3, .doc h4, .doc h5 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+
+.landing h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+
+.landing h2, .landing h3, .landing h4, .landing h5 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+
+
+.landing p {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+
+.landing .landing-card p.landing-card-header {
+    text-align: left;
+    font-weight: lighter;
+    font-size: 2em;
+}
+
+.landing .landing-card p {
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+
+pre {
+    background: #F0F0F0;
+    border: 1px solid #ddd;
+    border-left: 3px solid #f36d33;
+    color: #666;
+    page-break-inside: avoid;
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 0.5em 1em;
+    display: block;
+    word-wrap: break-word;
+}

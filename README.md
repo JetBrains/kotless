@@ -113,6 +113,13 @@ Kotless is in active development, so we are working on extending this list with 
   (already implemented, but postponed for now).
 * Events handlers support - Kotless will generate events subscriptions for properly annotated events handlers.
 
+## Examples
+
+There is no better than an example!
+
+At an `examples` folder of repository you can find real world projects using Kotless:
+    * `ktls-site` - site about Kotless written using Kotless (see the result at [kotless.sandbox.intellij.net](https://kotless.sandbox.intellij.net)). 
+
 ## Want to know more?
 
 You may take a look at [Wiki](https://github.com/JetBrains/kotless/wiki) where the client documentation on Kotless is located.
