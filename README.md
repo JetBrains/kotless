@@ -118,7 +118,7 @@ Kotless is in active development, so we are working on extending this list with 
 There is no better than an example!
 
 At an `examples` folder of repository you can find real world projects using Kotless:
-    * `ktls-site` - site about Kotless written using Kotless (see the result at [kotless.sandbox.intellij.net](https://kotless.sandbox.intellij.net)). 
+* `ktls-site` - site about Kotless written using Kotless (see the result at [kotless.sandbox.intellij.net](https://kotless.sandbox.intellij.net)). 
 
 ## Want to know more?
 
