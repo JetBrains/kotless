@@ -7,8 +7,6 @@ import io.kotless.dsl.lang.http.Post
 import io.kotless.parser.utils.buildSet
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.filter.*
-import io.kotless.parser.utils.psi.filter.gatherAllExpressions
-import io.kotless.parser.utils.psi.filter.gatherNamedFunctions
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File

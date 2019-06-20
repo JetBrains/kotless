@@ -5,7 +5,6 @@ import io.kotless.dsl.events.HttpRequest
 import io.kotless.dsl.events.HttpResponse
 import io.kotless.dsl.lang.KotlessContext
 import io.kotless.dsl.lang.http.*
-import io.kotless.dsl.lang.http.okResponse
 import io.kotless.dsl.reflection.FunctionCaller
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory

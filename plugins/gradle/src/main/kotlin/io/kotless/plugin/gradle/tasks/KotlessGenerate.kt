@@ -1,13 +1,12 @@
 package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
-import io.kotless.plugin.gradle.dsl.*
-import io.kotless.plugin.gradle.dsl.toSchema
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
 import io.kotless.parser.KotlessDslParser
+import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils._ktSourceSet
 import io.kotless.plugin.gradle.utils._shadowJar
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.*
 import java.io.File
 
 /**

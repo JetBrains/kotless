@@ -4,8 +4,6 @@ import io.kotless.*
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.utils.buildSet
 import io.kotless.parser.utils.psi.annotation.*
-import io.kotless.parser.utils.psi.annotation.getAnnotations
-import io.kotless.parser.utils.psi.annotation.isAnnotatedWith
 import io.kotless.parser.utils.psi.filter.gatherStaticObjects
 import io.kotless.parser.utils.psi.filter.gatherVariables
 import org.jetbrains.kotlin.psi.KtCallExpression

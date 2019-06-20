@@ -6,7 +6,6 @@ import io.kotless.MimeType
 import io.kotless.dsl.dispatcher.Dispatcher
 import io.kotless.dsl.dispatcher.RouteKey
 import io.kotless.dsl.events.*
-import io.kotless.dsl.events.CloudWatch
 import io.kotless.dsl.lang.http.serverError
 import io.kotless.dsl.utils.Json
 import org.slf4j.LoggerFactory

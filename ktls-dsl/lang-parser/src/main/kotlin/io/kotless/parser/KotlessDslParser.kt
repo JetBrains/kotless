@@ -1,9 +1,7 @@
 package io.kotless.parser
 
 import io.kotless.*
-import io.kotless.parser.processor.DynamicRoutesProcessor
-import io.kotless.parser.processor.GlobalActionsProcessor
-import io.kotless.parser.processor.StaticRoutesProcessor
+import io.kotless.parser.processor.*
 import io.kotless.parser.utils.psi.analysis.AnalysisUtils
 import io.kotless.parser.utils.psi.analysis.EnvironmentManager
 import org.jetbrains.kotlin.psi.KtFile

@@ -50,5 +50,5 @@ data class HttpResponse(
         /** Payload of response */
         val body: String?
 ) {
-    constructor(statusCode: Int, mime: MimeType, body: String? = null): this(statusCode, hashMapOf("Content-Type" to mime.mimeText), body)
+    constructor(statusCode: Int, mime: MimeType, body: String? = null) : this(statusCode, hashMapOf("Content-Type" to mime.mimeText), body)
 }

@@ -1,12 +1,10 @@
 package io.kotless.parser.processor
 
-import io.kotless.parser.utils.buildSet
 import io.kotless.AwsResource
 import io.kotless.Permission
 import io.kotless.dsl.lang.*
+import io.kotless.parser.utils.buildSet
 import io.kotless.parser.utils.psi.annotation.*
-import io.kotless.parser.utils.psi.annotation.getAnnotations
-import io.kotless.parser.utils.psi.annotation.getValue
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.resolve.BindingContext
 

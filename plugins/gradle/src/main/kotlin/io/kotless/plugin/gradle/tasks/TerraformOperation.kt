@@ -1,9 +1,9 @@
 package io.kotless.plugin.gradle.tasks
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.*
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.CommandLine
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.*
 import java.io.File
 
 /**

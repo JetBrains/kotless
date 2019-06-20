@@ -6,7 +6,6 @@ import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.lang.http.HttpRequestInterceptor
 import io.kotless.parser.utils.buildSet
 import io.kotless.parser.utils.psi.filter.*
-import io.kotless.parser.utils.psi.filter.gatherAllExpressions
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 

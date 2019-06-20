@@ -1,10 +1,10 @@
 package io.kotless.plugin.gradle
 
 import io.kotless.plugin.gradle.tasks.*
-import org.gradle.api.Plugin
-import org.gradle.api.Project
 import io.kotless.plugin.gradle.utils._create
 import io.kotless.plugin.gradle.utils.applyPluginSafely
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 /**
  * Implementation of Kotless plugin

@@ -1,9 +1,9 @@
 package io.kotless.plugin.gradle.dsl
 
-import org.gradle.api.Project
+import io.kotless.KotlessConfig.Optimization.MergeLambda
 import io.kotless.plugin.gradle.utils._ext
 import io.kotless.plugin.gradle.utils.ext
-import io.kotless.KotlessConfig.Optimization.MergeLambda
+import org.gradle.api.Project
 import java.io.File
 import java.io.Serializable
 

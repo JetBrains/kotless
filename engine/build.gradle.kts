@@ -5,6 +5,7 @@ version = rootProject.version
 
 dependencies {
     compile(kotlin("stdlib"))
+    compile(kotlin("reflect"))
     compile(project(":schema"))
 }
 
