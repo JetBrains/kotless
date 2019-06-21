@@ -126,4 +126,6 @@ You may take a look at [Wiki](https://github.com/JetBrains/kotless/wiki) where t
 
 Apart from that, Kotless code itself is widely documented, and you can take a look into its interfaces to get to know Kotless better. 
 
+You may ask questions and participate in discussions in `#kotless` channel in [KotlinLang slack](http://slack.kotlinlang.org).
+
 If you still have questions that we weren't able to answer in this README, feel free to contact us at your convenience!
