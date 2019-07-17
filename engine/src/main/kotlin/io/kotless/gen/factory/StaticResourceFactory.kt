@@ -11,6 +11,7 @@ object StaticResourceFactory : KotlessFactory<StaticResource> {
             bucket = entity.bucket
             key = entity.path.toString()
             source = entity.content.absolutePath
+            etag = "md5(file(\"${entity.content.absolutePath}\"))"
             content_type = entity.mime.mimeText
         }
 

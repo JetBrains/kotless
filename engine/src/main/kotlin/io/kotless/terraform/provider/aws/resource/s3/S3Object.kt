@@ -12,6 +12,7 @@ class S3Object(id: String) : TFResource(id, "aws_s3_bucket_object") {
     var bucket by text()
     var key by text()
     var source by text()
+    var etag by text()
     var content_type by text()
 }
 
