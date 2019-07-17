@@ -9,6 +9,8 @@ import io.kotless.terraform.TFResource
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/lambda_function.html">aws_lambda_function</a>
  */
 class LambdaFunction(id: String) : TFResource(id, "aws_lambda_function") {
+    val arn by text(inner = true)
+
     var function_name by text()
     var role by text()
 

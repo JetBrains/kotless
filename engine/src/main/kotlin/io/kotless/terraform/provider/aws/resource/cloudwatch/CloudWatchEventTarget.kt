@@ -9,7 +9,7 @@ import io.kotless.terraform.TFResource
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_target.html">aws_cloudwatch_event_target</a>
  */
 class CloudWatchEventTarget(id: String) : TFResource(id, "aws_cloudwatch_event_target") {
-    val rule by text()
+    var rule by text()
     var arn by text()
 }
 
