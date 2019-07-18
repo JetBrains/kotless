@@ -15,7 +15,7 @@ class ApiGatewayDeployment(id: String) : TFResource(id, "aws_api_gateway_deploym
     var rest_api_id by text()
     var stage_name by text()
 
-    val variables by entity<HCLEntity>(default = HCLEntity())
+    var variables by entity<HCLEntity>(default = HCLEntity())
 
     class Lifecycle(configure: Lifecycle.() -> Unit = {}) : HCLEntity() {
         init {

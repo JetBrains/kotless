@@ -14,6 +14,7 @@ object StaticResourceFactory : KotlessFactory<StaticResource, Unit> {
             content_type = entity.mime.mimeText
         }
 
+        context.registerOutput(entity, Unit)
         context.registerEntities(obj)
     }
 }

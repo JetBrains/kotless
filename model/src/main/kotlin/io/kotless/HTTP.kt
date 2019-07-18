@@ -24,5 +24,5 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean) {
     JSON("application/json", false),
     XML("application/xml", false),
     ZIP("application/zip", true),
-    GZIP("application/gzip", true)
+    GZIP("application/gzip", true);
 }

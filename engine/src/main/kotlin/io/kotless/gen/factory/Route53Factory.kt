@@ -29,6 +29,7 @@ object Route53Factory : KotlessFactory<Webapp.Route53, Unit> {
             }
         }
 
+        context.registerOutput(entity, Unit)
         context.registerEntities(cert, zone, record)
     }
 }

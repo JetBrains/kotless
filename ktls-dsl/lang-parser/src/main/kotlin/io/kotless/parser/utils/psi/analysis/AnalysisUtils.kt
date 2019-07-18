@@ -20,7 +20,8 @@ internal object AnalysisUtils {
     fun analyzeFiles(files: Set<KtFile>, environment: KotlinCoreEnvironment): BindingContext {
         val trace = CliBindingTrace()
         val configuration = environment.configuration
-        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true)
+        //TODO-tanvd Should fix?
+//        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true)
 
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
                 environment.project,
