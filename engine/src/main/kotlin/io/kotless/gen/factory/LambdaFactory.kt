@@ -2,14 +2,15 @@ package io.kotless.gen.factory
 
 import io.kotless.Lambda
 import io.kotless.gen.*
-import io.kotless.hcl.HCLNamed
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_rule
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
-object LambdaFactory : KotlessFactory<Lambda> {
-    override fun get(entity: Lambda, context: KotlessGenerationContext): Set<HCLNamed> {
+object LambdaFactory : KotlessFactory<Lambda, LambdaFactory.LambdaOutput> {
+    data class LambdaOutput(val lambda_arn: String)
+
+    override fun get(entity: Lambda, context: KotlessGenerationContext) {
         val obj = s3_object(Names.tf(entity.name)) {
             bucket = context.schema.kotlessConfig.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
@@ -47,6 +48,7 @@ object LambdaFactory : KotlessFactory<Lambda> {
             setOf(eventRule, target)
         } else emptySet()
 
-        return setOf(obj, lambda) + autowarm
+        context.registerOutput(entity, LambdaOutput(lambda.arn))
+        context.registerEntities(setOf(obj, lambda) + autowarm)
     }
 }

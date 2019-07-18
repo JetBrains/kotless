@@ -2,14 +2,13 @@ package io.kotless.gen.factory
 
 import io.kotless.Webapp
 import io.kotless.gen.*
-import io.kotless.hcl.HCLNamed
 import io.kotless.terraform.provider.aws.data.acm.acm_certificate
 import io.kotless.terraform.provider.aws.data.route53.route53_zone
 import io.kotless.terraform.provider.aws.resource.route53.Route53Record
 import io.kotless.terraform.provider.aws.resource.route53.route53_record
 
-object Route53Factory : KotlessFactory<Webapp.Route53> {
-    override fun get(entity: Webapp.Route53, context: KotlessGenerationContext): Set<HCLNamed> {
+object Route53Factory : KotlessFactory<Webapp.Route53, Unit> {
+    override fun get(entity: Webapp.Route53, context: KotlessGenerationContext) {
         val cert = acm_certificate(Names.tf(entity.certificate)) {
             domain = entity.certificate
             statuses = arrayOf("ISSUED")
@@ -30,6 +29,6 @@ object Route53Factory : KotlessFactory<Webapp.Route53> {
             }
         }
 
-        return setOf(cert, zone, record)
+        context.registerEntities(cert, zone, record)
     }
 }
