@@ -2,6 +2,8 @@ package io.kotless.gen.factory
 
 import io.kotless.StaticResource
 import io.kotless.gen.*
+import io.kotless.terraform.functions.file
+import io.kotless.terraform.functions.md5
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
 object StaticResourceFactory : KotlessFactory<StaticResource, Unit> {
@@ -10,7 +12,7 @@ object StaticResourceFactory : KotlessFactory<StaticResource, Unit> {
             bucket = entity.bucket
             key = entity.path.toString()
             source = entity.content.absolutePath
-            etag = "md5(file(\"${entity.content.absolutePath}\"))"
+            etag = md5(file((entity.content)))
             content_type = entity.mime.mimeText
         }
 

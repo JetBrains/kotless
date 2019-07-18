@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.*
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
-import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext

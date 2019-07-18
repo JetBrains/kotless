@@ -2,6 +2,8 @@ package io.kotless.gen.factory
 
 import io.kotless.Lambda
 import io.kotless.gen.*
+import io.kotless.terraform.functions.base64sha256
+import io.kotless.terraform.functions.file
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_rule
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
@@ -29,7 +31,7 @@ object LambdaFactory : KotlessFactory<Lambda, LambdaFactory.LambdaOutput> {
             memory_size = entity.config.memoryMb
             timeout = entity.config.timeoutSec
 
-            source_code_hash = "base64sha256(file(${obj.source}))"
+            source_code_hash = base64sha256(file(obj.source))
 
             //add here role
         }

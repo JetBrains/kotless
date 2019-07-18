@@ -1,6 +1,5 @@
 package io.kotless.dsl.dispatcher
 
-import io.kotless.dsl.conversion.ConversionService
 import io.kotless.dsl.events.HttpRequest
 import io.kotless.dsl.events.HttpResponse
 import io.kotless.dsl.lang.KotlessContext

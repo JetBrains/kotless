@@ -1,10 +1,11 @@
 package io.kotless.gen.factory
 
-import io.kotless.*
+import io.kotless.Schema
+import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.hcl.HCLEntity
+import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_rest_api
 
 object DeploymentFactory : KotlessFactory<Webapp.ApiGateway.Deployment, Unit> {
     override fun get(entity: Webapp.ApiGateway.Deployment, context: KotlessGenerationContext) {
@@ -13,7 +14,7 @@ object DeploymentFactory : KotlessFactory<Webapp.ApiGateway.Deployment, Unit> {
             stage_name = entity.version
 
             variables = object : HCLEntity() {
-                val deployed_at by text(default = "timestamp()")
+                val deployed_at by text(default = timestamp())
             }
         }
 
