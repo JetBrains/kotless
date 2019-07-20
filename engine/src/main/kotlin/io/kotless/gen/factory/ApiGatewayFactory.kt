@@ -7,7 +7,7 @@ import io.kotless.terraform.provider.aws.resource.route53.Route53Record
 import io.kotless.terraform.provider.aws.resource.route53.route53_record
 
 object ApiGatewayFactory : KotlessFactory<Webapp.ApiGateway, ApiGatewayFactory.ApiGatewayOutput> {
-    data class ApiGatewayOutput(val rest_api_arn: String)
+    data class ApiGatewayOutput(val rest_api_arn: String, val root_resource_id: String)
 
     override fun get(entity: Webapp.ApiGateway, context: KotlessGenerationContext) {
         val route53Entity = entity.route53(context.schema)
@@ -43,7 +43,7 @@ object ApiGatewayFactory : KotlessFactory<Webapp.ApiGateway, ApiGatewayFactory.A
             }
         }
 
-        context.registerOutput(entity, ApiGatewayOutput(restApi.arn))
+        context.registerOutput(entity, ApiGatewayOutput(restApi.arn, restApi.root_resource_id))
         context.registerEntities(restApi, domain, basePath, record)
     }
 
