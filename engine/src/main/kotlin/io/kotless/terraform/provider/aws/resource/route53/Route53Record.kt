@@ -20,9 +20,9 @@ class Route53Record(id: String) : TFResource(id, "aws_route53_record") {
             configure()
         }
 
-        val name by text()
-        val zone_id by text()
-        val evaluate_target_health by bool()
+        var name by text()
+        var zone_id by text()
+        var evaluate_target_health by bool()
     }
 
     var alias by entity(default = Alias())

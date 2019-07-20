@@ -7,7 +7,9 @@ import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
 
-object DeploymentFactory : KotlessFactory<Webapp.ApiGateway.Deployment, Unit> {
+object DeploymentFactory : KotlessFactory<Webapp.ApiGateway.Deployment, DeploymentFactory.DeploymentOutput> {
+    data class DeploymentOutput(val stage_name: String)
+
     override fun get(entity: Webapp.ApiGateway.Deployment, context: KotlessGenerationContext) {
         val deployment = api_gateway_deployment(Names.tf(entity.name)) {
             rest_api_id = context.get(entity.restApi(context.schema), ApiGatewayFactory).rest_api_arn
@@ -19,7 +21,7 @@ object DeploymentFactory : KotlessFactory<Webapp.ApiGateway.Deployment, Unit> {
         }
 
         context.registerEntities(deployment)
-        context.registerOutput(entity, Unit)
+        context.registerOutput(entity, DeploymentOutput(deployment.stage_name))
     }
 
     private fun Webapp.ApiGateway.Deployment.restApi(schema: Schema) = schema.webapps.find { it.api.deployment == this }!!.api
