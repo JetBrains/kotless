@@ -1,7 +1,6 @@
 package io.kotless.gen.factory.resource.static
 
 import io.kotless.StaticResource
-import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.resource.s3.s3_object

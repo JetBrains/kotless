@@ -31,5 +31,5 @@ data class GenerationContext(val schema: Schema, val webapp: Webapp,
         return outputs[factory to input] as Output
     }
 
-    inline fun <reified T: HCLNamed> find(filter: (T) -> Boolean) = entities.mapNotNull { it as? T }.filter(filter)
+    inline fun <reified T : HCLNamed> find(filter: (T) -> Boolean) = entities.mapNotNull { it as? T }.filter(filter)
 }
