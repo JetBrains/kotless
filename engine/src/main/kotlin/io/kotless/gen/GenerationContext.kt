@@ -2,21 +2,21 @@ package io.kotless.gen
 
 import io.kotless.Schema
 import io.kotless.Webapp
-import io.kotless.hcl.HCLNamed
+import io.kotless.hcl.HCLEntity
 
 
 data class GenerationContext(val schema: Schema, val webapp: Webapp,
                              private val outputs: HashMap<Pair<GenerationFactory<*, *>, Any>, Any> = HashMap(),
-                             val entities: HashSet<HCLNamed> = HashSet()) {
+                             val entities: HashSet<HCLEntity> = HashSet()) {
     fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> registerOutput(factory: Factory, input: Input, output: Output) {
         outputs[factory to input] = output
     }
 
-    fun registerEntities(entities: Iterable<HCLNamed>) {
+    fun registerEntities(entities: Iterable<HCLEntity>) {
         this.entities.addAll(entities)
     }
 
-    fun registerEntities(vararg entities: HCLNamed) {
+    fun registerEntities(vararg entities: HCLEntity) {
         registerEntities(entities.toList())
     }
 
@@ -30,6 +30,4 @@ data class GenerationContext(val schema: Schema, val webapp: Webapp,
         @Suppress("UNCHECKED_CAST")
         return outputs[factory to input] as Output
     }
-
-    inline fun <reified T : HCLNamed> find(filter: (T) -> Boolean) = entities.mapNotNull { it as? T }.filter(filter)
 }

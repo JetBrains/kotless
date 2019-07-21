@@ -15,14 +15,14 @@ data class KotlessConfig(
         /** Terraform configuration used by Kotless */
         val terraform: Terraform,
         /** Optimizations considered during generation of code */
-        val optimization: Optimization = Optimization()) {
+        val optimization: Optimization = Optimization()): Visitable {
 
     /** Terraform configuration used by Kotless */
     data class Terraform(
             /** Version of Terraform used */
             val version: String,
             val backend: Backend,
-            val aws: AWSProvider) {
+            val aws: AWSProvider): Visitable {
 
         /** Configuration of Terraform backend */
         data class Backend(
@@ -42,11 +42,16 @@ data class KotlessConfig(
                 /** AWS profile from a local machine to use for Terraform operations authentication */
                 val profile: String,
                 /** AWS region in context of which all Terraform operations should be performed */
-                val region: String)
+                val region: String): Visitable
+
+        override fun visit(visitor: (Any) -> Unit) {
+            aws.visit(visitor)
+            visitor(this)
+        }
     }
 
     /** Configuration of optimizations considered during code generation */
-    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All) {
+    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All): Visitable {
         /**
          * Optimization defines, if different lambdas should be merged into one and when.
          *
@@ -62,5 +67,11 @@ data class KotlessConfig(
             PerPermissions,
             All
         }
+    }
+
+    override fun visit(visitor: (Any) -> Unit) {
+        terraform.visit(visitor)
+        optimization.visit(visitor)
+        visitor(this)
     }
 }

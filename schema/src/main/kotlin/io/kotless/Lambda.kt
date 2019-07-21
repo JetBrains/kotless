@@ -20,7 +20,7 @@ data class Lambda(
         /** Config of function: defines memory and time limit, etc. */
         val config: Config,
         /** Permissions to access other resources granted to this lambda */
-        val permissions: Set<Permission>) {
+        val permissions: Set<Permission>): Visitable {
 
     /** Entrypoint function definition */
     data class Entrypoint(

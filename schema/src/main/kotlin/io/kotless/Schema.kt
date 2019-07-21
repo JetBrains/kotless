@@ -15,4 +15,14 @@ data class Schema(
         /** Lambdas used in application */
         val lambdas: Set<Lambda>,
         /** Static resources used in application */
-        val statics: Set<StaticResource>)
+        val statics: Set<StaticResource>) : Visitable {
+
+    override fun visit(visitor: (Any) -> Unit) {
+        kotlessConfig.visit(visitor)
+        lambdas.forEach { it.visit(visitor) }
+        statics.forEach { it.visit(visitor) }
+        webapps.forEach { it.visit(visitor) }
+
+        visitor(this)
+    }
+}

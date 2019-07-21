@@ -8,7 +8,7 @@ package io.kotless
 data class Webapp(
         /** Alias to ApiGateway, if present */
         val route53: Route53?,
-        val api: ApiGateway) {
+        val api: ApiGateway): Visitable {
 
     /** Route53 CNAME alias */
     data class Route53(
@@ -33,7 +33,7 @@ data class Webapp(
             /** Dynamic routes of this ApiGateway served by lambdas */
             val dynamics: Set<DynamicRoute>,
             /** Static routes of ApiGateway served by static resources */
-            val statics: Set<StaticRoute>) {
+            val statics: Set<StaticRoute>): Visitable {
 
         /** Deployment definition of ApiGateway. Recreated each redeploy */
         data class Deployment(
@@ -55,5 +55,18 @@ data class Webapp(
         data class StaticRoute(override val path: URIPath, val resource: StaticResource) : Route {
             override val method = HttpMethod.GET
         }
+
+        override fun visit(visitor: (Any) -> Unit) {
+            visitor(deployment)
+            dynamics.forEach { visitor(it) }
+            statics.forEach { visitor(it) }
+            visitor(this)
+        }
+    }
+
+    override fun visit(visitor: (Any) -> Unit) {
+        visitor(route53!!)
+        api.visit(visitor)
+        visitor(this)
     }
 }

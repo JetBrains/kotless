@@ -22,4 +22,4 @@ data class StaticResource(
         val content: File,
         /** MIME type of content, will be used to set right
          * headers on http response */
-        val mime: MimeType)
+        val mime: MimeType) : Visitable
