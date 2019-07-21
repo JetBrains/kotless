@@ -1,18 +1,19 @@
-package io.kotless.gen.factory
+package io.kotless.gen.factory.resource.dynamic
 
 import io.kotless.Lambda
 import io.kotless.gen.*
 import io.kotless.terraform.functions.base64sha256
 import io.kotless.terraform.functions.file
-import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_rule
-import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
-object LambdaFactory : KotlessFactory<Lambda, LambdaFactory.LambdaOutput> {
+
+object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
     data class LambdaOutput(val lambda_arn: String)
 
-    override fun get(entity: Lambda, context: KotlessGenerationContext) {
+    override fun mayRun(entity: Lambda, context: GenerationContext) = true
+
+    override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<LambdaOutput> {
         val obj = s3_object(Names.tf(entity.name)) {
             bucket = context.schema.kotlessConfig.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
@@ -36,21 +37,6 @@ object LambdaFactory : KotlessFactory<Lambda, LambdaFactory.LambdaOutput> {
             //add here role
         }
 
-        val autowarm = if (entity.config.autowarm) {
-            val eventRule = cloudwatch_event_rule(Names.tf(entity.name)) {
-                name = Names.aws(entity.name)
-                schedule_expression = "cron(0/${entity.config.autowarmMinutes} * * * ? *)"
-            }
-
-            val target = cloudwatch_event_target(Names.tf(entity.name)) {
-                rule = eventRule.name
-                arn = lambda.arn
-            }
-
-            setOf(eventRule, target)
-        } else emptySet()
-
-        context.registerOutput(entity, LambdaOutput(lambda.arn))
-        context.registerEntities(setOf(obj, lambda) + autowarm)
+        return GenerationFactory.GenerationResult(LambdaOutput(lambda.arn), obj, lambda)
     }
 }

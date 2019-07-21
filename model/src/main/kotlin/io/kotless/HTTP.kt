@@ -25,4 +25,8 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean) {
     XML("application/xml", false),
     ZIP("application/zip", true),
     GZIP("application/gzip", true);
+
+    companion object {
+        fun binary() = values().filter { it.isBinary }.toTypedArray()
+    }
 }
