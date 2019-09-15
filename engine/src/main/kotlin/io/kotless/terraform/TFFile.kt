@@ -12,8 +12,8 @@ class TFFile(val name: String, private val entities: ArrayList<HCLEntity> = Arra
         file.writeText(buildString {
             for (entity in entities) {
                 entity.render(0, this)
+                append("\n\n")
             }
-            append("\n")
         })
     }
 

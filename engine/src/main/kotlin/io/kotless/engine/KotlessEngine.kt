@@ -17,9 +17,9 @@ import io.kotless.engine.terraform.aws.route53.TfRoute53Record
 import io.kotless.engine.terraform.aws.route53.TfRoute53ZoneData
 import io.kotless.engine.terraform.aws.s3.TfS3BucketData
 import io.kotless.engine.terraform.aws.s3.TfS3Object
-import io.kotless.engine.terraform.synthesizer.TfSynthesizer
 import io.kotless.engine.terraform.synthesizer.TfSynthesizer.TfFile
 import io.kotless.engine.terraform.utils.*
+import io.kotless.gen.Generator
 import java.io.File
 
 /**
@@ -31,19 +31,28 @@ import java.io.File
  */
 @Suppress("TooManyFunctions")
 class KotlessEngine(private val schema: Schema) {
-    fun generateTerraform(resourcePrefix: String): List<File> = try {
-        TfEntity.resourcePrefix = resourcePrefix
 
-        val kotlessBucketData = TfS3BucketData("kotless_bucket".toTfName(), schema.kotlessConfig.bucket)
-        val role = generateStaticRole("kotless".toTfName("s3", "statics", "access"), kotlessBucketData)
-        val lambdas = generateLambdas(kotlessBucketData, schema.lambdas)
-        val statics = generateStatics(kotlessBucketData, schema.statics)
-        val apis = generateWebapps(schema.webapps, role, lambdas, statics)
-        val tfFiles = TfSynthesizer.synthesize() + generateInfra(schema.kotlessConfig.terraform)
-        writeDown(tfFiles)
-    } finally {
-        cleanup()
+    fun generateTerraform(resourcePrefix: String) = Generator.generate(schema).map { tfFile ->
+        schema.kotlessConfig.genDirectory.mkdir()
+        val file = File(schema.kotlessConfig.genDirectory, tfFile.nameWithExt)
+        tfFile.write(file)
+        file
     }
+
+
+//    fun generateTerraform(resourcePrefix: String): List<File> = try {
+//        TfEntity.resourcePrefix = resourcePrefix
+//
+//        val kotlessBucketData = TfS3BucketData("kotless_bucket".toTfName(), schema.kotlessConfig.bucket)
+//        val role = generateStaticRole("kotless".toTfName("s3", "statics", "access"), kotlessBucketData)
+//        val lambdas = generateLambdas(kotlessBucketData, schema.lambdas)
+//        val statics = generateStatics(kotlessBucketData, schema.statics)
+//        val apis = generateWebapps(schema.webapps, role, lambdas, statics)
+//        val tfFiles = TfSynthesizer.synthesize() + generateInfra(schema.kotlessConfig.terraform)
+//        writeDown(tfFiles)
+//    } finally {
+//        cleanup()
+//    }
 
     private fun cleanup() {
         LambdaMergeOptimization.cleanup()

@@ -8,7 +8,7 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
     override val renderable: Boolean = true
 
     override fun render(indentNum: Int): String = buildString {
-        for ((ind, field) in fields.withIndex()) {
+        for ((ind, field) in fields.filter { it.renderable }.withIndex()) {
             field.render(indentNum, this)
             if (ind != fields.size - 1) {
                 append("\n")

@@ -1,7 +1,14 @@
+import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
 group = rootProject.group
 version = rootProject.version
+
+publishJar {
+    publication {
+        artifactId = "io.kotless.gradle.plugin"
+    }
+}
 
 publishPlugin {
     id = "io.kotless"

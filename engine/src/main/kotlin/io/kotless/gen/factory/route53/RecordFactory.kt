@@ -18,7 +18,7 @@ object RecordFactory : GenerationFactory<Webapp.Route53, Unit> {
             name = entity.alias
             type = "A"
 
-            alias = Route53Record.Alias {
+            alias = Route53Record.Alias().apply {
                 name = domain.domain_name
                 zone_id = domain.zone_id
                 evaluate_target_health = false

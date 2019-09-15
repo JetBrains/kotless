@@ -5,10 +5,12 @@ import io.kotless.gen.*
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
-object StaticResourceFactory : GenerationFactory<StaticResource, Unit> {
+object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceFactory.StaticResourceOutput> {
+    data class StaticResourceOutput(val key: String, val bucket: String)
+
     override fun mayRun(entity: StaticResource, context: GenerationContext) = true
 
-    override fun generate(entity: StaticResource, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
+    override fun generate(entity: StaticResource, context: GenerationContext): GenerationFactory.GenerationResult<StaticResourceOutput> {
         val obj = s3_object(Names.tf(entity.bucket, *entity.path.parts.toTypedArray())) {
             bucket = entity.bucket
             key = entity.path.toString()
@@ -17,6 +19,6 @@ object StaticResourceFactory : GenerationFactory<StaticResource, Unit> {
             content_type = entity.mime.mimeText
         }
 
-        return GenerationFactory.GenerationResult(Unit, obj)
+        return GenerationFactory.GenerationResult(StaticResourceOutput(obj.key, obj.bucket), obj)
     }
 }

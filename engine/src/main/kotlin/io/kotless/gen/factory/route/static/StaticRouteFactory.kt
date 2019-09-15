@@ -3,20 +3,20 @@ package io.kotless.gen.factory.route.static
 import io.kotless.*
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
-import io.kotless.gen.factory.resource.dynamic.LambdaFactory
+import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.provider.aws.resource.apigateway.*
 import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gateway_integration_response
 
-object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Unit> {
+object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit> {
     private val allResources = HashMap<URIPath, ApiGatewayResource>()
 
-    override fun mayRun(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
-        && context.check(entity.lambda, LambdaFactory)
+    override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
+        && context.check(entity.resource, StaticResourceFactory)
 
-    override fun generate(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
+    override fun generate(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
-        val lambda = context.get(entity.lambda, LambdaFactory)
+        val resource = context.get(entity.resource, StaticResourceFactory)
 
         val resourceId = when {
             entity.path.parts.isEmpty() -> {
@@ -73,7 +73,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Un
 
             type = "AWS"
             //TODO-tanvd hardcoded region for now
-            uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda.lambda_arn}/invocations"
+            uri = "arn:aws:apigateway:us-east-1:s3:path/${resource.bucket}/${resource.key}"
 //            credentials
         }
 

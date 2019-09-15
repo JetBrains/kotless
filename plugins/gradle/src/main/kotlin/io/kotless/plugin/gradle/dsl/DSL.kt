@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.KotlessConfig.Optimization.MergeLambda
+import io.kotless.gen.Generator
 import io.kotless.plugin.gradle.utils._ext
 import io.kotless.plugin.gradle.utils.ext
 import org.gradle.api.Project

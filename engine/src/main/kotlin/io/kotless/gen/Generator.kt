@@ -13,7 +13,8 @@ import kotlin.reflect.KClass
 
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
-        Webapp.ApiGateway::class to setOf(DeploymentFactory, DomainFactory, RestAPIFactory),
+        Webapp.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
+        Webapp.ApiGateway.Deployment::class to setOf(DeploymentFactory),
         Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
         StaticResource::class to setOf(StaticResourceFactory),
@@ -30,13 +31,17 @@ object Generator {
             var newExecuted = true
             while (newExecuted) {
                 newExecuted = false
-                webapp.visit { entity ->
+                //FIXME it should visit only webapp
+                schema.visit { entity ->
+                    println("Visiting entity ${entity::class.qualifiedName}")
                     factories[entity::class].orEmpty().forEach { factory ->
                         factory as GenerationFactory<Any, Any>
-
                         if (!factory.hasRan(entity, context)) {
-                            if (factory.mayRun(entity, context)) factory.run(entity, context)
-                            newExecuted = true
+                            if (factory.mayRun(entity, context)) {
+                                println("Factory run ${factory::class.qualifiedName}")
+                                factory.run(entity, context)
+                                newExecuted = true
+                            }
                         }
                     }
                 }
