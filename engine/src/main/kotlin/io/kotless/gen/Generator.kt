@@ -13,14 +13,14 @@ import kotlin.reflect.KClass
 
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
-            Webapp.ApiGateway::class to setOf(DeploymentFactory, DomainFactory, RestAPIFactory),
-            Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
+        Webapp.ApiGateway::class to setOf(DeploymentFactory, DomainFactory, RestAPIFactory),
+        Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
-            StaticResource::class to setOf(StaticResourceFactory),
-            Lambda::class to setOf(LambdaFactory, AutowarmFactory),
+        StaticResource::class to setOf(StaticResourceFactory),
+        Lambda::class to setOf(LambdaFactory, AutowarmFactory),
 
-            Webapp.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
-            Webapp.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)
+        Webapp.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
+        Webapp.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)
     )
 
     fun generate(schema: Schema): Set<TFFile> {

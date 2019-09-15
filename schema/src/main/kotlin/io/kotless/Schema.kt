@@ -8,14 +8,14 @@ package io.kotless
  * routes served from static and via lambdas.
  */
 data class Schema(
-        /** Configuration of kotless itself */
-        val kotlessConfig: KotlessConfig,
-        /** Web applications defined by application */
-        val webapps: Set<Webapp>,
-        /** Lambdas used in application */
-        val lambdas: Set<Lambda>,
-        /** Static resources used in application */
-        val statics: Set<StaticResource>) : Visitable {
+    /** Configuration of kotless itself */
+    val kotlessConfig: KotlessConfig,
+    /** Web applications defined by application */
+    val webapps: Set<Webapp>,
+    /** Lambdas used in application */
+    val lambdas: Set<Lambda>,
+    /** Static resources used in application */
+    val statics: Set<StaticResource>) : Visitable {
 
     override fun visit(visitor: (Any) -> Unit) {
         kotlessConfig.visit(visitor)

@@ -58,7 +58,7 @@ class KotlessEngine(private val schema: Schema) {
 
     private fun generateInfra(terraform: KotlessConfig.Terraform): TfFile {
         return TfFile("infra.tf", TfConfig(terraform.version, terraform.backend).render() + "\n\n" +
-                TfAwsProvider(terraform.aws).render())
+            TfAwsProvider(terraform.aws).render())
     }
 
     private fun generateLambdas(kotlessBucketData: TfS3BucketData, lambdas: Set<Lambda>): Map<Lambda, TfLambda> {
@@ -70,7 +70,7 @@ class KotlessEngine(private val schema: Schema) {
         for (lambda in mergedLambdas) {
             with(lambda.merged) {
                 val role = TfRole(name.toTfName("role"), name.toAwsName("role"),
-                        TfRoleAssumePolicy.LambdaAssumePolicy.toPolicyJson())
+                    TfRoleAssumePolicy.LambdaAssumePolicy.toPolicyJson())
                 val policyDocument = generatePermissions(name.toTfName("policy", "document"), permissions)
                 TfRolePolicy(name.toTfName("policy"), role, name.toAwsName("policy"), policyDocument)
 
@@ -78,9 +78,9 @@ class KotlessEngine(private val schema: Schema) {
                 val s3Object = TfS3Object(name.toTfName("object"), { tf(kotlessBucketData.name) }, "kotless-lambdas/$name.jar", file)
 
                 val tfLambda = TfLambda(name.toTfName("lambda"), name.toAwsName("lambda"),
-                        TfLambda.LambdaRuntime(entrypoint.qualifiedName,
-                                config.timeoutSec, config.memoryMb, mapOf("KOTLESS_PACKAGES" to config.packages.joinToString())),
-                        s3Object, role).apply {
+                    TfLambda.LambdaRuntime(entrypoint.qualifiedName,
+                        config.timeoutSec, config.memoryMb, mapOf("KOTLESS_PACKAGES" to config.packages.joinToString())),
+                    s3Object, role).apply {
                     comment = lambda.comment
                 }
                 lambda.from.forEach {
@@ -99,8 +99,8 @@ class KotlessEngine(private val schema: Schema) {
     private fun generateStaticRole(tfName: String, kotlessBucketData: TfS3BucketData): TfRole {
         val tfRole = TfRole(tfName, tfName.toAwsName("role"), TfRoleAssumePolicy.ApiGatewayAssumePolicy.toPolicyJson())
         val tfPolicy = TfPolicyDocument(tfName.toTfName("policy", "document"), setOf(TfPolicyDocument.Statement("Allow",
-                actions = setOf("s3:GetObject"),
-                resources = setOf("\${${kotlessBucketData.arn}}/*"))))
+            actions = setOf("s3:GetObject"),
+            resources = setOf("\${${kotlessBucketData.arn}}/*"))))
         val tfRolePolicy = TfRolePolicy(tfName.toTfName("policy"), tfRole, document = tfPolicy)
         return tfRole
     }
@@ -126,25 +126,25 @@ class KotlessEngine(private val schema: Schema) {
 
     private fun generateRoute53(route53: Webapp.Route53, deployment: TfRestApiDeployment, api: Pair<Webapp.ApiGateway, TfRestApi>): TfRoute53Record {
         val apiGatewayDomain = TfRestApiDomainName(route53.alias.toTfName("api", "alias"),
-                route53.alias + "." + route53.zone,
-                TfAcmCertificateData(route53.certificate.toTfName("acm"), route53.certificate))
+            route53.alias + "." + route53.zone,
+            TfAcmCertificateData(route53.certificate.toTfName("acm"), route53.certificate))
         TfRestApiBasePathMapping(route53.alias.toTfName("api", "mapping"), api.second, apiGatewayDomain, deployment)
 
         val zoneData = TfRoute53ZoneData(api.first.name.toTfName("route53", "alias", "zone"), route53.zone)
         return TfRoute53Record(
-                api.first.name.toTfName("route53", "alias"),
-                route53.alias, zoneData,
-                type = "A",
-                aliases = listOf(TfRoute53Record.AliasRecord({ tf(apiGatewayDomain.cloudfront_domain_name) },
-                        { tf(apiGatewayDomain.cloudfront_zone_id) }, false)))
+            api.first.name.toTfName("route53", "alias"),
+            route53.alias, zoneData,
+            type = "A",
+            aliases = listOf(TfRoute53Record.AliasRecord({ tf(apiGatewayDomain.cloudfront_domain_name) },
+                { tf(apiGatewayDomain.cloudfront_zone_id) }, false)))
     }
 
     private fun generateDeployment(deployment: Webapp.ApiGateway.Deployment, tfApi: TfRestApi): TfRestApiDeployment {
         return TfRestApiDeployment(
-                deployment.name.toTfName(), tfApi,
-                deployment.name.toAwsName(deployment.version),
-                TfEntity.instantiatedEntities.mapNotNull { it.value as? TfRestApiLambdaIntegration },
-                TfEntity.instantiatedEntities.mapNotNull { it.value as? TfRestApiS3Integration })
+            deployment.name.toTfName(), tfApi,
+            deployment.name.toAwsName(deployment.version),
+            TfEntity.instantiatedEntities.mapNotNull { it.value as? TfRestApiLambdaIntegration },
+            TfEntity.instantiatedEntities.mapNotNull { it.value as? TfRestApiS3Integration })
     }
 
     @Suppress("ComplexMethod")
@@ -158,20 +158,20 @@ class KotlessEngine(private val schema: Schema) {
                                      currentPathPart: String, routes: List<Webapp.ApiGateway.Route>) {
             val tfNameByPath = (previousPath.parts + currentPathPart).toTfName()
             val resource = TfRestApiResource(api.name.toTfName("rest", "resource", tfNameByPath),
-                    restApi, path = currentPathPart, parentResource = previousResource)
+                restApi, path = currentPathPart, parentResource = previousResource)
 
             val onCurrentPath = routes.filter { it.path == URIPath(previousPath, currentPathPart) }
             for (route in onCurrentPath) {
                 val method = TfRestApiMethod(api.name.toTfName("rest", "method", tfNameByPath, route.method.name.toLowerCase()),
-                        restApi, { tf(resource.id) }, route.method)
+                    restApi, { tf(resource.id) }, route.method)
                 when (route) {
                     is DynamicRoute -> {
                         TfRestApiLambdaIntegration(api.name.toTfName("rest", "integration", tfNameByPath, route.method.name.toLowerCase()),
-                                restApi, { tf(resource.id) }, { tfRaw(resource.path) }, method, lambdas[route.lambda]!!)
+                            restApi, { tf(resource.id) }, { tfRaw(resource.path) }, method, lambdas[route.lambda]!!)
                     }
                     is StaticRoute -> {
                         TfRestApiS3Integration(api.name.toTfName("rest", "integration", tfNameByPath, route.method.name.toLowerCase()),
-                                restApi, { tf(resource.id) }, method, staticsRole, statics[route.resource]!!)
+                            restApi, { tf(resource.id) }, method, staticsRole, statics[route.resource]!!)
                     }
                 }
 
@@ -186,18 +186,18 @@ class KotlessEngine(private val schema: Schema) {
                 return
             }
             val method = TfRestApiMethod(api.name.toTfName("rest", "method", "root".toTfName(), (dynamic ?: static!!).method.name.toLowerCase()),
-                    restApi, { tf(tfApi.root_resource_id) }, (dynamic ?: static!!).method)
+                restApi, { tf(tfApi.root_resource_id) }, (dynamic ?: static!!).method)
             if (dynamic != null) {
                 TfRestApiLambdaIntegration(api.name.toTfName("rest", "integration", "root".toTfName(), dynamic.method.name.toLowerCase()),
-                        restApi, { tf(tfApi.root_resource_id) }, { "/" }, method, lambdas[dynamic.lambda]!!)
+                    restApi, { tf(tfApi.root_resource_id) }, { "/" }, method, lambdas[dynamic.lambda]!!)
             } else if (static != null) {
                 TfRestApiS3Integration(api.name.toTfName("rest", "integration", "root".toTfName(), static.method.name.toLowerCase()),
-                        restApi, { tf(tfApi.root_resource_id) }, method, staticsRole, statics[static.resource]!!)
+                    restApi, { tf(tfApi.root_resource_id) }, method, staticsRole, statics[static.resource]!!)
             }
         }
 
         createRoot(api, restApi, routesByPath.firstOrNull { it.first.parts.isEmpty() && it.second is DynamicRoute }?.second as DynamicRoute?,
-                routesByPath.firstOrNull { it.first.parts.isEmpty() && it.second is StaticRoute }?.second as StaticRoute?)
+            routesByPath.firstOrNull { it.first.parts.isEmpty() && it.second is StaticRoute }?.second as StaticRoute?)
 
         routesByPath.filter { it.first.parts.isNotEmpty() }.groupBy { it.first.parts.first() }.forEach {
             createGroupingByResource(null, URIPath(), it.key, it.value.map { it.second })
@@ -208,8 +208,8 @@ class KotlessEngine(private val schema: Schema) {
     private fun generatePermissions(tfName: String, permissions: Set<Permission>): TfPolicyDocument {
         return TfPolicyDocument(tfName, permissions.map { permission ->
             TfPolicyDocument.Statement("Allow",
-                    actions = permission.actions.map { permission.resource.prefix + ":$it" }.toSet(),
-                    resources = permission.awsIds)
+                actions = permission.actions.map { permission.resource.prefix + ":$it" }.toSet(),
+                resources = permission.awsIds)
         }.toSet())
     }
 }

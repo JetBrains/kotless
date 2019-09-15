@@ -20,7 +20,7 @@ enum class TfGroup {
     ACM,
     S3 {
         override fun resort(entities: List<TfEntity>): List<TfEntity> = entities.filter { it is TfResource } +
-                entities.filter { it is TfData } + entities.filter { it !is TfResource && it !is TfData }
+            entities.filter { it is TfData } + entities.filter { it !is TfResource && it !is TfData }
     },
     Info;
 

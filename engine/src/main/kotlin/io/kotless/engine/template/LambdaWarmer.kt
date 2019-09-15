@@ -15,6 +15,6 @@ import io.kotless.engine.terraform.utils.toTfName
  */
 data class LambdaWarmer(val tfLambda: TfLambda, val minutes: Int) {
     val eventRule = TfCloudwatchEventRule(tfLambda.tfFullName.toTfName("warmer", "rule"),
-            tfLambda.awsName.toAwsName("warmer"), "cron(0/$minutes * * * ? *)")
+        tfLambda.awsName.toAwsName("warmer"), "cron(0/$minutes * * * ? *)")
     val eventTarget = TfCloudwatchEventTarget(tfLambda.tfFullName.toTfName("warmer", "target"), tfLambda, eventRule)
 }

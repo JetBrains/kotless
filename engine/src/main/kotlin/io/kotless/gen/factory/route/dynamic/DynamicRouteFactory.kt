@@ -10,7 +10,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
     private val allResources = HashMap<URIPath, ApiGatewayResource>()
 
     override fun mayRun(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
-            && context.check(entity.lambda, LambdaFactory)
+        && context.check(entity.lambda, LambdaFactory)
 
     override fun generate(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)

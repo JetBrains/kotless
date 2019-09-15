@@ -16,9 +16,9 @@ import io.kotless.engine.terraform.utils.*
 class TfLambdaApiGatewayPermission(tfName: String, lambda: TfLambda, restApi: TfRestApi, resource_path: TfFieldValue,
                                    method: TfRestApiMethod) : TfResource("aws_lambda_permission", tfName) {
     private val sourceArn = "arn:aws:execute-api:" +
-            "${tfRaw(AwsInformation.tfRegion.name)}:" +
-            "${tfRaw(AwsInformation.tfAccount.account_id)}:" +
-            "${tfRaw(restApi.id)}/*/${tfRaw(method.http_method)}${resource_path()}"
+        "${tfRaw(AwsInformation.tfRegion.name)}:" +
+        "${tfRaw(AwsInformation.tfAccount.account_id)}:" +
+        "${tfRaw(restApi.id)}/*/${tfRaw(method.http_method)}${resource_path()}"
 
     override val resourceDef = """
         |    statement_id = "${tfName.toAwsName()}"

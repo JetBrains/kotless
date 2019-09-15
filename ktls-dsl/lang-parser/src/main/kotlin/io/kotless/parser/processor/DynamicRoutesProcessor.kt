@@ -26,9 +26,9 @@ internal object DynamicRoutesProcessor {
                             val functionName = prepareFunctionName(route, config.packages)
 
                             val function = Lambda(functionName, jarFile,
-                                    Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()),
-                                    config,
-                                    permissions)
+                                Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()),
+                                config,
+                                permissions)
 
                             val routeType = when (routeClass) {
                                 Get::class -> HttpMethod.GET
@@ -62,6 +62,6 @@ internal object DynamicRoutesProcessor {
     /** Get annotated @Get and @Post top-level functions and object functions */
     private fun gatherRoutesFunctions(context: BindingContext, ktFile: KtFile) = with(ktFile) {
         gatherNamedFunctions { it.isAnnotatedWith(context, ROUTE_ANNOTATIONS_CLASSES) } +
-                gatherStaticObjects().flatMap { it.gatherNamedFunctions { it.isAnnotatedWith(context, ROUTE_ANNOTATIONS_CLASSES) } }
+            gatherStaticObjects().flatMap { it.gatherNamedFunctions { it.isAnnotatedWith(context, ROUTE_ANNOTATIONS_CLASSES) } }
     }
 }

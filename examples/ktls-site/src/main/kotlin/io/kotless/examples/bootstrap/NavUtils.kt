@@ -65,16 +65,16 @@ fun BODY.siteNavbar() {
                 }
 
                 dropdown("DSL", listOf(
-                        "Overview" to DSL::overview.href,
-                        "Lifecycle" to DSL::lifecycle.href,
-                        "HTTP" to DSL::http.href,
-                        "Permissions" to DSL::permissions.href
+                    "Overview" to DSL::overview.href,
+                    "Lifecycle" to DSL::lifecycle.href,
+                    "HTTP" to DSL::http.href,
+                    "Permissions" to DSL::permissions.href
                 ))
 
                 dropdown("Plugin", listOf(
-                        "Overview" to Plugin::overview.href,
-                        "Configuration" to Plugin::configuration.href,
-                        "Tasks" to Plugin::tasks.href
+                    "Overview" to Plugin::overview.href,
+                    "Configuration" to Plugin::configuration.href,
+                    "Tasks" to Plugin::tasks.href
                 ))
 
                 li("nav-item") {

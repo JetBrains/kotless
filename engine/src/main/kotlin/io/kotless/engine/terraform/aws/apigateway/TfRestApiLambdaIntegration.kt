@@ -15,7 +15,7 @@ class TfRestApiLambdaIntegration(tfName: String, restApi: TfRestApi, resource: T
                                  method: TfRestApiMethod, lambda: TfLambda) : TfResource("aws_api_gateway_integration", tfName) {
 
     val tfPermission = TfLambdaApiGatewayPermission(tfName.toTfName("lambda", "permission"), lambda,
-            restApi, resource_path, method)
+        restApi, resource_path, method)
 
     override val resourceDef = """
         |    rest_api_id = ${tf(restApi.id)}

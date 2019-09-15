@@ -191,12 +191,12 @@ class KotlessDsl(project: Project) : Serializable {
 
         /** Route53 CNAME alias */
         inner class Route53(
-                /** Name of alias */
-                val alias: String,
-                /** A qualified name of zone, alias is created in */
-                val zone: String,
-                /** A fully qualified name of certificate, for SSL connection */
-                val certificate: String = "$alias.$zone") : Serializable
+            /** Name of alias */
+            val alias: String,
+            /** A qualified name of zone, alias is created in */
+            val zone: String,
+            /** A fully qualified name of certificate, for SSL connection */
+            val certificate: String = "$alias.$zone") : Serializable
 
 
     }

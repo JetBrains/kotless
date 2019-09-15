@@ -39,10 +39,10 @@ private val camelCaseRegex = Regex("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])
 fun List<String>.toTfName() = this.joinToString(separator = "_").toTfName()
 
 fun String.toTfName(vararg parts: String) = (this.split(Regex("-|\\s|\\."))
-        .flatMap { it.split(camelCaseRegex) } + parts).joinToString(separator = "_") { it.toLowerCase().replace("/", "") }
+    .flatMap { it.split(camelCaseRegex) } + parts).joinToString(separator = "_") { it.toLowerCase().replace("/", "") }
 
 fun String.toAwsName(vararg parts: String) = (this.split(Regex("_|\\s|\\."))
-        .flatMap { it.split(camelCaseRegex) } + parts).joinToString(separator = "-") { it.toLowerCase().replace("/", "") }.prependWithResourcePrefix()
+    .flatMap { it.split(camelCaseRegex) } + parts).joinToString(separator = "-") { it.toLowerCase().replace("/", "") }.prependWithResourcePrefix()
 
 private fun String.prependWithResourcePrefix() = if (!startsWith(TfEntity.resourcePrefix)) {
     TfEntity.resourcePrefix + this

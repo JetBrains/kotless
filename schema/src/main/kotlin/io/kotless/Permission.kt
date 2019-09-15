@@ -9,12 +9,12 @@ package io.kotless
  * The permission is granted to object owning it.
  */
 data class Permission(
-        /** Type of resource permission is for */
-        val resource: AwsResource,
-        /** Actions permitted by permission */
-        val level: PermissionLevel,
-        /** Identifiers of resources under permission */
-        val ids: Set<String>) {
+    /** Type of resource permission is for */
+    val resource: AwsResource,
+    /** Actions permitted by permission */
+    val level: PermissionLevel,
+    /** Identifiers of resources under permission */
+    val ids: Set<String>) {
 
     val awsIds: Set<String> = ids.map {
         if (!it.startsWith("arn")) {

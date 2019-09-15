@@ -31,5 +31,5 @@ internal object FunctionCaller {
     }
 
     private fun KCallable<*>.boundReceiver() = (this as? FunctionReference)?.boundReceiver
-            ?: (parameters.find { it.kind == KParameter.Kind.INSTANCE && it.index == 0 }?.type?.classifier as? KClass<*>)?.objectInstance
+        ?: (parameters.find { it.kind == KParameter.Kind.INSTANCE && it.index == 0 }?.type?.classifier as? KClass<*>)?.objectInstance
 }

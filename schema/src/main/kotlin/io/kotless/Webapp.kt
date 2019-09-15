@@ -6,18 +6,18 @@ package io.kotless
  * It includes ApiGateway REST API definition and Route53 alias with SSL certificate, if present.
  */
 data class Webapp(
-        /** Alias to ApiGateway, if present */
-        val route53: Route53?,
-        val api: ApiGateway): Visitable {
+    /** Alias to ApiGateway, if present */
+    val route53: Route53?,
+    val api: ApiGateway) : Visitable {
 
     /** Route53 CNAME alias */
     data class Route53(
-            /** A qualified name of zone, alias is created in */
-            val zone: String,
-            /** Name of alias */
-            val alias: String,
-            /** A fully qualified name of certificate, for SSL connection */
-            val certificate: String)
+        /** A qualified name of zone, alias is created in */
+        val zone: String,
+        /** Name of alias */
+        val alias: String,
+        /** A fully qualified name of certificate, for SSL connection */
+        val certificate: String)
 
     /**
      * ApiGateway REST API.
@@ -26,22 +26,22 @@ data class Webapp(
      * is an HTTP interface of Kotless Web application
      */
     data class ApiGateway(
-            /** A unique name of ApiGateway */
-            val name: String,
-            /** Deployment resource of ApiGateway */
-            val deployment: Deployment,
-            /** Dynamic routes of this ApiGateway served by lambdas */
-            val dynamics: Set<DynamicRoute>,
-            /** Static routes of ApiGateway served by static resources */
-            val statics: Set<StaticRoute>): Visitable {
+        /** A unique name of ApiGateway */
+        val name: String,
+        /** Deployment resource of ApiGateway */
+        val deployment: Deployment,
+        /** Dynamic routes of this ApiGateway served by lambdas */
+        val dynamics: Set<DynamicRoute>,
+        /** Static routes of ApiGateway served by static resources */
+        val statics: Set<StaticRoute>) : Visitable {
 
         /** Deployment definition of ApiGateway. Recreated each redeploy */
         data class Deployment(
-                /** A unique name of deployment */
-                val name: String,
-                /** Version of this deployment.
-                 *  Will be used for versioned Kotless deployments */
-                val version: String)
+            /** A unique name of deployment */
+            val name: String,
+            /** Version of this deployment.
+             *  Will be used for versioned Kotless deployments */
+            val version: String)
 
         interface Route {
             val method: HttpMethod

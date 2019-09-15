@@ -17,11 +17,11 @@ internal object CommandLine {
 
     fun execute(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean = false, redirectErr: Boolean = true): Int {
         return CommandLineUtils.executeCommandLine(
-                Commandline().apply {
-                    workingDirectory = workingDir
-                    executable = exec
-                    addArguments(args.toTypedArray())
-                }, getConsumer(redirectStdout), getConsumer(redirectErr)
+            Commandline().apply {
+                workingDirectory = workingDir
+                executable = exec
+                addArguments(args.toTypedArray())
+            }, getConsumer(redirectStdout), getConsumer(redirectErr)
         )
     }
 

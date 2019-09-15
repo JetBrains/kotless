@@ -4,45 +4,45 @@ import java.io.File
 
 /** Config of Kotless itself */
 data class KotlessConfig(
-        /** Name of bucket Kotless will use to store all files */
-        val bucket: String,
-        /** Name with which will be prepended all Kotless created entities */
-        val resourcePrefix: String,
-        /** Directory Kotless considers as root for a file resolving */
-        val workDirectory: File,
-        /** The local directory Kotless will use to store generated files */
-        val genDirectory: File,
-        /** Terraform configuration used by Kotless */
-        val terraform: Terraform,
-        /** Optimizations considered during generation of code */
-        val optimization: Optimization = Optimization()): Visitable {
+    /** Name of bucket Kotless will use to store all files */
+    val bucket: String,
+    /** Name with which will be prepended all Kotless created entities */
+    val resourcePrefix: String,
+    /** Directory Kotless considers as root for a file resolving */
+    val workDirectory: File,
+    /** The local directory Kotless will use to store generated files */
+    val genDirectory: File,
+    /** Terraform configuration used by Kotless */
+    val terraform: Terraform,
+    /** Optimizations considered during generation of code */
+    val optimization: Optimization = Optimization()) : Visitable {
 
     /** Terraform configuration used by Kotless */
     data class Terraform(
-            /** Version of Terraform used */
-            val version: String,
-            val backend: Backend,
-            val aws: AWSProvider): Visitable {
+        /** Version of Terraform used */
+        val version: String,
+        val backend: Backend,
+        val aws: AWSProvider) : Visitable {
 
         /** Configuration of Terraform backend */
         data class Backend(
-                /** Name of bucket, that will be used as Terraform backend storage */
-                val bucket: String,
-                /** Path in a bucket to store Terraform state */
-                val key: String,
-                /** AWS profile from a local machine to use for Terraform state storing */
-                val profile: String,
-                /** AWS region where state bucket is located */
-                val region: String)
+            /** Name of bucket, that will be used as Terraform backend storage */
+            val bucket: String,
+            /** Path in a bucket to store Terraform state */
+            val key: String,
+            /** AWS profile from a local machine to use for Terraform state storing */
+            val profile: String,
+            /** AWS region where state bucket is located */
+            val region: String)
 
         /** Configuration of Terraform AWS provider */
         data class AWSProvider(
-                /** Version of AWS provider to use */
-                val version: String,
-                /** AWS profile from a local machine to use for Terraform operations authentication */
-                val profile: String,
-                /** AWS region in context of which all Terraform operations should be performed */
-                val region: String): Visitable
+            /** Version of AWS provider to use */
+            val version: String,
+            /** AWS profile from a local machine to use for Terraform operations authentication */
+            val profile: String,
+            /** AWS region in context of which all Terraform operations should be performed */
+            val region: String) : Visitable
 
         override fun visit(visitor: (Any) -> Unit) {
             aws.visit(visitor)
@@ -51,7 +51,7 @@ data class KotlessConfig(
     }
 
     /** Configuration of optimizations considered during code generation */
-    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All): Visitable {
+    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All) : Visitable {
         /**
          * Optimization defines, if different lambdas should be merged into one and when.
          *

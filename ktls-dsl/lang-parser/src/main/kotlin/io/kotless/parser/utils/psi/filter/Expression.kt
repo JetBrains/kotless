@@ -27,7 +27,7 @@ internal fun KtExpression.gatherAllExpressions(context: BindingContext, alreadyG
 internal fun KtExpression.gatherExpressions(filter: (KtExpression) -> Boolean = { true }) = filterFor<KtExpression>().filter(filter)
 
 internal inline fun <reified Desc : DeclarationDescriptorWithSource, reified Elem : PsiElement>
-        KtExpression.gatherReferencedExpressions(context: BindingContext, filter: (Elem) -> Boolean = { true }): List<Elem> {
+    KtExpression.gatherReferencedExpressions(context: BindingContext, filter: (Elem) -> Boolean = { true }): List<Elem> {
     return filterFor<KtNameReferenceExpression>().flatMap {
         it.getReferenceTargets(context).mapNotNull { it as? Desc }.mapNotNull { it.source.getPsi() }.mapNotNull { it as? Elem }
     }.filter(filter)

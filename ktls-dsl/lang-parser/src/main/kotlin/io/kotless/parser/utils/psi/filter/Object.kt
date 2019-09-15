@@ -16,8 +16,8 @@ internal fun KtFile.gatherStaticObjects(filter: (KtObjectDeclaration) -> Boolean
 
 /** Gathers top-level and companion objects in a file */
 internal inline fun <reified T : Any> KtFile.gatherStaticObjectWithSubtype(
-        context: BindingContext,
-        noinline filter: (KtObjectDeclaration) -> Boolean = { true }): Set<KtObjectDeclaration> {
+    context: BindingContext,
+    noinline filter: (KtObjectDeclaration) -> Boolean = { true }): Set<KtObjectDeclaration> {
     return gatherStaticObjectsWithSubtypes(context, T::class, filter = filter)
 }
 

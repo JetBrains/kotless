@@ -16,7 +16,7 @@ internal object GlobalActionsProcessor {
             addAll(gatherGlobalActions<LambdaInit>(LambdaInit::init.name, context, ktFile).flatMap { it.gatherPermissions(context) })
             addAll(gatherGlobalActions<LambdaWarming>(LambdaWarming::warmup.name, context, ktFile).flatMap { it.gatherPermissions(context) })
             addAll(gatherGlobalActions<HttpRequestInterceptor>(HttpRequestInterceptor::intercept.name, context, ktFile)
-                    .flatMap { it.gatherPermissions(context) })
+                .flatMap { it.gatherPermissions(context) })
         }
     }
 

@@ -8,24 +8,24 @@ import io.kotless.engine.terraform.utils.tf
 enum class TfRoleAssumePolicy {
     LambdaAssumePolicy {
         override fun toPolicyJson() =
-                TfPolicyDocument("lambda_assume_policy",
-                        setOf(TfPolicyDocument.Statement("Allow", "AssumeRole",
-                                setOf(
-                                        TfPolicyDocument.Principals(listOf("lambda.amazonaws.com", "apigateway.amazonaws.com"), "Service")
-                                ),
-                                actions = setOf("sts:AssumeRole")
-                        ))
-                )
+            TfPolicyDocument("lambda_assume_policy",
+                setOf(TfPolicyDocument.Statement("Allow", "AssumeRole",
+                    setOf(
+                        TfPolicyDocument.Principals(listOf("lambda.amazonaws.com", "apigateway.amazonaws.com"), "Service")
+                    ),
+                    actions = setOf("sts:AssumeRole")
+                ))
+            )
 
     },
     ApiGatewayAssumePolicy {
         override fun toPolicyJson() = TfPolicyDocument("apigateway_assume_policy",
-                setOf(TfPolicyDocument.Statement("Allow", "AssumeRole",
-                        setOf(
-                                TfPolicyDocument.Principals(listOf("apigateway.amazonaws.com"), "Service")
-                        ),
-                        actions = setOf("sts:AssumeRole")
-                ))
+            setOf(TfPolicyDocument.Statement("Allow", "AssumeRole",
+                setOf(
+                    TfPolicyDocument.Principals(listOf("apigateway.amazonaws.com"), "Service")
+                ),
+                actions = setOf("sts:AssumeRole")
+            ))
         )
     };
 

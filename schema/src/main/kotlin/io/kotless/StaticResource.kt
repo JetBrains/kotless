@@ -14,12 +14,12 @@ import java.io.File
  * and CSS files
  */
 data class StaticResource(
-        /** Name of bucket where file will be placed */
-        val bucket: String,
-        /** URI path under which this resource will be located */
-        val path: URIPath,
-        /** File with actual content of resource */
-        val content: File,
-        /** MIME type of content, will be used to set right
-         * headers on http response */
-        val mime: MimeType) : Visitable
+    /** Name of bucket where file will be placed */
+    val bucket: String,
+    /** URI path under which this resource will be located */
+    val path: URIPath,
+    /** File with actual content of resource */
+    val content: File,
+    /** MIME type of content, will be used to set right
+     * headers on http response */
+    val mime: MimeType) : Visitable

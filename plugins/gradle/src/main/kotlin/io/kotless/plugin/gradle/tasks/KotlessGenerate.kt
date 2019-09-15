@@ -54,16 +54,16 @@ open class KotlessGenerate : DefaultTask() {
             val lambdaConfig = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.autowarm, webapp.lambda.autowarmMinutes, webapp.packages)
 
             val parsedWebapp = KotlessDslParser(project.configurations.getByName("compile").files.toSet())
-                    .parseFromFiles(shadowJar, lambdaConfig, config.bucket, config.workDirectory, sources)
+                .parseFromFiles(shadowJar, lambdaConfig, config.bucket, config.workDirectory, sources)
 
             lambdas += parsedWebapp.lambdas
             statics += parsedWebapp.statics
 
             val route53 = webapp.route53?.toSchema()
             Webapp(route53, Webapp.ApiGateway(project.name,
-                    webapp.deployment.toSchema(),
-                    parsedWebapp.dynamicRoutes,
-                    parsedWebapp.staticRoutes
+                webapp.deployment.toSchema(),
+                parsedWebapp.dynamicRoutes,
+                parsedWebapp.staticRoutes
             ))
         }.toSet()
 

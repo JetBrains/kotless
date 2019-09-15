@@ -12,11 +12,11 @@ import kotlin.reflect.jvm.kotlinFunction
 internal object ReflectionScanner {
     private val reflections by lazy {
         Reflections(ConfigurationBuilder()
-                .forPackages(KotlessConfig.packages)
-                .filterInputsBy { file: String? ->
-                    KotlessConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
-                }
-                .setScanners(MethodAnnotationsScanner(), TypeAnnotationsScanner(), SubTypesScanner())
+            .forPackages(KotlessConfig.packages)
+            .filterInputsBy { file: String? ->
+                KotlessConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
+            }
+            .setScanners(MethodAnnotationsScanner(), TypeAnnotationsScanner(), SubTypesScanner())
         )
     }
 

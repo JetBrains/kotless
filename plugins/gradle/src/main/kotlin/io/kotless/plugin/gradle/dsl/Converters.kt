@@ -5,17 +5,17 @@ import io.kotless.Webapp
 
 internal fun KotlessDsl.toSchema(): KotlessConfig {
     return KotlessConfig(
-            kotlessConfig.bucket, kotlessConfig.resourcePrefix, kotlessConfig.workDirectory, kotlessConfig.genDirectory,
-            KotlessConfig.Terraform(
-                    kotlessConfig.terraform.version,
-                    KotlessConfig.Terraform.Backend(
-                            kotlessConfig.terraform.backend.bucket, kotlessConfig.terraform.backend.key, kotlessConfig.terraform.profile, kotlessConfig.terraform.region
-                    ),
-                    KotlessConfig.Terraform.AWSProvider(
-                            kotlessConfig.terraform.provider.version, kotlessConfig.terraform.profile, kotlessConfig.terraform.region
-                    )
+        kotlessConfig.bucket, kotlessConfig.resourcePrefix, kotlessConfig.workDirectory, kotlessConfig.genDirectory,
+        KotlessConfig.Terraform(
+            kotlessConfig.terraform.version,
+            KotlessConfig.Terraform.Backend(
+                kotlessConfig.terraform.backend.bucket, kotlessConfig.terraform.backend.key, kotlessConfig.terraform.profile, kotlessConfig.terraform.region
             ),
-            KotlessConfig.Optimization(kotlessConfig.optimization.mergeLambda)
+            KotlessConfig.Terraform.AWSProvider(
+                kotlessConfig.terraform.provider.version, kotlessConfig.terraform.profile, kotlessConfig.terraform.region
+            )
+        ),
+        KotlessConfig.Optimization(kotlessConfig.optimization.mergeLambda)
     )
 }
 

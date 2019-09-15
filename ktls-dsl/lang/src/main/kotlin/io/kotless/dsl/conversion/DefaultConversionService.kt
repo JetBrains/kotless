@@ -43,7 +43,7 @@ internal object DefaultConversionService : ConversionService() {
         else -> {
             if (type is Class<*> && type.isEnum) {
                 type.enumConstants?.firstOrNull { (it as Enum<*>).name == value }
-                        ?: throw ConversionException("Value $value is not an enum member name of $type")
+                    ?: throw ConversionException("Value $value is not an enum member name of $type")
             } else {
                 throw ConversionException("Type $type is not supported in default data conversion service")
             }

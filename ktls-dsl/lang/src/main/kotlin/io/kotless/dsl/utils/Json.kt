@@ -8,13 +8,13 @@ import kotlinx.serialization.json.JsonConfiguration
 internal object Json {
     @Suppress("EXPERIMENTAL_API_USAGE")
     val jsonMapper = Json(JsonConfiguration(
-            encodeDefaults = true,
-            strictMode = false,
-            unquoted = false,
-            prettyPrint = true,
-            indent = "    ",
-            useArrayPolymorphism = false,
-            classDiscriminator = "kt_class_type"
+        encodeDefaults = true,
+        strictMode = false,
+        unquoted = false,
+        prettyPrint = true,
+        indent = "    ",
+        useArrayPolymorphism = false,
+        classDiscriminator = "kt_class_type"
     ))
 
     @Suppress("UNCHECKED_CAST")

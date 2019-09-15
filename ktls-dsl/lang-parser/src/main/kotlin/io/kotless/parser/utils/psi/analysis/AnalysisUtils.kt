@@ -23,13 +23,13 @@ internal object AnalysisUtils {
 //        configuration.put(JVMConfigurationKeys.ADD_BUILT_INS_FROM_COMPILER_TO_DEPENDENCIES, true)
 
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-                environment.project,
-                files,
-                trace,
-                configuration,
-                { globalSearchScope -> environment.createPackagePartProvider(globalSearchScope) },
-                { storageManager, ktFiles -> FileBasedDeclarationProviderFactory(storageManager, ktFiles) },
-                TopDownAnalyzerFacadeForJVM.newModuleSearchScope(environment.project, files)
+            environment.project,
+            files,
+            trace,
+            configuration,
+            { globalSearchScope -> environment.createPackagePartProvider(globalSearchScope) },
+            { storageManager, ktFiles -> FileBasedDeclarationProviderFactory(storageManager, ktFiles) },
+            TopDownAnalyzerFacadeForJVM.newModuleSearchScope(environment.project, files)
         ).bindingContext
     }
 
@@ -39,11 +39,11 @@ internal object AnalysisUtils {
         val resultSet = HashSet<KtFile>()
         for (file in files) {
             val ktFile = psiFileFactory.createFileFromText(
-                    file.name.toString(),
-                    KotlinLanguage.INSTANCE,
-                    StringUtilRt.convertLineSeparators(file.readText()),
-                    true, true, false,
-                    LightVirtualFile(file.toString())) as? KtFile ?: throw IllegalStateException("kotlin file expected")
+                file.name.toString(),
+                KotlinLanguage.INSTANCE,
+                StringUtilRt.convertLineSeparators(file.readText()),
+                true, true, false,
+                LightVirtualFile(file.toString())) as? KtFile ?: throw IllegalStateException("kotlin file expected")
             resultSet += ktFile
         }
         return resultSet

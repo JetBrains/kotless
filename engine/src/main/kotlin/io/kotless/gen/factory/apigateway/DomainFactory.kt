@@ -12,7 +12,7 @@ object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Domain
     data class DomainOutput(val domain_name: String, val zone_id: String)
 
     override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.check(entity, RestAPIFactory)
-            && context.check(context.webapp.route53!!, ZoneFactory) && context.check(context.webapp.route53!!, CertificateFactory)
+        && context.check(context.webapp.route53!!, ZoneFactory) && context.check(context.webapp.route53!!, CertificateFactory)
 
     override fun generate(entity: Webapp.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<DomainOutput> {
         val zone = context.get(context.webapp.route53!!, ZoneFactory)
