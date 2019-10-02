@@ -3,6 +3,7 @@ package io.kotless.hcl
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
+import kotlin.reflect.jvm.isAccessible
 
 open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), val owner: HCLNamed? = null) : HCLRender {
     override val renderable: Boolean = true
@@ -10,9 +11,7 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
     override fun render(indentNum: Int): String = buildString {
         for ((ind, field) in fields.filter { it.renderable }.withIndex()) {
             field.render(indentNum, this)
-            if (ind != fields.size - 1) {
-                append("\n")
-            }
+            if (ind != fields.size - 1) append("\n")
         }
     }
 
@@ -79,5 +78,9 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
     fun textArray(name: String? = null, inner: Boolean = false, default: Array<String> = emptyArray()) = TextArrayFieldDelegate(name, inner, default)
 }
 
-val <T : Any> KProperty0<T>.ref: String
-    get() = (this.getDelegate() as HCLEntity.FieldDelegate<*, *>).field!!.ref
+fun <T : Any> KProperty0<T>.ref(entity: HCLEntity): String {
+    this.isAccessible = true
+    val delegate = this.getDelegate() as HCLEntity.FieldDelegate<*, *>
+    delegate.getValue(entity, this)
+    return delegate.field!!.ref
+}

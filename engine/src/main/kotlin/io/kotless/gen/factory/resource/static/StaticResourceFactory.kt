@@ -2,6 +2,7 @@ package io.kotless.gen.factory.resource.static
 
 import io.kotless.StaticResource
 import io.kotless.gen.*
+import io.kotless.hcl.ref
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
@@ -19,6 +20,6 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
             content_type = entity.mime.mimeText
         }
 
-        return GenerationFactory.GenerationResult(StaticResourceOutput(obj.key, obj.bucket), obj)
+        return GenerationFactory.GenerationResult(StaticResourceOutput(obj::key.ref(obj), obj::bucket.ref(obj)), obj)
     }
 }

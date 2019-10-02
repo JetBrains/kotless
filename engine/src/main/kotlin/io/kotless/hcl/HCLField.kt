@@ -8,7 +8,7 @@ sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean,
     override val renderable: Boolean = !inner
 
     val ref: String
-        get() = entity.owner?.let { "${it.hcl_name}." }.orEmpty() + hcl_name
+        get() = (entity as? HCLNamed ?: entity.owner)?.hcl_name.orEmpty() + hcl_name
 
     //hashcode and equals by name and owner
     override fun equals(other: Any?): Boolean {

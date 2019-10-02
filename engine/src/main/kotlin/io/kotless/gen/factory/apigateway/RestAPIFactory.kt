@@ -3,6 +3,7 @@ package io.kotless.gen.factory.apigateway
 import io.kotless.MimeType
 import io.kotless.Webapp
 import io.kotless.gen.*
+import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_rest_api
 
 object RestAPIFactory : GenerationFactory<Webapp.ApiGateway, RestAPIFactory.RestAPIOutput> {
@@ -16,6 +17,6 @@ object RestAPIFactory : GenerationFactory<Webapp.ApiGateway, RestAPIFactory.Rest
             binary_media_types = MimeType.binary().map { it.mimeText }.toTypedArray()
         }
 
-        return GenerationFactory.GenerationResult(RestAPIOutput(restApi.arn, restApi.id, restApi.root_resource_id), restApi)
+        return GenerationFactory.GenerationResult(RestAPIOutput(restApi::arn.ref(restApi), restApi::id.ref(restApi), restApi::root_resource_id.ref(restApi)), restApi)
     }
 }

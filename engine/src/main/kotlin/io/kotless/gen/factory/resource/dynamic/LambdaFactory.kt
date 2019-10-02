@@ -2,6 +2,7 @@ package io.kotless.gen.factory.resource.dynamic
 
 import io.kotless.Lambda
 import io.kotless.gen.*
+import io.kotless.hcl.ref
 import io.kotless.terraform.functions.base64sha256
 import io.kotless.terraform.functions.file
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
@@ -37,6 +38,6 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             //add here role
         }
 
-        return GenerationFactory.GenerationResult(LambdaOutput(lambda.arn), obj, lambda)
+        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref(lambda)), obj, lambda)
     }
 }

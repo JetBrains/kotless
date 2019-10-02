@@ -3,6 +3,7 @@ package io.kotless.gen.factory.apigateway
 import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.hcl.HCLEntity
+import io.kotless.hcl.ref
 import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
 
@@ -23,6 +24,6 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
             }
         }
 
-        return GenerationFactory.GenerationResult(DeploymentOutput(deployment.stage_name), deployment)
+        return GenerationFactory.GenerationResult(DeploymentOutput(deployment::stage_name.ref(deployment)), deployment)
     }
 }

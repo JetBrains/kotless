@@ -2,6 +2,7 @@ package io.kotless.gen.factory.route53
 
 import io.kotless.Webapp
 import io.kotless.gen.*
+import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.data.acm.acm_certificate
 
 object CertificateFactory : GenerationFactory<Webapp.Route53, CertificateFactory.CertificateOutput> {
@@ -15,6 +16,6 @@ object CertificateFactory : GenerationFactory<Webapp.Route53, CertificateFactory
             statuses = arrayOf("ISSUED")
         }
 
-        return GenerationFactory.GenerationResult(CertificateOutput(cert.arn), cert)
+        return GenerationFactory.GenerationResult(CertificateOutput(cert::arn.ref(cert)), cert)
     }
 }

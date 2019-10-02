@@ -4,11 +4,10 @@ package io.kotless
  * Kotless web application
  *
  * It includes ApiGateway REST API definition and Route53 alias with SSL certificate, if present.
+ *
+ * @param route53 alias to ApiGateway, if present
  */
-data class Webapp(
-    /** Alias to ApiGateway, if present */
-    val route53: Route53?,
-    val api: ApiGateway) : Visitable {
+data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
 
     /** Route53 CNAME alias */
     data class Route53(

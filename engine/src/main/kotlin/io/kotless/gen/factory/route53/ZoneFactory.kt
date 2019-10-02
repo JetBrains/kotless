@@ -2,6 +2,7 @@ package io.kotless.gen.factory.route53
 
 import io.kotless.Webapp
 import io.kotless.gen.*
+import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.data.route53.route53_zone
 
 object ZoneFactory : GenerationFactory<Webapp.Route53, ZoneFactory.ZoneOutput> {
@@ -15,6 +16,6 @@ object ZoneFactory : GenerationFactory<Webapp.Route53, ZoneFactory.ZoneOutput> {
             private_zone = false
         }
 
-        return GenerationFactory.GenerationResult(ZoneOutput(zone.zone_id, "${entity.alias}.${entity.zone}"), zone)
+        return GenerationFactory.GenerationResult(ZoneOutput(zone::zone_id.ref(zone), "${entity.alias}.${entity.zone}"), zone)
     }
 }
