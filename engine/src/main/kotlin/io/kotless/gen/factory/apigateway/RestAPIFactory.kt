@@ -17,6 +17,6 @@ object RestAPIFactory : GenerationFactory<Webapp.ApiGateway, RestAPIFactory.Rest
             binary_media_types = MimeType.binary().map { it.mimeText }.toTypedArray()
         }
 
-        return GenerationFactory.GenerationResult(RestAPIOutput(restApi::arn.ref(restApi), restApi::id.ref(restApi), restApi::root_resource_id.ref(restApi)), restApi)
+        return GenerationFactory.GenerationResult(RestAPIOutput(restApi::arn.ref, restApi::id.ref, restApi::root_resource_id.ref), restApi)
     }
 }

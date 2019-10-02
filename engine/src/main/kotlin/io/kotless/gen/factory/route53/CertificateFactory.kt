@@ -16,6 +16,6 @@ object CertificateFactory : GenerationFactory<Webapp.Route53, CertificateFactory
             statuses = arrayOf("ISSUED")
         }
 
-        return GenerationFactory.GenerationResult(CertificateOutput(cert::arn.ref(cert)), cert)
+        return GenerationFactory.GenerationResult(CertificateOutput(cert::arn.ref), cert)
     }
 }

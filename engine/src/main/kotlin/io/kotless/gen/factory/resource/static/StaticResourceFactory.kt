@@ -20,6 +20,6 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
             content_type = entity.mime.mimeText
         }
 
-        return GenerationFactory.GenerationResult(StaticResourceOutput(obj::key.ref(obj), obj::bucket.ref(obj)), obj)
+        return GenerationFactory.GenerationResult(StaticResourceOutput(obj::key.ref, obj::bucket.ref), obj)
     }
 }

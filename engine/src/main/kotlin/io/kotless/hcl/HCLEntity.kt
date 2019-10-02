@@ -15,12 +15,15 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
         }
     }
 
-    abstract inner class FieldDelegate<T : Any, F : HCLField<T>>(val name: String?,
-                                                                 private val inner: Boolean,
+    abstract inner class FieldDelegate<T : Any, F : HCLField<T>>(val name: String?, private val inner: Boolean,
                                                                  private val default: T) : ReadWriteProperty<HCLEntity, T> {
-        var field: F? = null
+        val ref: String by lazy { field!!.ref }
+
+        private var field: F? = null
+
         protected abstract fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: T): F
-        protected fun init(property: KProperty<*>) {
+
+        private fun init(property: KProperty<*>) {
             if (field == null) {
                 field = getField(name ?: property.name, inner, this@HCLEntity, default)
                 fields += field!!
@@ -78,9 +81,9 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
     fun textArray(name: String? = null, inner: Boolean = false, default: Array<String> = emptyArray()) = TextArrayFieldDelegate(name, inner, default)
 }
 
-fun <T : Any> KProperty0<T>.ref(entity: HCLEntity): String {
-    this.isAccessible = true
-    val delegate = this.getDelegate() as HCLEntity.FieldDelegate<*, *>
-    delegate.getValue(entity, this)
-    return delegate.field!!.ref
-}
+val <T : Any> KProperty0<T>.ref: String
+    get() {
+        this.isAccessible = true
+        this.get()
+        return (getDelegate() as HCLEntity.FieldDelegate<*, *>).ref
+    }

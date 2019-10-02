@@ -16,6 +16,6 @@ object ZoneFactory : GenerationFactory<Webapp.Route53, ZoneFactory.ZoneOutput> {
             private_zone = false
         }
 
-        return GenerationFactory.GenerationResult(ZoneOutput(zone::zone_id.ref(zone), "${entity.alias}.${entity.zone}"), zone)
+        return GenerationFactory.GenerationResult(ZoneOutput(zone::zone_id.ref, "${entity.alias}.${entity.zone}"), zone)
     }
 }

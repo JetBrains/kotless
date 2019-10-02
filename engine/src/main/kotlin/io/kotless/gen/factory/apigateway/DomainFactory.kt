@@ -33,6 +33,6 @@ object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Domain
             domain_name = domain.domain_name
         }
 
-        return GenerationFactory.GenerationResult(DomainOutput(domain::cloudfront_domain_name.ref(domain), domain::cloudfront_zone_id.ref(domain)), domain, basePath)
+        return GenerationFactory.GenerationResult(DomainOutput(domain::cloudfront_domain_name.ref, domain::cloudfront_zone_id.ref), domain, basePath)
     }
 }

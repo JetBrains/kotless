@@ -24,6 +24,6 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
             }
         }
 
-        return GenerationFactory.GenerationResult(DeploymentOutput(deployment::stage_name.ref(deployment)), deployment)
+        return GenerationFactory.GenerationResult(DeploymentOutput(deployment::stage_name.ref), deployment)
     }
 }

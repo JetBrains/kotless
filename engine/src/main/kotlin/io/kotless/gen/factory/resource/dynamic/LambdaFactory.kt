@@ -38,6 +38,6 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             //add here role
         }
 
-        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref(lambda)), obj, lambda)
+        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref), obj, lambda)
     }
 }

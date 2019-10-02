@@ -3,12 +3,10 @@ package io.kotless.hcl
 import io.kotless.utils.Text
 import io.kotless.utils.indent
 
-sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean,
-                               private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
+sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val owner: HCLEntity, var value: T) : HCLNamed, HCLRender {
     override val renderable: Boolean = !inner
 
-    val ref: String
-        get() = (entity as? HCLNamed ?: entity.owner)?.hcl_name.orEmpty() + hcl_name
+    val ref: String by lazy { "\${${(owner as? HCLNamed ?: owner.owner)?.hcl_name.orEmpty()}.$hcl_name}" }
 
     //hashcode and equals by name and owner
     override fun equals(other: Any?): Boolean {
@@ -16,14 +14,14 @@ sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean,
         if (other !is HCLField<*>) return false
 
         if (hcl_name != other.hcl_name) return false
-        if (entity != other.entity) return false
+        if (owner != other.owner) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = hcl_name.hashCode()
-        result = 31 * result + entity.hashCode()
+        result = 31 * result + owner.hashCode()
         return result
     }
 }
