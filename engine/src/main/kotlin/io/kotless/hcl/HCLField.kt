@@ -6,7 +6,7 @@ import io.kotless.utils.indent
 sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val owner: HCLEntity, var value: T) : HCLNamed, HCLRender {
     override val renderable: Boolean = !inner
 
-    val ref: String by lazy { "\${${(owner as? HCLNamed ?: owner.owner)?.hcl_name.orEmpty()}.$hcl_name}" }
+    override val hcl_ref: String by lazy { "\${${(owner as? HCLNamed ?: owner.owner)?.hcl_ref.orEmpty()}.$hcl_name}" }
 
     //hashcode and equals by name and owner
     override fun equals(other: Any?): Boolean {

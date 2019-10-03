@@ -30,7 +30,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
 
                 //FIXME resource should be created by path parts.
                 val resource = api_gateway_resource(Names.tf(entity.path.parts)) {
-                    rest_api_id = api.rest_api_arn
+                    rest_api_id = api.rest_api_id
                     parent_id = prevResourceId
                     path_part = entity.path.parts.last()
                 }
@@ -45,7 +45,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
 
 
         val method = api_gateway_method(Names.tf(entity.path.parts)) {
-            rest_api_id = api.rest_api_arn
+            rest_api_id = api.rest_api_id
             resource_id = resourceId
 
             authorization = "NONE"
@@ -53,7 +53,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
         }
 
         val integration = api_gateway_integration(Names.tf(entity.path.parts)) {
-            rest_api_id = api.rest_api_arn
+            rest_api_id = api.rest_api_id
             resource_id = resourceId
 
             http_method = entity.method.name

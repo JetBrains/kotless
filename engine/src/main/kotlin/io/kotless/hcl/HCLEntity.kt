@@ -7,17 +7,19 @@ import kotlin.reflect.jvm.isAccessible
 
 open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), val owner: HCLNamed? = null) : HCLRender {
     override val renderable: Boolean = true
+    private val renderableFields: Collection<HCLField<*>>
+        get() = fields.filter { it.renderable }
 
     override fun render(indentNum: Int): String = buildString {
-        for ((ind, field) in fields.filter { it.renderable }.withIndex()) {
+        for ((ind, field) in renderableFields.withIndex()) {
             field.render(indentNum, this)
-            if (ind != fields.size - 1) append("\n")
+            if (ind != renderableFields.size - 1) append("\n")
         }
     }
 
     abstract inner class FieldDelegate<T : Any, F : HCLField<T>>(val name: String?, private val inner: Boolean,
                                                                  private val default: T) : ReadWriteProperty<HCLEntity, T> {
-        val ref: String by lazy { field!!.ref }
+        val hcl_ref: String by lazy { field!!.hcl_ref }
 
         private var field: F? = null
 
@@ -85,5 +87,5 @@ val <T : Any> KProperty0<T>.ref: String
     get() {
         this.isAccessible = true
         this.get()
-        return (getDelegate() as HCLEntity.FieldDelegate<*, *>).ref
+        return (getDelegate() as HCLEntity.FieldDelegate<*, *>).hcl_ref
     }

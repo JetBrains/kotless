@@ -7,7 +7,7 @@ import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_rest_api
 
 object RestAPIFactory : GenerationFactory<Webapp.ApiGateway, RestAPIFactory.RestAPIOutput> {
-    data class RestAPIOutput(val rest_api_arn: String, val rest_api_id: String, val root_resource_id: String)
+    data class RestAPIOutput(val rest_api_id: String, val root_resource_id: String)
 
     override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = true
 
@@ -17,6 +17,6 @@ object RestAPIFactory : GenerationFactory<Webapp.ApiGateway, RestAPIFactory.Rest
             binary_media_types = MimeType.binary().map { it.mimeText }.toTypedArray()
         }
 
-        return GenerationFactory.GenerationResult(RestAPIOutput(restApi::arn.ref, restApi::id.ref, restApi::root_resource_id.ref), restApi)
+        return GenerationFactory.GenerationResult(RestAPIOutput(restApi::id.ref, restApi::root_resource_id.ref), restApi)
     }
 }
