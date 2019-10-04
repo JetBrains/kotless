@@ -9,6 +9,9 @@ open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCL
     override val hcl_ref: String
         get() = hcl_name
 
+    override val owner: HCLNamed?
+        get() = this
+
     override fun render(indentNum: Int): String {
         return """
             |${indent(indentNum)}resource "$tf_type" "$tf_id" {

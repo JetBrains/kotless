@@ -1,34 +1,19 @@
 package io.kotless.hcl
 
+import io.kotless.terraform.functions.link
 import io.kotless.utils.Text
 import io.kotless.utils.indent
 
-sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val owner: HCLEntity, var value: T) : HCLNamed, HCLRender {
+sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
     override val renderable: Boolean = !inner
 
-    override val hcl_ref: String by lazy { "\${${(owner as? HCLNamed ?: owner.owner)?.hcl_ref.orEmpty()}.$hcl_name}" }
-
-    //hashcode and equals by name and owner
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is HCLField<*>) return false
-
-        if (hcl_name != other.hcl_name) return false
-        if (owner != other.owner) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = hcl_name.hashCode()
-        result = 31 * result + owner.hashCode()
-        return result
-    }
+    override val hcl_ref: String by lazy { link("${entity.owner?.hcl_ref?.let { "$it." }.orEmpty()}$hcl_name") }
 }
 
 class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEntity, value: T) : HCLField<T>(name, inner, owner, value) {
     override fun render(indentNum: Int): String {
-        return """${indent(indentNum)}$hcl_name = {
+        return """
+            |${indent(indentNum)}$hcl_name = {
             |${value.render(indentNum + Text.indent)}
             |${indent(indentNum)}}""".trimMargin()
     }

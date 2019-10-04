@@ -9,6 +9,9 @@ open class TFData(val tf_id: String, val tf_type: String) : HCLEntity(), HCLName
     override val hcl_ref: String
         get() = hcl_name
 
+    override val owner: HCLNamed?
+        get() = this
+
     override fun render(indentNum: Int): String {
         return """
             |${indent(indentNum)}data "$tf_type" "$tf_id" {

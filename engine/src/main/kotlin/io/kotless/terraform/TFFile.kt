@@ -3,7 +3,7 @@ package io.kotless.terraform
 import io.kotless.hcl.HCLEntity
 import java.io.File
 
-class TFFile(val name: String, private val entities: ArrayList<HCLEntity> = ArrayList()) {
+class TFFile(val name: String, private val entities: MutableList<HCLEntity> = ArrayList()) {
     val nameWithExt = "$name.tf"
 
     fun write(file: File) {

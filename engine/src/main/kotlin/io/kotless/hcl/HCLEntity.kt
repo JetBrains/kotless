@@ -1,91 +1,71 @@
 package io.kotless.hcl
 
+import io.kotless.utils.forEachWithEnd
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 import kotlin.reflect.jvm.isAccessible
 
-open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), val owner: HCLNamed? = null) : HCLRender {
+open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), open val owner: HCLNamed? = null) : HCLRender {
     override val renderable: Boolean = true
     private val renderableFields: Collection<HCLField<*>>
         get() = fields.filter { it.renderable }
 
     override fun render(indentNum: Int): String = buildString {
-        for ((ind, field) in renderableFields.withIndex()) {
+        renderableFields.forEachWithEnd { field, isEnd ->
             field.render(indentNum, this)
-            if (ind != renderableFields.size - 1) append("\n")
+            if (!isEnd) append("\n")
         }
     }
 
-    abstract inner class FieldDelegate<T : Any, F : HCLField<T>>(val name: String?, private val inner: Boolean,
-                                                                 private val default: T) : ReadWriteProperty<HCLEntity, T> {
-        val hcl_ref: String by lazy { field!!.hcl_ref }
-
-        private var field: F? = null
-
-        protected abstract fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: T): F
-
-        private fun init(property: KProperty<*>) {
-            if (field == null) {
-                field = getField(name ?: property.name, inner, this@HCLEntity, default)
-                fields += field!!
-            }
+    inner class FieldProvider<T : Any, F : HCLField<T>>(val name: String?, val inner: Boolean, val default: T,
+                                                        val getField: (name: String, renderable: Boolean, entity: HCLEntity, value: T) -> F) {
+        operator fun provideDelegate(thisRef: HCLEntity, prop: KProperty<*>): FieldDelegate<T, F> {
+            val field = getField(name ?: prop.name, inner, thisRef, default)
+            thisRef.fields.add(field)
+            return FieldDelegate(field)
         }
+    }
 
-        override fun getValue(thisRef: HCLEntity, property: KProperty<*>): T {
-            init(property)
-            return field!!.value
-        }
+
+    inner class FieldDelegate<T : Any, F : HCLField<T>>(val field: F) : ReadWriteProperty<HCLEntity, T> {
+        val hcl_ref: String by lazy { field.hcl_ref }
+
+        override fun getValue(thisRef: HCLEntity, property: KProperty<*>): T = field.value
 
         override fun setValue(thisRef: HCLEntity, property: KProperty<*>, value: T) {
-            init(property)
-            field!!.value = value
+            field.value = value
         }
     }
 
-    inner class IntFieldDelegate(name: String?, inner: Boolean, default: Int) : FieldDelegate<Int, HCLIntField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: Int) = HCLIntField(name, renderable, entity, value)
+    fun <T : HCLEntity> entity(name: String? = null, inner: Boolean = false, default: T) = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLEntityField(name, renderable, entity, value)
     }
 
-    inner class IntArrayFieldDelegate(name: String?, inner: Boolean, default: Array<Int>) : FieldDelegate<Array<Int>, HCLIntArrayField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: Array<Int>) = HCLIntArrayField(name, renderable, entity, value)
+    fun int(name: String? = null, inner: Boolean = false, default: Int = 0) = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLIntField(name, renderable, entity, value)
+    }
+    fun intArray(name: String? = null, inner: Boolean = false, default: Array<Int> = emptyArray()) = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLIntArrayField(name, renderable, entity, value)
     }
 
-    inner class TextFieldDelegate(name: String?, inner: Boolean, default: String) : FieldDelegate<String, HCLTextField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: String) = HCLTextField(name, renderable, entity, value)
+    fun bool(name: String? = null, inner: Boolean = false, default: Boolean = false) = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLBoolField(name, renderable, entity, value)
+    }
+    fun boolArray(name: String? = null, inner: Boolean = false, default: Array<Boolean> = emptyArray()) = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLBoolArrayField(name, renderable, entity, value)
     }
 
-    inner class TextArrayFieldDelegate(name: String?, inner: Boolean, default: Array<String>) : FieldDelegate<Array<String>, HCLTextArrayField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: Array<String>) = HCLTextArrayField(name, renderable, entity, value)
+    fun text(name: String? = null, inner: Boolean = false, default: String = "")  = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLTextField(name, renderable, entity, value)
     }
-
-    inner class BoolFieldDelegate(name: String?, inner: Boolean, default: Boolean) : FieldDelegate<Boolean, HCLBoolField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: Boolean) = HCLBoolField(name, renderable, entity, value)
+    fun textArray(name: String? = null, inner: Boolean = false, default: Array<String> = emptyArray())  = FieldProvider(name, inner, default) { name, renderable, entity, value ->
+        HCLTextArrayField(name, renderable, entity, value)
     }
-
-    inner class BoolArrayFieldDelegate(name: String?, inner: Boolean, default: Array<Boolean>) : FieldDelegate<Array<Boolean>, HCLBoolArrayField>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: Array<Boolean>) = HCLBoolArrayField(name, renderable, entity, value)
-    }
-
-    inner class EntityFieldDelegate<T : HCLEntity>(name: String?, inner: Boolean, default: T) : FieldDelegate<T, HCLEntityField<T>>(name, inner, default) {
-        override fun getField(name: String, renderable: Boolean, entity: HCLEntity, value: T) = HCLEntityField(name, renderable, entity, value)
-    }
-
-    fun <T : HCLEntity> entity(name: String? = null, inner: Boolean = false, default: T) = EntityFieldDelegate(name, inner, default)
-
-    fun int(name: String? = null, inner: Boolean = false, default: Int = 0) = IntFieldDelegate(name, inner, default)
-    fun intArray(name: String? = null, inner: Boolean = false, default: Array<Int> = emptyArray()) = IntArrayFieldDelegate(name, inner, default)
-
-    fun bool(name: String? = null, inner: Boolean = false, default: Boolean = false) = BoolFieldDelegate(name, inner, default)
-    fun boolArray(name: String? = null, inner: Boolean = false, default: Array<Boolean> = emptyArray()) = BoolArrayFieldDelegate(name, inner, default)
-
-    fun text(name: String? = null, inner: Boolean = false, default: String = "") = TextFieldDelegate(name, inner, default)
-    fun textArray(name: String? = null, inner: Boolean = false, default: Array<String> = emptyArray()) = TextArrayFieldDelegate(name, inner, default)
 }
 
 val <T : Any> KProperty0<T>.ref: String
     get() {
         this.isAccessible = true
-        this.get()
         return (getDelegate() as HCLEntity.FieldDelegate<*, *>).hcl_ref
     }
