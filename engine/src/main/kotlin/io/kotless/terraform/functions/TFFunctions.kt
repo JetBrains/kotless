@@ -15,3 +15,4 @@ fun file(file: String) = "file($file)"
 fun timestamp() = "timestamp()"
 
 fun link(field: String) = "\${$field}"
+fun link(vararg parts: String?) = parts.filterNotNull().joinToString(separator = ".")

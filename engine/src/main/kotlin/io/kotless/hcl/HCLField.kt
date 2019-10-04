@@ -7,7 +7,7 @@ import io.kotless.utils.indent
 sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
     override val renderable: Boolean = !inner
 
-    override val hcl_ref: String by lazy { link("${entity.owner?.hcl_ref?.let { "$it." }.orEmpty()}$hcl_name") }
+    override val hcl_ref: String by lazy { link(entity.owner?.hcl_ref, hcl_name) }
 }
 
 class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEntity, value: T) : HCLField<T>(name, inner, owner, value) {
