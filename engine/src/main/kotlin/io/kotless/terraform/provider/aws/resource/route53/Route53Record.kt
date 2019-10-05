@@ -13,6 +13,7 @@ class Route53Record(id: String) : TFResource(id, "aws_route53_record") {
     var zone_id by text()
     var name by text()
     var type by text()
+    var records by textArray()
 
     class Alias(configure: Alias.() -> Unit = {}) : HCLEntity() {
         init {

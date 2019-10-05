@@ -4,10 +4,11 @@ import io.kotless.*
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
+import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.*
 
 object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Unit> {
-    private val allResources = HashMap<URIPath, ApiGatewayResource>()
+    private val allResources = HashMap<URIPath, String>()
 
     override fun mayRun(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.lambda, LambdaFactory)
@@ -17,16 +18,14 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
         val lambda = context.get(entity.lambda, LambdaFactory)
 
         val resourceId = when {
-            entity.path.parts.isEmpty() -> {
-                api.root_resource_id
-            }
+            entity.path.parts.isEmpty() -> api.root_resource_id
             else -> {
                 var parts = entity.path.parts
                 while (parts.isNotEmpty() && !allResources.containsKey(URIPath(parts))) {
                     parts = parts.dropLast(1)
                 }
 
-                val prevResourceId = if (parts.isNotEmpty()) allResources[URIPath(parts)]!!.id else api.root_resource_id
+                val prevResourceId = if (parts.isNotEmpty()) allResources[URIPath(parts)]!! else api.root_resource_id
 
                 //FIXME resource should be created by path parts.
                 val resource = api_gateway_resource(Names.tf(entity.path.parts)) {
@@ -35,11 +34,11 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
                     path_part = entity.path.parts.last()
                 }
 
-                allResources[entity.path] = resource
+                allResources[entity.path] = resource::id.ref
 
                 context.registerEntities(resource)
 
-                resource.id
+                resource::id.ref
             }
         }
 

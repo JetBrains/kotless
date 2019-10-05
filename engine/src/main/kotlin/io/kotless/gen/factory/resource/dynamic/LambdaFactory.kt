@@ -3,8 +3,7 @@ package io.kotless.gen.factory.resource.dynamic
 import io.kotless.Lambda
 import io.kotless.gen.*
 import io.kotless.hcl.ref
-import io.kotless.terraform.functions.base64sha256
-import io.kotless.terraform.functions.file
+import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
@@ -18,7 +17,8 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
         val obj = s3_object(Names.tf(entity.name)) {
             bucket = context.schema.kotlessConfig.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
-            source = entity.file.absolutePath
+            source = path(entity.file)
+            etag = md5(file(entity.file))
         }
 
         val lambda = lambda_function(Names.tf(entity.name)) {

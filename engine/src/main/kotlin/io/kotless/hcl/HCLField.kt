@@ -4,54 +4,55 @@ import io.kotless.terraform.functions.link
 import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
-sealed class HCLField<T : Any>(override val hcl_name: String, val inner: Boolean, private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
-    override val renderable: Boolean = !inner
+sealed class HCLField<T : Any>(override val hcl_name: String, val inner: Boolean, private val entity: HCLEntity, var value: T?) : HCLNamed, HCLRender {
+    override val renderable: Boolean
+        get() = !inner && value != null
 
     override val hcl_ref: String by lazy { link(entity.owner?.hcl_ref, hcl_name) }
 }
 
-class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEntity, value: T) : HCLField<T>(name, inner, owner, value) {
+class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEntity, value: T?) : HCLField<T>(name, inner, owner, value) {
     override fun render(): String {
         return """
             |$hcl_name = {
-            |${value.render().withIndent(Text.indent)}
+            |${value!!.render().withIndent(Text.indent)}
             |}
             """.trimMargin()
     }
 }
 
-class HCLTextField(name: String, inner: Boolean, owner: HCLEntity, value: String) : HCLField<String>(name, inner, owner, value) {
+class HCLTextField(name: String, inner: Boolean, owner: HCLEntity, value: String?) : HCLField<String>(name, inner, owner, value) {
     override fun render(): String {
         return "$hcl_name = \"$value\""
     }
 }
 
-class HCLTextArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<String>) : HCLField<Array<String>>(name, inner, owner, value) {
+class HCLTextArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<String>?) : HCLField<Array<String>>(name, inner, owner, value) {
     override fun render(): String {
-        return "$hcl_name = ${value.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }}"
+        return "$hcl_name = ${value!!.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }}"
     }
 }
 
-class HCLBoolField(name: String, inner: Boolean, owner: HCLEntity, value: Boolean) : HCLField<Boolean>(name, inner, owner, value) {
+class HCLBoolField(name: String, inner: Boolean, owner: HCLEntity, value: Boolean?) : HCLField<Boolean>(name, inner, owner, value) {
     override fun render(): String {
         return "$hcl_name = $value"
     }
 }
 
-class HCLBoolArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<Boolean>) : HCLField<Array<Boolean>>(name, inner, owner, value) {
+class HCLBoolArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<Boolean>?) : HCLField<Array<Boolean>>(name, inner, owner, value) {
     override fun render(): String {
-        return "$hcl_name = ${value.joinToString(prefix = "[", postfix = "]") { "$it" }}"
+        return "$hcl_name = ${value!!.joinToString(prefix = "[", postfix = "]") { "$it" }}"
     }
 }
 
-class HCLIntField(name: String, inner: Boolean, owner: HCLEntity, value: Int) : HCLField<Int>(name, inner, owner, value) {
+class HCLIntField(name: String, inner: Boolean, owner: HCLEntity, value: Int?) : HCLField<Int>(name, inner, owner, value) {
     override fun render(): String {
         return "$hcl_name = $value"
     }
 }
 
-class HCLIntArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<Int>) : HCLField<Array<Int>>(name, inner, owner, value) {
+class HCLIntArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<Int>?) : HCLField<Array<Int>>(name, inner, owner, value) {
     override fun render(): String {
-        return "$hcl_name = ${value.joinToString(prefix = "[", postfix = "]") { "$it" }}"
+        return "$hcl_name = ${value!!.joinToString(prefix = "[", postfix = "]") { "$it" }}"
     }
 }
