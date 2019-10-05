@@ -34,7 +34,7 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), o
         }
     }
 
-    fun <T : HCLEntity> entity(name: String? = null, inner: Boolean = false, default: T) = FieldProvider(name, inner, default) { field, renderable, entity, value ->
+    fun <T : HCLEntity> entity(name: String? = null, inner: Boolean = false, default: T? = null) = FieldProvider(name, inner, default) { field, renderable, entity, value ->
         HCLEntityField(field, renderable, entity, value)
     }
 
