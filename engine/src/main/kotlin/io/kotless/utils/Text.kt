@@ -8,7 +8,7 @@ object Text {
     fun dehyphen(text: String): List<String> = text.split("-")
     fun dedot(text: String): List<String> = text.split(".")
 
-    const val indent = 4
+    const val indent = 2
 
     fun indent(number: Int) = " ".repeat(number)
 }

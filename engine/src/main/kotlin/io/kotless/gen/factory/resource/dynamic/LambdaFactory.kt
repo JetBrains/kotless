@@ -12,7 +12,7 @@ import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
 
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
-    data class LambdaOutput(val lambda_arn: String)
+    data class LambdaOutput(val lambda_arn: String, val lambda_name: String)
 
     override fun mayRun(entity: Lambda, context: GenerationContext) = true
 
@@ -70,6 +70,6 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             role = iam_role::arn.ref
         }
 
-        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
+        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
     }
 }

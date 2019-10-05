@@ -1,15 +1,16 @@
 package io.kotless.gen.factory.route.dynamic
 
-import io.kotless.*
+import io.kotless.HttpMethod
+import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.resource.apigateway.*
+import io.kotless.gen.factory.route.AbstractRouteFactory
+import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
+import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_method
+import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
 
-object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Unit> {
-    private val allResources = HashMap<URIPath, String>()
-
+object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Unit>, AbstractRouteFactory() {
     override fun mayRun(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.lambda, LambdaFactory)
 
@@ -17,33 +18,9 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
         val api = context.get(context.webapp.api, RestAPIFactory)
         val lambda = context.get(entity.lambda, LambdaFactory)
 
-        val resourceId = when {
-            entity.path.parts.isEmpty() -> api.root_resource_id
-            else -> {
-                var parts = entity.path.parts
-                while (parts.isNotEmpty() && !allResources.containsKey(URIPath(parts))) {
-                    parts = parts.dropLast(1)
-                }
+        val resourceId = getResource(entity.path, api, context)
 
-                val prevResourceId = if (parts.isNotEmpty()) allResources[URIPath(parts)]!! else api.root_resource_id
-
-                //FIXME resource should be created by path parts.
-                val resource = api_gateway_resource(Names.tf(entity.path.parts)) {
-                    rest_api_id = api.rest_api_id
-                    parent_id = prevResourceId
-                    path_part = entity.path.parts.last()
-                }
-
-                allResources[entity.path] = resource::id.ref
-
-                context.registerEntities(resource)
-
-                resource::id.ref
-            }
-        }
-
-
-        val method = api_gateway_method(Names.tf(entity.path.parts)) {
+        val method = api_gateway_method(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -51,7 +28,16 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
             http_method = entity.method.name
         }
 
-        val integration = api_gateway_integration(Names.tf(entity.path.parts)) {
+        val permission = lambda_permission(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+            statement_id = Names.aws(entity.path.parts).ifBlank { "root_resource" }
+            action = "lambda:InvokeFunction"
+            function_name = lambda.lambda_arn
+            principal = "apigateway.amazonaws.com"
+            //TODO Add back here region and account
+            source_arn = "arn:aws:execute-api:*:*:${api.rest_api_id}/*/${method.http_method}/${entity.path}"
+        }
+
+        val integration = api_gateway_integration(Names.tf(entity.path.parts).ifEmpty { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -63,6 +49,6 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
             uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda.lambda_arn}/invocations"
         }
 
-        return GenerationFactory.GenerationResult(Unit, method, integration)
+        return GenerationFactory.GenerationResult(Unit, method, integration, permission)
     }
 }

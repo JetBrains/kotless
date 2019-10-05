@@ -1,17 +1,17 @@
 package io.kotless.gen.factory.route.static
 
-import io.kotless.*
+import io.kotless.HttpMethod
+import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
+import io.kotless.gen.factory.route.AbstractRouteFactory
 import io.kotless.hcl.HCLEntity
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.resource.apigateway.*
+import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
+import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_method
 import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gateway_integration_response
 
-object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit> {
-    private val allResources = HashMap<URIPath, String>()
-
+object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit>, AbstractRouteFactory() {
     override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.resource, StaticResourceFactory)
 
@@ -19,32 +19,9 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
         val api = context.get(context.webapp.api, RestAPIFactory)
         val resource = context.get(entity.resource, StaticResourceFactory)
 
-        val resourceId = when {
-            entity.path.parts.isEmpty() -> api.root_resource_id
-            else -> {
-                var parts = entity.path.parts
-                while (parts.isNotEmpty() && !allResources.containsKey(URIPath(parts))) {
-                    parts = parts.dropLast(1)
-                }
+        val resourceId = getResource(entity.path, api, context)
 
-                val prevResourceId = if (parts.isNotEmpty()) allResources[URIPath(parts)]!! else api.root_resource_id
-
-                //FIXME resource should be created by path parts.
-                val resource = api_gateway_resource(Names.tf(entity.path.parts)) {
-                    rest_api_id = api.rest_api_id
-                    parent_id = prevResourceId
-                    path_part = entity.path.parts.last()
-                }
-
-                allResources[entity.path] = resource::id.ref
-
-                context.registerEntities(resource)
-
-                resource::id.ref
-            }
-        }
-
-        val method = api_gateway_method(Names.tf(entity.path.parts)) {
+        val method = api_gateway_method(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -52,7 +29,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             http_method = entity.method.name
         }
 
-        val response = api_gateway_integration_response(Names.tf(entity.path.parts)) {
+        val response = api_gateway_integration_response(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
             http_method = entity.method.name
@@ -63,7 +40,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             }
         }
 
-        val integration = api_gateway_integration(Names.tf(entity.path.parts)) {
+        val integration = api_gateway_integration(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -73,7 +50,6 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             type = "AWS"
             //TODO-tanvd hardcoded region for now
             uri = "arn:aws:apigateway:us-east-1:s3:path/${resource.bucket}/${resource.key}"
-//            credentials
         }
 
         return GenerationFactory.GenerationResult(Unit, method, response, integration)
