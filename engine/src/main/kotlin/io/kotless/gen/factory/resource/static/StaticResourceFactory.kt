@@ -16,7 +16,7 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
             bucket = entity.bucket
             key = entity.path.toString()
             source = path(entity.content)
-            etag = md5(file(entity.content))
+            etag = eval(md5(file(entity.content)))
             content_type = entity.mime.mimeText
         }
 

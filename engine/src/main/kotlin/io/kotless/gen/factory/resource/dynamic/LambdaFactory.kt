@@ -18,7 +18,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             bucket = context.schema.kotlessConfig.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
             source = path(entity.file)
-            etag = md5(file(entity.file))
+            etag = eval(md5(file(entity.file)))
         }
 
         val lambda = lambda_function(Names.tf(entity.name)) {
@@ -33,7 +33,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             memory_size = entity.config.memoryMb
             timeout = entity.config.timeoutSec
 
-            source_code_hash = base64sha256(file(obj.source))
+            source_code_hash = eval(base64sha256(file(obj.source)))
 
             //add here role
         }
