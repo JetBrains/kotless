@@ -4,7 +4,7 @@ import io.kotless.terraform.functions.link
 import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
-sealed class HCLField<T : Any>(override val hcl_name: String, inner: Boolean, private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
+sealed class HCLField<T : Any>(override val hcl_name: String, val inner: Boolean, private val entity: HCLEntity, var value: T) : HCLNamed, HCLRender {
     override val renderable: Boolean = !inner
 
     override val hcl_ref: String by lazy { link(entity.owner?.hcl_ref, hcl_name) }
