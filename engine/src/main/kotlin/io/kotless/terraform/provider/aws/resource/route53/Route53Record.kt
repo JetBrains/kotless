@@ -15,17 +15,16 @@ class Route53Record(id: String) : TFResource(id, "aws_route53_record") {
     var type by text()
     var records by textArray()
 
-    class Alias(configure: Alias.() -> Unit = {}) : HCLEntity() {
-        init {
-            configure()
-        }
-
+    class Alias : HCLEntity() {
         var name by text()
         var zone_id by text()
         var evaluate_target_health by bool()
     }
 
-    var alias by entity(default = Alias())
+    var alias by entity<Alias>()
+    fun alias(configure: Alias.() -> Unit) {
+        alias = Alias().apply(configure)
+    }
 }
 
 fun route53_record(id: String, configure: Route53Record.() -> Unit) = Route53Record(id).apply(configure)

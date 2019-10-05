@@ -14,7 +14,7 @@ class ApiGatewayMethodResponse(id: String) : TFResource(id, "aws_api_gateway_met
     var http_method by text()
     var status_code by int()
 
-    val response_parameters by entity<HCLEntity>(default = HCLEntity())
+    val response_parameters by entity<HCLEntity>()
 }
 
 fun api_gateway_method_response(id: String, configure: ApiGatewayMethodResponse.() -> Unit) = ApiGatewayMethodResponse(id).apply(configure)

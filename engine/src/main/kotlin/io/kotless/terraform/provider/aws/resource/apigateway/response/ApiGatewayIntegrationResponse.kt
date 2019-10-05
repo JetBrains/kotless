@@ -15,7 +15,7 @@ class ApiGatewayIntegrationResponse(id: String) : TFResource(id, "aws_api_gatewa
     var http_method by text()
     var status_code by int()
 
-    var response_parameters by entity(default = HCLEntity())
+    var response_parameters by entity<HCLEntity>()
 }
 
 fun api_gateway_integration_response(id: String, configure: ApiGatewayIntegrationResponse.() -> Unit) = ApiGatewayIntegrationResponse(id).apply(configure)

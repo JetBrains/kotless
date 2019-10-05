@@ -15,17 +15,16 @@ class ApiGatewayDeployment(id: String) : TFResource(id, "aws_api_gateway_deploym
     var rest_api_id by text()
     var stage_name by text()
 
-    var variables by entity<HCLEntity>(default = HCLEntity())
+    var variables by entity<HCLEntity>()
 
-    class Lifecycle(configure: Lifecycle.() -> Unit = {}) : HCLEntity() {
-        init {
-            configure()
-        }
-
+    class Lifecycle : HCLEntity() {
         val create_before_destroy by bool(default = true)
     }
 
-    val lifecycle by entity<Lifecycle>(default = Lifecycle())
+    var lifecycle by entity<Lifecycle>()
+    fun lifecycle(configure: Lifecycle.() -> Unit) {
+        lifecycle = Lifecycle().apply(configure)
+    }
 }
 
 fun api_gateway_deployment(id: String, configure: ApiGatewayDeployment.() -> Unit) = ApiGatewayDeployment(id).apply(configure)

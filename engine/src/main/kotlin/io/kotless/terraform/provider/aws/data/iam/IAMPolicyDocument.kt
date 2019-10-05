@@ -6,24 +6,19 @@ import io.kotless.terraform.TFFile
 
 
 class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
-    class Statement(configure: Statement.() -> Unit = {}) : HCLEntity() {
-        init {
-            configure()
-        }
-
+    class Statement : HCLEntity() {
         var effect by text()
         var sid by text()
 
-        class Principals(configure: Principals.() -> Unit = {}) : HCLEntity() {
-            init {
-                configure()
-            }
-
+        class Principals : HCLEntity() {
             var identifiers by textArray()
             var type by text()
         }
 
         var principals by entity<Principals>()
+        fun principals(configure: Principals.() -> Unit) {
+            principals = Principals().apply(configure)
+        }
 
         var resources by textArray()
         var actions by textArray()
@@ -31,7 +26,10 @@ class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
 
     val json by text(inner = true)
 
-    val statement by entity<Statement>()
+    var statement by entity<Statement>()
+    fun statement(configure: Statement.() -> Unit) {
+        statement = Statement().apply(configure)
+    }
 }
 
 fun iam_policy_document(id: String, configure: IAMPolicyDocument.() -> Unit) = IAMPolicyDocument(id).apply(configure)

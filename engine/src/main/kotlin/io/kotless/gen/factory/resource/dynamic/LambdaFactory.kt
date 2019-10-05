@@ -4,6 +4,9 @@ import io.kotless.Lambda
 import io.kotless.gen.*
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.*
+import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
+import io.kotless.terraform.provider.aws.resource.iam.iam_role
+import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
@@ -21,6 +24,35 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             etag = eval(md5(file(entity.file)))
         }
 
+        val assume = iam_policy_document(Names.tf(entity.name, "assume")) {
+            statement {
+                principals {
+                    type = "Service"
+                    identifiers = arrayOf("lambda.amazonaws.com", "apigateway.amazonaws.com")
+                }
+
+                actions = arrayOf("sts:AssumeRole")
+            }
+        }
+
+        val iam_role = iam_role(Names.tf(entity.name)) {
+            name = Names.aws(entity.name)
+            assume_role_policy = assume::json.ref
+        }
+
+        val policy_document = iam_policy_document(Names.tf(entity.name)) {
+            statement {
+                effect = "Allow"
+                resources = entity.permissions.flatMap { it.awsIds }.toTypedArray()
+                actions = entity.permissions.flatMap { permission -> permission.actions.map { "${permission.resource.prefix}:$it" } }.toTypedArray()
+            }
+        }
+
+        val role_policy = iam_role_policy(Names.tf(entity.name)) {
+            role = iam_role::arn.ref
+            policy = policy_document::json.ref
+        }
+
         val lambda = lambda_function(Names.tf(entity.name)) {
             function_name = Names.tf(entity.name)
 
@@ -35,9 +67,9 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
 
             source_code_hash = eval(base64sha256(file(obj.source)))
 
-            //add here role
+            role = iam_role::arn.ref
         }
 
-        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref), obj, lambda)
+        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
     }
 }
