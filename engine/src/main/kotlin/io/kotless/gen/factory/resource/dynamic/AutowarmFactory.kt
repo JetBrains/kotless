@@ -29,7 +29,7 @@ object AutowarmFactory : GenerationFactory<Lambda, Unit> {
         }
 
         val target = cloudwatch_event_target(Names.tf(entity.name)) {
-            rule = event_rule.name
+            rule = event_rule::name.ref
             arn = lambda.lambda_arn
         }
 

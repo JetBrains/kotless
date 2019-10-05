@@ -10,8 +10,8 @@ object Names {
         .filter { it.isNotBlank() }
 
     fun tf(vararg name: String) = tf(name.toList())
-    fun tf(name: Iterable<String>) = name.flatMap { deall(it) }.map { it.toLowerCase() }.joinToString(separator = "_")
+    fun tf(name: Iterable<String>) = name.flatMap { deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
 
     fun aws(vararg name: String) = aws(name.toList())
-    fun aws(name: Iterable<String>) = name.flatMap { deall(it) }.map { it.toLowerCase() }.joinToString(separator = "-")
+    fun aws(name: Iterable<String>) = name.flatMap { deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
 }

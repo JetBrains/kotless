@@ -3,7 +3,6 @@ package io.kotless.gen.factory.route53
 import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.DomainFactory
-import io.kotless.terraform.provider.aws.resource.route53.Route53Record
 import io.kotless.terraform.provider.aws.resource.route53.route53_record
 
 object RecordFactory : GenerationFactory<Webapp.Route53, Unit> {
@@ -18,7 +17,7 @@ object RecordFactory : GenerationFactory<Webapp.Route53, Unit> {
             name = entity.alias
             type = "A"
 
-            alias = Route53Record.Alias().apply {
+            alias {
                 name = domain.domain_name
                 zone_id = domain.zone_id
                 evaluate_target_health = false
