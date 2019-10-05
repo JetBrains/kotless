@@ -9,7 +9,8 @@ object Text {
     fun dedot(text: String): List<String> = text.split(".")
 
     const val indent = 4
+
+    fun indent(number: Int) = " ".repeat(number)
 }
 
-fun indent(number: Int) = " ".repeat(number)
-
+fun String.withIndent(number: Int) = split("\n").joinToString(separator = "\n") { Text.indent(number) + it }

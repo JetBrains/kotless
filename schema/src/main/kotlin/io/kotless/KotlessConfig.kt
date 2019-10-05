@@ -33,7 +33,7 @@ data class KotlessConfig(
             /** AWS profile from a local machine to use for Terraform state storing */
             val profile: String,
             /** AWS region where state bucket is located */
-            val region: String)
+            val region: String) : Visitable
 
         /** Configuration of Terraform AWS provider */
         data class AWSProvider(
@@ -46,6 +46,7 @@ data class KotlessConfig(
 
         override fun visit(visitor: (Any) -> Unit) {
             aws.visit(visitor)
+            backend.visit(visitor)
             visitor(this)
         }
     }

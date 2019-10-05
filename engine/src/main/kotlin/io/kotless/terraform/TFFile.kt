@@ -10,7 +10,7 @@ class TFFile(val name: String, private val entities: MutableList<HCLEntity> = Ar
         if (!file.exists()) file.createNewFile()
         file.writeText(buildString {
             for (entity in entities) {
-                entity.render(0, this)
+                append(entity.render())
                 append("\n\n")
             }
         })

@@ -16,7 +16,7 @@ data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
         /** Name of alias */
         val alias: String,
         /** A fully qualified name of certificate, for SSL connection */
-        val certificate: String)
+        val certificate: String) : Visitable
 
     /**
      * ApiGateway REST API.
@@ -40,9 +40,9 @@ data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
             val name: String,
             /** Version of this deployment.
              *  Will be used for versioned Kotless deployments */
-            val version: String)
+            val version: String) : Visitable
 
-        interface Route {
+        interface Route : Visitable {
             val method: HttpMethod
             val path: URIPath
         }
@@ -56,15 +56,15 @@ data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
         }
 
         override fun visit(visitor: (Any) -> Unit) {
-            visitor(deployment)
-            dynamics.forEach { visitor(it) }
-            statics.forEach { visitor(it) }
+            deployment.visit(visitor)
+            dynamics.forEach { it.visit(visitor) }
+            statics.forEach { it.visit(visitor) }
             visitor(this)
         }
     }
 
     override fun visit(visitor: (Any) -> Unit) {
-        visitor(route53!!)
+        route53?.visit(visitor)
         api.visit(visitor)
         visitor(this)
     }
