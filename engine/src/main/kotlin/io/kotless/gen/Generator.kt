@@ -2,6 +2,7 @@ package io.kotless.gen
 
 import io.kotless.*
 import io.kotless.gen.factory.apigateway.*
+import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.dynamic.AutowarmFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
@@ -13,6 +14,8 @@ import kotlin.reflect.KClass
 
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
+        KotlessConfig.Terraform.AWSProvider::class to setOf(InfoFactory),
+
         Webapp.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
         Webapp.ApiGateway.Deployment::class to setOf(DeploymentFactory),
         Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),

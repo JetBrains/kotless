@@ -15,6 +15,7 @@ import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gatewa
 object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit>, AbstractRouteFactory() {
     override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.resource, StaticResourceFactory)
+        && context.check(context.schema.kotlessConfig.terraform.aws, InfoFactory)
 
     override fun generate(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
