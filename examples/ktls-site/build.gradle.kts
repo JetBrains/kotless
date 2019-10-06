@@ -26,19 +26,19 @@ dependencies {
 
 kotless {
     config {
-        bucket = "ktls-site.s3.aws.kotless.io"
+        bucket = "site.s3.ktls.aws.intellij.net"
         resourcePrefix = "ktls-site-prod"
 
         workDirectory = File(project.projectDir, "src/main/static")
 
         terraform {
-            profile = "kotless"
+            profile = "kotless-jetbrains"
             region = "us-east-1"
         }
     }
     webapp(project) {
         packages = setOf("io.kotless.examples")
-        route53 = Route53("prod", "kotless.io")
+        route53 = Route53("site", "ktls.aws.intellij.net")
     }
 }
 
