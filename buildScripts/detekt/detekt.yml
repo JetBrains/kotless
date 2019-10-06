@@ -109,7 +109,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    thresholdInFiles: 11
+    thresholdInFiles: 30
     thresholdInClasses: 11
     thresholdInInterfaces: 11
     thresholdInObjects: 11
@@ -512,7 +512,7 @@ style:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
   UseDataClass:
-    active: true
+    active: false
     excludeAnnotatedClasses: ""
   UtilityClassWithPublicConstructor:
     active: false

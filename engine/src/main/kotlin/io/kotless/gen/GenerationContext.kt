@@ -2,6 +2,7 @@ package io.kotless.gen
 
 import io.kotless.*
 import io.kotless.hcl.HCLEntity
+import io.kotless.Storage
 
 /**
  * Context of current Terraform generation
@@ -47,25 +48,6 @@ class GenerationContext(val schema: Schema, val webapp: Webapp) {
         fun all() = entities.toSet()
     }
 
-    class Storage {
-        private val storage = HashMap<Key<*>, Any>()
-
-        class Key<T>()
-
-        fun <E: Any, K: Key<E>> register(key: K, value: E) {
-            storage[key] = value
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        operator fun <E: Any, K: Key<E>> get(key: K): E? {
-            return storage[key] as E?
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        fun <E: Any, K: Key<E>> getOrPut(key: K, defaultValue: () -> E): E {
-            return storage.getOrPut(key, defaultValue) as E
-        }
-    }
 
     val storage = Storage()
 }

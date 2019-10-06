@@ -6,6 +6,7 @@ import io.kotless.gen.Names
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_resource
+import io.kotless.Storage
 
 /**
  * Generic implementation of ApiGateway resources creation
@@ -14,7 +15,7 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_resourc
  */
 abstract class AbstractRouteFactory {
     companion object {
-        private val resource = GenerationContext.Storage.Key<HashMap<URIPath, String>>()
+        private val resource = Storage.Key<HashMap<URIPath, String>>()
     }
 
     fun getResource(resourcePath: URIPath, api: RestAPIFactory.RestAPIOutput, context: GenerationContext): String {
