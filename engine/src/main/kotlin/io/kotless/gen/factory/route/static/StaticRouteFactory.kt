@@ -15,12 +15,14 @@ import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gatewa
 object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit>, AbstractRouteFactory() {
     override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.resource, StaticResourceFactory)
-        && context.check(context.schema.kotlessConfig.terraform.aws, InfoFactory)
+        && context.check(context.webapp, InfoFactory)
+        && context.check(context.webapp, StaticRoleFactory)
 
     override fun generate(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
         val resource = context.get(entity.resource, StaticResourceFactory)
-        val info = context.get(context.schema.kotlessConfig.terraform.aws, InfoFactory)
+        val info = context.get(context.webapp, InfoFactory)
+        val static_role = context.get(context.webapp, StaticRoleFactory)
 
         val resourceId = getResource(entity.path, api, context)
 
@@ -52,6 +54,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
 
             type = "AWS"
             uri = "arn:aws:apigateway:${info.region_name}:s3:path/${resource.bucket}/${resource.key}"
+            credentials = static_role.role_arn
         }
 
         return GenerationFactory.GenerationResult(Unit, method, response, integration)

@@ -8,6 +8,7 @@ import io.kotless.gen.factory.resource.dynamic.AutowarmFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
+import io.kotless.gen.factory.route.static.StaticRoleFactory
 import io.kotless.gen.factory.route.static.StaticRouteFactory
 import io.kotless.gen.factory.route53.*
 import io.kotless.terraform.TFFile
@@ -15,7 +16,7 @@ import kotlin.reflect.KClass
 
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
-        KotlessConfig.Terraform.AWSProvider::class to setOf(InfoFactory),
+        Webapp::class to setOf(InfoFactory, StaticRoleFactory),
         KotlessConfig.Terraform::class to setOf(TFConfigFactory),
 
         Webapp.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),

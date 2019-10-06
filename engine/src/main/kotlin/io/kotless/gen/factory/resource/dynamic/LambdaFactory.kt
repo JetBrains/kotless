@@ -49,7 +49,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
         }
 
         val role_policy = iam_role_policy(Names.tf(entity.name)) {
-            role = iam_role::arn.ref
+            role = iam_role::name.ref
             policy = policy_document::json.ref
         }
 

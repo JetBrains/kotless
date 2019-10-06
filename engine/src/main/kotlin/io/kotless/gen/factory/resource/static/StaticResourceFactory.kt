@@ -12,6 +12,7 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
     override fun mayRun(entity: StaticResource, context: GenerationContext) = true
 
     override fun generate(entity: StaticResource, context: GenerationContext): GenerationFactory.GenerationResult<StaticResourceOutput> {
+
         val obj = s3_object(Names.tf(entity.bucket, *entity.path.parts.toTypedArray())) {
             bucket = entity.bucket
             key = entity.path.toString()

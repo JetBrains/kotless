@@ -14,12 +14,12 @@ import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
 object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, Unit>, AbstractRouteFactory() {
     override fun mayRun(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
         && context.check(entity.lambda, LambdaFactory)
-        && context.check(context.schema.kotlessConfig.terraform.aws, InfoFactory)
+        && context.check(context.webapp, InfoFactory)
 
     override fun generate(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
         val lambda = context.get(entity.lambda, LambdaFactory)
-        val info = context.get(context.schema.kotlessConfig.terraform.aws, InfoFactory)
+        val info = context.get(context.webapp, InfoFactory)
 
         val resourceId = getResource(entity.path, api, context)
 
