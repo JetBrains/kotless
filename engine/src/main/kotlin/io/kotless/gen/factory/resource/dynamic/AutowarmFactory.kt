@@ -8,12 +8,12 @@ import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_ta
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
 
 object AutowarmFactory : GenerationFactory<Lambda, Unit> {
-    override fun mayRun(entity: Lambda, context: GenerationContext) = context.check(entity, LambdaFactory)
+    override fun mayRun(entity: Lambda, context: GenerationContext) = context.output.check(entity, LambdaFactory)
 
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         if (!entity.config.autowarm) return GenerationFactory.GenerationResult(Unit)
 
-        val lambda = context.get(entity, LambdaFactory)
+        val lambda = context.output.get(entity, LambdaFactory)
 
         val event_rule = cloudwatch_event_rule(Names.tf(entity.name)) {
             name = Names.aws(entity.name)

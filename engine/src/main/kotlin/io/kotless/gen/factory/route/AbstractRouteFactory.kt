@@ -13,9 +13,15 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_resourc
  * Will create all intermediate resources
  */
 abstract class AbstractRouteFactory {
+    companion object {
+        private val resource = GenerationContext.Storage.Key<HashMap<URIPath, String>>()
+    }
+
     fun getResource(resourcePath: URIPath, api: RestAPIFactory.RestAPIOutput, context: GenerationContext): String {
-        if (URIPath() !in context.allResources) {
-            context.allResources[URIPath()] = api.root_resource_id
+        val resources = context.storage.getOrPut(resource) { HashMap() }
+
+        if (URIPath() !in resources) {
+            resources[URIPath()] = api.root_resource_id
         }
 
         var path = URIPath()
@@ -23,17 +29,17 @@ abstract class AbstractRouteFactory {
             val prev = path
             path = URIPath(path, part)
 
-            if (path !in context.allResources) {
+            if (path !in resources) {
                 val resource = api_gateway_resource(Names.tf(path.parts)) {
                     rest_api_id = api.rest_api_id
-                    parent_id = context.allResources[prev]!!
+                    parent_id = resources[prev]!!
                     path_part = part
                 }
-                context.registerEntities(resource)
-                context.allResources[path] = resource::id.ref
+                context.entities.register(resource)
+                resources[path] = resource::id.ref
             }
         }
 
-        return context.allResources[path]!!
+        return resources[path]!!
     }
 }

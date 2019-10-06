@@ -11,10 +11,10 @@ import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
 object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRoleOutput> {
     data class StaticRoleOutput(val role_arn: String, val role_name: String)
 
-    override fun mayRun(entity: Webapp, context: GenerationContext) = context.check(context.webapp, InfoFactory)
+    override fun mayRun(entity: Webapp, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
     override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<StaticRoleOutput> {
-        val info = context.get(context.webapp, InfoFactory)
+        val info = context.output.get(context.webapp, InfoFactory)
 
 
         val assume = iam_policy_document(Names.tf("kotless", "static", "assume")) {

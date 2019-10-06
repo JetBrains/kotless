@@ -12,16 +12,16 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_domain_
 object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.DomainOutput> {
     data class DomainOutput(val domain_name: String, val zone_id: String)
 
-    override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.check(entity, RestAPIFactory)
-        && context.check(context.webapp.route53!!, ZoneFactory)
-        && context.check(context.webapp.route53!!, CertificateFactory)
-        && context.check(context.webapp.api.deployment, DeploymentFactory)
+    override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
+        && context.output.check(context.webapp.route53!!, ZoneFactory)
+        && context.output.check(context.webapp.route53!!, CertificateFactory)
+        && context.output.check(context.webapp.api.deployment, DeploymentFactory)
 
     override fun generate(entity: Webapp.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<DomainOutput> {
-        val zone = context.get(context.webapp.route53!!, ZoneFactory)
-        val certificate = context.get(context.webapp.route53!!, CertificateFactory)
-        val api = context.get(context.webapp.api, RestAPIFactory)
-        val deployment = context.get(context.webapp.api.deployment, DeploymentFactory)
+        val zone = context.output.get(context.webapp.route53!!, ZoneFactory)
+        val certificate = context.output.get(context.webapp.route53!!, CertificateFactory)
+        val api = context.output.get(context.webapp.api, RestAPIFactory)
+        val deployment = context.output.get(context.webapp.api.deployment, DeploymentFactory)
 
         val domain = api_gateway_domain_name(Names.tf(entity.name)) {
             domain_name = zone.fqdn

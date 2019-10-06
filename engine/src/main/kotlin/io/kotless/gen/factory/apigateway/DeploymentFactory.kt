@@ -11,10 +11,10 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deploym
 object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, DeploymentFactory.DeploymentOutput> {
     data class DeploymentOutput(val stage_name: String)
 
-    override fun mayRun(entity: Webapp.ApiGateway.Deployment, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
+    override fun mayRun(entity: Webapp.ApiGateway.Deployment, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
 
     override fun generate(entity: Webapp.ApiGateway.Deployment, context: GenerationContext): GenerationFactory.GenerationResult<DeploymentOutput> {
-        val api = context.get(context.webapp.api, RestAPIFactory)
+        val api = context.output.get(context.webapp.api, RestAPIFactory)
 
         val deployment = api_gateway_deployment(Names.tf(entity.name)) {
             rest_api_id = api.rest_api_id

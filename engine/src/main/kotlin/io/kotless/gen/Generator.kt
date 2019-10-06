@@ -57,7 +57,7 @@ object Generator {
             context
         }
 
-        return contexts.map { TFFile(it.webapp.api.name, ArrayList(it.entities)) }.toSet()
+        return contexts.map { TFFile(it.webapp.api.name, ArrayList(it.entities.all())) }.toSet()
 
     }
 }

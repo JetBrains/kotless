@@ -8,30 +8,64 @@ import io.kotless.hcl.HCLEntity
  *
  * It is populated by outputs of [GenerationFactory] and resources created by them as well
  */
-data class GenerationContext(val schema: Schema, val webapp: Webapp,
-                             private val outputs: HashMap<Pair<GenerationFactory<*, *>, Any>, Any> = HashMap(),
-                             val allResources: HashMap<URIPath, String> = HashMap(),
-                             val entities: HashSet<HCLEntity> = HashSet()) {
-    fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> registerOutput(factory: Factory, input: Input, output: Output) {
-        outputs[factory to input] = output
+class GenerationContext(val schema: Schema, val webapp: Webapp) {
+
+    val output = Output()
+
+    inner class Output {
+        private val outputs: HashMap<Pair<GenerationFactory<*, *>, *>, Any> = HashMap()
+
+        fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> register(factory: Factory, input: Input, output: Output) {
+            outputs[factory to input] = output
+        }
+
+        fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> check(input: Input, factory: Factory): Boolean {
+            return (factory to input) in outputs
+        }
+
+        fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> get(input: Input, factory: Factory): Output {
+            if ((factory to input) !in outputs) factory.generate(input, this@GenerationContext)
+
+            @Suppress("UNCHECKED_CAST")
+            return outputs[factory to input] as Output
+        }
     }
 
-    fun registerEntities(entities: Iterable<HCLEntity>) {
-        this.entities.addAll(entities)
+    val entities = Entities()
+
+    class Entities {
+        private val entities: HashSet<HCLEntity> = HashSet()
+
+        fun register(entities: Iterable<HCLEntity>) {
+            this.entities.addAll(entities)
+        }
+
+        fun register(vararg entities: HCLEntity) {
+            register(entities.toList())
+        }
+
+        fun all() = entities.toSet()
     }
 
-    fun registerEntities(vararg entities: HCLEntity) {
-        registerEntities(entities.toList())
-    }
+    class Storage {
+        private val storage = HashMap<Key<*>, Any>()
 
-    fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> check(input: Input, factory: Factory): Boolean {
-        return outputs.containsKey(factory to input)
-    }
+        class Key<T>()
 
-    fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> get(input: Input, factory: Factory): Output {
-        if (!outputs.containsKey(factory to input)) factory.generate(input, this)
+        fun <E: Any, K: Key<E>> register(key: K, value: E) {
+            storage[key] = value
+        }
 
         @Suppress("UNCHECKED_CAST")
-        return outputs[factory to input] as Output
+        operator fun <E: Any, K: Key<E>> get(key: K): E? {
+            return storage[key] as E?
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun <E: Any, K: Key<E>> getOrPut(key: K, defaultValue: () -> E): E {
+            return storage.getOrPut(key, defaultValue) as E
+        }
     }
+
+    val storage = Storage()
 }

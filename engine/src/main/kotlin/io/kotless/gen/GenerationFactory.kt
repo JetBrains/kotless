@@ -12,15 +12,15 @@ interface GenerationFactory<Input : Any, Output : Any> {
         constructor(output: Output, vararg entities: HCLEntity) : this(output, entities.toSet())
     }
 
-    fun hasRan(entity: Input, context: GenerationContext): Boolean = context.check(entity, this)
+    fun hasRan(entity: Input, context: GenerationContext): Boolean = context.output.check(entity, this)
 
     fun mayRun(entity: Input, context: GenerationContext): Boolean
 
     fun generate(entity: Input, context: GenerationContext): GenerationResult<Output>
 
     fun run(entity: Input, context: GenerationContext) = generate(entity, context).also {
-        context.registerOutput(this, entity, it.output)
-        context.registerEntities(it.entities)
+        context.output.register(this, entity, it.output)
+        context.entities.register(it.entities)
     }
 }
 

@@ -15,16 +15,16 @@ import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gatewa
 import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gateway_method_response
 
 object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Unit>, AbstractRouteFactory() {
-    override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.check(context.webapp.api, RestAPIFactory)
-        && context.check(entity.resource, StaticResourceFactory)
-        && context.check(context.webapp, InfoFactory)
-        && context.check(context.webapp, StaticRoleFactory)
+    override fun mayRun(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
+        && context.output.check(entity.resource, StaticResourceFactory)
+        && context.output.check(context.webapp, InfoFactory)
+        && context.output.check(context.webapp, StaticRoleFactory)
 
     override fun generate(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
-        val api = context.get(context.webapp.api, RestAPIFactory)
-        val resource = context.get(entity.resource, StaticResourceFactory)
-        val info = context.get(context.webapp, InfoFactory)
-        val static_role = context.get(context.webapp, StaticRoleFactory)
+        val api = context.output.get(context.webapp.api, RestAPIFactory)
+        val resource = context.output.get(entity.resource, StaticResourceFactory)
+        val info = context.output.get(context.webapp, InfoFactory)
+        val static_role = context.output.get(context.webapp, StaticRoleFactory)
 
         val resourceId = getResource(entity.path, api, context)
 
