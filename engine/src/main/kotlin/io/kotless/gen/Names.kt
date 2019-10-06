@@ -10,7 +10,7 @@ object Names {
         .filter { it.isNotBlank() }
 
     fun tf(vararg name: String) = tf(name.toList())
-    fun tf(part: String, parts: Iterable<String>) = tf(part + parts.toList())
+    fun tf(part: String, parts: Iterable<String>) = tf(listOf(part) + parts.toList())
     fun tf(name: Iterable<String>) = name.flatMap { deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
 
     fun aws(vararg name: String) = aws(name.toList())

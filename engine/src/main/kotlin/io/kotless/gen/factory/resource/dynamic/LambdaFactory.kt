@@ -22,7 +22,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             bucket = context.schema.kotlessConfig.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
             source = path(entity.file)
-            etag = eval(md5(file(entity.file)))
+            etag = eval(filemd5(entity.file))
         }
 
         val assume = iam_policy_document(Names.tf(entity.name, "assume")) {

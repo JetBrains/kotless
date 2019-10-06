@@ -8,6 +8,9 @@ fun path(file: File): String = file.canonicalPath
 fun md5(field: String) = "md5($field)"
 fun base64sha256(field: String) = "base64sha256($field)"
 
+fun filemd5(file: File) = filemd5(path(file))
+fun filemd5(file: String) = "filemd5(\"${file}\")"
+
 fun file(file: File) = file(path(file))
 fun file(file: String) = "file(\"$file\")"
 
