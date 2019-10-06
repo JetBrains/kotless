@@ -1,4 +1,4 @@
-<h1> <img align="left" width="40" height="40" src="https://kotless.sandbox.intellij.net/favicon.apng" alt="Kotless Icon"> Kotless </h1>
+<h1> <img align="left" width="40" height="40" src="https://site.ktls.aws.intellij.net/favicon.apng" alt="Kotless Icon"> Kotless </h1>
 
 [![JetBrains incubator project](https://jb.gg/badges/incubator-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![Download](https://img.shields.io/bintray/v/tanvd/io.kotless/lang.svg?label=jcenter&style=flat-square) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
