@@ -1,12 +1,12 @@
 package io.kotless.gen
 
-import io.kotless.Schema
-import io.kotless.Webapp
+import io.kotless.*
 import io.kotless.hcl.HCLEntity
 
 
 data class GenerationContext(val schema: Schema, val webapp: Webapp,
                              private val outputs: HashMap<Pair<GenerationFactory<*, *>, Any>, Any> = HashMap(),
+                             val allResources: HashMap<URIPath, String> = HashMap(),
                              val entities: HashSet<HCLEntity> = HashSet()) {
     fun <Input : Any, Output : Any, Factory : GenerationFactory<Input, Output>> registerOutput(factory: Factory, input: Input, output: Output) {
         outputs[factory to input] = output
