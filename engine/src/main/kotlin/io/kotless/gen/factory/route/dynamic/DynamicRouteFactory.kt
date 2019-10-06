@@ -4,6 +4,7 @@ import io.kotless.HttpMethod
 import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
+import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.route.AbstractRouteFactory
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
@@ -17,6 +18,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
     override fun generate(entity: Webapp.ApiGateway.DynamicRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
         val lambda = context.get(entity.lambda, LambdaFactory)
+        val info = context.get(context.schema.kotlessConfig.terraform.aws, InfoFactory)
 
         val resourceId = getResource(entity.path, api, context)
 
@@ -33,8 +35,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
             action = "lambda:InvokeFunction"
             function_name = lambda.lambda_arn
             principal = "apigateway.amazonaws.com"
-            //TODO Add back here region and account
-            source_arn = "arn:aws:execute-api:*:*:${api.rest_api_id}/*/${method.http_method}/${entity.path}"
+            source_arn = "arn:aws:execute-api:${info.region_name}:${info.account_id}:${api.rest_api_id}/*/${method.http_method}/${entity.path}"
         }
 
         val integration = api_gateway_integration(Names.tf(entity.path.parts).ifEmpty { "root_resource" }) {
@@ -45,8 +46,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
             integration_http_method = HttpMethod.POST.name
 
             type = "AWS_PROXY"
-            //TODO-tanvd hardcoded region for now
-            uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda.lambda_arn}/invocations"
+            uri = "arn:aws:apigateway:${info.region_name}:lambda:path/2015-03-31/functions/${lambda.lambda_arn}/invocations"
         }
 
         return GenerationFactory.GenerationResult(Unit, method, integration, permission)

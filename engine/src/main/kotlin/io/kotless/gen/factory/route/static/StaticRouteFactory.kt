@@ -4,6 +4,7 @@ import io.kotless.HttpMethod
 import io.kotless.Webapp
 import io.kotless.gen.*
 import io.kotless.gen.factory.apigateway.RestAPIFactory
+import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.AbstractRouteFactory
 import io.kotless.hcl.HCLEntity
@@ -18,6 +19,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
     override fun generate(entity: Webapp.ApiGateway.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val api = context.get(context.webapp.api, RestAPIFactory)
         val resource = context.get(entity.resource, StaticResourceFactory)
+        val info = context.get(context.schema.kotlessConfig.terraform.aws, InfoFactory)
 
         val resourceId = getResource(entity.path, api, context)
 
@@ -48,8 +50,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             integration_http_method = HttpMethod.GET.name
 
             type = "AWS"
-            //TODO-tanvd hardcoded region for now
-            uri = "arn:aws:apigateway:us-east-1:s3:path/${resource.bucket}/${resource.key}"
+            uri = "arn:aws:apigateway:${info.region_name}:s3:path/${resource.bucket}/${resource.key}"
         }
 
         return GenerationFactory.GenerationResult(Unit, method, response, integration)
