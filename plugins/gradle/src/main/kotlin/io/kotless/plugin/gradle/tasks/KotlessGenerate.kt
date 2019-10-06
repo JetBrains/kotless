@@ -69,6 +69,6 @@ open class KotlessGenerate : DefaultTask() {
 
         val schema = Schema(config, webapps, lambdas, statics)
 
-        io.kotless.engine.KotlessEngine(schema).generateTerraform(schema.kotlessConfig.resourcePrefix)
+        KotlessEngine.generate(schema)
     }
 }
