@@ -23,6 +23,10 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
             variables = object : HCLEntity() {
                 val deployed_at by text(default = eval(timestamp()))
             }
+
+            lifecycle {
+                create_before_destroy = true
+            }
         }
 
         return GenerationFactory.GenerationResult(DeploymentOutput(deployment::stage_name.ref), deployment)

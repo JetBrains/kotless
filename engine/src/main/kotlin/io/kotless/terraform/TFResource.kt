@@ -13,6 +13,17 @@ open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCL
     override val owner: HCLNamed?
         get() = this
 
+    var depends_on by textArray()
+
+    class Lifecycle : HCLEntity() {
+        var create_before_destroy by bool(default = true)
+    }
+
+    var lifecycle by entity<Lifecycle>()
+    fun lifecycle(configure: Lifecycle.() -> Unit) {
+        lifecycle = Lifecycle().apply(configure)
+    }
+
     override fun render(): String {
         return """
             |resource "$tf_type" "$tf_id" {

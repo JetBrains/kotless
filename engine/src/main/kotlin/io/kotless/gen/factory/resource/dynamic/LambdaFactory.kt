@@ -2,6 +2,7 @@ package io.kotless.gen.factory.resource.dynamic
 
 import io.kotless.Lambda
 import io.kotless.gen.*
+import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
@@ -65,9 +66,15 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             memory_size = entity.config.memoryMb
             timeout = entity.config.timeoutSec
 
-            source_code_hash = eval(base64sha256(file(obj.source)))
+            source_code_hash = eval(base64sha256(file(obj::source.ref)))
 
             role = iam_role::arn.ref
+
+            environment {
+                variables = object : HCLEntity() {
+                    val packages by text(name = "KOTLESS_PACKAGES", default = entity.config.packages.joinToString())
+                }
+            }
         }
 
         return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
