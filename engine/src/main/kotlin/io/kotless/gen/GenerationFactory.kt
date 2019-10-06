@@ -2,6 +2,11 @@ package io.kotless.gen
 
 import io.kotless.hcl.HCLEntity
 
+/**
+ * Interface of factory generating Terraform from schema
+ *
+ * Factories are called in cycle and provided with updated generation context
+ */
 interface GenerationFactory<Input : Any, Output : Any> {
     data class GenerationResult<Output : Any>(val output: Output, val entities: Set<HCLEntity>) {
         constructor(output: Output, vararg entities: HCLEntity) : this(output, entities.toSet())

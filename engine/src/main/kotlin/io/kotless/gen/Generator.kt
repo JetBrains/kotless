@@ -41,6 +41,7 @@ object Generator {
                 schema.visit { entity ->
                     println("Visiting entity ${entity::class.qualifiedName}")
                     factories[entity::class].orEmpty().forEach { factory ->
+                        @Suppress("UNCHECKED_CAST")
                         factory as GenerationFactory<Any, Any>
                         if (!factory.hasRan(entity, context)) {
                             if (factory.mayRun(entity, context)) {

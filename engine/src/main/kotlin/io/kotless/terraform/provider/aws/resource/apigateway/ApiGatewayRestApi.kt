@@ -5,6 +5,7 @@ import io.kotless.terraform.TFResource
 
 /**
  * Terraform aws_api_gateway_rest_api resource.
+ *
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/api_gateway_rest_api.html">aws_api_gateway_rest_api</a>
  */
 class ApiGatewayRestApi(id: String) : TFResource(id, "aws_api_gateway_rest_api") {

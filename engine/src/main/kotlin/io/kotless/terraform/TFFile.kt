@@ -3,6 +3,7 @@ package io.kotless.terraform
 import io.kotless.hcl.HCLEntity
 import java.io.File
 
+/** Representation of file with Terraform code */
 class TFFile(val name: String, private val entities: MutableList<HCLEntity> = ArrayList()) {
     val nameWithExt = "$name.tf"
 

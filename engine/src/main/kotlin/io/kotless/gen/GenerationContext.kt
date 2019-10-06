@@ -3,7 +3,11 @@ package io.kotless.gen
 import io.kotless.*
 import io.kotless.hcl.HCLEntity
 
-
+/**
+ * Context of current Terraform generation
+ *
+ * It is populated by outputs of [GenerationFactory] and resources created by them as well
+ */
 data class GenerationContext(val schema: Schema, val webapp: Webapp,
                              private val outputs: HashMap<Pair<GenerationFactory<*, *>, Any>, Any> = HashMap(),
                              val allResources: HashMap<URIPath, String> = HashMap(),

@@ -7,6 +7,11 @@ import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_resource
 
+/**
+ * Generic implementation of ApiGateway resources creation
+ *
+ * Will create all intermediate resources
+ */
 abstract class AbstractRouteFactory {
     fun getResource(resourcePath: URIPath, api: RestAPIFactory.RestAPIOutput, context: GenerationContext): String {
         if (URIPath() !in context.allResources) {

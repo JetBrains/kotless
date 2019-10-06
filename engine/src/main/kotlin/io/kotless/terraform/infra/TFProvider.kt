@@ -5,6 +5,11 @@ import io.kotless.terraform.TFFile
 import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
+/**
+ * Representation of Terraform provider
+ *
+ *  @see <a href="https://www.terraform.io/docs/providers/index.html">All providers</a>
+ */
 open class TFProvider(val tf_provider: String) : HCLEntity() {
     override fun render(): String {
         return """
@@ -15,6 +20,11 @@ open class TFProvider(val tf_provider: String) : HCLEntity() {
     }
 }
 
+/**
+ * AWS Terraform provider
+ *
+ *  @see <a href="https://www.terraform.io/docs/providers/aws/index.html">AWS provider</a>
+ */
 class AWSProvider : TFProvider("aws") {
     var region by text()
     var profile by text()

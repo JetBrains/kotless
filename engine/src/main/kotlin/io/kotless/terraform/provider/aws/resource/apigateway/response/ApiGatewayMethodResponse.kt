@@ -6,6 +6,7 @@ import io.kotless.terraform.TFResource
 
 /**
  * Terraform aws_api_gateway_method_response resource.
+ *
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/api_gateway_method_response.html">aws_api_gateway_method_response</a>
  */
 class ApiGatewayMethodResponse(id: String) : TFResource(id, "aws_api_gateway_method_response") {

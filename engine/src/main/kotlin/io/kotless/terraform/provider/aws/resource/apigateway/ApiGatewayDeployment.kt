@@ -6,6 +6,7 @@ import io.kotless.terraform.TFResource
 
 /**
  * Terraform aws_api_gateway_deployment resource.
+ *
  * @see <a href="https://www.terraform.io/docs/providers/aws/r/api_gateway_deployment.html">aws_api_gateway_deployment</a>
  */
 class ApiGatewayDeployment(id: String) : TFResource(id, "aws_api_gateway_deployment") {

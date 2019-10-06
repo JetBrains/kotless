@@ -5,8 +5,7 @@ version = "0.1.1-SNAPSHOT"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
-    //TODO enable back once ready
-//    id("io.gitlab.arturbosch.detekt").version("1.0.0-RC14") apply true
+    id("io.gitlab.arturbosch.detekt").version("1.0.0-RC14") apply true
     kotlin("jvm") version "1.3.41" apply false
 }
 
@@ -15,7 +14,7 @@ subprojects {
     apply {
         plugin("kotlin")
         plugin("tanvd.kosogor")
-//        plugin("io.gitlab.arturbosch.detekt")
+        plugin("io.gitlab.arturbosch.detekt")
     }
 
     repositories {
@@ -31,19 +30,19 @@ subprojects {
         }
     }
 
-//    detekt {
-//        parallel = true
-//        failFast = false
-//        config = files(File(project.rootProject.projectDir, "buildScripts/detekt/detekt.yml"))
-//        reports {
-//            xml {
-//                enabled = false
-//            }
-//            html {
-//                enabled = false
-//            }
-//        }
-//    }
+    detekt {
+        parallel = true
+        failFast = false
+        config = files(File(project.rootProject.projectDir, "buildScripts/detekt/detekt.yml"))
+        reports {
+            xml {
+                enabled = false
+            }
+            html {
+                enabled = false
+            }
+        }
+    }
 
     afterEvaluate {
         System.setProperty("gradle.publish.key", System.getenv("gradle_publish_key") ?: "")

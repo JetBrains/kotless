@@ -5,6 +5,7 @@ import io.kotless.terraform.TFFile
 import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
+/** Declaration of Terraform configuration */
 class TFConfig : HCLEntity() {
     override fun render(): String {
         return """

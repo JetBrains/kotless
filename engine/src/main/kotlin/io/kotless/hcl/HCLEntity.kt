@@ -5,6 +5,11 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 import kotlin.reflect.jvm.isAccessible
 
+/**
+ * Representation of HCL entity -- in general it is set of fields, like map
+ *
+ * HCLEntity not necessarily is [HCLNamed]
+ */
 open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), open val owner: HCLNamed? = null) : HCLRender {
     override val renderable: Boolean = true
     private val renderableFields: Collection<HCLField<*>>

@@ -4,7 +4,11 @@ import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFData
 import io.kotless.terraform.TFFile
 
-
+/**
+ * Terraform aws_iam_policy_document data.
+ *
+ * @see <a href="https://www.terraform.io/docs/providers/aws/d/iam_policy_document.html">aws_iam_policy_document</a>
+ */
 class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
     class Statement : HCLEntity() {
         var effect by text()
