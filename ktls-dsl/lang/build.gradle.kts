@@ -18,7 +18,7 @@ plugins {
 dependencies {
     compile(kotlin("stdlib"))
 
-    compile("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.11.0")
+    compile("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
 
 
     compile(kotlin("reflect"))

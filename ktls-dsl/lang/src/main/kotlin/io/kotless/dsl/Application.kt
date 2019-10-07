@@ -15,7 +15,7 @@ internal object Application {
 
     fun init() {
         if (isInitialized) return
-        Application.logger.info("Started initialization of Lambda")
+        logger.info("Started initialization of Lambda")
 
         RoutesCache.scan()
 
@@ -24,7 +24,7 @@ internal object Application {
         startInitSequence()
         startWarmingSequence()
 
-        Application.logger.info("Lambda is initialized")
+        logger.info("Lambda is initialized")
         isInitialized = true
     }
 
@@ -39,7 +39,7 @@ internal object Application {
             try {
                 it.init()
             } catch (e: Throwable) {
-                Application.logger.error("Exception occurred during call of initializing sequence function ${it::class.qualifiedName}", e)
+                logger.error("Exception occurred during call of initializing sequence function ${it::class.qualifiedName}", e)
             }
         }
     }
@@ -50,7 +50,7 @@ internal object Application {
             try {
                 it.warmup()
             } catch (e: Throwable) {
-                Application.logger.error("Exception occurred during call of warming sequence function ${it::class.qualifiedName}", e)
+                logger.error("Exception occurred during call of warming sequence function ${it::class.qualifiedName}", e)
             }
         }
     }

@@ -54,9 +54,7 @@ internal class LambdaHandler {
             logger.info("Request is HTTP Event")
 
             val request = Json.parse(HttpRequest.serializer(), jsonRequest)
-
             val resourceKey = RouteKey(HttpMethod.valueOf(request.httpMethod.toUpperCase()), MimeType.HTML, request.path)
-
             Dispatcher.dispatch(request, resourceKey)
         } catch (e: Throwable) {
             logger.error("Error occurred during handle of request and was not caught", e)
