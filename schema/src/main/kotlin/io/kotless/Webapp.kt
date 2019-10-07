@@ -9,38 +9,35 @@ package io.kotless
  */
 data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
 
-    /** Route53 CNAME alias */
-    data class Route53(
-        /** A qualified name of zone, alias is created in */
-        val zone: String,
-        /** Name of alias */
-        val alias: String,
-        /** A fully qualified name of certificate, for SSL connection */
-        val certificate: String) : Visitable
+    /**
+     * Route53 CNAME alias
+     *
+     * @param zone a qualified name of zone, alias is created in
+     * @param zone name of alias
+     * @param zone a fully qualified name of certificate, for SSL connection
+     */
+    data class Route53(val zone: String, val alias: String, val certificate: String) : Visitable
 
     /**
      * ApiGateway REST API.
      *
      * It includes Lambdas and Static Resources and it
      * is an HTTP interface of Kotless Web application
+     *
+     * @param name A unique name of ApiGateway
+     * @param deployment Deployment resource of ApiGateway
+     * @param dynamics Dynamic routes of this ApiGateway served by lambdas
+     * @param statics  Static routes of ApiGateway served by static resources
      */
-    data class ApiGateway(
-        /** A unique name of ApiGateway */
-        val name: String,
-        /** Deployment resource of ApiGateway */
-        val deployment: Deployment,
-        /** Dynamic routes of this ApiGateway served by lambdas */
-        val dynamics: Set<DynamicRoute>,
-        /** Static routes of ApiGateway served by static resources */
-        val statics: Set<StaticRoute>) : Visitable {
+    data class ApiGateway(val name: String, val deployment: Deployment, val dynamics: Set<DynamicRoute>, val statics: Set<StaticRoute>) : Visitable {
 
-        /** Deployment definition of ApiGateway. Recreated each redeploy */
-        data class Deployment(
-            /** A unique name of deployment */
-            val name: String,
-            /** Version of this deployment.
-             *  Will be used for versioned Kotless deployments */
-            val version: String) : Visitable
+        /**
+         * Deployment definition of ApiGateway. Recreated each redeploy
+         *
+         * @param name a unique name of deployment
+         * @param version version of this deployment; will be used for versioned Kotless deployments
+         */
+        data class Deployment(val name: String, val version: String) : Visitable
 
         interface Route : Visitable {
             val method: HttpMethod

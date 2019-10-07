@@ -2,47 +2,44 @@ package io.kotless
 
 import java.io.File
 
-/** Config of Kotless itself */
-data class KotlessConfig(
-    /** Name of bucket Kotless will use to store all files */
-    val bucket: String,
-    /** Name with which will be prepended all Kotless created entities */
-    val resourcePrefix: String,
-    /** Directory Kotless considers as root for a file resolving */
-    val workDirectory: File,
-    /** The local directory Kotless will use to store generated files */
-    val genDirectory: File,
-    /** Terraform configuration used by Kotless */
-    val terraform: Terraform,
-    /** Optimizations considered during generation of code */
-    val optimization: Optimization = Optimization()) : Visitable {
+/**
+ * Config of Kotless itself
+ *
+ * @param bucket name of bucket Kotless will use to store all files
+ * @param resourcePrefix name with which will be prepended all Kotless created entities
+ * @param workDirectory directory Kotless considers as root for a file resolving
+ * @param genDirectory the local directory Kotless will use to store generated files
+ * @param terraform terraform configuration used by Kotless
+ * @param optimization optimizations considered during generation of code
+ */
+data class KotlessConfig(val bucket: String, val resourcePrefix: String, val workDirectory: File, val genDirectory: File, val terraform: Terraform,
+                         val optimization: Optimization = Optimization()) : Visitable {
 
-    /** Terraform configuration used by Kotless */
-    data class Terraform(
-        /** Version of Terraform used */
-        val version: String,
-        val backend: Backend,
-        val aws: AWSProvider) : Visitable {
+    /**
+     * Terraform configuration used by Kotless
+     *
+     * @param version version of Terraform used
+     */
+    data class Terraform(val version: String, val backend: Backend, val aws: AWSProvider) : Visitable {
 
-        /** Configuration of Terraform backend */
-        data class Backend(
-            /** Name of bucket, that will be used as Terraform backend storage */
-            val bucket: String,
-            /** Path in a bucket to store Terraform state */
-            val key: String,
-            /** AWS profile from a local machine to use for Terraform state storing */
-            val profile: String,
-            /** AWS region where state bucket is located */
-            val region: String) : Visitable
+        /**
+         * Configuration of Terraform backend
+         *
+         * @param bucket name of bucket, that will be used as Terraform backend storage
+         * @param key path in a bucket to store Terraform state
+         * @param profile AWS profile from a local machine to use for Terraform state storing
+         * @param region AWS region where state bucket is located
+         */
+        data class Backend(val bucket: String, val key: String, val profile: String, val region: String) : Visitable
 
-        /** Configuration of Terraform AWS provider */
-        data class AWSProvider(
-            /** Version of AWS provider to use */
-            val version: String,
-            /** AWS profile from a local machine to use for Terraform operations authentication */
-            val profile: String,
-            /** AWS region in context of which all Terraform operations should be performed */
-            val region: String) : Visitable
+        /**
+         * Configuration of Terraform AWS provider
+         *
+         * @param version version of AWS provider to use
+         * @param profile AWS profile from a local machine to use for Terraform operations authentication
+         * @param region AWS region in context of which all Terraform operations should be performed
+         */
+        data class AWSProvider(val version: String, val profile: String, val region: String) : Visitable
 
         override fun visit(visitor: (Any) -> Unit) {
             aws.visit(visitor)

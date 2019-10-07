@@ -9,42 +9,33 @@ import java.io.File
  *
  * Lambda is used as a worker serving requests
  * from different interfaces (for example, ApiGateway)
+ *
+ * @param name a unique name of lambda
+ * @param file file with function code
+ * @param entrypoint entrypoint of function
+ * @param config сonfig of function: defines memory and time limit, etc.
+ * @param config permissions to access other resources granted to this lambda
  */
-data class Lambda(
-    /** A unique name of lambda */
-    val name: String,
-    /** File with function code */
-    val file: File,
-    /** Entrypoint of function */
-    val entrypoint: Entrypoint,
-    /** Config of function: defines memory and time limit, etc. */
-    val config: Config,
-    /** Permissions to access other resources granted to this lambda */
-    val permissions: Set<Permission>) : Visitable {
+data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, val config: Config, val permissions: Set<Permission>) : Visitable {
 
-    /** Entrypoint function definition */
-    data class Entrypoint(
-        /** The qualified name of entrypoint function */
-        val qualifiedName: String,
-        /** Params of entrypoint function */
-        val params: Set<Param>) {
-        data class Param(
-            /** Name of a function parameter */
-            val name: String,
-            /** A fully qualified name of type of parameter */
-            val type: String)
+    /**
+     * Entrypoint function definition
+     *
+     * @param qualifiedName a qualified name of entrypoint function
+     * @param params params of entrypoint function
+     */
+    data class Entrypoint(val qualifiedName: String, val params: Set<Param>) {
+        data class Param(val name: String, val type: String)
     }
 
-    /** Configuration of lambda deployment */
-    data class Config(
-        /** Memory in megabytes available for a lambda */
-        val memoryMb: Int,
-        /** Limit of lambda execution in seconds */
-        val timeoutSec: Int,
-        /** Should this lambda be autowarmed, or not */
-        val autowarm: Boolean,
-        /** Period in minutes between warm invocations */
-        val autowarmMinutes: Int,
-        /** Packages that lambda dispatcher should scan for annotated classes */
-        val packages: Set<String>)
+    /**
+     * Configuration of lambda deployment
+     *
+     * @param memoryMb memory in megabytes available for a lambda
+     * @param timeoutSec limit of lambda execution in seconds
+     * @param autowarm should this lambda be autowarmed, or not
+     * @param autowarmMinutes period in minutes between warm invocations
+     * @param packages packages that lambda dispatcher should scan for annotated classes
+     */
+    data class Config(val memoryMb: Int, val timeoutSec: Int, val autowarm: Boolean, val autowarmMinutes: Int, val packages: Set<String>)
 }

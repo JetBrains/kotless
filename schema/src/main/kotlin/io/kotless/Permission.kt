@@ -7,15 +7,12 @@ package io.kotless
  * resources of specified type with specified ids.
  *
  * The permission is granted to object owning it.
+ *
+ * @param resource type of resource permission is for
+ * @param level actions permitted by permission
+ * @param ids identifiers of resources under permission
  */
-data class Permission(
-    /** Type of resource permission is for */
-    val resource: AwsResource,
-    /** Actions permitted by permission */
-    val level: PermissionLevel,
-    /** Identifiers of resources under permission */
-    val ids: Set<String>) {
-
+data class Permission(val resource: AwsResource, val level: PermissionLevel, val ids: Set<String>) {
     val awsIds: Set<String> = ids.map {
         if (!it.startsWith("arn")) {
             "arn:aws:${resource.prefix}:*:*:$it"
