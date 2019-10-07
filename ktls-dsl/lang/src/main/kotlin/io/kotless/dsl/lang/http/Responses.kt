@@ -4,7 +4,7 @@ import io.kotless.MimeType
 import io.kotless.dsl.events.HttpResponse
 
 /** Redirect response (code 302) */
-fun redirect(href: String) = HttpResponse(302, hashMapOf("Location" to href), null)
+fun redirect(href: String) = HttpResponse(302, hashMapOf("Location" to href), null, false)
 
 /** Bad request error response (code 400) */
 fun badRequest(message: String? = null, mime: MimeType = MimeType.PLAIN) = HttpResponse(400, mime, message)
