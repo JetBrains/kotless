@@ -44,7 +44,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
         val policy_document = iam_policy_document(Names.tf(entity.name)) {
             statement {
                 effect = "Allow"
-                resources = entity.permissions.flatMap { it.awsIds }.toTypedArray()
+                resources = entity.permissions.flatMap { it.cloudIds }.toTypedArray()
                 actions = entity.permissions.flatMap { permission -> permission.actions.map { "${permission.resource.prefix}:$it" } }.toTypedArray()
             }
         }

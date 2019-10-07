@@ -1,7 +1,7 @@
 package io.kotless
 
 /** Representation of URI path. Removes blank parts. */
-data class URIPath(var parts: List<String>) {
+data class URIPath(var parts: Iterable<String>) {
     init {
         parts = parts.filter { it.isNotBlank() }
     }
@@ -12,5 +12,5 @@ data class URIPath(var parts: List<String>) {
     override fun toString() = parts.joinToString(separator = "/")
 }
 
-fun List<String>.toURIPath() = URIPath(this)
+fun Iterable<String>.toURIPath() = URIPath(this)
 fun String.toURIPath() = URIPath(this.split("/"))
