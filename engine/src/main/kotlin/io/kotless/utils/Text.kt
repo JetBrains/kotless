@@ -10,7 +10,7 @@ object Text {
 
     const val indent = 2
 
-    fun indent(number: Int) = " ".repeat(number)
+    fun indent(number: Int = indent) = " ".repeat(number)
 }
 
-fun String.withIndent(number: Int) = split("\n").joinToString(separator = "\n") { Text.indent(number) + it }
+fun String.withIndent(number: Int = Text.indent) = prependIndent(Text.indent(number))
