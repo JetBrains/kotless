@@ -1,3 +1,4 @@
+import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = "io.kotless"
@@ -26,14 +27,14 @@ dependencies {
 
 kotless {
     config {
-        bucket = "site.s3.ktls.aws.intellij.net"
+        bucket = "eu.site.s3.ktls.aws.intellij.net"
         resourcePrefix = "ktls-site-prod"
 
         workDirectory = File(project.projectDir, "src/main/static")
 
         terraform {
             profile = "kotless-jetbrains"
-            region = "us-east-1"
+            region = "eu-west-1"
         }
     }
     webapp(project) {

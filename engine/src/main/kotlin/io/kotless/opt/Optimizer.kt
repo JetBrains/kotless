@@ -9,7 +9,7 @@ object Optimizer {
         var optimized = schema
         val context = OptimizationContext()
         for (optimizer in optimizers) {
-            optimized = optimizer.optimize(optimized, schema.kotlessConfig.optimization, context)
+            optimized = optimizer.optimize(optimized, schema.config.optimization, context)
         }
         return optimized
     }

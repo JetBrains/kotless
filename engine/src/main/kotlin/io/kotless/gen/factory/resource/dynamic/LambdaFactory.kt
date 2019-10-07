@@ -19,7 +19,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
 
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<LambdaOutput> {
         val obj = s3_object(Names.tf(entity.name)) {
-            bucket = context.schema.kotlessConfig.bucket
+            bucket = context.schema.config.bucket
             key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
             source = path(entity.file)
             etag = eval(filemd5(entity.file))

@@ -4,6 +4,7 @@ import io.kotless.*
 import io.kotless.gen.factory.apigateway.*
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.infra.TFConfigFactory
+import io.kotless.gen.factory.infra.TFProvidersFactory
 import io.kotless.gen.factory.resource.dynamic.AutowarmFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
@@ -17,7 +18,7 @@ import kotlin.reflect.KClass
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Webapp::class to setOf(InfoFactory, StaticRoleFactory),
-        KotlessConfig.Terraform::class to setOf(TFConfigFactory),
+        KotlessConfig.Terraform::class to setOf(TFConfigFactory, TFProvidersFactory),
 
         Webapp.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
         Webapp.ApiGateway.Deployment::class to setOf(DeploymentFactory),

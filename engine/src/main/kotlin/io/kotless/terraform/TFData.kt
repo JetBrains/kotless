@@ -2,7 +2,6 @@ package io.kotless.terraform
 
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.HCLNamed
-import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
 /** Representation of Terraform Data */
@@ -14,10 +13,12 @@ open class TFData(val tf_id: String, val tf_type: String) : HCLEntity(), HCLName
     override val owner: HCLNamed?
         get() = this
 
+    var provider by text()
+
     override fun render(): String {
         return """
             |data "$tf_type" "$tf_id" {
-            |${super.render().withIndent(Text.indent)}
+            |${super.render().withIndent()}
             |}
         """.trimMargin()
     }

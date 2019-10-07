@@ -9,9 +9,9 @@ object KotlessEngine {
         val optimized = Optimizer.optimize(schema)
         val files = Generator.generate(optimized)
         return files.map { tfFile ->
-            schema.kotlessConfig.genDirectory.mkdir()
+            schema.config.genDirectory.mkdir()
 
-            File(schema.kotlessConfig.genDirectory, tfFile.nameWithExt).apply {
+            File(schema.config.genDirectory, tfFile.nameWithExt).apply {
                 tfFile.write(this)
             }
         }

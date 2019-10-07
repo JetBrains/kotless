@@ -25,12 +25,12 @@ open class TerraformDownload : DefaultTask() {
     }
 
     companion object {
-        fun tfBin(project: Project) = File(project.kotless.kotlessConfig.binDirectory, "terraform")
+        fun tfBin(project: Project) = File(project.kotless.config.binDirectory, "terraform")
     }
 
     @get:Input
     val version: String
-        get() = project.kotless.kotlessConfig.terraform.version
+        get() = project.kotless.config.terraform.version
 
     @get:OutputFile
     val file: File

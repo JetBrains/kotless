@@ -2,7 +2,6 @@ package io.kotless.terraform
 
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.HCLNamed
-import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
 /** Representation of Terraform Resource */
@@ -13,6 +12,8 @@ open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCL
 
     override val owner: HCLNamed?
         get() = this
+
+    var provider by text()
 
     var depends_on by textArray()
 
@@ -28,7 +29,7 @@ open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCL
     override fun render(): String {
         return """
             |resource "$tf_type" "$tf_id" {
-            |${super.render().withIndent(Text.indent)}
+            |${super.render().withIndent()}
             |}
             """.trimMargin()
     }

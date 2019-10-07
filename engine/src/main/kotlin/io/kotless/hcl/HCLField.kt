@@ -17,7 +17,7 @@ class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEnti
     override fun render(): String {
         return """
             |$hcl_name = {
-            |${value!!.render().withIndent(Text.indent)}
+            |${value!!.render().withIndent()}
             |}
             """.trimMargin()
     }

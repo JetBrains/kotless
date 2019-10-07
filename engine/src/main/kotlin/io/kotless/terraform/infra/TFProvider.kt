@@ -1,8 +1,8 @@
 package io.kotless.terraform.infra
 
 import io.kotless.hcl.HCLEntity
+import io.kotless.hcl.HCLNamed
 import io.kotless.terraform.TFFile
-import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
 /**
@@ -10,11 +10,20 @@ import io.kotless.utils.withIndent
  *
  *  @see <a href="https://www.terraform.io/docs/providers/index.html">All providers</a>
  */
-open class TFProvider(val tf_provider: String) : HCLEntity() {
+open class TFProvider(val tf_provider: String) : HCLEntity(), HCLNamed {
+    var alias by text()
+
+    override val hcl_name: String
+        get() = "$tf_provider.$alias"
+    override val hcl_ref: String
+        get() = hcl_name
+
+    override val owner: HCLNamed?
+        get() = this
     override fun render(): String {
         return """
             |provider "$tf_provider" {
-            |${super.render().withIndent(Text.indent)}
+            |${super.render().withIndent()}
             |}
             """.trimMargin()
     }

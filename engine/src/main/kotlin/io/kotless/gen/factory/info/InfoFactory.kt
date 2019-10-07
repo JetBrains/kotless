@@ -16,7 +16,7 @@ object InfoFactory : GenerationFactory<Webapp, InfoFactory.InfoOutput> {
         val caller_identity = caller_identity("current") {}
         val region = region("current") {}
         val kotless_bucket = s3_bucket(Names.tf("kotless", "bucket")) {
-            bucket = context.schema.kotlessConfig.bucket
+            bucket = context.schema.config.bucket
         }
 
         return GenerationFactory.GenerationResult(InfoOutput(caller_identity::account_id.ref, region::name.ref, kotless_bucket::arn.ref),

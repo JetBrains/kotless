@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
+import io.kotless.Webapp
 import io.kotless.parser.KotlessDslParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils._ktSourceSet
@@ -25,7 +26,7 @@ open class KotlessGenerate : DefaultTask() {
     }
 
     @get:Input
-    val dsl: KotlessDsl
+    val dsl: KotlessDSL
         get() = project.kotless
 
     @get:InputFiles
@@ -35,7 +36,7 @@ open class KotlessGenerate : DefaultTask() {
 
     @get:OutputDirectory
     val genDir: File
-        get() = project.kotless.kotlessConfig.genDirectory
+        get() = project.kotless.config.genDirectory
 
     @TaskAction
     fun generate() {

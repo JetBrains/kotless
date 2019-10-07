@@ -18,6 +18,7 @@ object TFConfigFactory : GenerationFactory<KotlessConfig.Terraform, Unit> {
                 region = entity.backend.region
             }
         }
+
         val aws_provider = aws_provider {
             profile = entity.aws.profile
             region = entity.aws.region

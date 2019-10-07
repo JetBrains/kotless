@@ -10,8 +10,8 @@ class TFConfig : HCLEntity() {
     override fun render(): String {
         return """
             |terraform {
-            |${super.render().withIndent(Text.indent)}
-            |${(backend?.render() ?: "").withIndent(Text.indent)}
+            |${super.render().withIndent()}
+            |${(backend?.render() ?: "").withIndent()}
             |}
             """.trimMargin()
     }
@@ -22,7 +22,7 @@ class TFConfig : HCLEntity() {
         override fun render(): String {
             return """
             |backend "$type" {
-            |${super.render().withIndent(Text.indent)}
+            |${super.render().withIndent()}
             |}
             """.trimMargin()
         }

@@ -34,7 +34,7 @@ open class TerraformOperation : DefaultTask() {
 
     @get:InputDirectory
     val root: File
-        get() = project.kotless.kotlessConfig.genDirectory
+        get() = project.kotless.config.genDirectory
 
     @TaskAction
     fun execute() {
