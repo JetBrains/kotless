@@ -160,8 +160,8 @@ object Plugin {
         }
 
         p {
-            +"""Note, that right now Kotless supports deployment only to `us-east-1` region.
-                We are working on a fix of this issue."""
+            +"""Note, that Kotless supports deployment to any region, but requires certificate
+                to be created in us-east-1. It is AWS limitation and cannot be fixed in Kotless."""
         }
 
         p {
