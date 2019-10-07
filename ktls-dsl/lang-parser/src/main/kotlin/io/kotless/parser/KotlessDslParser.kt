@@ -2,7 +2,8 @@ package io.kotless.parser
 
 import io.kotless.*
 import io.kotless.parser.processor.*
-import io.kotless.parser.utils.psi.analysis.AnalysisUtils
+import io.kotless.parser.utils.psi.analysis.*
+import io.kotless.parser.utils.psi.analysis.ParseUtil
 import io.kotless.parser.utils.psi.analysis.EnvironmentManager
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
@@ -28,8 +29,8 @@ class KotlessDslParser(private val libs: Set<File>) {
      * It will reuse already parsed KtFiles/
      */
     fun parseFromKtFiles(jarFile: File, lambdaConfig: Lambda.Config, bucket: String, workDir: File, files: Set<KtFile>): ParsedResult {
-        val environment = EnvironmentManager.createEnvironment(libs)
-        val context = AnalysisUtils.analyzeFiles(files, environment)
+        val environment = EnvironmentManager.create(libs)
+        val context = ResolveUtil.analyze(files, environment).bindingContext
 
         val permissions = GlobalActionsProcessor.process(context, files)
         val (dynamicRoutes, lambdas) = DynamicRoutesProcessor.process(context, files, permissions, lambdaConfig, jarFile)
@@ -43,9 +44,9 @@ class KotlessDslParser(private val libs: Set<File>) {
      * It will firstly parse Files into KtFiles.
      */
     fun parseFromFiles(jarFile: File, lambdaConfig: Lambda.Config, bucket: String, workDir: File, files: Set<File>): ParsedResult {
-        val environment = EnvironmentManager.createEnvironment(libs)
-        val ktFiles = AnalysisUtils.parseFiles(files, environment)
-        val context = AnalysisUtils.analyzeFiles(ktFiles, environment)
+        val environment = EnvironmentManager.create(libs)
+        val ktFiles = ParseUtil.analyze(files, environment)
+        val context = ResolveUtil.analyze(ktFiles, environment).bindingContext
 
         val permissions = GlobalActionsProcessor.process(context, ktFiles)
         val (dynamicRoutes, lambdas) = DynamicRoutesProcessor.process(context, ktFiles, permissions, lambdaConfig, jarFile)

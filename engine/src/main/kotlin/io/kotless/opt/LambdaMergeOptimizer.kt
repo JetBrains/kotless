@@ -1,9 +1,7 @@
 package io.kotless.opt
 
+import io.kotless.*
 import io.kotless.KotlessConfig.Optimization
-import io.kotless.Lambda
-import io.kotless.Schema
-import io.kotless.Storage
 
 object LambdaMergeOptimizer : SchemaOptimizer {
     private val key = Storage.Key<Int>()

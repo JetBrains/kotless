@@ -7,12 +7,12 @@ buildscript {
     repositories { jcenter() }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.3.31")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.3.50")
     }
 }
 
 plugins {
-    id("kotlinx-serialization") version "1.3.31" apply true
+    id("kotlinx-serialization") version "1.3.50" apply true
 }
 
 dependencies {
