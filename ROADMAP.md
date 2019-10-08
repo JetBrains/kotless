@@ -1,7 +1,6 @@
 # Kotless roadmap
 
 ## 0.1.*
-* Create separate Terraform DSL
 * Extension for Cognito authentication
 * DSL libraries for S3, DynamoDB, SSM at least
 * Event handlers - functions as handlers for different AWS events

@@ -10,7 +10,7 @@ object Main {
     fun root() = landing {
 
         h1 {
-            +"Kotlin Serverless Framework - Super Cool"
+            +"Kotlin Serverless Framework"
         }
 
         br()
