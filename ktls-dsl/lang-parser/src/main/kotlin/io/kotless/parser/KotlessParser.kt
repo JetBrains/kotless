@@ -3,6 +3,7 @@ package io.kotless.parser
 import io.kotless.*
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor
+import io.kotless.parser.processor.events.ScheduledEventsProcessor
 import io.kotless.parser.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.processor.route.StaticRoutesProcessor
 import io.kotless.parser.utils.psi.analysis.*
@@ -16,11 +17,12 @@ import java.io.File
  * with them Dynamic and Static routes
  */
 object KotlessParser {
-    private val processors = setOf(GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor)
+    private val processors = setOf(GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor, ScheduledEventsProcessor)
 
-    data class Result(val routes: Routes, val resources: Resources) {
+    data class Result(val routes: Routes, val resources: Resources, val events: Events) {
         data class Routes(val dynamics: Set<Webapp.ApiGateway.DynamicRoute>, val statics: Set<Webapp.ApiGateway.StaticRoute>)
         data class Resources(val dynamics: Set<Lambda>, val statics: Set<StaticResource>)
+        data class Events(val scheduled: Set<Webapp.Events.ScheduledEvent>)
     }
 
     fun parse(files: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {
@@ -42,6 +44,10 @@ object KotlessParser {
             }
         }
 
-        return Result(Result.Routes(context.routes.dynamics, context.routes.statics), Result.Resources(context.resources.dynamics, context.resources.statics))
+        return Result(
+            Result.Routes(context.routes.dynamics, context.routes.statics),
+            Result.Resources(context.resources.dynamics, context.resources.statics),
+            Result.Events(context.events.scheduled)
+        )
     }
 }

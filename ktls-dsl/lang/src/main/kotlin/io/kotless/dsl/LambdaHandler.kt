@@ -7,6 +7,8 @@ import io.kotless.dsl.dispatcher.Dispatcher
 import io.kotless.dsl.dispatcher.RouteKey
 import io.kotless.dsl.events.*
 import io.kotless.dsl.lang.http.serverError
+import io.kotless.dsl.model.*
+import io.kotless.dsl.model.CloudWatch
 import io.kotless.dsl.utils.Json
 import org.slf4j.LoggerFactory
 import java.io.InputStream
@@ -40,10 +42,10 @@ internal class LambdaHandler {
 
             if (jsonRequest.contains("Scheduled Event")) {
                 try {
-                    val map = Json.parse(CloudWatch.serializer(), jsonRequest)
-                    if (map.`detail-type` == "Scheduled Event" && map.source == "aws.events") {
-                        logger.info("Request is Scheduled Event for Warming sequence")
-                        Application.startWarmingSequence()
+                    logger.info("Cloudwatch $jsonRequest")
+                    val event = Json.parse(CloudWatch.serializer(), jsonRequest)
+                    if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
+                        EventsDispatcher.process(event)
                         return
                     }
                 } catch (e: Exception) {

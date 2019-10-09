@@ -61,11 +61,15 @@ open class KotlessGenerate : DefaultTask() {
             statics += result.resources.statics
 
             val route53 = webapp.route53?.toSchema()
-            Webapp(route53, Webapp.ApiGateway(project.name,
-                webapp.deployment.toSchema(),
-                result.routes.dynamics,
-                result.routes.statics
-            ))
+            Webapp(
+                route53,
+                Webapp.ApiGateway(project.name,
+                    webapp.deployment.toSchema(),
+                    result.routes.dynamics,
+                    result.routes.statics
+                ),
+                Webapp.Events(result.events.scheduled)
+            )
         }.toSet()
 
         val schema = Schema(config, webapps, lambdas, statics)

@@ -7,7 +7,7 @@ package io.kotless
  *
  * @param route53 alias to ApiGateway, if present
  */
-data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
+data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events) : Visitable {
 
     /**
      * Route53 CNAME alias
@@ -17,6 +17,15 @@ data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
      * @param zone a fully qualified name of certificate, for SSL connection
      */
     data class Route53(val zone: String, val alias: String, val certificate: String) : Visitable
+
+    data class Events(val scheduled: Set<ScheduledEvent>): Visitable {
+        data class ScheduledEvent(val id: String, val cron: String, val lambda: Lambda) : Visitable
+
+        override fun visit(visitor: (Any) -> Unit) {
+            scheduled.forEach { visitor(it) }
+            visitor(this)
+        }
+    }
 
     /**
      * ApiGateway REST API.
@@ -63,6 +72,7 @@ data class Webapp(val route53: Route53?, val api: ApiGateway) : Visitable {
     override fun visit(visitor: (Any) -> Unit) {
         route53?.visit(visitor)
         api.visit(visitor)
+        events.visit(visitor)
         visitor(this)
     }
 }

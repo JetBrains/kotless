@@ -1,7 +1,7 @@
 package io.kotless.dsl.dispatcher
 
-import io.kotless.dsl.events.HttpRequest
-import io.kotless.dsl.events.HttpResponse
+import io.kotless.dsl.model.HttpRequest
+import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.lang.KotlessContext
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.reflection.FunctionCaller

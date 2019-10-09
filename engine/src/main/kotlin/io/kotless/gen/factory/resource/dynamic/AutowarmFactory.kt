@@ -16,7 +16,7 @@ object AutowarmFactory : GenerationFactory<Lambda, Unit> {
         val lambda = context.output.get(entity, LambdaFactory)
 
         val event_rule = cloudwatch_event_rule(Names.tf(entity.name)) {
-            name = Names.aws(entity.name)
+            name = Names.aws(entity.name, "autowarm")
             schedule_expression = "cron(0/${entity.config.autowarmMinutes} * * * ? *)"
         }
 

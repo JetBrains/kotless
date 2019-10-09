@@ -29,13 +29,9 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
             myDynamics.add(lambda)
         }
 
-        fun getDynamic(name: String) = myDynamics.find { it.name == name }
-
         fun register(static: StaticResource) {
             myStatics.add(static)
         }
-
-        fun getStatic(file: File) = myStatics.find { it.content.canonicalFile == file.canonicalFile }
     }
 
     val resources = Resources()
@@ -53,16 +49,23 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
             myDynamics.add(dynamic)
         }
 
-        fun getDynamic(path: URIPath) = myDynamics.find { it.path == path }
-
-
         fun register(static: Webapp.ApiGateway.StaticRoute) {
             myStatics.add(static)
         }
-
-        fun getStatic(path: URIPath) = myStatics.find { it.path == path }
     }
 
     val routes = Routes()
+
+    class Events(private val myScheduled: MutableSet<Webapp.Events.ScheduledEvent> = HashSet()) {
+        val scheduled: Set<Webapp.Events.ScheduledEvent>
+            get() = myScheduled.toSet()
+
+
+        fun register(dynamic: Webapp.Events.ScheduledEvent) {
+            myScheduled.add(dynamic)
+        }
+    }
+
+    val events = Events()
 
 }

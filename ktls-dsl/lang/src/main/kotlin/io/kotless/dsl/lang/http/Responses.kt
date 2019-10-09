@@ -1,7 +1,7 @@
 package io.kotless.dsl.lang.http
 
 import io.kotless.MimeType
-import io.kotless.dsl.events.HttpResponse
+import io.kotless.dsl.model.HttpResponse
 
 /** Redirect response (code 302) */
 fun redirect(href: String) = HttpResponse(302, hashMapOf("Location" to href), null, false)

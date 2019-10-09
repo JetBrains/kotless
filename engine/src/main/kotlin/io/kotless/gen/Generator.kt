@@ -2,6 +2,7 @@ package io.kotless.gen
 
 import io.kotless.*
 import io.kotless.gen.factory.apigateway.*
+import io.kotless.gen.factory.event.ScheduledEventsFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.infra.TFConfigFactory
 import io.kotless.gen.factory.infra.TFProvidersFactory
@@ -26,6 +27,8 @@ object Generator {
 
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(LambdaFactory, AutowarmFactory),
+
+        Webapp.Events.ScheduledEvent::class to setOf(ScheduledEventsFactory),
 
         Webapp.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
         Webapp.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)

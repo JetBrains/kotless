@@ -1,4 +1,4 @@
-package io.kotless.dsl.events
+package io.kotless.dsl.model
 
 import io.kotless.MimeType
 import io.kotless.dsl.utils.tryRun

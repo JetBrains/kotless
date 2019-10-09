@@ -1,6 +1,6 @@
 package io.kotless.dsl.lang
 
-import io.kotless.dsl.events.HttpRequest
+import io.kotless.dsl.model.HttpRequest
 
 /**
  * Global context of Kotless execution

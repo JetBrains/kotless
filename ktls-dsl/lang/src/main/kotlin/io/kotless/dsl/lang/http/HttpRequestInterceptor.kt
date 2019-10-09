@@ -1,8 +1,8 @@
 package io.kotless.dsl.lang.http
 
 import io.kotless.dsl.dispatcher.RouteKey
-import io.kotless.dsl.events.HttpRequest
-import io.kotless.dsl.events.HttpResponse
+import io.kotless.dsl.model.HttpRequest
+import io.kotless.dsl.model.HttpResponse
 
 
 /**

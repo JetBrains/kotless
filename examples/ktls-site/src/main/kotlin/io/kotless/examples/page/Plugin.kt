@@ -1,9 +1,15 @@
 package io.kotless.examples.page
 
+import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.dsl.lang.http.Get
 import io.kotless.examples.bootstrap.doc
 import io.kotless.examples.bootstrap.kotlin
 import kotlinx.html.*
+
+@Scheduled("0/2 * * * ? *")
+fun myScheduledPart() {
+    println("WOWOWOWWO")
+}
 
 
 object Plugin {

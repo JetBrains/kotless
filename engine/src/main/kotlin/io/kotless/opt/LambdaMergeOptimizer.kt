@@ -42,7 +42,13 @@ object LambdaMergeOptimizer : SchemaOptimizer {
         val mergedMap = merge(schema.lambdas, optimization.mergeLambda, context)
         val lambdas = schema.lambdas.map { mergedMap.getValue(it) }.toSet()
         val dynamics = schema.webapps.map { webapp -> webapp to webapp.api.dynamics.map { dynamic -> dynamic.copy(lambda = mergedMap.getValue(dynamic.lambda)) }.toSet() }.toMap()
-        val webapps = schema.webapps.map { webapp -> webapp.copy(api = webapp.api.copy(dynamics = dynamics.getValue(webapp))) }.toSet()
+        val scheduled = schema.webapps.map { webapp -> webapp to webapp.events.scheduled.map { event -> event.copy(lambda = mergedMap.getValue(event.lambda)) }.toSet() }.toMap()
+        val webapps = schema.webapps.map { webapp ->
+            webapp.copy(
+                api = webapp.api.copy(dynamics = dynamics.getValue(webapp)),
+                events = webapp.events.copy(scheduled = scheduled.getValue(webapp))
+            )
+        }.toSet()
 
         return schema.copy(lambdas = lambdas).copy(webapps = webapps)
     }
