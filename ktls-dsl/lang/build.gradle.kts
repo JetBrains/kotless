@@ -3,16 +3,9 @@ import tanvd.kosogor.proxy.publishJar
 group = rootProject.group
 version = rootProject.version
 
-buildscript {
-    repositories { jcenter() }
-
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.3.50")
-    }
-}
 
 plugins {
-    id("kotlinx-serialization") version "1.3.50" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50" apply true
 }
 
 dependencies {

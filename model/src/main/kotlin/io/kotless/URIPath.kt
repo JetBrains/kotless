@@ -8,6 +8,7 @@ data class URIPath(var parts: Iterable<String>) {
 
     constructor() : this(emptyList())
     constructor(path: URIPath, part: String) : this(path.parts + part)
+    constructor(part: String, path: URIPath) : this(listOf(part) + path.parts)
 
     override fun toString() = parts.joinToString(separator = "/")
 }

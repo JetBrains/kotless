@@ -1,8 +1,7 @@
 package io.kotless.parser.utils.psi.filter
 
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtVariableDeclaration
+import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.resolve.BindingContext
+import kotlin.reflect.KClass
 
-internal inline fun KtElement.gatherVariables(filter: (KtVariableDeclaration) -> Boolean): Set<KtVariableDeclaration> {
-    return this.filterFor(filter).toSet()
-}
+internal inline fun KtElement.gatherVariables(filter: (KtVariableDeclaration) -> Boolean) = filterFor(filter)

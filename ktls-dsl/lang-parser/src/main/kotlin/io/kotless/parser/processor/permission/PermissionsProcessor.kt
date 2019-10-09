@@ -1,4 +1,4 @@
-package io.kotless.parser.processor
+package io.kotless.parser.processor.permission
 
 import io.kotless.AwsResource
 import io.kotless.Permission

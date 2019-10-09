@@ -2,7 +2,7 @@ package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
 import io.kotless.Webapp
-import io.kotless.parser.KotlessDslParser
+import io.kotless.parser.KotlessDSLParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils._ktSourceSet
 import io.kotless.plugin.gradle.utils._shadowJar
@@ -54,7 +54,7 @@ open class KotlessGenerate : DefaultTask() {
 
             val lambdaConfig = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.autowarm, webapp.lambda.autowarmMinutes, webapp.packages)
 
-            val parsedWebapp = KotlessDslParser(project.configurations.getByName("compile").files.toSet())
+            val parsedWebapp = KotlessDSLParser(project.configurations.getByName("compile").files.toSet())
                 .parseFromFiles(shadowJar, lambdaConfig, config.bucket, config.workDirectory, sources)
 
             lambdas += parsedWebapp.lambdas
