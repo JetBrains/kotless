@@ -27,11 +27,10 @@ internal fun <T> KtAnnotationEntry.getValue(context: BindingContext, param: KPro
 @Suppress("UNCHECKED_CAST")
 internal fun <T> AnnotationDescriptor.getValue(param: KProperty<T>): T? = argumentValue(param.name)?.value as T?
 
-internal fun KtAnnotationEntry.getUriPath(context: BindingContext, param: KProperty<String>) = getValue(context, param)?.toURIPath()
+internal fun KtAnnotationEntry.getURIPath(context: BindingContext, param: KProperty<String>) = getValue(context, param)?.toURIPath()
 
 
-internal inline fun <reified T : Any> KtAnnotationEntry.getArrayValue(context: BindingContext,
-                                                                      param: KProperty1<out Annotation, Array<out T>>): Array<T> {
+internal inline fun <reified T : Any> KtAnnotationEntry.getArrayValue(context: BindingContext, param: KProperty1<out Annotation, Array<out T>>): Array<T> {
     return getDescriptor(context).getArrayValue(param)
 }
 

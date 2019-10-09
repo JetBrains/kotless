@@ -1,4 +1,4 @@
-package io.kotless.parser.utils.psi.filter
+package io.kotless.parser.utils.psi.utils
 
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtFile

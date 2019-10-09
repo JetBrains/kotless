@@ -1,4 +1,4 @@
-package io.kotless.parser.utils.psi.filter
+package io.kotless.parser.utils.psi.utils
 
 import io.kotless.parser.utils.buildSet
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -15,7 +15,7 @@ internal fun KtExpression.gatherAllExpressions(context: BindingContext, alreadyG
 
         addAll(gatherReferencedExpressions<ClassDescriptor, KtClass>(context))
         addAll(gatherReferencedExpressions<ClassDescriptor, KtObjectDeclaration>(context))
-        addAll(gatherReferencedExpressions<ClassDescriptor, KtVariableDeclaration>(context))
+        addAll(gatherReferencedExpressions<ClassDescriptor, KtProperty>(context))
         addAll(gatherReferencedExpressions<FunctionDescriptor, KtNamedFunction>(context))
 
         if (andSelf) add(this@gatherAllExpressions)

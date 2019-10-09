@@ -1,18 +1,17 @@
 package io.kotless.parser.processor
 
-import io.kotless.parser.ParserContext
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
-abstract class Processor {
-    protected abstract fun process(files: Set<KtFile>, binding: BindingContext, context: ParserContext)
+abstract class Processor<Output : Any> {
+    protected abstract fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output
 
-    abstract fun mayRun(context: ParserContext): Boolean
+    abstract fun mayRun(context: ProcessorContext): Boolean
 
-    fun hasRan(context: ParserContext) = context.flow.hasRan(this)
+    fun hasRan(context: ProcessorContext) = context.output.check(this)
 
-    fun run(files: Set<KtFile>, binding: BindingContext, context: ParserContext) {
-        process(files, binding, context)
-        context.flow.register(this)
+    fun run(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
+        val result = process(files, binding, context)
+        context.output.register(this, result)
     }
 }

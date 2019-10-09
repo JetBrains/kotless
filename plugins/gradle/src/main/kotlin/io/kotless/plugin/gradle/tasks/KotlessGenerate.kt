@@ -2,7 +2,7 @@ package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
 import io.kotless.Webapp
-import io.kotless.parser.KotlessDSLParser
+import io.kotless.parser.KotlessParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils._ktSourceSet
 import io.kotless.plugin.gradle.utils._shadowJar
@@ -51,20 +51,20 @@ open class KotlessGenerate : DefaultTask() {
             val project = webapp.project(project)
             val sources = project._ktSourceSet
             val shadowJar = project._shadowJar().archiveFile.get().asFile
+            val dependencies = project.configurations.getByName(project.kotless.config.configurationName).files.toSet()
 
-            val lambdaConfig = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.autowarm, webapp.lambda.autowarmMinutes, webapp.packages)
+            val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.autowarm, webapp.lambda.autowarmMinutes, webapp.packages)
 
-            val parsedWebapp = KotlessDSLParser(project.configurations.getByName("compile").files.toSet())
-                .parseFromFiles(shadowJar, lambdaConfig, config.bucket, config.workDirectory, sources)
+            val result = KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
 
-            lambdas += parsedWebapp.lambdas
-            statics += parsedWebapp.statics
+            lambdas += result.resources.dynamics
+            statics += result.resources.statics
 
             val route53 = webapp.route53?.toSchema()
             Webapp(route53, Webapp.ApiGateway(project.name,
                 webapp.deployment.toSchema(),
-                parsedWebapp.dynamicRoutes,
-                parsedWebapp.staticRoutes
+                result.routes.dynamics,
+                result.routes.statics
             ))
         }.toSet()
 

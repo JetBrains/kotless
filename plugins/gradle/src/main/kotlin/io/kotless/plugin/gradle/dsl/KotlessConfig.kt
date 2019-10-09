@@ -28,6 +28,9 @@ class KotlessConfig(project: Project) : Serializable {
      */
     var genDirectory = File(project.buildDir, "kotless-gen")
 
+    /** Name of configuration to use as a classpath */
+    var configurationName = "compile"
+
     /**
      * Directory Kotless considers as root for File resolving
      * By default it is `projectDir`

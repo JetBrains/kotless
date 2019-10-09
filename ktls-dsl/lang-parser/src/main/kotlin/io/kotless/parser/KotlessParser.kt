@@ -1,8 +1,8 @@
 package io.kotless.parser
 
 import io.kotless.*
+import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor
-import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.processor.route.StaticRoutesProcessor
 import io.kotless.parser.utils.psi.analysis.*
@@ -14,29 +14,22 @@ import java.io.File
  *
  * The result of parsing is a number of Lambdas and StaticResources and associated
  * with them Dynamic and Static routes
- *
- * @param libs -- libraries that should be used as classpath during parsing.
  */
-class KotlessDSLParser(private val libs: Set<File>) {
-    companion object {
-        val processors = setOf(GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor)
+object KotlessParser {
+    private val processors = setOf(GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor)
+
+    data class Result(val routes: Routes, val resources: Resources) {
+        data class Routes(val dynamics: Set<Webapp.ApiGateway.DynamicRoute>, val statics: Set<Webapp.ApiGateway.StaticRoute>)
+        data class Resources(val dynamics: Set<Lambda>, val statics: Set<StaticResource>)
     }
 
-    data class ParsedResult(val dynamicRoutes: Set<Webapp.ApiGateway.DynamicRoute>, val staticRoutes: Set<Webapp.ApiGateway.StaticRoute>,
-                            val lambdas: Set<Lambda>, val statics: Set<StaticResource>)
-
-    /**
-     * Parse Kotlin code for Kotless constructs.
-     * It will firstly parse Files into KtFiles.
-     */
-    fun parseFromFiles(jarFile: File, lambdaConfig: Lambda.Config, bucket: String, workDir: File, files: Set<File>): ParsedResult {
+    fun parse(files: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {
         val environment = EnvironmentManager.create(libs)
-
 
         val ktFiles = ParseUtil.analyze(files, environment)
         val binding = ResolveUtil.analyze(ktFiles, environment).bindingContext
 
-        val context = ParserContext(workDir, bucket, jarFile, lambdaConfig.packages)
+        val context = ProcessorContext(jar, config, lambda)
 
         var newExecuted = true
         while (newExecuted) {
@@ -49,6 +42,6 @@ class KotlessDSLParser(private val libs: Set<File>) {
             }
         }
 
-        return ParsedResult(context.routes.allDynamic(), context.routes.allStatic(), context.resources.allDynamic(), context.resources.allStatic())
+        return Result(Result.Routes(context.routes.dynamics, context.routes.statics), Result.Resources(context.resources.dynamics, context.resources.statics))
     }
 }

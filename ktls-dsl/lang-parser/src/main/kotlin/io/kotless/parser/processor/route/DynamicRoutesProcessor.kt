@@ -4,46 +4,38 @@ import io.kotless.*
 import io.kotless.dsl.kotlessLambdaEntrypoint
 import io.kotless.dsl.lang.http.Get
 import io.kotless.dsl.lang.http.Post
-import io.kotless.parser.ParserContext
+import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.buildSet
-import io.kotless.parser.utils.psi.annotation.getUriPath
-import io.kotless.parser.utils.psi.filter.gatherAllExpressions
+import io.kotless.parser.utils.psi.annotation.getURIPath
+import io.kotless.parser.utils.psi.utils.gatherAllExpressions
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 
-internal object DynamicRoutesProcessor : AnnotationProcessor() {
+internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
     override val annotations = setOf(Get::class, Post::class)
 
-    override fun mayRun(context: ParserContext) = context.flow.hasRan(GlobalActionsProcessor)
+    override fun mayRun(context: ProcessorContext) = context.output.check(GlobalActionsProcessor)
 
-    override fun process(files: Set<KtFile>, binding: BindingContext, context: ParserContext) {
-        val permissions = context.storage[GlobalActionsProcessor.permissions]!!
+    override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
+        val permissions = context.output.get(GlobalActionsProcessor).permissions
 
-        processFunctions(files, binding) { func, entry ->
+        processFunctions(files, binding) { func, entry, klass ->
             val routePermissions = gatherPermissionsForRoute(binding, func) + permissions
 
-            val functionName = prepareFunctionName(func, context.packages)
+            val name = prepareFunctionName(func, context.lambda.packages)
 
-            val function = Lambda(functionName, context.file,
-                Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()),
-                //TODO-tanvd fix
-                Lambda.Config(1024, 300, true, 5, context.packages),
-                routePermissions)
+            val function = Lambda(name, context.jar, Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()), context.lambda, routePermissions)
 
-            val routeType = when (entry) {
-                Get::class -> HttpMethod.GET
-                Post::class -> HttpMethod.POST
+            val (routeType, pathProperty) = when (klass) {
+                Get::class -> HttpMethod.GET to Get::path
+                Post::class -> HttpMethod.POST to Post::path
                 else -> error("Not supported class $entry")
             }
-            val pathProperty = when (entry) {
-                Get::class -> Get::path
-                Post::class -> Post::path
-                else -> error("Not supported class $entry")
-            }
-            val path = entry.getUriPath(binding, pathProperty)!!
+
+            val path = entry.getURIPath(binding, pathProperty)!!
 
             context.resources.register(function)
             context.routes.register(Webapp.ApiGateway.DynamicRoute(routeType, path, function))
