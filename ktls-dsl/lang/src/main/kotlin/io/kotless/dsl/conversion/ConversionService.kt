@@ -1,5 +1,6 @@
 package io.kotless.dsl.conversion
 
+import io.kotless.dsl.lang.LambdaInit
 import java.lang.reflect.Type
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.javaType
@@ -9,7 +10,11 @@ import kotlin.reflect.jvm.javaType
 /**
  * Data conversion service that does serialization and deserialization to/from request parameters
  */
-abstract class ConversionService {
+abstract class ConversionService: LambdaInit {
+    override fun init() {
+        register(this)
+    }
+
     /**
      * Convert [value] to an instance of [type]
      *

@@ -1,6 +1,6 @@
-package io.kotless.dsl.api
+package io.kotless.dsl.app.http
 
-import io.kotless.HttpMethod
+import io.kotless.*
 import io.kotless.dsl.lang.http.Get
 import io.kotless.dsl.lang.http.Post
 import io.kotless.dsl.reflection.ReflectionScanner
@@ -8,10 +8,12 @@ import org.slf4j.LoggerFactory
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotation
 
-internal object RoutesCache {
-    private val logger = LoggerFactory.getLogger(RoutesCache::class.java)
+internal object RoutesStorage {
+    data class Descriptor(val func: KFunction<*>, val mime: MimeType)
 
-    private val cache = HashMap<RouteKey, KFunction<*>>()
+    private val logger = LoggerFactory.getLogger(RoutesStorage::class.java)
+
+    private val cache = HashMap<RouteKey, Descriptor>()
 
     private var scanned = false
 
@@ -29,17 +31,16 @@ internal object RoutesCache {
             logger.debug("Found function ${route.name} for annotation ${T::class.simpleName}")
             val annotation = route.findAnnotation<T>()
             if (annotation != null) {
-                val key = RouteKey(annotation.refMethod, annotation.refMime, annotation.refPath)
-                if (cache.containsKey(key)) {
-                    logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).name}, new ${route.name}")
-                }
-                cache[key] = route
+                val key = RouteKey(annotation.refMethod, annotation.refPath)
+                if (key !in cache) logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).func.name}, new ${route.name}")
+
+                cache[key] = Descriptor(route, annotation.refMime)
                 logger.debug("Saved with key $key function ${route.name} for annotation ${T::class.simpleName}")
             }
         }
     }
 
-    operator fun get(key: RouteKey): KFunction<*>? {
+    operator fun get(key: RouteKey): Descriptor? {
         scan()
         return cache[key] ?: return null
     }

@@ -1,4 +1,4 @@
-package io.kotless.dsl.events
+package io.kotless.dsl.app.events
 
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
@@ -11,8 +11,8 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.jvm.kotlinFunction
 
 
-object EventsCache {
-    private val logger = LoggerFactory.getLogger(EventsCache::class.java)
+internal object EventsStorage {
+    private val logger = LoggerFactory.getLogger(EventsStorage::class.java)
 
     private val cache = HashMap<String, KFunction<*>>()
 

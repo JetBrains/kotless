@@ -18,8 +18,10 @@ package io.kotless.dsl.lang.event
 @Target(AnnotationTarget.FUNCTION)
 annotation class Scheduled(val cron: String, val id: String = "") {
     companion object {
-        const val each5Minutes = "0/5 * * * ? *"
-        const val eachHour = "* 0/1 * * ? *"
-        const val eachDay = "* * 0/1 * ? *"
+        const val everyMinute = "0/1 * * * ? *"
+        const val every5Minutes = "0/5 * * * ? *"
+        const val every10Minutes = "0/10 * * * ? *"
+        const val everyHour = "* 0/1 * * ? *"
+        const val everyDay = "* * 0/1 * ? *"
     }
 }

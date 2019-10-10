@@ -1,7 +1,6 @@
 package io.kotless.dsl.model
 
 import io.kotless.MimeType
-import io.kotless.dsl.utils.tryRun
 import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.collections.HashMap
@@ -19,9 +18,11 @@ data class HttpRequest(
     val body: String?
 ) {
     private val bodyPostParamsMap = body?.split("&")?.mapNotNull {
-        tryRun {
+        try {
             val (name, value) = it.split("=")
             name to value
+        } catch (e: Throwable) {
+            null
         }
     }?.toMap()
 

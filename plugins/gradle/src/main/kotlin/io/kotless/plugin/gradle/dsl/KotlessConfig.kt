@@ -49,7 +49,7 @@ class KotlessConfig(project: Project) : Serializable {
     class Terraform : Serializable {
         /**
          * Version of Terraform to use.
-         * By default, `0.11.13`
+         * By default, `0.11.14`
          */
         var version: String = "0.11.14"
         /** AWS profile from a local machine to use for Terraform operations authentication */

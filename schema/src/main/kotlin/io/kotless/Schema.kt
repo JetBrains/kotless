@@ -16,7 +16,8 @@ import io.kotless.utils.Visitable
  * @param statics static resources used in application
  */
 data class Schema(val config: KotlessConfig, val webapp: Webapp,
-                  val lambdas: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>) : Visitable {
+                  val lambdas: TypedStorage<Lambda>,
+                  val statics: TypedStorage<StaticResource>) : Visitable {
     override fun visit(visitor: (Any) -> Unit) {
         config.visit(visitor)
         lambdas.all.forEach { it.visit(visitor) }

@@ -1,9 +1,9 @@
 package io.kotless.dsl.reflection
 
 import io.kotless.dsl.config.KotlessConfig
-import io.kotless.dsl.utils.forPackages
 import org.reflections.Reflections
 import org.reflections.scanners.*
+import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
@@ -12,8 +12,11 @@ import kotlin.reflect.jvm.kotlinFunction
 
 internal object ReflectionScanner {
     private val reflections by lazy {
-        Reflections(ConfigurationBuilder()
-            .forPackages(KotlessConfig.packages)
+        val configurationBuilder = ConfigurationBuilder()
+        Reflections(configurationBuilder
+            .apply {
+                KotlessConfig.packages.forEach { configurationBuilder.addUrls(ClasspathHelper.forPackage(it)) }
+            }
             .filterInputsBy { file: String? ->
                 KotlessConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
             }

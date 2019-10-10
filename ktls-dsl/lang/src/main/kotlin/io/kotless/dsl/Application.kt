@@ -1,7 +1,6 @@
 package io.kotless.dsl
 
-import io.kotless.dsl.conversion.ConversionService
-import io.kotless.dsl.api.RoutesCache
+import io.kotless.dsl.app.http.RoutesStorage
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.reflection.ReflectionScanner
@@ -17,41 +16,26 @@ internal object Application {
         if (isInitialized) return
         logger.info("Started initialization of Lambda")
 
-        RoutesCache.scan()
+        RoutesStorage.scan()
 
-        initConversions()
+        executeForObjects<LambdaInit> { it.init() }
 
-        startInitSequence()
-        startWarmingSequence()
+        warmup()
 
         logger.info("Lambda is initialized")
         isInitialized = true
     }
 
-    private fun initConversions() {
-        ReflectionScanner.objectsWithSubtype<ConversionService>().forEach {
-            ConversionService.register(it)
-        }
-    }
+    fun warmup() = executeForObjects<LambdaWarming> { it.warmup() }
 
-    private fun startInitSequence() {
-        ReflectionScanner.objectsWithSubtype<LambdaInit>().forEach {
+    private inline fun <reified T : Any> executeForObjects(body: (T) -> Unit) {
+        ReflectionScanner.objectsWithSubtype<T>().forEach {
             try {
-                it.init()
+                body(it)
             } catch (e: Throwable) {
-                logger.error("Exception occurred during call of initializing sequence function ${it::class.qualifiedName}", e)
+                logger.error("Exception occurred during call of ${T::class} sequence for object ${it::class.qualifiedName}", e)
             }
         }
     }
 
-    /** Start warming up sequence */
-    fun startWarmingSequence() {
-        ReflectionScanner.objectsWithSubtype<LambdaWarming>().forEach {
-            try {
-                it.warmup()
-            } catch (e: Throwable) {
-                logger.error("Exception occurred during call of warming sequence function ${it::class.qualifiedName}", e)
-            }
-        }
-    }
 }

@@ -1,6 +1,6 @@
 package io.kotless.dsl.lang.http
 
-import io.kotless.dsl.api.RouteKey
+import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
 

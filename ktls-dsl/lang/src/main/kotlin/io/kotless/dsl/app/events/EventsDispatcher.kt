@@ -1,4 +1,4 @@
-package io.kotless.dsl.events
+package io.kotless.dsl.app.events
 
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.Application
@@ -12,11 +12,11 @@ internal object EventsDispatcher {
     fun process(event: CloudWatch) {
         for (resource in event.resources.distinct().map { it.substringAfter("/") }) {
             when {
-                resource.startsWith(ScheduledEventType.Autowarm.prefix) -> Application.startWarmingSequence()
+                resource.startsWith(ScheduledEventType.Autowarm.prefix) -> Application.warmup()
                 resource.startsWith(ScheduledEventType.General.prefix) -> {
                     logger.info("Got key $resource")
 
-                    EventsCache[resource]?.let {
+                    EventsStorage[resource]?.let {
                         logger.info("Calling Event handler")
                         FunctionCaller.call(it, emptyMap())
                     }

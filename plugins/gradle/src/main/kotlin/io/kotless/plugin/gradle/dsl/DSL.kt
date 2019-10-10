@@ -4,6 +4,7 @@ import io.kotless.plugin.gradle.utils.myExt
 import io.kotless.plugin.gradle.utils.ext
 import org.gradle.api.Project
 
+@KotlessDSLTag
 var Project.kotless: KotlessDSL
     get() = this.ext("kotless")
     set(value) {

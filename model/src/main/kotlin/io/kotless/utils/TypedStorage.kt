@@ -2,7 +2,6 @@ package io.kotless.utils
 
 /** Interface for typeful singleton storage */
 class TypedStorage<T>(private val storage: MutableMap<Key<T>, T> = HashMap()) {
-
     class Key<T>
 
     val all: Collection<T>

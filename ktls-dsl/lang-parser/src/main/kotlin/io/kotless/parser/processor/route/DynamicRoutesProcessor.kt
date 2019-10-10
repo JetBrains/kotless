@@ -12,7 +12,7 @@ import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.annotation.getURIPath
 import io.kotless.utils.TypedStorage
-import io.kotless.utils.eachNMinutes
+import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -44,7 +44,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             context.resources.register(key, function)
             context.routes.register(ApiGateway.DynamicRoute(routeType, path, key))
             if (context.config.optimization.autowarm.enable) {
-                context.events.register(Events.Scheduled(name, eachNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key))
+                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key))
             }
         }
     }

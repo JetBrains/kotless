@@ -1,4 +1,4 @@
-package io.kotless.dsl.api
+package io.kotless.dsl.app.http
 
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
@@ -9,8 +9,8 @@ import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 
-internal object APIDispatcher {
-    private val logger = LoggerFactory.getLogger(APIDispatcher::class.java)
+internal object RoutesDispatcher {
+    private val logger = LoggerFactory.getLogger(RoutesDispatcher::class.java)
 
     private val pipeline by lazy { preparePipeline(ReflectionScanner.objectsWithSubtype<HttpRequestInterceptor>().sortedBy { it.priority }) }
 
@@ -36,7 +36,8 @@ internal object APIDispatcher {
 
     private fun processRequest(request: HttpRequest, resourceKey: RouteKey): HttpResponse {
         logger.info("Passing request to route {}", resourceKey)
-        val func = RoutesCache[resourceKey] ?: return notFound()
+
+        val (func, mime) = RoutesStorage[resourceKey] ?: return notFound()
         logger.debug("Found $func for key $resourceKey")
 
         val result = try {
@@ -49,7 +50,7 @@ internal object APIDispatcher {
         logger.info("Route returned result")
         return when (result) {
             is HttpResponse -> result
-            else -> okResponse(result?.toString(), resourceKey.mimeType)
+            else -> okResponse(result?.toString(), mime)
         }
     }
 }

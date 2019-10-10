@@ -45,7 +45,7 @@ object LambdaMergeOptimizer : SchemaOptimizer {
         val scheduled = if (optimization.autowarm.enable) {
             (schema.webapp.events.scheduled.filter { it.type != ScheduledEventType.Autowarm } +
                 mergedMap.entries.distinctBy { it.value }.map { (key, lambda) ->
-                    Webapp.Events.Scheduled(lambda.name, eachNMinutes(optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                    Webapp.Events.Scheduled(lambda.name, everyNMinutes(optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
                 }).toSet()
         } else schema.webapp.events.scheduled
 
