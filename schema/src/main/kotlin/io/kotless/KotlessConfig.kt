@@ -1,5 +1,6 @@
 package io.kotless
 
+import io.kotless.utils.Visitable
 import java.io.File
 
 /**
@@ -51,7 +52,16 @@ data class KotlessConfig(val bucket: String, val resourcePrefix: String,
     }
 
     /** Configuration of optimizations considered during code generation */
-    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All) : Visitable {
+    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All,
+                            val autowarm: Autowarm = Autowarm(enable = true, minutes = 5)) : Visitable {
+
+        /**
+         * Optimization defines, if lambdas should be autowarmed and with what schedule
+         *
+         * Lambdas cannot be autowarmed with interval more than hour, since it has no practical sense
+         */
+        data class Autowarm(val enable: Boolean, val minutes: Int) : Visitable
+
         /**
          * Optimization defines, if different lambdas should be merged into one and when.
          *
@@ -66,6 +76,11 @@ data class KotlessConfig(val bucket: String, val resourcePrefix: String,
             None,
             PerPermissions,
             All
+        }
+
+        override fun visit(visitor: (Any) -> Unit) {
+            autowarm.visit(visitor)
+            visitor(this)
         }
     }
 

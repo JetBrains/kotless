@@ -1,6 +1,6 @@
 package io.kotless.opt
 
-import io.kotless.Storage
+import io.kotless.utils.Storage
 
 /** Context of current Schema optimization */
 class OptimizationContext {

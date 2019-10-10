@@ -3,7 +3,6 @@ package io.kotless.plugin.gradle.dsl
 import io.kotless.KotlessConfig
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
-
     return with(config) {
         KotlessConfig(bucket, resourcePrefix, workDirectory, genDirectory,
             with(terraform) {
@@ -22,7 +21,10 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
                     )
                 )
             },
-            KotlessConfig.Optimization(optimization.mergeLambda)
+            KotlessConfig.Optimization(
+                optimization.mergeLambda,
+                KotlessConfig.Optimization.Autowarm(optimization.autowarm.enable, optimization.autowarm.minutes)
+            )
         )
     }
 }

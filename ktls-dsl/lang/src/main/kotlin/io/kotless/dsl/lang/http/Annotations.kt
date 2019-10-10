@@ -10,7 +10,7 @@ import io.kotless.MimeType
  * Serialization of the result also will be done automatically. Nevertheless, it is
  * possible to return data as HttpResponse -- in this case no serialization will be performed.
  *
- * @see io.kotless.dsl.events.HttpResponse
+ * @see io.kotless.dsl.model.HttpResponse
  *
  * @param path -- URI path for this route.
  * @param mime -- MimeType of payload.

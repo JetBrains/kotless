@@ -2,9 +2,12 @@ package io.kotless.opt
 
 import io.kotless.*
 import io.kotless.KotlessConfig.Optimization
+import io.kotless.utils.Storage
+import io.kotless.utils.TypedStorage
 
 object LambdaMergeOptimizer : SchemaOptimizer {
     private val key = Storage.Key<Int>()
+
     private fun OptimizationContext.getIndexAndIncrement(): Int {
         val value = storage.getOrPut(key) { 0 }
         storage[key] = value + 1
@@ -40,7 +43,18 @@ object LambdaMergeOptimizer : SchemaOptimizer {
 
     override fun optimize(schema: Schema, optimization: Optimization, context: OptimizationContext): Schema {
         val mergedMap = merge(schema.lambdas, optimization.mergeLambda, context)
+        val scheduled = if (optimization.autowarm.enable) {
+            (schema.webapp.events.scheduled.filter { it.type != ScheduledEventType.Autowarm } +
+                mergedMap.entries.distinctBy { it.value }.map { (key, lambda) ->
+                    Webapp.Events.Scheduled(lambda.name, "0/${optimization.autowarm.minutes} * * * ? *", ScheduledEventType.Autowarm, key)
+                }).toSet()
+        } else schema.webapp.events.scheduled
 
-        return schema.copy(lambdas = TypedStorage(HashMap(mergedMap)))
+        return schema.copy(
+            lambdas = TypedStorage(HashMap(mergedMap)),
+            webapp = schema.webapp.copy(
+                events = schema.webapp.events.copy(scheduled = scheduled)
+            )
+        )
     }
 }

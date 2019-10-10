@@ -7,6 +7,7 @@ import io.kotless.parser.processor.events.ScheduledEventsProcessor
 import io.kotless.parser.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.processor.route.StaticRoutesProcessor
 import io.kotless.parser.utils.psi.analysis.*
+import io.kotless.utils.TypedStorage
 import java.io.File
 
 /**

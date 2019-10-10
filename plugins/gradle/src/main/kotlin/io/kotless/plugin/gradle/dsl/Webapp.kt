@@ -29,12 +29,6 @@ class Webapp(project: Project) : Serializable {
 
         /** Limit of lambda execution in seconds */
         var timeoutSec: Int = 300
-
-        /** Should lambdas in this webapp be autowarmed, or not */
-        var autowarm: Boolean = true
-
-        /** Period in minutes between warm invocations */
-        val autowarmMinutes: Int = 3
     }
 
     /** Deployment definition of ApiGateway. Recreated each redeploy */

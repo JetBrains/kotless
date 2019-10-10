@@ -6,7 +6,6 @@ import io.kotless.gen.factory.event.ScheduledEventsFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.infra.TFConfigFactory
 import io.kotless.gen.factory.infra.TFProvidersFactory
-import io.kotless.gen.factory.resource.dynamic.AutowarmFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
@@ -26,7 +25,7 @@ object Generator {
         Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
         StaticResource::class to setOf(StaticResourceFactory),
-        Lambda::class to setOf(LambdaFactory, AutowarmFactory),
+        Lambda::class to setOf(LambdaFactory),
 
         Webapp.Events.Scheduled::class to setOf(ScheduledEventsFactory),
 
@@ -35,31 +34,25 @@ object Generator {
     )
 
     fun generate(schema: Schema): Set<TFFile> {
-        val contexts = schema.webapps.map { webapp ->
-            val context = GenerationContext(schema, webapp)
+        val context = GenerationContext(schema, schema.webapp)
 
-            var newExecuted = true
-            while (newExecuted) {
-                newExecuted = false
-                //FIXME it should visit only webapp
-                schema.visit { entity ->
-                    factories[entity::class].orEmpty().forEach { factory ->
-                        @Suppress("UNCHECKED_CAST")
-                        factory as GenerationFactory<Any, Any>
-                        if (!factory.hasRan(entity, context)) {
-                            if (factory.mayRun(entity, context)) {
-                                factory.run(entity, context)
-                                newExecuted = true
-                            }
+        var newExecuted = true
+        while (newExecuted) {
+            newExecuted = false
+            schema.visit { entity ->
+                factories[entity::class].orEmpty().forEach { factory ->
+                    @Suppress("UNCHECKED_CAST")
+                    factory as GenerationFactory<Any, Any>
+                    if (!factory.hasRan(entity, context)) {
+                        if (factory.mayRun(entity, context)) {
+                            factory.run(entity, context)
+                            newExecuted = true
                         }
                     }
                 }
             }
-
-            context
         }
 
-        return contexts.map { TFFile(it.webapp.api.name, ArrayList(it.entities.all())) }.toSet()
-
+        return setOf(TFFile(context.webapp.api.name, ArrayList(context.entities.all())))
     }
 }

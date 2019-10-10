@@ -2,7 +2,7 @@ package io.kotless.gen
 
 import io.kotless.*
 import io.kotless.hcl.HCLEntity
-import io.kotless.Storage
+import io.kotless.utils.Storage
 
 /**
  * Context of current Terraform generation

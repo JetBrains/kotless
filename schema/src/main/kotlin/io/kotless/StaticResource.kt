@@ -1,5 +1,6 @@
 package io.kotless
 
+import io.kotless.utils.Visitable
 import java.io.File
 
 /**

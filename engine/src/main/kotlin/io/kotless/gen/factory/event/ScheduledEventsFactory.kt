@@ -14,20 +14,20 @@ object ScheduledEventsFactory : GenerationFactory<Webapp.Events.Scheduled, Unit>
     override fun generate(entity: Webapp.Events.Scheduled, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val lambda = context.output.get(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
 
-        val event_rule = cloudwatch_event_rule(Names.tf(entity.id)) {
-            name = Names.aws(entity.id)
+        val event_rule = cloudwatch_event_rule(Names.tf(entity.fqId)) {
+            name = Names.aws(entity.fqId)
             schedule_expression = "cron(${entity.cron})"
         }
 
-        val permission = lambda_permission(Names.tf(entity.id)) {
-            statement_id = Names.aws(entity.id)
+        val permission = lambda_permission(Names.tf(entity.fqId)) {
+            statement_id = Names.aws(entity.fqId)
             action = "lambda:InvokeFunction"
             function_name = lambda.lambda_arn
             principal = "events.amazonaws.com"
             source_arn = event_rule::arn.ref
         }
 
-        val target = cloudwatch_event_target(Names.tf(entity.id)) {
+        val target = cloudwatch_event_target(Names.tf(entity.fqId)) {
             rule = event_rule::name.ref
             arn = lambda.lambda_arn
         }

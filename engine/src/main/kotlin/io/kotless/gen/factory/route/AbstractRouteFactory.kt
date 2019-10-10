@@ -6,7 +6,7 @@ import io.kotless.gen.Names
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_resource
-import io.kotless.Storage
+import io.kotless.utils.Storage
 
 /**
  * Generic implementation of ApiGateway resources creation

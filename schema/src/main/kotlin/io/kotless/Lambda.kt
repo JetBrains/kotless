@@ -1,5 +1,6 @@
 package io.kotless
 
+import io.kotless.utils.Visitable
 import java.io.File
 
 /**
@@ -33,9 +34,7 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
      *
      * @param memoryMb memory in megabytes available for a lambda
      * @param timeoutSec limit of lambda execution in seconds
-     * @param autowarm should this lambda be autowarmed, or not
-     * @param autowarmMinutes period in minutes between warm invocations
      * @param packages packages that lambda dispatcher should scan for annotated classes
      */
-    data class Config(val memoryMb: Int, val timeoutSec: Int, val autowarm: Boolean, val autowarmMinutes: Int, val packages: Set<String>)
+    data class Config(val memoryMb: Int, val timeoutSec: Int, val packages: Set<String>)
 }

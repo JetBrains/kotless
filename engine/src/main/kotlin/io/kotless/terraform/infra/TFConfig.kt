@@ -2,7 +2,6 @@ package io.kotless.terraform.infra
 
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFFile
-import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
 /** Declaration of Terraform configuration */

@@ -1,4 +1,4 @@
-package io.kotless
+package io.kotless.utils
 
 /** Defines entity that can be walked by visitor */
 interface Visitable {

@@ -1,7 +1,6 @@
 package io.kotless.hcl
 
 import io.kotless.terraform.functions.link
-import io.kotless.utils.Text
 import io.kotless.utils.withIndent
 
 /** Field of HCL entity */

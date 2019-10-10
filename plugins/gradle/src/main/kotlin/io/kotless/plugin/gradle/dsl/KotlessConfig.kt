@@ -121,5 +121,15 @@ class KotlessConfig(project: Project) : Serializable {
          * * All -- all lambdas in context are merged in one
          */
         var mergeLambda: MergeLambda = MergeLambda.All
+
+        /**
+         * Optimization defines, if lambdas should be autowarmed and with what schedule
+         *
+         * Lambdas cannot be autowarmed with interval more than hour, since it has no practical sense
+         */
+        @KotlessDSLTag
+        data class Autowarm(val enable: Boolean, val minutes: Int) : Serializable
+
+        var autowarm: Autowarm = Autowarm(true, 5)
     }
 }

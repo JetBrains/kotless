@@ -1,5 +1,8 @@
 package io.kotless
 
+import io.kotless.utils.TypedStorage
+import io.kotless.utils.Visitable
+
 /**
  * Kotless web application
  *
@@ -22,18 +25,8 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
      * Events processed by different functions of Webapp
      *
      * @param scheduled scheduled functions of Webapp
-     * @param autowarmed autowarm events setuped for Webapp
      */
-    data class Events(val scheduled: Set<Scheduled>, val autowarmed: Set<Autowarm>): Visitable {
-        /**
-         * Definition of autowarm event
-         *
-         * @param id unique name of event
-         * @param cron expression in a crontab-like syntax defining scheduler for autowarm
-         * @param lambda function to warm
-         */
-        data class Autowarm(val id: String, val cron: String, val lambda: TypedStorage.Key<Lambda>) : Visitable
-
+    data class Events(val scheduled: Set<Scheduled>): Visitable {
         /**
          * Definition of scheduled event
          *
@@ -41,11 +34,12 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
          * @param cron expression in a crontab-like syntax defining scheduler
          * @param lambda function to trigger by scheduled event
          */
-        data class Scheduled(val id: String, val cron: String, val lambda: TypedStorage.Key<Lambda>) : Visitable
+        data class Scheduled(val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Visitable {
+            val fqId = "${type.prefix}-$id"
+        }
 
         override fun visit(visitor: (Any) -> Unit) {
             scheduled.forEach { visitor(it) }
-            autowarmed.forEach { visitor(it) }
             visitor(this)
         }
     }

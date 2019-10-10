@@ -7,6 +7,7 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.utils.psi.annotation.getEnumValue
 import io.kotless.parser.utils.psi.annotation.getURIPath
 import io.kotless.parser.utils.psi.utils.getTypeFqName
+import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -30,7 +31,10 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             }
 
             val arguments = (variable.initializer as KtCallExpression).valueArguments
-            require(arguments.size == 1) { "Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")" }
+
+            require(arguments.size == 1) {
+                "Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")"
+            }
 
             val file = File(context.config.workDirectory, arguments.single().text.trim('"'))
 

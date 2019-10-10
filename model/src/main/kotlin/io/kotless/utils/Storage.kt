@@ -1,4 +1,4 @@
-package io.kotless
+package io.kotless.utils
 
 /** Interface for typeful singleton storage */
 class Storage {

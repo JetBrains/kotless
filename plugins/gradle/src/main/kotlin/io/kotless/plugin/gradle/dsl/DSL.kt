@@ -13,7 +13,7 @@ var Project.kotless: KotlessDSL
 /** Configuration of Kotless application */
 @KotlessDSLTag
 fun Project.kotless(configure: KotlessDSL.() -> Unit) {
-    kotless = KotlessDSL(project).apply(configure)
+    kotless = KotlessDSL(this).apply(configure)
 }
 
 

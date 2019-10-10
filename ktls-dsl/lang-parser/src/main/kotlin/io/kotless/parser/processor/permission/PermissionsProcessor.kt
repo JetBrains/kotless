@@ -1,17 +1,24 @@
 package io.kotless.parser.processor.permission
 
-import io.kotless.AwsResource
-import io.kotless.Permission
+import io.kotless.*
 import io.kotless.dsl.lang.*
 import io.kotless.parser.utils.buildSet
 import io.kotless.parser.utils.psi.annotation.*
+import io.kotless.parser.utils.psi.utils.gatherAllExpressions
 import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 
 internal object PermissionsProcessor {
     private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class)
 
-    fun process(context: BindingContext, expressions: List<KtAnnotated>) = buildSet<Permission> {
+    fun process(func: KtNamedFunction, context: BindingContext) = buildSet<Permission> {
+        val annotatedExpressions = func.gatherAllExpressions(context, andSelf = true).filterIsInstance<KtAnnotated>()
+        addAll(AwsResource.values().flatMap { process(annotatedExpressions, context) })
+        add(Permission(AwsResource.CloudWatchLogs, PermissionLevel.ReadWrite, setOf("*")))
+    }
+
+    fun process(expressions: Iterable<KtAnnotated>, context: BindingContext) = buildSet<Permission> {
         expressions.forEach { expr ->
             PERMISSION_ANNOTATIONS_CLASSES.forEach { routeClass ->
                 expr.getAnnotations(context, routeClass).forEach { annotation ->

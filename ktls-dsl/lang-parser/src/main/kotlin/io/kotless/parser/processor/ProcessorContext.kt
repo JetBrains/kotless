@@ -1,6 +1,7 @@
 package io.kotless.parser.processor
 
 import io.kotless.*
+import io.kotless.utils.TypedStorage
 import java.io.File
 
 class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lambda.Config) {
@@ -54,12 +55,10 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
         val scheduled: Set<Webapp.Events.Scheduled>
             get() = myScheduled.toSet()
 
-
-        fun register(dynamic: Webapp.Events.Scheduled) {
-            myScheduled.add(dynamic)
+        fun register(scheduled: Webapp.Events.Scheduled) {
+            myScheduled.add(scheduled)
         }
     }
 
     val events = Events()
-
 }

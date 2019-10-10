@@ -13,10 +13,10 @@ class KotlessDSL(project: Project) : Serializable {
         config = config.apply(configure)
     }
 
-    val webapps = ArrayList<Webapp>()
+    lateinit var webapp: Webapp
     /** Configuration of Kotless Web application */
     @KotlessDSLTag
-    fun webapp(project: Project, configure: Webapp.() -> Unit) {
-        webapps.add(Webapp(project).apply(configure))
+    fun Project.webapp(configure: Webapp.() -> Unit) {
+        webapp = Webapp(this).apply(configure)
     }
 }
