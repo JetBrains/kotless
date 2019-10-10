@@ -1,6 +1,7 @@
 package io.kotless.gen
 
-import io.kotless.*
+import io.kotless.Schema
+import io.kotless.Webapp
 import io.kotless.hcl.HCLEntity
 import io.kotless.utils.Storage
 

@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
-import io.kotless.plugin.gradle.utils.myExt
 import io.kotless.plugin.gradle.utils.ext
+import io.kotless.plugin.gradle.utils.myExt
 import org.gradle.api.Project
 
 @KotlessDSLTag

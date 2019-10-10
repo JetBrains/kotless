@@ -26,7 +26,7 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
      *
      * @param scheduled scheduled functions of Webapp
      */
-    data class Events(val scheduled: Set<Scheduled>): Visitable {
+    data class Events(val scheduled: Set<Scheduled>) : Visitable {
         /**
          * Definition of scheduled event
          *

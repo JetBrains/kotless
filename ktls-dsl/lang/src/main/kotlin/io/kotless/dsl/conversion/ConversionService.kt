@@ -10,7 +10,7 @@ import kotlin.reflect.jvm.javaType
 /**
  * Data conversion service that does serialization and deserialization to/from request parameters
  */
-abstract class ConversionService: LambdaInit {
+abstract class ConversionService : LambdaInit {
     override fun init() {
         register(this)
     }

@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
 
-abstract class SubTypesProcessor<Output: Any> : Processor<Output>() {
+abstract class SubTypesProcessor<Output : Any> : Processor<Output>() {
     abstract val klasses: Set<KClass<*>>
 
     fun processObjects(files: Set<KtFile>, binding: BindingContext, body: (KtObjectDeclaration, KClass<*>) -> Unit) {

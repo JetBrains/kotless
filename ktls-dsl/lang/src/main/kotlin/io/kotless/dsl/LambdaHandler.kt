@@ -2,9 +2,9 @@ package io.kotless.dsl
 
 import com.amazonaws.services.lambda.runtime.Context
 import io.kotless.HttpMethod
-import io.kotless.dsl.app.http.RoutesDispatcher
-import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.events.EventsDispatcher
+import io.kotless.dsl.app.http.RouteKey
+import io.kotless.dsl.app.http.RoutesDispatcher
 import io.kotless.dsl.lang.http.serverError
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json

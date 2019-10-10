@@ -20,6 +20,7 @@ open class TFProvider(val tf_provider: String) : HCLEntity(), HCLNamed {
 
     override val owner: HCLNamed?
         get() = this
+
     override fun render(): String {
         return """
             |provider "$tf_provider" {

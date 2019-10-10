@@ -1,6 +1,7 @@
 package io.kotless.dsl.app.http
 
-import io.kotless.*
+import io.kotless.HttpMethod
+import io.kotless.URIPath
 
 /** Descriptor of HTTP route. */
 data class RouteKey(val method: HttpMethod, val path: URIPath) {

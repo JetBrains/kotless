@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import org.gradle.api.Project
-import java.io.*
+import java.io.Serializable
 
 /** Kotless DSL root */
 @KotlessDSLTag

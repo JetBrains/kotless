@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
 
-abstract class AnnotationProcessor<Output: Any>: Processor<Output>() {
+abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
     abstract val annotations: Set<KClass<out Annotation>>
 
     fun processFunctions(files: Set<KtFile>, binding: BindingContext, body: (KtNamedFunction, KtAnnotationEntry, KClass<*>) -> Unit) {

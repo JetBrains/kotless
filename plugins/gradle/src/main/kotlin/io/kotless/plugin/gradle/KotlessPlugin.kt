@@ -1,8 +1,8 @@
 package io.kotless.plugin.gradle
 
 import io.kotless.plugin.gradle.tasks.*
-import io.kotless.plugin.gradle.utils.myCreate
 import io.kotless.plugin.gradle.utils.applyPluginSafely
+import io.kotless.plugin.gradle.utils.myCreate
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

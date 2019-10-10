@@ -27,7 +27,7 @@ class LambdaFunction(id: String) : TFResource(id, "aws_lambda_function") {
     var timeout by int()
     var memory_size by int()
 
-    class Environment: HCLEntity() {
+    class Environment : HCLEntity() {
         var variables by entity<HCLEntity>()
     }
 
