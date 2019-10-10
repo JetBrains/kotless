@@ -5,6 +5,7 @@ import io.kotless.dsl.utils.forPackages
 import org.reflections.Reflections
 import org.reflections.scanners.*
 import org.reflections.util.ConfigurationBuilder
+import java.lang.reflect.Method
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.kotlinFunction
@@ -25,6 +26,13 @@ internal object ReflectionScanner {
     fun <T : Annotation> funcsWithAnnotation(annotation: KClass<T>): Set<KFunction<*>> {
         val methods = reflections.getMethodsAnnotatedWith(annotation.java)
         return methods.mapNotNull { it.kotlinFunction }.toSet()
+    }
+
+    inline fun <reified T : Annotation> methodsWithAnnotation() = methodsWithAnnotation(T::class)
+
+    fun <T : Annotation> methodsWithAnnotation(annotation: KClass<T>): Set<Method> {
+        val methods = reflections.getMethodsAnnotatedWith(annotation.java)
+        return methods.mapNotNull { it }.toSet()
     }
 
     inline fun <reified T : Any> withSubtype() = withSubtype(T::class)

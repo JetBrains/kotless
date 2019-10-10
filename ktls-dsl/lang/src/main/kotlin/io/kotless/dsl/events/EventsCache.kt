@@ -4,12 +4,14 @@ import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
+import java.lang.reflect.Method
 import kotlin.math.absoluteValue
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.jvm.kotlinFunction
 
 
-internal object EventsCache {
+object EventsCache {
     private val logger = LoggerFactory.getLogger(EventsCache::class.java)
 
     private val cache = HashMap<String, KFunction<*>>()
@@ -19,14 +21,21 @@ internal object EventsCache {
     fun scan() {
         if (scanned) return
 
-        ReflectionScanner.funcsWithAnnotation<Scheduled>().forEach { route ->
-            logger.info("Found function ${route.name} for annotation ${Scheduled::class.simpleName}")
-            val annotation = route.findAnnotation<Scheduled>()
+        ReflectionScanner.methodsWithAnnotation<Scheduled>().forEach { method ->
+            logger.info("Found function ${method.name} for annotation ${Scheduled::class.simpleName}")
+            val kFunc = method.kotlinFunction
+            val annotation = kFunc?.findAnnotation<Scheduled>()
             if (annotation != null) {
-                val id = route.name
-                val key = "${ScheduledEventType.General.prefix}-${id.hashCode().absoluteValue}"
-                logger.info("Key $key")
-                cache[key] = route
+                if (annotation.id.isNotBlank()) {
+                    cache[annotation.id] = kFunc
+                } else {
+                    val ids = method.possibleNames()
+                    val keys = ids.map { "${ScheduledEventType.General.prefix}-${it.hashCode().absoluteValue}" }
+                    for (key in keys) {
+                        logger.info("Key $key")
+                        cache[key] = kFunc
+                    }
+                }
             }
         }
 
@@ -36,6 +45,11 @@ internal object EventsCache {
     operator fun get(key: String): KFunction<*>? {
         scan()
         return cache[key] ?: return null
+    }
+
+    private fun Method.possibleNames(): Set<String> {
+        val klass = declaringClass.kotlin.qualifiedName!!
+        return setOf("$klass.$name", "${klass.substringBeforeLast(".")}.$name")
     }
 
 }

@@ -45,6 +45,7 @@ internal class LambdaHandler {
                     logger.info("Cloudwatch $jsonRequest")
                     val event = Json.parse(CloudWatch.serializer(), jsonRequest)
                     if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
+                        logger.info("Request is Scheduled Event")
                         EventsDispatcher.process(event)
                         return
                     }
