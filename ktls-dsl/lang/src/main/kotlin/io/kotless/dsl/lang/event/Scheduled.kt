@@ -9,11 +9,17 @@ package io.kotless.dsl.lang.event
  * Function should not have any parameters, since it will be called via crontab-like
  * service that passes no context
  *
- * @param cron -- cron expression defining trigger behavior; use [eachNDays], [eachNHours], [eachNMinutes]
+ * Cron syntax is taken from AWS Scheduled Events
+ * @see  <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">AWS docs for Scheduled Events</a>
+ *
+ * @param cron cron expression defining trigger behavior
+ * @param id optional id of event, otherwise it will be generated from function
  */
 @Target(AnnotationTarget.FUNCTION)
-annotation class Scheduled(val cron: String)
-
-fun eachNMinutes(minutes: Int) = "0/$minutes * * * *"
-fun eachNHours(hours: Int) = "* 0/$hours * * *"
-fun eachNDays(days: Int) = "* * 0/$days * *"
+annotation class Scheduled(val cron: String, val id: String = "") {
+    companion object {
+        const val each5Minutes = "0/5 * * * ? *"
+        const val eachHour = "* 0/1 * * ? *"
+        const val eachDay = "* * 0/1 * ? *"
+    }
+}

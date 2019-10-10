@@ -33,10 +33,12 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             require(arguments.size == 1) { "Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")" }
 
             val file = File(context.config.workDirectory, arguments.single().text.trim('"'))
+
+            val key = TypedStorage.Key<StaticResource>()
             val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
 
-            context.resources.register(resource)
-            context.routes.register(Webapp.ApiGateway.StaticRoute(path, resource))
+            context.resources.register(key, resource)
+            context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
         }
     }
 }

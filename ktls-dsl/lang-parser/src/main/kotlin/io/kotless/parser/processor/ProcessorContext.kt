@@ -18,19 +18,13 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
 
     val output = Output()
 
-    class Resources(private val myDynamics: MutableSet<Lambda> = HashSet(), private val myStatics: MutableSet<StaticResource> = HashSet()) {
-        val dynamics: Set<Lambda>
-            get() = myDynamics.toSet()
-
-        val statics: Set<StaticResource>
-            get() = myStatics.toSet()
-
-        fun register(lambda: Lambda) {
-            myDynamics.add(lambda)
+    class Resources(val dynamics: TypedStorage<Lambda> = TypedStorage(), val statics: TypedStorage<StaticResource> = TypedStorage()) {
+        fun register(key: TypedStorage.Key<Lambda>, lambda: Lambda) {
+            dynamics[key] = lambda
         }
 
-        fun register(static: StaticResource) {
-            myStatics.add(static)
+        fun register(key: TypedStorage.Key<StaticResource>, static: StaticResource) {
+            statics[key] = static
         }
     }
 
@@ -56,12 +50,12 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
 
     val routes = Routes()
 
-    class Events(private val myScheduled: MutableSet<Webapp.Events.ScheduledEvent> = HashSet()) {
-        val scheduled: Set<Webapp.Events.ScheduledEvent>
+    class Events(private val myScheduled: MutableSet<Webapp.Events.Scheduled> = HashSet()) {
+        val scheduled: Set<Webapp.Events.Scheduled>
             get() = myScheduled.toSet()
 
 
-        fun register(dynamic: Webapp.Events.ScheduledEvent) {
+        fun register(dynamic: Webapp.Events.Scheduled) {
             myScheduled.add(dynamic)
         }
     }

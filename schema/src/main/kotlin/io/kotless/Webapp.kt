@@ -18,11 +18,34 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
      */
     data class Route53(val zone: String, val alias: String, val certificate: String) : Visitable
 
-    data class Events(val scheduled: Set<ScheduledEvent>): Visitable {
-        data class ScheduledEvent(val id: String, val cron: String, val lambda: Lambda) : Visitable
+    /**
+     * Events processed by different functions of Webapp
+     *
+     * @param scheduled scheduled functions of Webapp
+     * @param autowarmed autowarm events setuped for Webapp
+     */
+    data class Events(val scheduled: Set<Scheduled>, val autowarmed: Set<Autowarm>): Visitable {
+        /**
+         * Definition of autowarm event
+         *
+         * @param id unique name of event
+         * @param cron expression in a crontab-like syntax defining scheduler for autowarm
+         * @param lambda function to warm
+         */
+        data class Autowarm(val id: String, val cron: String, val lambda: TypedStorage.Key<Lambda>) : Visitable
+
+        /**
+         * Definition of scheduled event
+         *
+         * @param id unique name of event
+         * @param cron expression in a crontab-like syntax defining scheduler
+         * @param lambda function to trigger by scheduled event
+         */
+        data class Scheduled(val id: String, val cron: String, val lambda: TypedStorage.Key<Lambda>) : Visitable
 
         override fun visit(visitor: (Any) -> Unit) {
             scheduled.forEach { visitor(it) }
+            autowarmed.forEach { visitor(it) }
             visitor(this)
         }
     }
@@ -54,10 +77,10 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
         }
 
         /** Definition of URI path served by a lambda (POST or GET depending on `method`) */
-        data class DynamicRoute(override val method: HttpMethod, override val path: URIPath, val lambda: Lambda) : Route
+        data class DynamicRoute(override val method: HttpMethod, override val path: URIPath, val lambda: TypedStorage.Key<Lambda>) : Route
 
         /** Definition of URI path served by static resource (only GET)*/
-        data class StaticRoute(override val path: URIPath, val resource: StaticResource) : Route {
+        data class StaticRoute(override val path: URIPath, val resource: TypedStorage.Key<StaticResource>) : Route {
             override val method = HttpMethod.GET
         }
 

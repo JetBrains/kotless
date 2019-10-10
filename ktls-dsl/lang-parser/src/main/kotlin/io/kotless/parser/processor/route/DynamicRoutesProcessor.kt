@@ -4,8 +4,8 @@ import io.kotless.*
 import io.kotless.dsl.kotlessLambdaEntrypoint
 import io.kotless.dsl.lang.http.Get
 import io.kotless.dsl.lang.http.Post
-import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.AnnotationProcessor
+import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.buildSet
@@ -27,6 +27,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
 
             val name = prepareFunctionName(func, context.lambda.packages)
 
+            val key = TypedStorage.Key<Lambda>()
             val function = Lambda(name, context.jar, Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()), context.lambda, routePermissions)
 
             val (routeType, pathProperty) = when (klass) {
@@ -37,8 +38,8 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
 
             val path = entry.getURIPath(binding, pathProperty)!!
 
-            context.resources.register(function)
-            context.routes.register(Webapp.ApiGateway.DynamicRoute(routeType, path, function))
+            context.resources.register(key, function)
+            context.routes.register(Webapp.ApiGateway.DynamicRoute(routeType, path, key))
         }
     }
 

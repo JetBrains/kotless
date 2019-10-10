@@ -44,8 +44,8 @@ open class KotlessGenerate : DefaultTask() {
 
         val config = dsl.toSchema()
 
-        val lambdas = HashSet<Lambda>()
-        val statics = HashSet<StaticResource>()
+        val lambdas = TypedStorage<Lambda>()
+        val statics = TypedStorage<StaticResource>()
 
         val webapps = dsl.webapps.map { webapp ->
             val project = webapp.project(project)
@@ -57,8 +57,8 @@ open class KotlessGenerate : DefaultTask() {
 
             val result = KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
 
-            lambdas += result.resources.dynamics
-            statics += result.resources.statics
+            lambdas.addAll(result.resources.dynamics)
+            statics.addAll(result.resources.statics)
 
             val route53 = webapp.route53?.toSchema()
             Webapp(
@@ -68,7 +68,8 @@ open class KotlessGenerate : DefaultTask() {
                     result.routes.dynamics,
                     result.routes.statics
                 ),
-                Webapp.Events(result.events.scheduled)
+                //TODO-tanvd fix
+                Webapp.Events(result.events.scheduled, emptySet())
             )
         }.toSet()
 

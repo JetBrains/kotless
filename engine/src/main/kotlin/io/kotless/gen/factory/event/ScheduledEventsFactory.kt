@@ -8,11 +8,11 @@ import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_ru
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
 
-object ScheduledEventsFactory : GenerationFactory<Webapp.Events.ScheduledEvent, Unit> {
-    override fun mayRun(entity: Webapp.Events.ScheduledEvent, context: GenerationContext) = context.output.check(entity.lambda, LambdaFactory)
+object ScheduledEventsFactory : GenerationFactory<Webapp.Events.Scheduled, Unit> {
+    override fun mayRun(entity: Webapp.Events.Scheduled, context: GenerationContext) = context.output.check(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
 
-    override fun generate(entity: Webapp.Events.ScheduledEvent, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
-        val lambda = context.output.get(entity.lambda, LambdaFactory)
+    override fun generate(entity: Webapp.Events.Scheduled, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
+        val lambda = context.output.get(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
 
         val event_rule = cloudwatch_event_rule(Names.tf(entity.id)) {
             name = Names.aws(entity.id)

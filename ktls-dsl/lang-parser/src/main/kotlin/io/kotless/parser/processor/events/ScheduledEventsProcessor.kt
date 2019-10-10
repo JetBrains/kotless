@@ -28,12 +28,13 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
             val id = "scheduled-${func.name.hashCode().absoluteValue}"
 
             //TODO-tanvd Fix -- should use ID from fully qualified name
+            val key = TypedStorage.Key<Lambda>()
             val function = Lambda(id, context.jar, Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()), context.lambda, routePermissions)
 
             val cron = entry.getValue(binding, Scheduled::cron)!!
 
-            context.resources.register(function)
-            context.events.register(Webapp.Events.ScheduledEvent(id, cron, function))
+            context.resources.register(key, function)
+            context.events.register(Webapp.Events.Scheduled(id, cron, key))
         }
     }
 

@@ -28,7 +28,7 @@ object Generator {
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(LambdaFactory, AutowarmFactory),
 
-        Webapp.Events.ScheduledEvent::class to setOf(ScheduledEventsFactory),
+        Webapp.Events.Scheduled::class to setOf(ScheduledEventsFactory),
 
         Webapp.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
         Webapp.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)

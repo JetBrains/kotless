@@ -12,11 +12,12 @@ package io.kotless
  * @param lambdas lambdas used in application
  * @param statics static resources used in application
  */
-data class Schema(val config: KotlessConfig, val webapps: Set<Webapp>, val lambdas: Set<Lambda>, val statics: Set<StaticResource>) : Visitable {
+data class Schema(val config: KotlessConfig, val webapps: Set<Webapp>,
+                  val lambdas: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>) : Visitable {
     override fun visit(visitor: (Any) -> Unit) {
         config.visit(visitor)
-        lambdas.forEach { it.visit(visitor) }
-        statics.forEach { it.visit(visitor) }
+        lambdas.all.forEach { it.visit(visitor) }
+        statics.all.forEach { it.visit(visitor) }
         webapps.forEach { it.visit(visitor) }
 
         visitor(this)

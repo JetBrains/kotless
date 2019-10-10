@@ -21,8 +21,8 @@ object KotlessParser {
 
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
         data class Routes(val dynamics: Set<Webapp.ApiGateway.DynamicRoute>, val statics: Set<Webapp.ApiGateway.StaticRoute>)
-        data class Resources(val dynamics: Set<Lambda>, val statics: Set<StaticResource>)
-        data class Events(val scheduled: Set<Webapp.Events.ScheduledEvent>)
+        data class Resources(val dynamics: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>)
+        data class Events(val scheduled: Set<Webapp.Events.Scheduled>)
     }
 
     fun parse(files: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {

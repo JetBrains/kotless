@@ -12,7 +12,9 @@ import java.io.File
  * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
  */
-data class KotlessConfig(val bucket: String, val resourcePrefix: String, val workDirectory: File, val genDirectory: File, val terraform: Terraform,
+data class KotlessConfig(val bucket: String, val resourcePrefix: String,
+                         val workDirectory: File, val genDirectory: File,
+                         val terraform: Terraform,
                          val optimization: Optimization = Optimization()) : Visitable {
 
     /**
