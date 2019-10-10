@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package io.kotless.parser.utils.psi.annotation
 
 import io.kotless.toURIPath
@@ -23,9 +21,8 @@ internal fun KtAnnotated.getAnnotations(context: BindingContext, ann: KClass<*>)
     it.getDescriptor(context).qualifiedName == ann.qualifiedName
 }.toSet()
 
-internal fun <T> KtAnnotationEntry.getValue(context: BindingContext, param: KProperty<T>): T? = getDescriptor(context).getValue(param)
-@Suppress("UNCHECKED_CAST")
-internal fun <T> AnnotationDescriptor.getValue(param: KProperty<T>): T? = argumentValue(param.name)?.value as T?
+internal inline fun <reified T> KtAnnotationEntry.getValue(context: BindingContext, param: KProperty<T>): T? = getDescriptor(context).getValue(param)
+internal inline fun <reified T> AnnotationDescriptor.getValue(param: KProperty<T>): T? = argumentValue(param.name)?.value as T?
 
 internal fun KtAnnotationEntry.getURIPath(context: BindingContext, param: KProperty<String>) = getValue(context, param)?.toURIPath()
 

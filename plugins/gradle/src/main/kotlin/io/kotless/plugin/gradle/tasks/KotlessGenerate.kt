@@ -4,8 +4,8 @@ import io.kotless.*
 import io.kotless.Webapp
 import io.kotless.parser.KotlessParser
 import io.kotless.plugin.gradle.dsl.*
-import io.kotless.plugin.gradle.utils._ktSourceSet
-import io.kotless.plugin.gradle.utils._shadowJar
+import io.kotless.plugin.gradle.utils.myKtSourceSet
+import io.kotless.plugin.gradle.utils.myShadowJar
 import io.kotless.utils.TypedStorage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
@@ -33,7 +33,7 @@ open class KotlessGenerate : DefaultTask() {
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
     val allSources: Set<File>
-        get() = project._ktSourceSet.toSet()
+        get() = project.myKtSourceSet.toSet()
 
     @get:OutputDirectory
     val genDir: File
@@ -50,8 +50,8 @@ open class KotlessGenerate : DefaultTask() {
 
         val webapp = dsl.webapp.let { webapp ->
             val project = webapp.project(project)
-            val sources = project._ktSourceSet
-            val shadowJar = project._shadowJar().archiveFile.get().asFile
+            val sources = project.myKtSourceSet
+            val shadowJar = project.myShadowJar().archiveFile.get().asFile
             val dependencies = project.configurations.getByName(project.kotless.config.configurationName).files.toSet()
 
             val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.packages)

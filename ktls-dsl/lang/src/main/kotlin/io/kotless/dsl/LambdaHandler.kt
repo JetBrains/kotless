@@ -3,8 +3,8 @@ package io.kotless.dsl
 import com.amazonaws.services.lambda.runtime.Context
 import io.kotless.HttpMethod
 import io.kotless.MimeType
-import io.kotless.dsl.dispatcher.Dispatcher
-import io.kotless.dsl.dispatcher.RouteKey
+import io.kotless.dsl.api.APIDispatcher
+import io.kotless.dsl.api.RouteKey
 import io.kotless.dsl.events.*
 import io.kotless.dsl.lang.http.serverError
 import io.kotless.dsl.model.*
@@ -57,7 +57,7 @@ internal class LambdaHandler {
 
             val request = Json.parse(HttpRequest.serializer(), jsonRequest)
             val resourceKey = RouteKey(HttpMethod.valueOf(request.httpMethod.toUpperCase()), MimeType.HTML, request.path)
-            Dispatcher.dispatch(request, resourceKey)
+            APIDispatcher.dispatch(request, resourceKey)
         } catch (e: Throwable) {
             logger.error("Error occurred during handle of request and was not caught", e)
             serverError("Internal error occurred")

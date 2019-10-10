@@ -1,4 +1,4 @@
-package io.kotless.dsl.dispatcher
+package io.kotless.dsl.api
 
 import io.kotless.HttpMethod
 import io.kotless.dsl.lang.http.Get

@@ -1,4 +1,4 @@
-package io.kotless.dsl.dispatcher
+package io.kotless.dsl.api
 
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
@@ -9,8 +9,8 @@ import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 
-internal object Dispatcher {
-    private val logger = LoggerFactory.getLogger(Dispatcher::class.java)
+internal object APIDispatcher {
+    private val logger = LoggerFactory.getLogger(APIDispatcher::class.java)
 
     private val pipeline by lazy { preparePipeline(ReflectionScanner.objectsWithSubtype<HttpRequestInterceptor>().sortedBy { it.priority }) }
 

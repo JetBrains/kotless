@@ -1,5 +1,6 @@
 package io.kotless.dsl.events
 
+import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
@@ -23,7 +24,7 @@ internal object EventsCache {
             val annotation = route.findAnnotation<Scheduled>()
             if (annotation != null) {
                 val id = route.name
-                val key = "scheduled-${id.hashCode().absoluteValue}"
+                val key = "${ScheduledEventType.General.prefix}-${id.hashCode().absoluteValue}"
                 logger.info("Key $key")
                 cache[key] = route
             }

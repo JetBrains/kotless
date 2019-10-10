@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle
 
 import io.kotless.plugin.gradle.tasks.*
-import io.kotless.plugin.gradle.utils._create
+import io.kotless.plugin.gradle.utils.myCreate
 import io.kotless.plugin.gradle.utils.applyPluginSafely
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -25,21 +25,21 @@ class KotlessPlugin : Plugin<Project> {
             with(tasks) {
                 val shadowJar = getByName("shadowJar")
 
-                val generate = _create("generate", KotlessGenerate::class)
-                val download = _create("download_terraform", TerraformDownload::class)
+                val generate = myCreate("generate", KotlessGenerate::class)
+                val download = myCreate("download_terraform", TerraformDownload::class)
 
-                val init = _create("initialize", TerraformOperation::class) {
+                val init = myCreate("initialize", TerraformOperation::class) {
                     dependsOn(download, generate, shadowJar)
 
                     operation = TerraformOperation.Operation.INIT
                 }
-                _create("plan", TerraformOperation::class) {
+                myCreate("plan", TerraformOperation::class) {
                     dependsOn(init)
 
                     operation = TerraformOperation.Operation.PLAN
                 }
 
-                _create("deploy", TerraformOperation::class) {
+                myCreate("deploy", TerraformOperation::class) {
                     dependsOn(init)
 
                     operation = TerraformOperation.Operation.APPLY

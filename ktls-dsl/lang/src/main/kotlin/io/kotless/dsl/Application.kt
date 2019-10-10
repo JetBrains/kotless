@@ -1,7 +1,7 @@
 package io.kotless.dsl
 
 import io.kotless.dsl.conversion.ConversionService
-import io.kotless.dsl.dispatcher.RoutesCache
+import io.kotless.dsl.api.RoutesCache
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.reflection.ReflectionScanner
