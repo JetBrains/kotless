@@ -1,7 +1,7 @@
 <h1> <img align="left" width="40" height="40" src="https://site.ktls.aws.intellij.net/favicon.apng" alt="Kotless Icon"> Kotless </h1>
 
 [![JetBrains incubator project](https://jb.gg/badges/incubator-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![Download](https://img.shields.io/bintray/v/tanvd/io.kotless/lang.svg?label=jcenter&style=flat-square) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
+[![Download](https://img.shields.io/badge/dynamic/json.svg?label=latest&query=name&style=flat-square&url=https%3A%2F%2Fapi.bintray.com%2Fpackages%2Ftanvd%2Fio.kotless%2Flang%2Fversions%2F_latest) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
 [![CircleCI](https://img.shields.io/circleci/build/github/JetBrains/kotless.svg?style=flat-square)](https://circleci.com/gh/JetBrains/kotless)
 
 Kotless stands for Kotlin serverless framework. 
