@@ -2,7 +2,8 @@ package io.kotless.gen.factory.route.dynamic
 
 import io.kotless.HttpMethod
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
@@ -23,7 +24,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
 
         val resourceId = getResource(entity.path, api, context)
 
-        val method = api_gateway_method(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val method = api_gateway_method(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -31,15 +32,15 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, U
             http_method = entity.method.name
         }
 
-        val permission = lambda_permission(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
-            statement_id = Names.aws(entity.path.parts).ifBlank { "root_resource" }
+        val permission = lambda_permission(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+            statement_id = context.names.aws(entity.path.parts).ifBlank { "root_resource" }
             action = "lambda:InvokeFunction"
             function_name = lambda.lambda_arn
             principal = "apigateway.amazonaws.com"
             source_arn = "arn:aws:execute-api:${info.region_name}:${info.account_id}:${api.rest_api_id}/*/${method.http_method}/${entity.path}"
         }
 
-        val integration = api_gateway_integration(Names.tf(entity.path.parts).ifEmpty { "root_resource" }) {
+        val integration = api_gateway_integration(context.names.tf(entity.path.parts).ifEmpty { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 

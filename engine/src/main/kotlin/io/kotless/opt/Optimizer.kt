@@ -7,7 +7,7 @@ object Optimizer {
 
     fun optimize(schema: Schema): Schema {
         var optimized = schema
-        val context = OptimizationContext()
+        val context = OptimizationContext(schema)
         for (optimizer in optimizers) {
             optimized = optimizer.optimize(optimized, schema.config.optimization, context)
         }

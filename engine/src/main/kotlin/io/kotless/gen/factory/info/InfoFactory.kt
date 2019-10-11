@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.info
 
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.data.info.caller_identity
 import io.kotless.terraform.provider.aws.data.info.region
@@ -15,7 +16,7 @@ object InfoFactory : GenerationFactory<Webapp, InfoFactory.InfoOutput> {
     override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<InfoOutput> {
         val caller_identity = caller_identity("current") {}
         val region = region("current") {}
-        val kotless_bucket = s3_bucket(Names.tf("kotless", "bucket")) {
+        val kotless_bucket = s3_bucket(context.names.tf("kotless", "bucket")) {
             bucket = context.schema.config.bucket
         }
 

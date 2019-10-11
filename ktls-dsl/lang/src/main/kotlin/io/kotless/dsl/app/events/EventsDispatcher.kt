@@ -12,12 +12,16 @@ internal object EventsDispatcher {
     fun process(event: CloudWatch) {
         for (resource in event.resources.distinct().map { it.substringAfter("/") }) {
             when {
-                resource.startsWith(ScheduledEventType.Autowarm.prefix) -> Application.warmup()
-                resource.startsWith(ScheduledEventType.General.prefix) -> {
-                    logger.info("Got key $resource")
+                resource.contains(ScheduledEventType.Autowarm.prefix) -> {
+                    logger.info("Executing warmup sequence")
+                    Application.warmup()
+                }
+                resource.contains(ScheduledEventType.General.prefix) -> {
+                    val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
 
-                    EventsStorage[resource]?.let {
-                        logger.info("Calling Event handler")
+                    logger.info("Calling scheduled lambda with key $key")
+
+                    EventsStorage[key]?.let {
                         FunctionCaller.call(it, emptyMap())
                     }
                 }

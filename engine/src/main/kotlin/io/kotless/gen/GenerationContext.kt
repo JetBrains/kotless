@@ -3,7 +3,7 @@ package io.kotless.gen
 import io.kotless.Schema
 import io.kotless.Webapp
 import io.kotless.hcl.HCLEntity
-import io.kotless.utils.Storage
+import io.kotless.utils.*
 
 /**
  * Context of current Terraform generation
@@ -49,6 +49,16 @@ class GenerationContext(val schema: Schema, val webapp: Webapp) {
         fun all() = entities.toSet()
     }
 
+    inner class Names {
+        fun tf(vararg name: String) = tf(name.toList())
+        fun tf(part: String, parts: Iterable<String>) = tf(part.plusIterable(parts))
+        fun tf(name: Iterable<String>) = name.flatMap { Text.deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
+
+        fun aws(vararg name: String) = aws(name.toList())
+        fun aws(name: Iterable<String>) = (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+    }
+
+    val names = Names()
 
     val storage = Storage()
 }

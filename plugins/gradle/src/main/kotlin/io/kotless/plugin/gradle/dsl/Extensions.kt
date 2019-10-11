@@ -13,7 +13,7 @@ class Extensions : Serializable {
     }
 
     @KotlessDSLTag
-    class Terraform: Serializable {
+    class Terraform : Serializable {
         var allowDestroy = false
 
         internal val files = Files()
@@ -24,7 +24,7 @@ class Extensions : Serializable {
         }
 
         @KotlessDSLTag
-        class Files: Serializable {
+        class Files : Serializable {
             internal val additional = HashSet<File>()
 
             fun add(file: File) {

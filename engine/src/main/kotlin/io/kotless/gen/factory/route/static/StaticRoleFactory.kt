@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.route.static
 
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.hcl.ref
 import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
@@ -17,7 +18,7 @@ object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRol
         val info = context.output.get(context.webapp, InfoFactory)
 
 
-        val assume = iam_policy_document(Names.tf("kotless", "static", "assume")) {
+        val assume = iam_policy_document(context.names.tf("kotless", "static", "assume")) {
             statement {
                 principals {
                     type = "Service"
@@ -29,12 +30,12 @@ object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRol
         }
 
 
-        val iam_role = iam_role(Names.tf("kotless", "static", "role")) {
-            name = Names.aws("kotless", "static", "role")
+        val iam_role = iam_role(context.names.tf("kotless", "static", "role")) {
+            name = context.names.aws("kotless", "static", "role")
             assume_role_policy = assume::json.ref
         }
 
-        val policy_document = iam_policy_document(Names.tf("kotless", "static", "policy")) {
+        val policy_document = iam_policy_document(context.names.tf("kotless", "static", "policy")) {
             statement {
                 effect = "Allow"
                 resources = arrayOf("${info.kotless_bucket_arn}/*")
@@ -42,7 +43,7 @@ object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRol
             }
         }
 
-        val role_policy = iam_role_policy(Names.tf("kotless", "static", "policy")) {
+        val role_policy = iam_role_policy(context.names.tf("kotless", "static", "policy")) {
             role = iam_role::name.ref
             policy = policy_document::json.ref
         }

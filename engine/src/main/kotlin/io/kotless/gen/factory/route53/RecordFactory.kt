@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.route53
 
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.apigateway.DomainFactory
 import io.kotless.terraform.provider.aws.resource.route53.route53_record
 
@@ -13,7 +14,7 @@ object RecordFactory : GenerationFactory<Webapp.Route53, Unit> {
         val zone = context.output.get(entity, ZoneFactory)
         val domain = context.output.get(context.webapp.api, DomainFactory)
 
-        val record = route53_record(Names.tf(zone.fqdn)) {
+        val record = route53_record(context.names.tf(zone.fqdn)) {
             zone_id = zone.zone_id
             name = entity.alias
             type = "A"

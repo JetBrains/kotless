@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.apigateway
 
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.eval
@@ -16,7 +17,7 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
     override fun generate(entity: Webapp.ApiGateway.Deployment, context: GenerationContext): GenerationFactory.GenerationResult<DeploymentOutput> {
         val api = context.output.get(context.webapp.api, RestAPIFactory)
 
-        val deployment = api_gateway_deployment(Names.tf(entity.name)) {
+        val deployment = api_gateway_deployment(context.names.tf(entity.name)) {
             rest_api_id = api.rest_api_id
             stage_name = entity.version
 

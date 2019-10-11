@@ -33,7 +33,7 @@ internal object RoutesStorage {
             val annotation = route.findAnnotation<T>()
             if (annotation != null) {
                 val key = RouteKey(annotation.refMethod, annotation.refPath)
-                if (key !in cache) logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).func.name}, new ${route.name}")
+                if (cache.containsKey(key)) logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).func.name}, new ${route.name}")
 
                 cache[key] = Descriptor(route, annotation.refMime)
                 logger.debug("Saved with key $key function ${route.name} for annotation ${T::class.simpleName}")

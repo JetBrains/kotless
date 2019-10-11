@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.apigateway
 
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.route53.CertificateFactory
 import io.kotless.gen.factory.route53.ZoneFactory
 import io.kotless.hcl.ref
@@ -23,12 +24,12 @@ object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Domain
         val api = context.output.get(context.webapp.api, RestAPIFactory)
         val deployment = context.output.get(context.webapp.api.deployment, DeploymentFactory)
 
-        val domain = api_gateway_domain_name(Names.tf(entity.name)) {
+        val domain = api_gateway_domain_name(context.names.tf(entity.name)) {
             domain_name = zone.fqdn
             certificate_arn = certificate.cert_arn
         }
 
-        val basePath = api_gateway_base_path_mapping(Names.tf(entity.name)) {
+        val basePath = api_gateway_base_path_mapping(context.names.tf(entity.name)) {
             api_id = api.rest_api_id
             stage_name = deployment.stage_name
 

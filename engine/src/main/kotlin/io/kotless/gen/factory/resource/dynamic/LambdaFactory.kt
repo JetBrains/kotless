@@ -1,7 +1,8 @@
 package io.kotless.gen.factory.resource.dynamic
 
 import io.kotless.Lambda
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.*
@@ -18,14 +19,14 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
     override fun mayRun(entity: Lambda, context: GenerationContext) = true
 
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<LambdaOutput> {
-        val obj = s3_object(Names.tf(entity.name)) {
+        val obj = s3_object(context.names.tf(entity.name)) {
             bucket = context.schema.config.bucket
-            key = "kotless-lambdas/${Names.aws(entity.name)}.jar"
+            key = "kotless-lambdas/${context.names.aws(entity.name)}.jar"
             source = path(entity.file)
             etag = eval(filemd5(entity.file))
         }
 
-        val assume = iam_policy_document(Names.tf(entity.name, "assume")) {
+        val assume = iam_policy_document(context.names.tf(entity.name, "assume")) {
             statement {
                 principals {
                     type = "Service"
@@ -36,12 +37,12 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             }
         }
 
-        val iam_role = iam_role(Names.tf(entity.name)) {
-            name = Names.aws(entity.name)
+        val iam_role = iam_role(context.names.tf(entity.name)) {
+            name = context.names.aws(entity.name)
             assume_role_policy = assume::json.ref
         }
 
-        val policy_document = iam_policy_document(Names.tf(entity.name)) {
+        val policy_document = iam_policy_document(context.names.tf(entity.name)) {
             statement {
                 effect = "Allow"
                 resources = entity.permissions.flatMap { it.cloudIds }.toTypedArray()
@@ -49,13 +50,13 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             }
         }
 
-        val role_policy = iam_role_policy(Names.tf(entity.name)) {
+        val role_policy = iam_role_policy(context.names.tf(entity.name)) {
             role = iam_role::name.ref
             policy = policy_document::json.ref
         }
 
-        val lambda = lambda_function(Names.tf(entity.name)) {
-            function_name = Names.tf(entity.name)
+        val lambda = lambda_function(context.names.tf(entity.name)) {
+            function_name = context.names.aws(entity.name)
 
             s3_bucket = obj.bucket
             s3_key = obj.key

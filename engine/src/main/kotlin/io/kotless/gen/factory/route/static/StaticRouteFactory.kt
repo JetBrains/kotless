@@ -2,7 +2,8 @@ package io.kotless.gen.factory.route.static
 
 import io.kotless.HttpMethod
 import io.kotless.Webapp
-import io.kotless.gen.*
+import io.kotless.gen.GenerationContext
+import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
@@ -28,7 +29,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
 
         val resourceId = getResource(entity.path, api, context)
 
-        val method = api_gateway_method(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val method = api_gateway_method(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 
@@ -36,7 +37,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             http_method = entity.method.name
         }
 
-        val method_response = api_gateway_method_response(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val method_response = api_gateway_method_response(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
             http_method = method::http_method.ref
@@ -47,7 +48,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             }
         }
 
-        val response = api_gateway_integration_response(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val response = api_gateway_integration_response(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             depends_on = arrayOf(method_response.hcl_ref)
 
             rest_api_id = api.rest_api_id
@@ -60,7 +61,7 @@ object StaticRouteFactory : GenerationFactory<Webapp.ApiGateway.StaticRoute, Uni
             }
         }
 
-        val integration = api_gateway_integration(Names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val integration = api_gateway_integration(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             rest_api_id = api.rest_api_id
             resource_id = resourceId
 

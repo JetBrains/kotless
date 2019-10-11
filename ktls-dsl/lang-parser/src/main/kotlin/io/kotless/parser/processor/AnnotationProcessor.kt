@@ -4,8 +4,6 @@ import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.utils.psi.annotation.getAnnotations
 import io.kotless.parser.utils.psi.annotation.isAnnotatedWith
 import io.kotless.parser.utils.psi.utils.*
-import io.kotless.parser.utils.psi.utils.gatherNamedFunctions
-import io.kotless.parser.utils.psi.utils.gatherStaticObjects
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass

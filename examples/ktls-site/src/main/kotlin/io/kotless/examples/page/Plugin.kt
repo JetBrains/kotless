@@ -6,12 +6,6 @@ import io.kotless.examples.bootstrap.doc
 import io.kotless.examples.bootstrap.kotlin
 import kotlinx.html.*
 
-@Scheduled("0/2 * * * ? *")
-fun myScheduledPart() {
-    println("WOWOWOWWO")
-}
-
-
 object Plugin {
     @Get("/plugin/overview")
     fun overview() = doc {

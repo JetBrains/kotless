@@ -7,13 +7,13 @@ import java.io.File
  * Config of Kotless itself
  *
  * @param bucket name of bucket Kotless will use to store all files
- * @param resourcePrefix name with which will be prepended all Kotless created entities
+ * @param prefix name with which will be prepended all Kotless created entities
  * @param workDirectory directory Kotless considers as root for a file resolving
  * @param genDirectory the local directory Kotless will use to store generated files
  * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
  */
-data class KotlessConfig(val bucket: String, val resourcePrefix: String,
+data class KotlessConfig(val bucket: String, val prefix: String,
                          val workDirectory: File, val genDirectory: File,
                          val terraform: Terraform,
                          val optimization: Optimization = Optimization()) : Visitable {
