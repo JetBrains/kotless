@@ -8,8 +8,6 @@ plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
     kotlin("jvm") version "1.3.50" apply true
-    //shadow jar should be applied before kotless
-    id("com.github.johnrengelman.shadow") version "5.0.0" apply true
 
     id("io.kotless") version "0.1.1-SNAPSHOT" apply true
 }

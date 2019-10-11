@@ -9,21 +9,19 @@ plugins {
 }
 
 dependencies {
-    compile(kotlin("stdlib"))
-
-    compile("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
 
 
-    compile(kotlin("reflect"))
-    compile("org.reflections", "reflections", "0.9.11")
+    implementation(kotlin("reflect"))
+    implementation("org.reflections", "reflections", "0.9.11")
 
-    compile(project(":model"))
+    api(project(":model"))
 
-    compile("com.amazonaws", "aws-lambda-java-core", "1.2.0")
+    implementation("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 
-    compile("org.slf4j", "slf4j-log4j12", "1.7.25")
-    compile("log4j", "log4j", "1.2.17")
-    compile("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
+    api("org.slf4j", "slf4j-log4j12", "1.7.25")
+    implementation("log4j", "log4j", "1.2.17")
+    implementation("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
 }
 
 publishJar {

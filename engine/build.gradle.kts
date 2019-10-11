@@ -4,9 +4,8 @@ group = rootProject.group
 version = rootProject.version
 
 dependencies {
-    compile(kotlin("stdlib"))
-    compile(kotlin("reflect"))
-    compile(project(":schema"))
+    implementation(project(":schema"))
+    implementation(kotlin("reflect"))
 }
 
 publishJar {

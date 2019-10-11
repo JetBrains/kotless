@@ -4,9 +4,11 @@ group = rootProject.group
 version = rootProject.version
 
 dependencies {
-    compile(project(":ktls-dsl:lang"))
-    compile(project(":schema"))
-    compile(kotlin("compiler-embeddable"))
+    api(project(":schema"))
+
+    implementation(kotlin("reflect"))
+    implementation(project(":ktls-dsl:lang"))
+    implementation(kotlin("compiler-embeddable"))
 }
 
 publishJar {
