@@ -1,5 +1,6 @@
 package io.kotless.plugin.gradle
 
+import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.*
 import io.kotless.plugin.gradle.utils.applyPluginSafely
 import io.kotless.plugin.gradle.utils.myCreate
@@ -33,6 +34,7 @@ class KotlessPlugin : Plugin<Project> {
 
                     operation = TerraformOperation.Operation.INIT
                 }
+
                 myCreate("plan", TerraformOperation::class) {
                     dependsOn(init)
 
@@ -43,6 +45,16 @@ class KotlessPlugin : Plugin<Project> {
                     dependsOn(init)
 
                     operation = TerraformOperation.Operation.APPLY
+                }
+
+                afterEvaluate {
+                    if (kotless.extensions.terraform.allowDestroy) {
+                        myCreate("destroy", TerraformOperation::class) {
+                            dependsOn(init)
+
+                            operation = TerraformOperation.Operation.DESTROY
+                        }
+                    }
                 }
             }
         }

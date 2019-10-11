@@ -10,6 +10,7 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
             outputs[processor] = output
         }
 
+        @Suppress("UNCHECKED_CAST")
         fun <T : Any> get(processor: Processor<T>): T {
             return outputs[processor] as T
         }

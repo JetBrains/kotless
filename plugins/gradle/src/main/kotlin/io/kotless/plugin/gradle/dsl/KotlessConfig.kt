@@ -38,7 +38,7 @@ class KotlessConfig(project: Project) : Serializable {
     var workDirectory = project.projectDir as File
 
 
-    val terraform: Terraform = Terraform()
+    internal val terraform: Terraform = Terraform()
     /** Configuration of Terraform */
     @KotlessDSLTag
     fun terraform(configure: Terraform.() -> Unit) {
@@ -57,7 +57,7 @@ class KotlessConfig(project: Project) : Serializable {
         /** AWS region in context of which all Terraform operations should be performed */
         lateinit var region: String
 
-        val backend = Backend()
+        internal val backend = Backend()
         /** Configuration of Terraform backend */
         @KotlessDSLTag
         fun backend(configure: Backend.() -> Unit) {
@@ -83,7 +83,7 @@ class KotlessConfig(project: Project) : Serializable {
             var region: String? = null
         }
 
-        val provider = AWSProvider()
+        internal val provider = AWSProvider()
         /** Configuration of Terraform AWS provider */
         @KotlessDSLTag
         fun provider(configure: AWSProvider.() -> Unit) {
@@ -101,7 +101,7 @@ class KotlessConfig(project: Project) : Serializable {
         }
     }
 
-    val optimization: Optimization = Optimization()
+    internal val optimization: Optimization = Optimization()
     /** Optimizations applied during generation */
     @KotlessDSLTag
     fun optimization(configure: Optimization.() -> Unit) {

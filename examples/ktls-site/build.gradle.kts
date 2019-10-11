@@ -35,6 +35,7 @@ kotless {
             region = "eu-west-1"
         }
     }
+
     webapp {
         packages = setOf("io.kotless.examples")
         route53 = Route53("site", "ktls.aws.intellij.net")

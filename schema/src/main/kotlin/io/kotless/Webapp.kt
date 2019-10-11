@@ -34,7 +34,7 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
          * @param cron expression in a crontab-like syntax defining scheduler
          * @param lambda function to trigger by scheduled event
          */
-        data class Scheduled(val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Visitable {
+        data class Scheduled(private val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Visitable {
             val fqId = "${type.prefix}-$id"
         }
 

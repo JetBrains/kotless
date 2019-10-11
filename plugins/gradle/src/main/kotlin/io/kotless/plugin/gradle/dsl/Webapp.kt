@@ -15,7 +15,7 @@ class Webapp(project: Project) : Serializable {
     /** Packages that lambda dispatcher should scan for annotated classes */
     lateinit var packages: Set<String>
 
-    val lambda: Lambda = Lambda()
+    internal val lambda: Lambda = Lambda()
     /** Optimizations applied during generation */
     @KotlessDSLTag
     fun lambda(configure: Lambda.() -> Unit) {
@@ -47,7 +47,7 @@ class Webapp(project: Project) : Serializable {
         var version: String = "1"
     }
 
-    val deployment = Deployment()
+    internal val deployment = Deployment()
     /** Deployment resource of ApiGateway */
     @KotlessDSLTag
     fun deployment(configure: Deployment.() -> Unit) {

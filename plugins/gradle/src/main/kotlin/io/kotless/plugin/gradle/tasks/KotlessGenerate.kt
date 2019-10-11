@@ -7,6 +7,7 @@ import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import io.kotless.plugin.gradle.utils.myShadowJar
 import io.kotless.utils.TypedStorage
+import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import java.io.File
@@ -75,6 +76,11 @@ open class KotlessGenerate : DefaultTask() {
 
         val schema = Schema(config, webapp, lambdas, statics)
 
-        KotlessEngine.generate(schema)
+        val generated = KotlessEngine.generate(schema)
+
+        for (file in dsl.extensions.terraform.files.additional) {
+            require(generated.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
+            FileUtils.copyFile(file, File(genDir, file.name))
+        }
     }
 }
