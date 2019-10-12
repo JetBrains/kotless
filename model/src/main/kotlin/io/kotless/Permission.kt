@@ -1,6 +1,7 @@
 package io.kotless
 
 /** Types of supported AWS resources */
+//TODO-tanvd fix permissions -- usage of account and region, divide by actions
 enum class AwsResource(val prefix: String, val glob: String, val read: Set<String>, val write: Set<String>) {
     S3("s3", "arn:aws:s3::",
         read = setOf("Get*", "List*"),

@@ -3,11 +3,14 @@ package io.kotless.dsl.reflection
 import io.kotless.dsl.conversion.ConversionService
 import kotlin.jvm.internal.FunctionReference
 import kotlin.reflect.*
+import kotlin.reflect.jvm.isAccessible
 
 internal object FunctionCaller {
     private object NULL
 
     fun <T> call(func: KCallable<T>, params: Map<String, String>): T {
+        func.isAccessible = true
+
         val args = func.parameters.map { param ->
             val stringValue = params[param.name]
             param to transformToArg(func, param, stringValue)

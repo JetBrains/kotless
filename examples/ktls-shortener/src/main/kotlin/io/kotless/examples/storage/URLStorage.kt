@@ -4,20 +4,23 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.model.*
 import io.kotless.PermissionLevel
 import io.kotless.dsl.lang.DynamoDBTable
+import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.examples.utils.RandomCode
+import org.slf4j.LoggerFactory
 
 private const val tableName: String = "short-url-table"
 
 @DynamoDBTable(tableName, PermissionLevel.ReadWrite)
 object URLStorage {
 
+    private val logger = LoggerFactory.getLogger(URLStorage::class.java)
+
     private val client = AmazonDynamoDBClientBuilder.defaultClient()
 
     fun getByCode(code: String): String? {
-        val key = mapOf(
+        val req = GetItemRequest().withKey(mapOf(
             "URLHash" to AttributeValue().apply { s = code }
-        )
-        val req = GetItemRequest().withKey(key).withTableName(tableName)
+        )).withTableName(tableName)
 
         val res = client.getItem(req).item
 
@@ -42,7 +45,7 @@ object URLStorage {
         val values = mapOf(
             "URLHash" to AttributeValue().apply { s = code },
             "URL" to AttributeValue().apply { s = url },
-            "LastTime" to AttributeValue().apply { n = System.currentTimeMillis().toString() }
+            "TimeStamp" to AttributeValue().apply { n = System.currentTimeMillis().toString() }
         )
 
         val req = PutItemRequest().withItem(values).withTableName(tableName)
@@ -50,5 +53,35 @@ object URLStorage {
         client.putItem(req)
 
         return code
+    }
+
+
+    @Scheduled(Scheduled.everyHour)
+    private fun storageCleanup() {
+        logger.info("Starting URL storage cleanup")
+
+        //Save URLs only for three hours
+        val limitMillis = System.currentTimeMillis() - 3 * 60 * 60 * 1000
+        val req = ScanRequest()
+            .withTableName(tableName)
+            .withFilterExpression("#t < :t_time")
+            .withExpressionAttributeNames(mapOf("#t" to "TimeStamp"))
+            .withExpressionAttributeValues(mapOf(":t_time" to AttributeValue().apply { n = limitMillis.toString() }))
+
+        val items = client.scan(req)
+
+        logger.info("Cleaning ${items.count} too old items at storage")
+
+        for (item in items.items) {
+            val delete = DeleteItemRequest()
+                .withTableName(tableName)
+                .withKey(mapOf(
+                    "URLHash" to AttributeValue().apply { s = item["URLHash"]!!.s }
+                ))
+
+            client.deleteItem(delete)
+        }
+
+        logger.info("Ended URL storage cleanup")
     }
 }

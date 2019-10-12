@@ -32,7 +32,6 @@ internal object EventsStorage {
                     val ids = method.possibleNames()
                     val keys = ids.map { "${ScheduledEventType.General.prefix}-${it.hashCode().absoluteValue}" }
                     for (key in keys) {
-                        logger.info("Key $key")
                         cache[key] = kFunc
                     }
                 }
