@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 
 @Get("/r")
 fun redirectUrl(k: String): HttpResponse {
-    val url = URLStorage.get(k)
+    val url = URLStorage.getByCode(k)
     return if (url == null) {
         notFound("Unknown short URL")
     } else {
@@ -21,13 +21,15 @@ private val logger = LoggerFactory.getLogger("ShortenerKt")
 
 @Get("/shorten")
 fun shorten(value: String): String {
-    logger.info("URL $value")
+    logger.info("URL for shortening $value")
 
-    if (UrlValidator.getInstance().isValid(value).not()) {
+    val url = if (value.contains("://").not()) "https://$value" else value
+
+    if (UrlValidator.getInstance().isValid(url).not()) {
         return "Non valid URL"
     }
 
-    val code = URLStorage.set(value)
+    val code = URLStorage.getByUrl(url) ?: URLStorage.createCode(url)
 
     return "https://short.kotless.io${::redirectUrl.href(code)}"
 }

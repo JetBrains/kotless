@@ -9,7 +9,7 @@ enum class AwsResource(val prefix: String, val glob: String, val read: Set<Strin
         read = setOf("Get*", "List*", "Describe*"),
         write = setOf("Delete*", "Put*", "Create*")),
     DynamoDB("dynamodb", "arn:aws:dynamodb:*:*",
-        read = setOf("Get*", "List*", "Describe*", "Scan*", "Query*").withBatches(),
+        read = setOf("Get*", "List*", "Describe*", "Scan", "Query").withBatches(),
         write = setOf("Write*", "Update*", "Delete*", "Put*", "Create*").withBatches()),
     CloudWatchLogs("logs", "arn:aws:logs:*:*",
         read = setOf("Get*", "Describe*"),

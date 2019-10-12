@@ -11,8 +11,4 @@ object RandomCode {
     fun next(len: Int = defaultLength, radix: Int = 36): String {
         return BigInteger(128, rnd).toString(radix).takeLast(len)
     }
-
-    fun nextBytes(len: Int): ByteArray = ByteArray(len).apply {
-        rnd.nextBytes(this)
-    }
 }

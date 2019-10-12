@@ -13,7 +13,7 @@ object URLStorage {
 
     private val client = AmazonDynamoDBClientBuilder.defaultClient()
 
-    fun get(code: String): String? {
+    fun getByCode(code: String): String? {
         val key = mapOf(
             "URLHash" to AttributeValue().apply { s = code }
         )
@@ -24,7 +24,19 @@ object URLStorage {
         return res?.let { it["URL"]!!.s }
     }
 
-    fun set(url: String): String {
+    fun getByUrl(url: String): String? {
+        val req = ScanRequest()
+            .withTableName(tableName)
+            .withFilterExpression("#u = :v_url")
+            .withExpressionAttributeNames(mapOf("#u" to "URL"))
+            .withExpressionAttributeValues(mapOf(":v_url" to AttributeValue().apply { s = url }))
+
+        val items = client.scan(req)
+
+        return items.items.firstOrNull()?.get("URLHash")?.s
+    }
+
+    fun createCode(url: String): String {
         val code = RandomCode.next()
 
         val values = mapOf(
