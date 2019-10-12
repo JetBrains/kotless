@@ -36,6 +36,11 @@ open class KotlessGenerate : DefaultTask() {
     val allSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    val allTerraformAddition: Set<File>
+        get() = project.kotless.extensions.terraform.files.additional
+
     @get:OutputDirectory
     val genDir: File
         get() = project.kotless.config.genDirectory
