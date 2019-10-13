@@ -31,7 +31,8 @@ object LambdaMergeOptimizer : SchemaOptimizer {
             grouped.flatMap { (_, group) ->
                 if (group.size > 1) {
                     val (_, fst) = group.first()
-                    val merged = Lambda("merged-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, fst.permissions)
+                    val permissions = group.flatMap { it.value.permissions }.toSet()
+                    val merged = Lambda("merged-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, permissions)
                     group.map { it.key to merged }
                 } else {
                     listOf(group.single().key to group.single().value)

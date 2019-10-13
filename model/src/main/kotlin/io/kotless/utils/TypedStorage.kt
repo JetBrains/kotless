@@ -25,4 +25,8 @@ class TypedStorage<T>(private val storage: MutableMap<Key<T>, T> = HashMap()) {
     fun addAll(storage: TypedStorage<T>) {
         this.storage.putAll(storage.storage)
     }
+
+    override fun toString(): String {
+        return storage.entries.joinToString(prefix = "{", postfix = "}") { "${it.key}: ${it.value}" }
+    }
 }
