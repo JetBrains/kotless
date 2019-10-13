@@ -1,4 +1,4 @@
-<h1> <img align="left" width="40" height="40" src="https://site.ktls.aws.intellij.net/favicon.apng" alt="Kotless Icon"> Kotless </h1>
+<h1> <img align="left" width="40" height="40" src="https://site.kotless.io/favicon.apng" alt="Kotless Icon"> Kotless </h1>
 
 [![JetBrains incubator project](https://jb.gg/badges/incubator-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![Download](https://img.shields.io/badge/dynamic/json.svg?label=latest&query=name&style=flat-square&url=https%3A%2F%2Fapi.bintray.com%2Fpackages%2Ftanvd%2Fio.kotless%2Flang%2Fversions%2F_latest) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
@@ -118,7 +118,10 @@ Kotless is in active development, so we are working on extending this list with 
 There is no better than an example!
 
 At an `examples` folder of repository you can find real world projects using Kotless:
-* `ktls-site` - site about Kotless written using Kotless (see the result at [https://site.ktls.aws.intellij.net](https://site.ktls.aws.intellij.net)). 
+* `ktls-site` - site about Kotless written with Kotless (see the result at [https://site.kotless.io](https://site.kotless.io)). 
+This example uses a lot `@StaticGet` and `@Get` (static and dynamic routes) and Link API
+* `ktls-shortener` - simple URL shortener written with Kotless (see the result at [https://short.kotless.io](https://short.kotless.io)). 
+This example uses a lot `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and terraform extensions.
 
 ## Want to know more?
 

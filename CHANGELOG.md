@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Added
 * Support of binary responses for binary MimeTypes
 * Scheduled events -- just annotate function with @Scheduled
+* Extensions API -- now it is possible to use custom Terraform code along with Kotless generated during deployment.
+* URL shortener example -- simple URL shortener written with Kotless
 
 ## Changed
 * Separate Terraform synthesizing into Terraform DSL, Generators and Optimizers
