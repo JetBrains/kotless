@@ -2,7 +2,7 @@ import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = "io.kotless"
-version = "0.1.0"
+version = "0.1.1"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true

@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    compile("io.kotless", "lang", "0.1.0")
+    compile("io.kotless", "lang", "0.1.1")
 }
 ```
 
@@ -38,7 +38,7 @@ Secondly, set up Kotless Gradle plugin. You will need to apply the plugin:
 
 ```kotlin
 plugins {
-    id("io.kotless") version "0.1.0" apply true
+    id("io.kotless") version "0.1.1" apply true
 }
 ```
 
@@ -89,10 +89,7 @@ fun gettingStartedPage() = html {
 ## Advanced features
 
 While Kotless can be used as a framework for a rapid creation of serverless
-applications, it has *(or will have)* a lot more features covering different areas of application.
-
-Please note that some of the features may be written in *cursive*, which means they are in development or
-are undergoing redesign.
+applications, it has a lot more features covering different areas of application.
 
 Including, but not limited to:
 * Lambdas auto-warming - Kotless creates schedulers to execute warming sequences to never leave your lambdas cold. 
@@ -101,12 +98,15 @@ Including, but not limited to:
   calls the function via annotations on kotlin functions. Permissions will be granted automatically.
 * Static resources - Kotless will deploy files annotated with `@StaticResource` to S3 and create specified HTTP 
   routes for them.
+* Scheduled events - Kotless setups timers to execute `@Scheduled` jobs on schedule;
+* Terraform extensions - Kotless generated code can be extended by custom terraform code;
 * Serialization and deserialization - Kotless will automatically deserialize parameters from an HTTP request into 
   function parameters and will serialize the result of the function as well. You can extend the number of supported 
   types of parameters by creating top-level `object` implementing `ConversionService`. It will be automatically
   added to the list of supported conversions.
 
 Kotless is in active development, so we are working on extending this list with such features as:
+* Support of other clouds - Kotless is based on a cloud-agnostic schema, so we are working on support of other clouds
 * Versioned deployment - Kotless will be able to deploy several versions of the application and maintain one of them
   as active.
 * Implicit permissions granting - Kotless will be able to deduce permissions from AWS SDK function calls 
@@ -117,10 +117,10 @@ Kotless is in active development, so we are working on extending this list with 
 
 There is no better than an example!
 
-At an `examples` folder of repository you can find real world projects using Kotless:
-* `ktls-site` - site about Kotless written with Kotless (see the result at [https://site.kotless.io](https://site.kotless.io)). 
+At an `examples` folder of repository you can find example projects built with Kotless:
+* `ktls-site` - site about Kotless written with Kotless ([site.kotless.io](https://site.kotless.io)). 
 This example uses a lot `@StaticGet` and `@Get` (static and dynamic routes) and Link API
-* `ktls-shortener` - simple URL shortener written with Kotless (see the result at [https://short.kotless.io](https://short.kotless.io)). 
+* `ktls-shortener` - simple URL shortener written with Kotless (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example uses a lot `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and terraform extensions.
 
 ## Want to know more?

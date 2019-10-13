@@ -61,7 +61,7 @@ object Introduction {
                     jcenter()
                 }
                 dependencies {
-                    compile("io.kotless", "lang", "0.1.0")
+                    compile("io.kotless", "lang", "0.1.1")
                 }""")
 
         p {
