@@ -17,7 +17,7 @@
     font-weight: 300;
     font-size: 30px;
 
-    outline-color: #c7c7c7 ;
+    outline-color: #c7c7c7;
 
     padding-left: 1%;
 
@@ -80,9 +80,9 @@
     align-items: center;
     justify-content: flex-start;
 
-    left:0;
-    bottom:0;
-    width:100%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer-text {

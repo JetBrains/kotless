@@ -1,4 +1,3 @@
-
 window.onload = function () {
     let btn = document.getElementById("shorten-button");
     let input = document.getElementById("shorten-input");
