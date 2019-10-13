@@ -1,6 +1,5 @@
 package io.kotless.examples.page
 
-import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.dsl.lang.http.Get
 import io.kotless.examples.bootstrap.doc
 import io.kotless.examples.bootstrap.kotlin
@@ -31,6 +30,10 @@ object Plugin {
             li {
                 +"`deploy` - executes `apply` terraform operation on generated terraform code"
             }
+
+            li {
+                +"`destroy` - executes `destroy` terraform operation, if enabled in `extensions`"
+            }
         }
 
         p {
@@ -38,8 +41,8 @@ object Plugin {
         }
 
         p {
-            +"""Furthermore, Kotless gradle plugin is one of a two available for end-user
-                interfaces to configure Kotless-based application deployment (second is Kotless DSL)."""
+            +"""Furthermore, Kotless gradle plugin defines a part of configurations of 
+                a Kotless-based application deployment."""
         }
 
         p {
@@ -55,6 +58,10 @@ object Plugin {
                 +"""WebApp configs - configuration of lambdas used in specific web application, it's alias
                     and deployment parameters"""
             }
+            li {
+                +"""Extensions configs - configuration that defines different extensions for Kotless pipeline.
+                    For example, it may enable `destroy` task or add user's terraform files to deployment code."""
+            }
         }
 
         p {
@@ -64,9 +71,9 @@ object Plugin {
                 config {
                     //see details in a Kotless Configuration docs
                     bucket = "kotless.s3.example.com"
-                    resourcePrefix = "dev-"
+                    prefix = "dev"
 
-                    workDirectory = File(project.projectDir, "src/main/static")
+                    workDirectory = file("src/main/static")
 
                     terraform {
                         profile = "example-profile"
@@ -126,9 +133,9 @@ object Plugin {
         kotlin("""
                 config {
                     bucket = "kotless.s3.example.com"
-                    resourcePrefix = "dev-"
+                    prefix = "dev"
 
-                    workDirectory = File(project.projectDir, "src/main/static")
+                    workDirectory = file("src/main/static")
 
                     terraform {
                         profile = "example-profile"
@@ -213,9 +220,9 @@ object Plugin {
         kotlin("""
                 config {
                     bucket = "kotless.s3.example.com"
-                    resourcePrefix = "dev-"
+                    prefix = "dev"
 
-                    workDirectory = File(project.projectDir, "src/main/static")
+                    workDirectory = file("src/main/static")
                 }
         """)
 
@@ -275,6 +282,33 @@ object Plugin {
             }
         """)
 
+        h4 {
+            +"Lambda AutoWarming Optimization"
+        }
+
+        p {
+            +"""This optimization sets up a timer that will autowarm lambda, by default each 5 minutes.
+                Such an optimization makes cold start less frequent. """
+        }
+
+        p {
+            +"""Each timer event executes warming sequence. This sequence triggers `LambdaWarming` objects
+                and is described in a Lifecycle API section."""
+        }
+
+        kotlin("""
+            optimization {
+                //default config
+                autowarm = Autowarm(enable = true, minutes = 5)
+            }
+        """)
+
+        p {
+            +"""Kotless lambdas can be autowarmed. It means, that some scheduler will
+                periodically (by default, each 5 minutes) call lambda to be sure, that
+                it will not be displaced from hot pool of cloud provider."""
+        }
+
 
         h2 {
             +"WebApp Configuration"
@@ -283,13 +317,6 @@ object Plugin {
         p {
             +"""WebApp configuration in a Kotless gradle plugin defines project-specific
                 deployment configuration."""
-        }
-
-        p {
-            +"""First of all, `webapp` function receives `Project` as a first argument.
-                This project will be considered as a source of defined web application.
-                It means, that in sources of this project will be performed a lookup
-                for DSL usage."""
         }
 
         p {
@@ -314,7 +341,7 @@ object Plugin {
         }
 
         kotlin("""
-                webapp(project) {
+                webapp {
                     packages = setOf("org.example.kotless")
                     route53 = Route53("kotless", "example.com")
                     lambda {
@@ -356,6 +383,10 @@ object Plugin {
                 +"""`plan` - task that "plans" the deployment. The result of this task is a log of changes
                 that will be applied to cloud provider (terraform generated)"""
             }
+            li {
+                +"""`destroy` - task that "destroys" the deployment. This task destroys all the resources
+                create by `deploy` task. By default, task is hidden and can be enabled through extensions."""
+            }
         }
 
         p {
@@ -373,6 +404,44 @@ object Plugin {
                 +"`download_terraform` - task that downloads required version of terraform from HashiCorp site"
             }
         }
+    }
+
+    @Get("/plugin/extensions")
+    fun extensions() = doc {
+        h1 {
+            +"Extensions"
+        }
+
+        p {
+            +"""Extensions configuration in a Kotless gradle plugin defines different 
+                extensions for Kotless pipeline."""
+        }
+
+        p {
+            +"""Via Extensions API you may add user's terraform files to generated terraform code.
+                It may be useful in case you have some resource, that cannot be created by Kotless
+                itself, but is used by Kotless based application. For example, via terraform extension
+                you can create a DynamoDB table that will be used by Kotless-based application."""
+        }
+
+        p {
+            +"Also, via Extensions API you can enable `destroy` task in Gradle. It is hidden by default for safety reasons"
+        }
+
+        kotlin("""
+            extensions {
+                terraform {
+                    //Enable back Destroy task
+                    allowDestroy = true
+            
+                    files {
+                        // Add file to deployment code
+                        add(file("src/main/tf/extensions.tf"))
+                    }
+                }
+            }
+        """)
+
     }
 }
 

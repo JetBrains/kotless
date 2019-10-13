@@ -34,9 +34,6 @@ object Introduction {
                 +"ACM certificate for DNS name at US-EAST-1"
             }
         }
-        p {
-            +"Note: right now Kotless supports deployment only to US-EAST-1 region. We are working on a fix of this issue."
-        }
 
         h3 {
             +"Setting up Gradle project"
@@ -52,8 +49,8 @@ object Introduction {
         }
 
         p {
-            +"""To use Kotless DSL in project you will need to add a repository with DSL and
-                        add needed compile dependency:"""
+            +"""To use Kotless DSL in project you will need to set up a maven repository with DSL and
+                        add needed dependency:"""
         }
 
         kotlin("""
@@ -61,7 +58,7 @@ object Introduction {
                     jcenter()
                 }
                 dependencies {
-                    compile("io.kotless", "lang", "0.1.1")
+                    implementation("io.kotless", "lang", "0.1.1")
                 }""")
 
         p {
@@ -74,10 +71,10 @@ object Introduction {
                         //bucket that kotless will use to store its artifacts
                         bucket = "kotless-example-bucket"
                         //prefix that will be added to all resources created in AWS
-                        resourcePrefix = "dev-"
+                        prefix = "dev"
 
                         //directory against which @StaticGet annotated files are resolved
-                        workDirectory = File(project.projectDir, "src/main/static")
+                        workDirectory = file("src/main/static")
 
                         terraform {
                             profile = "example-profile"
@@ -86,7 +83,7 @@ object Introduction {
                     }
 
                     //webapp for this gradle project
-                    webapp(project) {
+                    webapp {
                         //configuration of lambda created
                         lambda {
                             memoryMb = 1024
@@ -107,7 +104,7 @@ object Introduction {
 
         p {
             +"""In Kotless terminology "dynamic route" is an HTTP route processed by a lambda.
-                On the contrary, "static route" is an HTTP route mapped to S3 file."""
+                On the contrary, "static route" is an HTTP route mapped to S3 object."""
         }
 
         p {
@@ -136,7 +133,7 @@ object Introduction {
         }
 
         p {
-            +"""Often applications includes static resources, e.g. CSS and JS files. It is a very wasteful
+            +"""Most of the real world applications contain static resources, e.g. CSS and JS files. It is a very wasteful
                 spending of resources to serve static resources with lambdas. So, Kotless proposes solution --
                 static resources mapped directly to S3."""
         }

@@ -68,13 +68,15 @@ fun BODY.siteNavbar() {
                     "Overview" to DSL::overview.href,
                     "Lifecycle" to DSL::lifecycle.href,
                     "HTTP" to DSL::http.href,
+                    "Events" to DSL::events.href,
                     "Permissions" to DSL::permissions.href
                 ))
 
                 dropdown("Plugin", listOf(
                     "Overview" to Plugin::overview.href,
                     "Configuration" to Plugin::configuration.href,
-                    "Tasks" to Plugin::tasks.href
+                    "Tasks" to Plugin::tasks.href,
+                    "Extensions" to Plugin::extensions.href
                 ))
 
                 li("nav-item") {
