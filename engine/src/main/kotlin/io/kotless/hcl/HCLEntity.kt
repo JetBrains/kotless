@@ -10,12 +10,13 @@ import kotlin.reflect.jvm.isAccessible
  *
  * HCLEntity not necessarily is [HCLNamed]
  */
-open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), open val owner: HCLNamed? = null) : HCLRender {
+open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), val inner: LinkedHashSet<HCLEntity> = LinkedHashSet(),
+                     open val owner: HCLNamed? = null) : HCLRender {
     override val renderable: Boolean = true
     private val renderableFields: Collection<HCLField<*>>
         get() = fields.filter { it.renderable }
 
-    override fun render(): String = renderableFields.joinToString(separator = "\n") {
+    override fun render(): String = (renderableFields + inner).joinToString(separator = "\n") {
         it.render()
     }
 
@@ -41,6 +42,10 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), o
 
     fun <T : HCLEntity> entity(name: String? = null, inner: Boolean = false, default: T? = null) = FieldProvider(name, inner, default) { field, renderable, entity, value ->
         HCLEntityField(field, renderable, entity, value)
+    }
+
+    fun <T : HCLEntity> inner(entity: T) {
+        inner.add(entity)
     }
 
     fun int(name: String? = null, inner: Boolean = false, default: Int? = null) = FieldProvider(name, inner, default) { field, renderable, entity, value ->

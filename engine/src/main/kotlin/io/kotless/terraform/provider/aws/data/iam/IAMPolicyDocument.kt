@@ -3,6 +3,7 @@ package io.kotless.terraform.provider.aws.data.iam
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFData
 import io.kotless.terraform.TFFile
+import io.kotless.utils.withIndent
 
 /**
  * Terraform aws_iam_policy_document data.
@@ -11,6 +12,14 @@ import io.kotless.terraform.TFFile
  */
 class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
     class Statement : HCLEntity() {
+        override fun render(): String {
+            return """
+            |statement {
+            |${super.render().withIndent()}
+            |}
+            """.trimMargin()
+        }
+
         var effect by text()
         var sid by text()
 
@@ -30,9 +39,8 @@ class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
 
     val json by text(inner = true)
 
-    var statement by entity<Statement>()
     fun statement(configure: Statement.() -> Unit) {
-        statement = Statement().apply(configure)
+        inner(Statement().apply(configure))
     }
 }
 

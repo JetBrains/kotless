@@ -1,23 +1,41 @@
 package io.kotless
 
 /** Types of supported AWS resources */
-//TODO-tanvd fix permissions -- usage of account and region, divide by actions
-enum class AwsResource(val prefix: String, val glob: String, val read: Set<String>, val write: Set<String>) {
-    S3("s3", "arn:aws:s3::",
-        read = setOf("Get*", "List*"),
-        write = setOf("Delete*", "Put*", "Create*")),
-    SSM("ssm", "arn:aws:ssm:*:*",
-        read = setOf("Get*", "List*", "Describe*"),
-        write = setOf("Delete*", "Put*", "Create*")),
-    DynamoDB("dynamodb", "arn:aws:dynamodb:*:*",
-        read = setOf("Get*", "List*", "Describe*", "Scan", "Query").withBatches(),
-        write = setOf("Write*", "Update*", "Delete*", "Put*", "Create*").withBatches()),
-    CloudWatchLogs("logs", "arn:aws:logs:*:*",
-        read = setOf("Get*", "Describe*"),
-        write = setOf("Create*", "Put*", "Delete*"))
+enum class AwsResource(val prefix: String, val glob: (region: String, account: String) -> String,
+                       val read: Set<String>, val write: Set<String>) {
+    S3("s3",
+        glob = { _, _ -> "arn:aws:s3::" },
+        read = setOf("Get*", "Describe*", "List*", "AbortMultipartUpload"),
+        write = setOf("Create*", "Delete*", "ObjectOwnerOverrideToBucketOwner", "Put*", "Replicate*", "Update*")),
+    SSM("ssm",
+        glob = { region, account -> "arn:aws:ssm:$region:$account" },
+        read = setOf("GetParameter", "GetParameters", "GetParameterHistory", "GetParametersByPath", "DescribeParameters"),
+        write = setOf("DeleteParameter", "DeleteParameters", "PutParameter")),
+    DynamoDB("dynamodb",
+        glob = { region, account -> "arn:aws:dynamodb:$region:$account" },
+        read = setOf(
+            "BatchGetItem", "GetItem", "TransactGetItems",
+            "Query", "Scan",
+            "Describe*", "List*"
+        ),
+        write = setOf(
+            "BatchWriteItem", "PutItem", "TransactWriteItems",
+            "Create*", "Delete*", "Restore*",
+            "Update*",
+            "TagResource", "UntagResource"
+        )),
+    CloudWatchLogs("logs",
+        glob = { region, account -> "arn:aws:logs:$region:$account" },
+        read = setOf(
+            "GetLogEvents", "GetLogRecord", "GetLogGroupFields", "GetQueryResults",
+            "DescribeLogGroups", "DescribeLogStreams", "DescribeMetricFilters"
+        ),
+        write = setOf(
+            "CreateLogGroup", "DeleteLogGroup", "CreateLogStream", "DeleteLogStream", "PutLogEvents",
+            "DeleteMetricFilter", "PutMetricFilter"
+        )
+    )
 }
-
-private fun Set<String>.withBatches() = flatMap { setOf(it, "Batch$it") }.toSet()
 
 /** Level of access -- Read/Write/ReadWrite */
 enum class PermissionLevel {

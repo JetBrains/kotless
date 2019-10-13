@@ -13,7 +13,7 @@ package io.kotless
  * @param ids identifiers of resources under permission
  */
 data class Permission(val resource: AwsResource, val level: PermissionLevel, val ids: Set<String>) {
-    val cloudIds = ids.map { "${resource.glob}:$it" }.toSet()
+    fun cloudIds(region: String, account: String) = ids.map { "${resource.glob(region, account)}:$it" }.toSet()
 
     val actions: Set<String> = when (level) {
         PermissionLevel.Read -> resource.read

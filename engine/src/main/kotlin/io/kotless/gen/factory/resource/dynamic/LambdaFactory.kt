@@ -3,6 +3,7 @@ package io.kotless.gen.factory.resource.dynamic
 import io.kotless.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
+import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.*
@@ -16,9 +17,11 @@ import io.kotless.terraform.provider.aws.resource.s3.s3_object
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
     data class LambdaOutput(val lambda_arn: String, val lambda_name: String)
 
-    override fun mayRun(entity: Lambda, context: GenerationContext) = true
+    override fun mayRun(entity: Lambda, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<LambdaOutput> {
+        val info = context.output.get(context.webapp, InfoFactory)
+
         val obj = s3_object(context.names.tf(entity.name)) {
             bucket = context.schema.config.bucket
             key = "kotless-lambdas/${context.names.aws(entity.name)}.jar"
@@ -43,10 +46,12 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
         }
 
         val policy_document = iam_policy_document(context.names.tf(entity.name)) {
-            statement {
-                effect = "Allow"
-                resources = entity.permissions.flatMap { it.cloudIds }.toTypedArray()
-                actions = entity.permissions.flatMap { permission -> permission.actions.map { "${permission.resource.prefix}:$it" } }.toTypedArray()
+            for (permission in entity.permissions) {
+                statement {
+                    effect = "Allow"
+                    resources = permission.cloudIds(info.region_name, info.account_id).toTypedArray()
+                    actions = permission.actions.map { "${permission.resource.prefix}:$it" }.toTypedArray()
+                }
             }
         }
 

@@ -16,7 +16,7 @@ import java.io.File
  *
  * @param bucket name of bucket where file will be placed
  * @param path URI path under which this resource will be located
- * @param content File with actual content of resource
+ * @param file File with actual content of resource
  * @param mime MIME type of content, will be used to set right headers on http response
  */
-data class StaticResource(val bucket: String, val path: URIPath, val content: File, val mime: MimeType) : Visitable
+data class StaticResource(val bucket: String, val path: URIPath, val file: File, val mime: MimeType) : Visitable

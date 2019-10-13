@@ -17,8 +17,8 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
         val obj = s3_object(context.names.tf(entity.bucket, entity.path.parts)) {
             bucket = entity.bucket
             key = entity.path.toString()
-            source = path(entity.content)
-            etag = eval(filemd5(entity.content))
+            source = path(entity.file)
+            etag = eval(filemd5(entity.file))
             content_type = entity.mime.mimeText
         }
 
