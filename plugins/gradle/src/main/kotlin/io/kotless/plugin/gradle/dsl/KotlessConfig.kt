@@ -35,7 +35,7 @@ class KotlessConfig(project: Project) : Serializable {
     var workDirectory = project.projectDir as File
 
     /** Name of configuration to use as a classpath */
-    var configurationName = "compile"
+    var configurationName = "compileClasspath"
 
 
     internal val terraform: Terraform = Terraform()

@@ -10,20 +10,19 @@ internal object EventsDispatcher {
     private val logger = LoggerFactory.getLogger(EventsDispatcher::class.java)
 
     fun process(event: CloudWatch) {
-        for (resource in event.resources.distinct().map { it.substringAfter("/") }) {
+        for (resource in event.resources.map { it.substringAfter("/") }) {
             when {
                 resource.contains(ScheduledEventType.Autowarm.prefix) -> {
                     logger.info("Executing warmup sequence")
                     Application.warmup()
+                    logger.info("Warmup sequence executed")
                 }
                 resource.contains(ScheduledEventType.General.prefix) -> {
                     val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
 
-                    logger.info("Calling scheduled lambda with key $key")
-
-                    EventsStorage[key]?.let {
-                        FunctionCaller.call(it, emptyMap())
-                    }
+                    logger.info("Executing scheduled lambda with key $key")
+                    EventsStorage[key]?.let { FunctionCaller.call(it, emptyMap()) }
+                    logger.info("Scheduled lambda with key $key was executed")
                 }
             }
         }

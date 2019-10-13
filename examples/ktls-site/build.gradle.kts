@@ -19,8 +19,8 @@ repositories {
 }
 
 dependencies {
-    compile("io.kotless", "lang", "0.1.1-SNAPSHOT")
-    compile("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
+    implementation("io.kotless", "lang", "0.1.1-SNAPSHOT")
+    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
 kotless {

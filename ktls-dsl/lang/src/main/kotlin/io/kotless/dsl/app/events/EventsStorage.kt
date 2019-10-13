@@ -22,7 +22,7 @@ internal object EventsStorage {
         if (scanned) return
 
         ReflectionScanner.methodsWithAnnotation<Scheduled>().forEach { method ->
-            logger.info("Found function ${method.name} for annotation ${Scheduled::class.simpleName}")
+            logger.debug("Found function ${method.name} for annotation ${Scheduled::class.simpleName}")
             val kFunc = method.kotlinFunction
             val annotation = kFunc?.findAnnotation<Scheduled>()
             if (annotation != null) {
@@ -33,6 +33,7 @@ internal object EventsStorage {
                     val keys = ids.map { "${ScheduledEventType.General.prefix}-${it.hashCode().absoluteValue}" }
                     for (key in keys) {
                         cache[key] = kFunc
+                        logger.debug("Saved with key $key function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
                     }
                 }
             }

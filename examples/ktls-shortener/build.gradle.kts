@@ -19,12 +19,12 @@ repositories {
 }
 
 dependencies {
-    compile("io.kotless", "lang", "0.1.1-SNAPSHOT")
+    implementation("io.kotless", "lang", "0.1.1-SNAPSHOT")
 
-    compile("commons-validator", "commons-validator", "1.6")
-    compile("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
+    implementation("commons-validator", "commons-validator", "1.6")
+    implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
-    compile("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
+    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
 kotless {

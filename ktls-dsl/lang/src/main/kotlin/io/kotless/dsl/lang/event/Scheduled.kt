@@ -22,6 +22,7 @@ annotation class Scheduled(val cron: String, val id: String = "") {
         const val every5Minutes = "0/5 * * * ? *"
         const val every10Minutes = "0/10 * * * ? *"
         const val everyHour = "* 0/1 * * ? *"
+        const val every3Hours = "* 0/3 * * ? *"
         const val everyDay = "* * 0/1 * ? *"
     }
 }
