@@ -14,12 +14,12 @@ import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
 
-object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
-    data class LambdaOutput(val lambda_arn: String, val lambda_name: String)
+object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
+    data class Output(val lambda_arn: String, val lambda_name: String)
 
     override fun mayRun(entity: Lambda, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
-    override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<LambdaOutput> {
+    override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
         val obj = s3_object(context.names.tf(entity.name)) {
@@ -83,6 +83,6 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.LambdaOutput> {
             }
         }
 
-        return GenerationFactory.GenerationResult(LambdaOutput(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
+        return GenerationFactory.GenerationResult(Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
     }
 }

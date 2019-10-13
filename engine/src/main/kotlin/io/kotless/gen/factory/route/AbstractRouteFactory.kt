@@ -13,15 +13,17 @@ import io.kotless.utils.Storage
  * Will create all intermediate resources
  */
 abstract class AbstractRouteFactory {
+    data class ResourceDescriptor(val ref: String, val id: String)
+
     companion object {
-        private val resource = Storage.Key<HashMap<URIPath, String>>()
+        private val resource = Storage.Key<HashMap<URIPath, ResourceDescriptor>>()
     }
 
-    fun getResource(resourcePath: URIPath, api: RestAPIFactory.RestAPIOutput, context: GenerationContext): String {
+    fun getResource(resourcePath: URIPath, api: RestAPIFactory.Output, context: GenerationContext): ResourceDescriptor {
         val resources = context.storage.getOrPut(resource) { HashMap() }
 
         if (URIPath() !in resources) {
-            resources[URIPath()] = api.root_resource_id
+            resources[URIPath()] = ResourceDescriptor(api.ref, api.root_resource_id)
         }
 
         var path = URIPath()
@@ -31,12 +33,14 @@ abstract class AbstractRouteFactory {
 
             if (path !in resources) {
                 val resource = api_gateway_resource(context.names.tf(path.parts)) {
+                    depends_on = arrayOf(resources[prev]!!.ref)
+
                     rest_api_id = api.rest_api_id
-                    parent_id = resources[prev]!!
+                    parent_id = resources[prev]!!.id
                     path_part = part
                 }
                 context.entities.register(resource)
-                resources[path] = resource::id.ref
+                resources[path] = ResourceDescriptor(resource.hcl_ref, resource::id.ref)
             }
         }
 

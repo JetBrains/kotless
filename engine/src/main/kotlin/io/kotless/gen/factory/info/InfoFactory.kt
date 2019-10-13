@@ -8,19 +8,19 @@ import io.kotless.terraform.provider.aws.data.info.caller_identity
 import io.kotless.terraform.provider.aws.data.info.region
 import io.kotless.terraform.provider.aws.data.s3.s3_bucket
 
-object InfoFactory : GenerationFactory<Webapp, InfoFactory.InfoOutput> {
-    data class InfoOutput(val account_id: String, val region_name: String, val kotless_bucket_arn: String)
+object InfoFactory : GenerationFactory<Webapp, InfoFactory.Output> {
+    data class Output(val account_id: String, val region_name: String, val kotless_bucket_arn: String)
 
     override fun mayRun(entity: Webapp, context: GenerationContext) = true
 
-    override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<InfoOutput> {
+    override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val caller_identity = caller_identity("current") {}
         val region = region("current") {}
         val kotless_bucket = s3_bucket(context.names.tf("kotless", "bucket")) {
             bucket = context.schema.config.bucket
         }
 
-        return GenerationFactory.GenerationResult(InfoOutput(caller_identity::account_id.ref, region::name.ref, kotless_bucket::arn.ref),
+        return GenerationFactory.GenerationResult(Output(caller_identity::account_id.ref, region::name.ref, kotless_bucket::arn.ref),
             caller_identity, region, kotless_bucket)
     }
 }

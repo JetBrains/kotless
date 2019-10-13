@@ -9,12 +9,12 @@ import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
 import io.kotless.terraform.provider.aws.resource.iam.iam_role
 import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
 
-object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRoleOutput> {
-    data class StaticRoleOutput(val role_arn: String, val role_name: String)
+object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.Output> {
+    data class Output(val role_arn: String, val role_name: String)
 
     override fun mayRun(entity: Webapp, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
-    override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<StaticRoleOutput> {
+    override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
 
@@ -48,7 +48,7 @@ object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.StaticRol
             policy = policy_document::json.ref
         }
 
-        return GenerationFactory.GenerationResult(StaticRoleOutput(iam_role::arn.ref, iam_role::name.ref), assume, iam_role, policy_document, role_policy)
+        return GenerationFactory.GenerationResult(Output(iam_role::arn.ref, iam_role::name.ref), assume, iam_role, policy_document, role_policy)
     }
 }
 

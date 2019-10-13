@@ -10,15 +10,15 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_base_pa
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_domain_name
 
 
-object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.DomainOutput> {
-    data class DomainOutput(val domain_name: String, val zone_id: String)
+object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Output> {
+    data class Output(val domain_name: String, val zone_id: String)
 
     override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
         && context.output.check(context.webapp.route53!!, ZoneFactory)
         && context.output.check(context.webapp.route53!!, CertificateFactory)
         && context.output.check(context.webapp.api.deployment, DeploymentFactory)
 
-    override fun generate(entity: Webapp.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<DomainOutput> {
+    override fun generate(entity: Webapp.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val zone = context.output.get(context.webapp.route53!!, ZoneFactory)
         val certificate = context.output.get(context.webapp.route53!!, CertificateFactory)
         val api = context.output.get(context.webapp.api, RestAPIFactory)
@@ -36,6 +36,6 @@ object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Domain
             domain_name = domain.domain_name
         }
 
-        return GenerationFactory.GenerationResult(DomainOutput(domain::cloudfront_domain_name.ref, domain::cloudfront_zone_id.ref), domain, basePath)
+        return GenerationFactory.GenerationResult(Output(domain::cloudfront_domain_name.ref, domain::cloudfront_zone_id.ref), domain, basePath)
     }
 }

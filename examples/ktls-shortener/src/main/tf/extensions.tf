@@ -1,4 +1,4 @@
-resource "aws_dynamodb_table" "basic-dynamodb-table" {
+resource "aws_dynamodb_table" "short_url_table" {
   name           = "short-url-table"
   billing_mode   = "PROVISIONED"
   read_capacity  = 20
