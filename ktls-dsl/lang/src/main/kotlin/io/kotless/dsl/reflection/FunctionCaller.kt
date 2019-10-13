@@ -19,7 +19,6 @@ internal object FunctionCaller {
         return func.callBy(args)
     }
 
-    // TODO-tanvd: consider allow both nulls and default values
     private fun transformToArg(func: KCallable<*>, param: KParameter, value: String?): Any? {
         val isNullable = param.type.isMarkedNullable
         return when {
