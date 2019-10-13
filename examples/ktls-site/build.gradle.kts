@@ -9,17 +9,16 @@ plugins {
 
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.1-SNAPSHOT" apply true
+    id("io.kotless") version "0.1.1" apply true
 }
 
 repositories {
     //artifacts are located at JCenter
-    mavenLocal()
     jcenter()
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.1-SNAPSHOT")
+    implementation("io.kotless", "lang", "0.1.1")
     implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 

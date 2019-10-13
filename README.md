@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    compile("io.kotless", "lang", "0.1.1")
+    implementation("io.kotless", "lang", "0.1.1")
 }
 ```
 
@@ -84,7 +84,7 @@ fun gettingStartedPage() = html {
 }
 ```
 
-*HTML builder provided by `compile("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency*
+*HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency*
 
 ## Advanced features
 
