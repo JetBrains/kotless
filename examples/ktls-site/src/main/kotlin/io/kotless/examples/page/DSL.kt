@@ -446,11 +446,10 @@ object DSL {
 
         p {
             +"""Annotation requires `cron` argument - it is a cron expression
-                that defines trigger behavior. Its syntax is taken from AWS Scheduled
-                Events"""
+                that defines trigger behavior. Its syntax is taken from """
             a {
                 href = "https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions"
-                +"(see)"
+                +"AWS Scheduled Events"
             }
         }
 
