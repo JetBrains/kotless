@@ -119,9 +119,9 @@ There is no better than an example!
 
 At an `examples` folder of repository you can find example projects built with Kotless:
 * `ktls-site` - site about Kotless written with Kotless ([site.kotless.io](https://site.kotless.io)). 
-This example uses a lot `@StaticGet` and `@Get` (static and dynamic routes) and Link API
+This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes) and Link API
 * `ktls-shortener` - simple URL shortener written with Kotless (see the result at [short.kotless.io](https://short.kotless.io)). 
-This example uses a lot `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and terraform extensions.
+This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and terraform extensions.
 
 ## Want to know more?
 
