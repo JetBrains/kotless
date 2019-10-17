@@ -3,6 +3,8 @@
 [![JetBrains incubator project](https://jb.gg/badges/incubator-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 [![Download](https://img.shields.io/badge/dynamic/json.svg?label=latest&query=name&style=flat-square&url=https%3A%2F%2Fapi.bintray.com%2Fpackages%2Ftanvd%2Fio.kotless%2Flang%2Fversions%2F_latest) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
 [![CircleCI](https://img.shields.io/circleci/build/github/JetBrains/kotless.svg?style=flat-square)](https://circleci.com/gh/JetBrains/kotless)
+[![gradlePluginPortal](https://img.shields.io/maven-metadata/v.svg?label=gradlePluginPortal&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fio.kotless%2Fio.kotless.gradle.plugin%2Fmaven-metadata.xml?style=flat-square)](https://plugins.gradle.org/plugin/io.kotless)
+
 
 Kotless stands for Kotlin serverless framework. 
 
