@@ -16,7 +16,7 @@ Kotless consists of two main parts:
 * Kotless DSL provides a way of defining serverless applications. It includes Post/Get annotations, lambda dispatcher, etc.;
 * Kotless Gradle Plugin provides a way of deploying serverless application. It performs the tasks of generating Terraform 
   code from the application code and, subsequently, deploying it to AWS.
-
+  
 ## Getting started
 
 Kotless uses Gradle to wrap around the existing build process and insert the deployment into it. 
@@ -42,6 +42,9 @@ Secondly, set up Kotless Gradle plugin. You need to apply the plugin:
 ```kotlin
 plugins {
     id("io.kotless") version "0.1.1" apply true
+    
+    //Version of Kotlin should 1.3.50+
+    kotlin("jvm") version "1.3.50" apply true
 }
 ```
 
