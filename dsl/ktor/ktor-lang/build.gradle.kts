@@ -9,12 +9,10 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":dsl:utils:lang-utils"))
+
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
-
-    api(project(":dsl:utils:lang-utils"))
-
-    implementation(kotlin("reflect"))
-    implementation("org.reflections", "reflections", "0.9.11")
+    implementation("io.ktor", "ktor-server-core", "1.2.5")
 
     api(project(":model"))
 
