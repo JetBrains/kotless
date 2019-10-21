@@ -22,7 +22,7 @@ import java.io.File
  *
  * Resulting KotlinCoreEnvironment is used to parse Kotlin code into Kotlin AST.
  */
-internal object EnvironmentManager {
+object EnvironmentManager {
     /** Create KotlinCoreEnvironment with specified classpath */
     fun create(libraries: Set<File>): KotlinCoreEnvironment {
         val configuration = CompilerConfiguration().apply {

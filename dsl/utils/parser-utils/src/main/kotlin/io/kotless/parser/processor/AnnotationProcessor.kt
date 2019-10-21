@@ -1,6 +1,5 @@
 package io.kotless.parser.processor
 
-import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.utils.psi.annotation.getAnnotations
 import io.kotless.parser.utils.psi.annotation.isAnnotatedWith
 import io.kotless.parser.utils.psi.utils.*
@@ -43,8 +42,8 @@ abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
     }
 
     private fun gatherStaticVariables(context: BindingContext, ktFile: KtFile): Set<KtProperty> {
-        val topLevel = ktFile.gatherVariables { it.isAnnotatedWith<StaticGet>(context) }
-        val objects = ktFile.gatherStaticObjects().flatMap { obj -> obj.gatherVariables { it.isAnnotatedWith<StaticGet>(context) } }
+        val topLevel = ktFile.gatherVariables { it.isAnnotatedWith(context, annotations) }
+        val objects = ktFile.gatherStaticObjects().flatMap { obj -> obj.gatherVariables { it.isAnnotatedWith(context, annotations) } }
         return (topLevel + objects).toSet()
     }
 }

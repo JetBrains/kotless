@@ -7,8 +7,6 @@ dependencies {
     api(project(":schema"))
 
     implementation(kotlin("reflect"))
-    implementation(project(":dsl:kotless:lang"))
-    implementation(project(":dsl:utils:parser-utils"))
     implementation(kotlin("compiler-embeddable"))
 }
 
@@ -17,7 +15,7 @@ publishJar {
         username = "tanvd"
         repository = "io.kotless"
         info {
-            description = "Kotless DSL Parser"
+            description = "Kotless Parser Utils"
             githubRepo = "https://github.com/JetBrains/kotless"
             vcsUrl = "https://github.com/JetBrains/kotless"
             labels.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
