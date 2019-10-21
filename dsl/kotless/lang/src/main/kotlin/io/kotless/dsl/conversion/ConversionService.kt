@@ -8,7 +8,7 @@ import kotlin.reflect.jvm.javaType
 //Taken from KTor
 
 /**
- * Data conversion service that does serialization and deserialization to/from request parameters
+ * Data conversion service does serialization and deserialization to/from request parameters
  */
 abstract class ConversionService : LambdaInit {
     override fun init() {

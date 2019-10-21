@@ -3,6 +3,6 @@ rootProject.name = "kotless"
 include(":schema")
 include(":model")
 include(":engine")
-include(":ktls-dsl:lang")
-include(":ktls-dsl:lang-parser")
+include(":dsl:kotless:lang")
+include(":dsl:kotless:lang-parser")
 include(":plugins:gradle")

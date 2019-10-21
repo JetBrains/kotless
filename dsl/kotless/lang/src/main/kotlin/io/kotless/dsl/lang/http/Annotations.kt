@@ -19,7 +19,7 @@ import io.kotless.MimeType
 annotation class Post(val path: String, val mime: MimeType = MimeType.HTML)
 
 /**
- * Get route of Kotless web application  (dynamic function).
+ * Get route of Kotless web application (dynamic function).
  *
  * Deserialization of it's params, if it is primitive types, will be done automatically.
  *
@@ -34,11 +34,11 @@ annotation class Get(val path: String, val mime: MimeType = MimeType.HTML)
 
 
 /**
- * Static get route of Kotless web application  (static resources).
+ * Static get route of Kotless web application (static resources).
  *
  * **This annotation has severe limitations on an annotated object:**
  *
- * Under annotation should be property, which value is instantiated
+ * Under annotation should be a property, which value is instantiated
  * directly with `java.io.File(String)` constructor and path should
  * be relative to working dir of Kotless.
  *

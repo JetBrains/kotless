@@ -7,7 +7,7 @@ dependencies {
     api(project(":schema"))
 
     implementation(kotlin("reflect"))
-    implementation(project(":ktls-dsl:lang"))
+    implementation(project(":dsl:kotless:lang"))
     implementation(kotlin("compiler-embeddable"))
 }
 
