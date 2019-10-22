@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 
-internal object PermissionsProcessor {
+object PermissionsProcessor {
     private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class)
 
     fun process(func: KtNamedFunction, context: BindingContext): Set<Permission> {

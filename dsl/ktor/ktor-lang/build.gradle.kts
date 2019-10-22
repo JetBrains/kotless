@@ -9,13 +9,12 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":dsl:utils:lang-utils"))
+    api(project(":model"))
+    api(project(":dsl:common:lang-common"))
 
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
     implementation("io.ktor", "ktor-server-core", "1.2.5")
     implementation("io.ktor", "ktor-server-host-common", "1.2.5")
-
-    api(project(":model"))
 
     implementation("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 

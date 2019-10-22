@@ -9,14 +9,15 @@ plugins {
 }
 
 dependencies {
+    api(project(":dsl:common:lang-common"))
+    api(project(":model"))
+
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
 
-    api(project(":dsl:utils:lang-utils"))
 
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
 
-    api(project(":model"))
 
     implementation("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 
