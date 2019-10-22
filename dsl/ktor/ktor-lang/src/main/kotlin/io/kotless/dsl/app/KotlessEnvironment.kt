@@ -13,7 +13,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 
-class KotlessEnvironment(override val application: Application) : ApplicationEngineEnvironment {
+class KotlessEnvironment() : ApplicationEngineEnvironment {
+    override val application: Application = Application(this)
+
     override val connectors: List<EngineConnectorConfig> = emptyList()
 
     override fun start() {}

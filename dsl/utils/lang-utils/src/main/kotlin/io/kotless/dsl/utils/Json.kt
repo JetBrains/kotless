@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 
 import kotlinx.serialization.json.JsonConfiguration
 
-internal object Json {
+object Json {
     @Suppress("EXPERIMENTAL_API_USAGE")
     val jsonMapper = Json(JsonConfiguration(
         encodeDefaults = true,
