@@ -5,10 +5,10 @@ version = rootProject.version
 
 dependencies {
     api(project(":schema"))
+    api(project(":dsl:common:lang-parser-common"))
 
     implementation(kotlin("reflect"))
     implementation(project(":dsl:kotless:lang"))
-    implementation(project(":dsl:common:lang-parser-common"))
     implementation(kotlin("compiler-embeddable"))
 }
 
