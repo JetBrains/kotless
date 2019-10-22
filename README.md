@@ -124,9 +124,9 @@ Kotless is in active development, so we are currently working on extending this 
 Any explanation becomes much better with a proper example.
 
 In the repository's `examples` folder, you can find example projects built with Kotless:
-* `ktls-site` &mdash; a site about Kotless written with Kotless ([site.kotless.io](https://site.kotless.io)). 
+* `kotless-site` &mdash; a site about Kotless written with Kotless ([site.kotless.io](https://site.kotless.io)). 
 This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API
-* `ktls-shortener` &mdash; a simple URL shortener written with Kotless (see the result at [short.kotless.io](https://short.kotless.io)). 
+* `kotless-shortener` &mdash; a simple URL shortener written with Kotless (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and Terraform extensions.
 
 ## Want to know more?

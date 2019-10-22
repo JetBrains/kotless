@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit
 
 @EngineAPI
 class KotlessEngine(environment: ApplicationEngineEnvironment) : BaseApplicationEngine(environment) {
+    class Configuration: ApplicationEngine.Configuration()
+
     override fun start(wait: Boolean): ApplicationEngine {
         environment.start()
         return this

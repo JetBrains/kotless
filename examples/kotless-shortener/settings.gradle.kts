@@ -1,4 +1,4 @@
-rootProject.name = "ktls-shortener"
+rootProject.name = "kotless-shortener"
 
 pluginManagement {
     repositories {

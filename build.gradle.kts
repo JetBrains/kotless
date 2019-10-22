@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.defaults.configureIdea
 
 group = "io.kotless"
-version = "0.1.1"
+version = "0.1.2-SNAPSHOT"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
@@ -11,7 +11,7 @@ plugins {
 }
 
 configureIdea {
-    for (example in setOf("examples/ktls-site", "examples/ktls-shortener")) {
+    for (example in setOf("examples/kotless-site", "examples/kotless-shortener")) {
         exclude += files("$example/.gradle", "$example/gradle", "$example/.idea", "$example/build", "$example/gradlew", "$example/gradlew.bat")
     }
 }

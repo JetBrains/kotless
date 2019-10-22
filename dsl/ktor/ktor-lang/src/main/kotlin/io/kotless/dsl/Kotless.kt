@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import io.kotless.dsl.app.*
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json
+import io.ktor.application.Application
 import io.ktor.server.engine.EngineAPI
 import io.ktor.util.pipeline.execute
 import kotlinx.coroutines.runBlocking
@@ -12,30 +13,25 @@ import java.io.InputStream
 import java.io.OutputStream
 
 
-/**
- * Kotless Application entrypoint.
- *
- * This entrypoint serves requests of cloud provider.
- *
- * It supports:
- * * ApiGateway Post and Get requests
- * * CloudWatch events (used for warming)
- */
 @Suppress("unused")
-@EngineAPI
-internal class LambdaHandler {
-    companion object {
-        private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)
+abstract class Kotless {
+    private var prepared = false
 
-        private val engine = KotlessEngine(KotlessEnvironment())
+    private val logger = LoggerFactory.getLogger(Kotless::class.java)
 
-        init {
-            engine.start()
-        }
-    }
+    @EngineAPI
+    val engine = KotlessEngine(KotlessEnvironment()).also { it.start() }
 
 
+    abstract fun prepare(app: Application)
+
+    @EngineAPI
     fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
+        if (!prepared) {
+            prepare(engine.application)
+            prepared = true
+        }
+
         val response = try {
             runBlocking {
                 val jsonRequest = input.bufferedReader().use { it.readText() }

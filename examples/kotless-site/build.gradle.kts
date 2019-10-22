@@ -2,14 +2,14 @@ import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = "io.kotless"
-version = "0.1.0"
+version = "0.1.2-SNAPSHOT"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.1" apply true
+    id("io.kotless") version "0.1.2-SNAPSHOT" apply true
 }
 
 repositories {
@@ -18,18 +18,14 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.1")
-
-    implementation("commons-validator", "commons-validator", "1.6")
-    implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
-
+    implementation("io.kotless", "lang", "0.1.2-SNAPSHOT")
     implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
 kotless {
     config {
-        bucket = "eu.short.s3.ktls.aws.intellij.net"
-        prefix = "short"
+        bucket = "eu.site.s3.ktls.aws.intellij.net"
+        prefix = "site"
 
         workDirectory = file("src/main/static")
 
@@ -41,15 +37,7 @@ kotless {
 
     webapp {
         packages = setOf("io.kotless.examples")
-        route53 = Route53("short", "kotless.io")
-    }
-
-    extensions {
-        terraform {
-            files {
-                add(file("src/main/tf/extensions.tf"))
-            }
-        }
+        route53 = Route53("site", "kotless.io")
     }
 }
 

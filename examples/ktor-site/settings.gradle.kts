@@ -1,7 +1,8 @@
-rootProject.name = "ktls-site"
+rootProject.name = "ktls-ktor-site"
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
     }
 }
