@@ -3,11 +3,13 @@ package io.kotless.dsl.app
 import io.kotless.dsl.model.HttpRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.http.*
-import io.ktor.request.*
+import io.ktor.request.ApplicationReceivePipeline
+import io.ktor.request.RequestCookies
+import io.ktor.server.engine.BaseApplicationRequest
 import kotlinx.coroutines.io.ByteReadChannel
 
 //TODO-tanvd verify all
-class KotlessRequest(val query: HttpRequest, override val call: ApplicationCall) : ApplicationRequest {
+class KotlessRequest(val query: HttpRequest, call: ApplicationCall) : BaseApplicationRequest(call) {
     override val pipeline = ApplicationReceivePipeline().apply {
         merge(call.application.receivePipeline)
     }
@@ -26,7 +28,6 @@ class KotlessRequest(val query: HttpRequest, override val call: ApplicationCall)
         override val scheme: String = query.requestContext.protocol ?: ""
         override val uri: String = query.path
         override val version: String = query.requestContext.stage
-
     }
 
     override val queryParameters: Parameters = Parameters.build {

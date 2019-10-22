@@ -1,35 +1,38 @@
 package io.kotless.dsl.app
 
-import io.kotless.dsl.model.HttpResponse
 import io.ktor.application.ApplicationCall
+import io.ktor.http.HeadersBuilder
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.*
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.http.content.OutgoingContent
+import io.ktor.response.ResponseHeaders
+import io.ktor.server.engine.BaseApplicationResponse
+import kotlinx.coroutines.io.ByteChannel
+import kotlinx.coroutines.io.ByteWriteChannel
+import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
-class KotlessResponse(override val call: ApplicationCall): ApplicationResponse {
-    private var _status: HttpStatusCode? = null
-    private val myHeaders = HashMap<String, String>()
+class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call) {
+    val output = ByteChannel(true)
 
-    override val pipeline = ApplicationSendPipeline().apply {
-        merge(call.application.sendPipeline)
-    }
-
-    //TODO-tanvd fix -- use only when https
-    override val cookies: ResponseCookies get() = ResponseCookies(this, true)
     override val headers: ResponseHeaders = object : ResponseHeaders() {
+        private val builder = HeadersBuilder()
+
         override fun engineAppendHeader(name: String, value: String) {
-            myHeaders[name] = value
+            builder.append(name, value)
         }
 
-        override fun getEngineHeaderNames() = myHeaders.keys.toList()
-        override fun getEngineHeaderValues(name: String) = myHeaders[name]?.let { listOf(it) } ?: emptyList()
+        override fun getEngineHeaderNames(): List<String> = builder.names().toList()
+        override fun getEngineHeaderValues(name: String): List<String> = builder.getAll(name).orEmpty()
     }
 
-    @KtorExperimentalAPI
-    override fun push(builder: ResponsePushBuilder) {}
+    private var _status: HttpStatusCode? = null
 
-    override fun status() = _status
-    override fun status(value: HttpStatusCode) {
-        _status = value
+    override suspend fun respondUpgrade(upgrade: OutgoingContent.ProtocolUpgrade) {
+        throw NotImplementedException()
+    }
+
+    override suspend fun responseChannel(): ByteWriteChannel = output
+
+    override fun setStatus(statusCode: HttpStatusCode) {
+        _status = statusCode
     }
 }
