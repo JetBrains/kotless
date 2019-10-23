@@ -75,11 +75,13 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
 
             role = iam_role::arn.ref
 
-            environment {
-                variables = object : HCLEntity() {
-                    init {
-                        for ((key, value) in entity.config.environment) {
-                            fields.add(HCLTextField(key, false, this, value))
+            if (entity.config.environment.isNotEmpty()) {
+                environment {
+                    variables = object : HCLEntity() {
+                        init {
+                            for ((key, value) in entity.config.environment) {
+                                fields.add(HCLTextField(key, false, this, value))
+                            }
                         }
                     }
                 }

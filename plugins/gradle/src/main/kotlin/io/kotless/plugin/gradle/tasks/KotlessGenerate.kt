@@ -65,9 +65,9 @@ open class KotlessGenerate : DefaultTask() {
 
             val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.environment)
 
-            val result = when (dsl.webapp.type) {
-                Webapp.DSLType.Kotless -> KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
-                Webapp.DSLType.Ktor -> KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
+            val result = when (dsl.config.dsl) {
+                DSLType.Kotless -> KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
+                DSLType.Ktor -> KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
             }
 
             lambdas.addAll(result.resources.dynamics)
@@ -76,7 +76,6 @@ open class KotlessGenerate : DefaultTask() {
             val route53 = webapp.route53?.toSchema()
             Webapp(
                 route53,
-                webapp.type,
                 Webapp.ApiGateway(project.name,
                     webapp.deployment.toSchema(),
                     result.routes.dynamics,

@@ -4,7 +4,7 @@ import io.kotless.KotlessConfig
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
-        KotlessConfig(bucket, prefix, workDirectory, genDirectory,
+        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl), workDirectory, genDirectory,
             with(terraform) {
                 KotlessConfig.Terraform(
                     version,

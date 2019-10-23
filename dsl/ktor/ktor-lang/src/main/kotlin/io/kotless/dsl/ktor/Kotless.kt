@@ -1,7 +1,6 @@
 package io.kotless.dsl.ktor
 
 import com.amazonaws.services.lambda.runtime.*
-import io.kotless.dsl.app.*
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json
 import io.kotless.dsl.ktor.app.KotlessCall

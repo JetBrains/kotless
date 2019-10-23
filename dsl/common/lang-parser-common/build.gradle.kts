@@ -7,6 +7,10 @@ dependencies {
     api(project(":schema"))
     api(project(":dsl:common:lang-common"))
 
+    implementation(project(":dsl:kotless:lang"))
+
+    api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
+
     implementation(kotlin("reflect"))
     implementation(kotlin("compiler-embeddable"))
 }

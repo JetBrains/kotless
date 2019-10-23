@@ -1,5 +1,6 @@
 package io.kotless.plugin.gradle.dsl
 
+import io.kotless.DSLType
 import io.kotless.KotlessConfig.Optimization.MergeLambda
 import org.gradle.api.Project
 import java.io.File
@@ -15,6 +16,9 @@ class KotlessConfig(project: Project) : Serializable {
 
     /** Prefix with which all created resources will be prepended */
     var prefix: String = ""
+
+    /** Type of DSL that is used for Kotless application */
+    lateinit var dsl: DSLType
 
     /**
      * A local directory Kotless will use to store needed binaries (like terraform)

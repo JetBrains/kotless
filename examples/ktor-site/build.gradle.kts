@@ -1,3 +1,5 @@
+import io.kotless.DSLType
+import io.kotless.Webapp
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
@@ -22,7 +24,7 @@ repositories {
 dependencies {
     implementation("io.kotless", "ktor-lang", "0.1.3-SNAPSHOT")
     implementation("io.kotless", "ktor-lang-parser", "0.1.3-SNAPSHOT")
-    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
+    implementation("io.ktor", "ktor-html-builder", "1.2.5")
 }
 
 tasks.withType<KotlinJvmCompile> {
@@ -40,6 +42,8 @@ kotless {
 
         workDirectory = file("src/main/static")
 
+        dsl = DSLType.Ktor
+
         terraform {
             profile = "kotless-jetbrains"
             region = "eu-west-1"
@@ -47,7 +51,6 @@ kotless {
     }
 
     webapp {
-        packages = setOf("io.kotless.examples")
         route53 = Route53("ktor-site", "kotless.io")
     }
 }

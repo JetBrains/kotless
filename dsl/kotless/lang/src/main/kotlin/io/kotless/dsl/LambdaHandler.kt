@@ -1,6 +1,7 @@
 package io.kotless.dsl
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.HttpMethod
 import io.kotless.dsl.app.events.EventsDispatcher
 import io.kotless.dsl.app.http.RouteKey
@@ -13,8 +14,6 @@ import java.io.InputStream
 import java.io.OutputStream
 
 
-val kotlessLambdaEntrypoint = "${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}"
-
 /**
  * Kotless Application entrypoint.
  *
@@ -24,12 +23,12 @@ val kotlessLambdaEntrypoint = "${LambdaHandler::class.qualifiedName}::${LambdaHa
  * * ApiGateway Post and Get requests
  * * CloudWatch events (used for warming)
  */
-internal class LambdaHandler {
+class LambdaHandler: RequestStreamHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)
     }
 
-    fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
+    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
         val response = try {
             val jsonRequest = input.bufferedReader().use { it.readText() }
 

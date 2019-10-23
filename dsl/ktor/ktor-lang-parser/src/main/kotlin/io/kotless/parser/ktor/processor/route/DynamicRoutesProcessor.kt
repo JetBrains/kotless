@@ -4,6 +4,7 @@ import io.kotless.*
 import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
+import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.utils.*
 import io.kotless.utils.TypedStorage
@@ -20,10 +21,11 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
     override val klasses = setOf(Kotless::class)
 
-    override fun mayRun(context: ProcessorContext) = true
+    override fun mayRun(context: ProcessorContext) = context.output.check(EntrypointProcessor)
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
-        logger.info("Processing")
+        val entrypoint = context.output.get(EntrypointProcessor).entrypoint
+
         processClasses(files, binding) { klass, _ ->
             klass.gatherNamedFunctions { func -> func.name == Kotless::prepare.name }.forEach {
                 for (expr in it.gatherAllExpressions(binding).filterIsInstance<KtCallExpression>()) {
@@ -43,8 +45,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     val name = "${path.parts.joinToString(separator = "_")}_${method.name}"
 
                     val key = TypedStorage.Key<Lambda>()
-                    //TODO-tanvd fix
-                    val function = Lambda(name, context.jar, Lambda.Entrypoint("io.kotless.examples.page.Main", emptySet()), context.lambda, permissions)
+                    val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
                     context.routes.register(Webapp.ApiGateway.DynamicRoute(method, path, key))

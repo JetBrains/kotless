@@ -12,14 +12,12 @@ dependencies {
     api(project(":dsl:common:lang-common"))
     api(project(":model"))
 
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
-
-
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
 
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
 
-    implementation("com.amazonaws", "aws-lambda-java-core", "1.2.0")
+    api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 
     api("org.slf4j", "slf4j-log4j12", "1.7.25")
     implementation("log4j", "log4j", "1.2.17")
