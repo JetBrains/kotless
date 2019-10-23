@@ -3,6 +3,7 @@ package io.kotless.parser.processor.route
 import io.kotless.*
 import io.kotless.Webapp.ApiGateway
 import io.kotless.Webapp.Events
+import io.kotless.dsl.config.KotlessAppConfig
 import io.kotless.dsl.kotlessLambdaEntrypoint
 import io.kotless.dsl.lang.http.Get
 import io.kotless.dsl.lang.http.Post
@@ -28,7 +29,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
         processFunctions(files, binding) { func, entry, klass ->
             val routePermissions = PermissionsProcessor.process(func, binding) + permissions
 
-            val name = prepareFunctionName(func, context.lambda.packages)
+            val name = prepareFunctionName(func, KotlessAppConfig.packages(context.lambda.environment.getValue(KotlessAppConfig.PACKAGE_ENV_NAME)))
 
             val key = TypedStorage.Key<Lambda>()
             val function = Lambda(name, context.jar, Lambda.Entrypoint(kotlessLambdaEntrypoint, emptySet()), context.lambda, routePermissions)

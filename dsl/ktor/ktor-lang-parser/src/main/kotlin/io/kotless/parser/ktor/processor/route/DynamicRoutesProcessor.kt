@@ -1,7 +1,7 @@
-package io.kotless.parser.processor.route
+package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
-import io.kotless.dsl.Kotless
+import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
@@ -51,8 +51,6 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     if (context.config.optimization.autowarm.enable) {
                         context.events.register(Webapp.Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key))
                     }
-                    println(expr::class)
-                    println(it)
                 }
             }
         }

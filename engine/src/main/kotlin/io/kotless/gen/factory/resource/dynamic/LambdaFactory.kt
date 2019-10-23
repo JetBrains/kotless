@@ -77,7 +77,11 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
 
             environment {
                 variables = object : HCLEntity() {
-                    val packages by text(name = "KOTLESS_PACKAGES", default = entity.config.packages.joinToString())
+                    init {
+                        for ((key, value) in entity.config.environment) {
+                            fields.add(HCLTextField(key, false, this, value))
+                        }
+                    }
                 }
             }
         }

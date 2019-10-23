@@ -1,6 +1,7 @@
-package io.kotless.parser
+package io.kotless.parser.ktor
 
-import io.kotless.parser.processor.route.DynamicRoutesProcessor
+import io.kotless.parser.ktor.processor.route.DynamicRoutesProcessor
+import io.kotless.parser.Parser
 
 /**
  * KTorDslParser parses Kotlin code with Kotlin embeddable compiler looking

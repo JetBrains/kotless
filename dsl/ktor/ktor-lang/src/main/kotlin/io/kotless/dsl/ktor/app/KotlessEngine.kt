@@ -1,4 +1,4 @@
-package io.kotless.dsl.app
+package io.kotless.dsl.ktor.app
 
 import io.ktor.server.engine.*
 import java.util.concurrent.TimeUnit

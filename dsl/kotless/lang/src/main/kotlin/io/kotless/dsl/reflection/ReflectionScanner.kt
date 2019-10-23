@@ -1,6 +1,6 @@
 package io.kotless.dsl.reflection
 
-import io.kotless.dsl.config.KotlessConfig
+import io.kotless.dsl.config.KotlessAppConfig
 import org.reflections.Reflections
 import org.reflections.scanners.*
 import org.reflections.util.ClasspathHelper
@@ -15,10 +15,10 @@ internal object ReflectionScanner {
         val configurationBuilder = ConfigurationBuilder()
         Reflections(configurationBuilder
             .apply {
-                KotlessConfig.packages.forEach { configurationBuilder.addUrls(ClasspathHelper.forPackage(it)) }
+                KotlessAppConfig.packages.forEach { configurationBuilder.addUrls(ClasspathHelper.forPackage(it)) }
             }
             .filterInputsBy { file: String? ->
-                KotlessConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
+                KotlessAppConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
             }
             .setScanners(MethodAnnotationsScanner(), TypeAnnotationsScanner(), SubTypesScanner())
         )

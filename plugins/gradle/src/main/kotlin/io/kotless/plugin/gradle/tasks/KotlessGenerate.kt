@@ -2,7 +2,8 @@ package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
 import io.kotless.Webapp
-import io.kotless.parser.KTorParser
+import io.kotless.parser.KotlessParser
+import io.kotless.parser.ktor.KTorParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import io.kotless.plugin.gradle.utils.myShadowJar
@@ -57,12 +58,17 @@ open class KotlessGenerate : DefaultTask() {
         val webapp = dsl.webapp.let { webapp ->
             val project = webapp.project(project)
             val sources = project.myKtSourceSet
+
+            @Suppress("UnstableApiUsage")
             val shadowJar = project.myShadowJar().archiveFile.get().asFile
             val dependencies = project.configurations.getByName(project.kotless.config.configurationName).files.toSet()
 
-            val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.packages)
+            val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.environment)
 
-            val result = KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
+            val result = when (dsl.webapp.type) {
+                Webapp.DSLType.Kotless -> KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
+                Webapp.DSLType.Ktor -> KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
+            }
 
             lambdas.addAll(result.resources.dynamics)
             statics.addAll(result.resources.statics)
@@ -70,6 +76,7 @@ open class KotlessGenerate : DefaultTask() {
             val route53 = webapp.route53?.toSchema()
             Webapp(
                 route53,
+                webapp.type,
                 Webapp.ApiGateway(project.name,
                     webapp.deployment.toSchema(),
                     result.routes.dynamics,

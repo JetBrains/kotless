@@ -1,5 +1,6 @@
 package io.kotless.plugin.gradle.dsl
 
+import io.kotless.dsl.config.KotlessAppConfig
 import org.gradle.api.Project
 import java.io.Serializable
 
@@ -12,8 +13,7 @@ class Webapp(project: Project) : Serializable {
     private val projectName: String = project.path
     internal fun project(project: Project): Project = project.project(projectName)
 
-    /** Packages that lambda dispatcher should scan for annotated classes */
-    lateinit var packages: Set<String>
+    lateinit var type: io.kotless.Webapp.DSLType
 
     internal val lambda: Lambda = Lambda()
     /** Optimizations applied during generation */
@@ -29,9 +29,18 @@ class Webapp(project: Project) : Serializable {
 
         /** Limit of lambda execution in seconds */
         var timeoutSec: Int = 300
+
+        val environment: HashMap<String, String> = HashMap()
+
+        class KotlessDSL(val packages: Set<String>): Serializable
+
+        /** Setup configuration for Kotless DSL */
+        fun kotless(dsl: KotlessDSL) {
+            environment[KotlessAppConfig.PACKAGE_ENV_NAME] = dsl.packages.joinToString(separator = ",")
+        }
     }
 
-    /** Deployment definition of ApiGateway. Recreated each redeploy */
+    /** Deployment definition of ApiGateway. Recreated each redeploy. */
     @KotlessDSLTag
     inner class Deployment : Serializable {
         /**

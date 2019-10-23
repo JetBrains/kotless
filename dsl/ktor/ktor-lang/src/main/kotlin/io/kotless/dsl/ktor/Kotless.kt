@@ -1,9 +1,11 @@
-package io.kotless.dsl
+package io.kotless.dsl.ktor
 
 import com.amazonaws.services.lambda.runtime.*
 import io.kotless.dsl.app.*
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json
+import io.kotless.dsl.ktor.app.KotlessCall
+import io.kotless.dsl.ktor.app.KotlessEngine
 import io.ktor.application.Application
 import io.ktor.server.engine.EngineAPI
 import io.ktor.server.engine.applicationEngineEnvironment
@@ -23,10 +25,8 @@ abstract class Kotless: RequestStreamHandler {
     @EngineAPI
     val engine = KotlessEngine(applicationEngineEnvironment {
         log = logger
-    })
-
-    init {
-        engine.start()
+    }).also {
+        it.start()
     }
 
     abstract fun prepare(app: Application)

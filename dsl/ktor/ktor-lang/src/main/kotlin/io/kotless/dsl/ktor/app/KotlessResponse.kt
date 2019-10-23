@@ -1,4 +1,4 @@
-package io.kotless.dsl.app
+package io.kotless.dsl.ktor.app
 
 import io.kotless.dsl.model.HttpResponse
 import io.ktor.application.ApplicationCall

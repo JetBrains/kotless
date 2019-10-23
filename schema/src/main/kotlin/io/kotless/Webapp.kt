@@ -10,7 +10,13 @@ import io.kotless.utils.Visitable
  *
  * @param route53 alias to ApiGateway, if present
  */
-data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events) : Visitable {
+data class Webapp(val route53: Route53?, val dsl: DSLType,
+                  val api: ApiGateway, val events: Events) : Visitable {
+
+    enum class DSLType {
+        Kotless,
+        Ktor
+    }
 
     /**
      * Route53 CNAME alias
