@@ -25,10 +25,18 @@ dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
+tasks.withType<KotlinJvmCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        languageVersion = "1.3"
+        apiVersion = "1.3"
+    }
+}
+
 kotless {
     config {
-        bucket = "eu.site.s3.ktls.aws.intellij.net"
-        prefix = "site"
+        bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
+        prefix = "ktor-site"
 
         workDirectory = file("src/main/static")
 
@@ -40,7 +48,7 @@ kotless {
 
     webapp {
         packages = setOf("io.kotless.examples")
-        route53 = Route53("site", "kotless.io")
+        route53 = Route53("ktor-site", "kotless.io")
     }
 }
 

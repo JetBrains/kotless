@@ -8,12 +8,11 @@ import io.ktor.http.content.OutgoingContent
 import io.ktor.response.ResponseHeaders
 import io.ktor.server.engine.BaseApplicationResponse
 import io.ktor.util.toByteArray
-import kotlinx.coroutines.io.ByteChannel
-import kotlinx.coroutines.io.ByteWriteChannel
+import kotlinx.coroutines.io.*
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call) {
-    val output = ByteChannel(true)
+    private val output = ByteChannel(true)
 
     override val headers: ResponseHeaders = object : ResponseHeaders() {
         private val builder = HeadersBuilder()
@@ -28,9 +27,15 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call) {
 
     private var _status: HttpStatusCode? = null
 
-    override suspend fun respondUpgrade(upgrade: OutgoingContent.ProtocolUpgrade) {
-        throw NotImplementedException()
+    override suspend fun respondOutgoingContent(content: OutgoingContent) {
+        try {
+            super.respondOutgoingContent(content)
+        } finally {
+            output.close()
+        }
     }
+
+    override suspend fun respondUpgrade(upgrade: OutgoingContent.ProtocolUpgrade) = throw NotImplementedException()
 
     override suspend fun responseChannel(): ByteWriteChannel = output
 

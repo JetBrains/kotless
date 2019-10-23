@@ -3,7 +3,6 @@ package io.kotless.plugin.gradle.tasks
 import io.kotless.*
 import io.kotless.Webapp
 import io.kotless.parser.KTorParser
-import io.kotless.parser.KotlessParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import io.kotless.plugin.gradle.utils.myShadowJar

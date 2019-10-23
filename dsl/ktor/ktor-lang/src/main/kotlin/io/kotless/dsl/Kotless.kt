@@ -1,11 +1,12 @@
 package io.kotless.dsl
 
-import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.*
 import io.kotless.dsl.app.*
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json
 import io.ktor.application.Application
 import io.ktor.server.engine.EngineAPI
+import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.util.pipeline.execute
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
@@ -14,19 +15,24 @@ import java.io.OutputStream
 
 
 @Suppress("unused")
-abstract class Kotless {
+abstract class Kotless: RequestStreamHandler {
     private var prepared = false
 
     private val logger = LoggerFactory.getLogger(Kotless::class.java)
 
     @EngineAPI
-    val engine = KotlessEngine(KotlessEnvironment()).also { it.start() }
+    val engine = KotlessEngine(applicationEngineEnvironment {
+        log = logger
+    })
 
+    init {
+        engine.start()
+    }
 
     abstract fun prepare(app: Application)
 
     @EngineAPI
-    fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
+    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
         if (!prepared) {
             prepare(engine.application)
             prepared = true
