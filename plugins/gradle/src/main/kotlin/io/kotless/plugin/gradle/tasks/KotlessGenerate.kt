@@ -2,6 +2,7 @@ package io.kotless.plugin.gradle.tasks
 
 import io.kotless.*
 import io.kotless.Webapp
+import io.kotless.parser.KTorParser
 import io.kotless.parser.KotlessParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.myKtSourceSet
@@ -62,7 +63,7 @@ open class KotlessGenerate : DefaultTask() {
 
             val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.packages)
 
-            val result = KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
+            val result = KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
 
             lambdas.addAll(result.resources.dynamics)
             statics.addAll(result.resources.statics)

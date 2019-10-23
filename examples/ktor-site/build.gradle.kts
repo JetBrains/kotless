@@ -1,5 +1,6 @@
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless"
 version = "0.1.1"
@@ -9,7 +10,7 @@ plugins {
 
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.2-SNAPSHOT" apply true
+    id("io.kotless") version "0.1.3-SNAPSHOT" apply true
 }
 
 repositories {
@@ -19,7 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "ktor-lang", "0.1.2-SNAPSHOT")
+    implementation("io.kotless", "ktor-lang", "0.1.3-SNAPSHOT")
+    implementation("io.kotless", "ktor-lang-parser", "0.1.3-SNAPSHOT")
     implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 

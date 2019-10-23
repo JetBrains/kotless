@@ -4,14 +4,13 @@ import io.kotless.*
 import io.kotless.dsl.lang.*
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.utils.gatherAllExpressions
-import org.jetbrains.kotlin.psi.KtAnnotated
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 
 object PermissionsProcessor {
     private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class)
 
-    fun process(func: KtNamedFunction, context: BindingContext): Set<Permission> {
+    fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val annotatedExpressions = func.gatherAllExpressions(context, andSelf = true).filterIsInstance<KtAnnotated>()
         val permissions = process(annotatedExpressions, context)
         return (permissions + Permission(AwsResource.CloudWatchLogs, PermissionLevel.ReadWrite, setOf("*"))).toSet()

@@ -4,8 +4,7 @@ import io.kotless.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
-import io.kotless.hcl.HCLEntity
-import io.kotless.hcl.ref
+import io.kotless.hcl.*
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
 import io.kotless.terraform.provider.aws.resource.iam.iam_role

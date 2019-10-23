@@ -7,7 +7,7 @@ import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 
-object Main: Kotless() {
+class Main: Kotless() {
     override fun prepare(app: Application) {
         app.routing {
             get("/") {
@@ -18,5 +18,4 @@ object Main: Kotless() {
             }
         }
     }
-
 }

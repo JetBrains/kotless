@@ -1,4 +1,4 @@
-rootProject.name = "ktls-ktor-site"
+rootProject.name = "ktor-site"
 
 pluginManagement {
     repositories {
