@@ -25,7 +25,6 @@ dependencies {
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
     implementation("io.kotless", "ktor-lang", "0.1.2-SNAPSHOT")
-    implementation("io.kotless", "ktor-lang-parser", "0.1.2-SNAPSHOT")
     implementation("io.ktor", "ktor-html-builder", "1.2.5")
 }
 

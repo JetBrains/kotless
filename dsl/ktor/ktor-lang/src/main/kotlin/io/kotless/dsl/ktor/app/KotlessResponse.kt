@@ -1,9 +1,9 @@
 package io.kotless.dsl.ktor.app
 
+import io.kotless.MimeType
 import io.kotless.dsl.model.HttpResponse
 import io.ktor.application.ApplicationCall
-import io.ktor.http.HeadersBuilder
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.*
 import io.ktor.http.content.OutgoingContent
 import io.ktor.response.ResponseHeaders
 import io.ktor.server.engine.BaseApplicationResponse
@@ -17,7 +17,6 @@ import kotlin.coroutines.EmptyCoroutineContext
 class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), CoroutineScope {
     override val coroutineContext: CoroutineContext = EmptyCoroutineContext
     private val output = ByteChannel(true)
-    private val bytes = ArrayList<Byte>()
 
     val reader = async(Dispatchers.Unconfined) {
         output.readRemaining()
@@ -55,9 +54,18 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
     suspend fun toHttp(): HttpResponse {
         val content = reader.await().readBytes()
 
+        val isBinary = headers["Content-Type"]?.let {
+            val type = ContentType.parse(it)
+            MimeType.forDeclaration(type.contentType, type.contentSubtype)
+        }?.isBinary ?: false
+
         val status = status()?.value ?: 500
         val myHeaders = headers.allValues().entries().map { it.key to it.value.single() }.toMap().let { HashMap(it) }
-        val text = bytes.toByteArray().toString(Charsets.UTF_8)
-        return HttpResponse(status, myHeaders, text, false)
+
+        return if (isBinary) {
+            HttpResponse(status, myHeaders, content)
+        } else {
+            HttpResponse(status, myHeaders, content.toString(Charsets.UTF_8))
+        }
     }
 }

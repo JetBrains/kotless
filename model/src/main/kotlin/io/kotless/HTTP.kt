@@ -30,6 +30,7 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: 
 
     companion object {
         fun binary() = values().filter { it.isBinary }.toTypedArray()
+        fun forDeclaration(type: String, subtype: String) = values().find { "${type}/${subtype}" == it.mimeText }
         fun forFile(file: File) = values().find { it.extension == file.extension }
     }
 }
