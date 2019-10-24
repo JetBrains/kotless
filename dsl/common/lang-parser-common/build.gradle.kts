@@ -11,8 +11,8 @@ dependencies {
 
     api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 
-    implementation(kotlin("reflect"))
-    implementation(kotlin("compiler-embeddable"))
+    api(kotlin("reflect"))
+    api(kotlin("compiler-embeddable"))
 }
 
 publishJar {
