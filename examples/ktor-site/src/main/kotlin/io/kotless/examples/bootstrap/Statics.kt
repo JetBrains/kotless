@@ -1,21 +1,19 @@
 package io.kotless.examples.bootstrap
 
-import io.ktor.http.content.file
-import io.ktor.http.content.static
+import io.ktor.http.content.*
 import io.ktor.routing.Routing
 import kotlinx.html.*
 
 
 fun Routing.siteStatics() {
     static("css") {
-        file("kotless-site.css", "css/kotless-site.css")
-        file("highlight-style.css", "css/highlight-style.css")
+        files("css")
     }
     static("js") {
         file("highlight.pack.js", "js/highlight.pack.js")
     }
     static {
-        file("favicon.apng", "favicon.apng")
+        file("favicon.apng")
     }
 }
 

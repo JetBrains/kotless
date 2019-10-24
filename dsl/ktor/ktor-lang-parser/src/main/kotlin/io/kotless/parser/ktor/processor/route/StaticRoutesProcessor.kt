@@ -9,12 +9,8 @@ import io.kotless.parser.utils.psi.*
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile
-import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.constants.TypedCompileTimeConstant
-import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
 import java.io.File
 
 internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
@@ -36,49 +32,34 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                         val file = File(context.config.workDirectory, localPath)
                         val path = URIPath(outer, remotePath)
 
-                        val key = TypedStorage.Key<StaticResource>()
-                        val mime = MimeType.forFile(file) ?: ContentType.defaultForFile(file).toMime()
-                        require(mime != null) { "Unknown mime type for file $fileCall" }
+                        createResource(file, path, context)
+                    }
 
-                        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
+                    for (filesCall in staticCall.gatherCallsOf("io.ktor.http.content.files", binding)) {
+                        val folder = File(context.config.workDirectory, filesCall.getArgument("folder", binding).asString(binding))
 
-                        context.resources.register(key, resource)
-                        context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
+                        val allFiles = folder.listFiles() ?: emptyArray()
+
+                        for (file in allFiles) {
+                            val remotePath = file.toRelativeString(folder).toURIPath()
+                            val path = URIPath(outer, remotePath)
+
+                            createResource(file, path, context)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun getPath(expr: KtCallExpression, binding: BindingContext): URIPath {
-        if (expr.valueArguments.size == 1) return URIPath()
-        val arg = expr.valueArguments.firstOrNull()?.getArgumentExpression() ?: return URIPath()
+    private fun createResource(file: File, path: URIPath, context: ProcessorContext) {
+        val key = TypedStorage.Key<StaticResource>()
+        val mime = MimeType.forFile(file) ?: ContentType.defaultForFile(file).toMime()
+        require(mime != null) { "Unknown mime type for file $file" }
 
-        val value = ConstantExpressionEvaluator.getConstant(arg, binding)
-        require(value is TypedCompileTimeConstant && value.type.nameIfStandardType?.identifier == "String") {
-            "Static routing path should be compile-time constant string"
-        }
-        val path = value.constantValue.value as String
+        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
 
-        return URIPath(path.split("/"))
+        context.resources.register(key, resource)
+        context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
     }
-
-    private fun getFileValue(expr: KtCallExpression, binding: BindingContext, dir: File): Pair<File, URIPath> {
-        require(expr.valueArguments.size == 2) {
-            "All static routing functions should have path and local argument"
-        }
-        val (path, file) = expr.valueArguments.map { it.getArgumentExpression() }
-        require(file != null && path != null) {
-            "Static routing path should be compile-time constant string"
-        }
-        val fileValue = ConstantExpressionEvaluator.getConstant(file, binding)
-        val pathValue = ConstantExpressionEvaluator.getConstant(path, binding)
-        require(fileValue is TypedCompileTimeConstant && fileValue.type.nameIfStandardType?.identifier == "String" &&
-            pathValue is TypedCompileTimeConstant && pathValue.type.nameIfStandardType?.identifier == "String") {
-            "Static routing path should be compile-time constant string"
-        }
-
-        return File(dir, fileValue.constantValue.value as String) to URIPath((pathValue.constantValue.value as String).split("/"))
-    }
-
 }
