@@ -5,8 +5,7 @@ import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.ktor.utils.toMime
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
-import io.kotless.parser.utils.psi.gatherCallsOf
-import io.kotless.parser.utils.psi.gatherNamedFunctions
+import io.kotless.parser.utils.psi.*
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile
@@ -27,16 +26,21 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
 
         processClasses(files, binding) { klass, _ ->
             klass.gatherNamedFunctions { func -> func.name == Kotless::prepare.name }.forEach {
-                for (expr in it.gatherCallsOf("io.ktor.http.content.static", binding)) {
-                    val outer = getPath(expr, binding)
-                    for (fileCall in expr.gatherCallsOf("io.ktor.http.content.file", binding)) {
-                        val (file, innerPath) = getFileValue(fileCall, binding, context.config.workDirectory)
+                for (staticCall in it.gatherCallsOf("io.ktor.http.content.static", binding)) {
+                    val outer = staticCall.getArgumentOrNull("remotePath", binding)?.asPath(binding) ?: URIPath()
 
-                        val path = URIPath(outer, innerPath)
+                    for (fileCall in staticCall.gatherCallsOf("io.ktor.http.content.file", binding)) {
+                        val remotePath = fileCall.getArgument("remotePath", binding).asString(binding)
+                        val localPath = fileCall.getArgumentOrNull("localPath", binding)?.asString(binding) ?: remotePath
+
+                        val file = File(context.config.workDirectory, localPath)
+                        val path = URIPath(outer, remotePath)
 
                         val key = TypedStorage.Key<StaticResource>()
-                        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, MimeType.forFile(file)
-                            ?: ContentType.defaultForFile(file).toMime()!!)
+                        val mime = MimeType.forFile(file) ?: ContentType.defaultForFile(file).toMime()
+                        require(mime != null) { "Unknown mime type for file $fileCall" }
+
+                        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
 
                         context.resources.register(key, resource)
                         context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))

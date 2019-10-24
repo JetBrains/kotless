@@ -26,10 +26,10 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                 for (expr in it.gatherAllExpressions(binding).filterIsInstance<KtCallExpression>()) {
                     val res = when (expr.getFqName(binding)) {
                         "io.ktor.routing.get" -> {
-                            HttpMethod.GET to URIPath(expr.getArgument("path", binding).asString(binding))
+                            HttpMethod.GET to expr.getArgument("path", binding).asPath(binding)
                         }
                         "io.ktor.routing.post" -> {
-                            HttpMethod.POST to URIPath(expr.getArgument("path", binding).asString(binding))
+                            HttpMethod.POST to expr.getArgument("path", binding).asPath(binding)
                         }
                         else -> null
                     } ?: continue

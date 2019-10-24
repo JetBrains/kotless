@@ -1,5 +1,6 @@
 package io.kotless.parser.utils.psi
 
+import io.kotless.URIPath
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
@@ -39,3 +40,5 @@ fun KtValueArgument.asString(binding: BindingContext): String {
 
     return value.constantValue.value as String
 }
+
+fun KtValueArgument.asPath(binding: BindingContext) = URIPath(asString(binding))
