@@ -35,7 +35,8 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                         val path = URIPath(outer.parts + innerPath.parts)
 
                         val key = TypedStorage.Key<StaticResource>()
-                        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, MimeType.forFile(file) ?: ContentType.defaultForFile(file).toMime()!!)
+                        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, MimeType.forFile(file)
+                            ?: ContentType.defaultForFile(file).toMime()!!)
 
                         context.resources.register(key, resource)
                         context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))

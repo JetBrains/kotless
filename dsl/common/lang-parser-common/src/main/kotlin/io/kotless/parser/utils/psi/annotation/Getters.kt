@@ -37,7 +37,7 @@ inline fun <reified T : Any> AnnotationDescriptor.getArrayValue(param: KProperty
 }
 
 inline fun <reified T : Enum<out T>> KtAnnotationEntry.getEnumValue(context: BindingContext,
-                                                                             param: KProperty1<out Annotation, Enum<out T>>): T? {
+                                                                    param: KProperty1<out Annotation, Enum<out T>>): T? {
     return getDescriptor(context).getEnumValue(param)
 }
 

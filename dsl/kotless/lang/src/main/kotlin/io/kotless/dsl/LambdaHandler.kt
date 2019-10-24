@@ -23,7 +23,7 @@ import java.io.OutputStream
  * * ApiGateway Post and Get requests
  * * CloudWatch events (used for warming)
  */
-class LambdaHandler: RequestStreamHandler {
+class LambdaHandler : RequestStreamHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)
     }

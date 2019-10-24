@@ -1,10 +1,11 @@
 package io.kotless.dsl.ktor
 
-import com.amazonaws.services.lambda.runtime.*
-import io.kotless.dsl.model.*
-import io.kotless.dsl.utils.Json
+import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
+import io.kotless.dsl.model.*
+import io.kotless.dsl.utils.Json
 import io.ktor.application.Application
 import io.ktor.server.engine.EngineAPI
 import io.ktor.server.engine.applicationEngineEnvironment
@@ -16,7 +17,7 @@ import java.io.OutputStream
 
 
 @Suppress("unused")
-abstract class Kotless: RequestStreamHandler {
+abstract class Kotless : RequestStreamHandler {
     private var prepared = false
 
     private val logger = LoggerFactory.getLogger(Kotless::class.java)
@@ -43,7 +44,6 @@ abstract class Kotless: RequestStreamHandler {
 
                 logger.info("Started handling request")
                 logger.debug("Request is {}", jsonRequest)
-
 
                 if (jsonRequest.contains("Scheduled Event")) {
                     val event = Json.parse(CloudWatch.serializer(), jsonRequest)

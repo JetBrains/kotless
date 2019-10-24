@@ -31,7 +31,7 @@ class Webapp(project: Project) : Serializable {
 
         val environment: HashMap<String, String> = HashMap()
 
-        class KotlessDSL(val packages: Set<String>): Serializable
+        class KotlessDSL(val packages: Set<String>) : Serializable
 
         /** Setup configuration for Kotless DSL */
         fun kotless(dsl: KotlessDSL) {

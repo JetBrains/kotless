@@ -13,4 +13,4 @@ import io.kotless.parser.processor.route.StaticRoutesProcessor
  * The result of parsing is a number of Lambdas and StaticResources and associated
  * with them Dynamic and Static routes
  */
-object KotlessParser: Parser(setOf(EntrypointProcessor, GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor, ScheduledEventsProcessor)) {}
+object KotlessParser : Parser(setOf(EntrypointProcessor, GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor, ScheduledEventsProcessor))

@@ -51,7 +51,7 @@ kotless {
     }
 
     webapp {
-        route53 = Route53("ktor-site", "kotless.io")
+        route53 = Route53("ktor.site", "kotless.io")
     }
 }
 
