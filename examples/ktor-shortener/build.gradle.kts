@@ -21,6 +21,9 @@ repositories {
 }
 
 dependencies {
+    implementation("commons-validator", "commons-validator", "1.6")
+    implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
+
     implementation("io.kotless", "ktor-lang", "0.1.2-SNAPSHOT")
     implementation("io.kotless", "ktor-lang-parser", "0.1.2-SNAPSHOT")
     implementation("io.ktor", "ktor-html-builder", "1.2.5")
@@ -36,8 +39,8 @@ tasks.withType<KotlinJvmCompile> {
 
 kotless {
     config {
-        bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
-        prefix = "ktor-site"
+        bucket = "eu.ktor-short.s3.ktls.aws.intellij.net"
+        prefix = "ktor-short"
 
         workDirectory = file("src/main/static")
 
@@ -50,7 +53,7 @@ kotless {
     }
 
     webapp {
-        route53 = Route53("ktor.site", "kotless.io")
+        route53 = Route53("ktor.short", "kotless.io")
     }
 }
 

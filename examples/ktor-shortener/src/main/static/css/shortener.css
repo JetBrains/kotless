@@ -1,0 +1,105 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+.main-block {
+    display: flex;
+
+    height: 75%;
+
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.main-block .url-input {
+    height: 70px;
+    width: 40%;
+
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 300;
+    font-size: 30px;
+
+    outline-color: #c7c7c7;
+
+    padding-left: 1%;
+
+    border-radius: 2px;
+    border: 2px solid #e7e7e7;
+}
+
+.main-block .url-button {
+    margin-left: 1%;
+
+    height: 70px;
+    width: 140px;
+
+    border-radius: 5px;
+
+    border: none;
+    outline: none;
+
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+
+    background: linear-gradient(90deg, #9f2a94, #c13499);
+    color: white;
+}
+
+.main-block .url-button:hover {
+    background: linear-gradient(90deg, #c13499, #d13499);
+}
+
+.main-block .copy-button {
+    margin-left: 1%;
+
+    height: 70px;
+    width: 140px;
+
+    border-radius: 5px;
+
+    border: none;
+    outline: none;
+
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+
+    background: linear-gradient(90deg, #3570bc, #477bd2);
+    color: white;
+}
+
+.main-block .copy-button:hover {
+    background: linear-gradient(90deg, #477bd2, #577bd2);
+}
+
+.footer-block {
+    display: flex;
+
+    height: 25%;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-text {
+    color: #9e2a94;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    font-size: 95px;
+}
+
+.footer-muted-text {
+    color: #bababa;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
