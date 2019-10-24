@@ -14,7 +14,7 @@ import java.io.File
  * @param name a unique name of lambda
  * @param file file with function code
  * @param entrypoint entrypoint of function
- * @param config сonfig of function: defines memory and time limit, etc.
+ * @param config config of function: defines memory and time limit, etc.
  * @param config permissions to access other resources granted to this lambda
  */
 data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, val config: Config, val permissions: Set<Permission>) : Visitable {

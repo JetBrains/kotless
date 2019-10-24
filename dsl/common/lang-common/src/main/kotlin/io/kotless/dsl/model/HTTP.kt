@@ -1,6 +1,8 @@
 package io.kotless.dsl.model
 
+import io.kotless.HttpMethod
 import io.kotless.MimeType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.collections.HashMap
@@ -10,30 +12,37 @@ import kotlin.collections.HashMap
 data class HttpRequest(
     val resource: String,
     val path: String,
-    val httpMethod: String,
-    val headers: Map<String, String>?,
-    val queryStringParameters: Map<String, String>?,
+    @SerialName("httpMethod") val method: HttpMethod,
+    @SerialName("headers") val myHeaders: Map<String, String>?,
+    @SerialName("queryStringParameters") val myQueryStringParameters: Map<String, String>?,
     val pathParameters: Map<String, String>?,
     val requestContext: RequestContext,
-    val body: String?
+    @SerialName("body") val myBody: String?,
+    private val isBase64Encoded: Boolean
 ) {
-    private val bodyPostParamsMap = body?.split("&")?.mapNotNull {
-        try {
-            val (name, value) = it.split("=")
-            name to value
-        } catch (e: Throwable) {
-            null
-        }
-    }?.toMap()
 
-    val allParams = queryStringParameters.orEmpty() + bodyPostParamsMap.orEmpty()
+    val headers: Map<String, List<String>>?
+        get() = myHeaders?.mapValues { (_, value) -> value.split(",").map { it.trim() } }
+
+    val params = myQueryStringParameters
+
+    val body: ByteArray?
+        get() = myBody?.let {
+            if (isBase64Encoded) {
+                Base64.getDecoder().decode(it)
+            } else {
+                it.toByteArray()
+            }
+        }
 
     @Serializable
     data class RequestContext(
-        val identity: RequestIdentity,
-        val stage: String,
         val path: String,
-        val protocol: String?,
+        val accountId: String,
+        val resourceId: String,
+        val stage: String,
+        val identity: RequestIdentity,
+        val protocol: String,
         val requestTimeEpoch: Long,
         val domainName: String
     ) {

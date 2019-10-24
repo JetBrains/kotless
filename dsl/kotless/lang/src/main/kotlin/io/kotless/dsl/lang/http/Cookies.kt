@@ -8,7 +8,7 @@ import kotlin.collections.set
 
 /** Cookie values parsed from headers */
 val HttpRequest.cookie: Map<String, String>
-    get() = headers?.get("Cookie")?.let { parseCookie(it) }.orEmpty().map { it.name to it.value }.toMap()
+    get() = myHeaders?.get("Cookie")?.let { parseCookie(it) }.orEmpty().map { it.name to it.value }.toMap()
 
 /** Add a cookie to HttpResponse */
 fun HttpResponse.withCookie(name: String, value: String): HttpResponse {

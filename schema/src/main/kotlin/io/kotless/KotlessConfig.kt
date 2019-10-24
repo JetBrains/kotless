@@ -23,7 +23,7 @@ data class KotlessConfig(val bucket: String, val prefix: String,
     /**
      * Configuration of DSL used for this application
      */
-    data class DSL(val type: DSLType)
+    data class DSL(val type: DSLType) : Visitable
 
     /**
      * Terraform configuration used by Kotless
@@ -59,8 +59,7 @@ data class KotlessConfig(val bucket: String, val prefix: String,
     }
 
     /** Configuration of optimizations considered during code generation */
-    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All,
-                            val autowarm: Autowarm = Autowarm(enable = true, minutes = 5)) : Visitable {
+    data class Optimization(val mergeLambda: MergeLambda = MergeLambda.All, val autowarm: Autowarm = Autowarm(enable = true, minutes = 5)) : Visitable {
 
         /**
          * Optimization defines, if lambdas should be autowarmed and with what schedule
@@ -77,7 +76,7 @@ data class KotlessConfig(val bucket: String, val prefix: String,
          * There are 3 levels of merge optimization:
          * * None -- lambdas will never be merged
          * * PerPermissions -- lambdas will be merged, if they have equal permissions
-         * * All -- all lambdas in context are merged in one
+         * * All -- all lambdas in context are merged in one.
          */
         enum class MergeLambda {
             None,
@@ -92,6 +91,7 @@ data class KotlessConfig(val bucket: String, val prefix: String,
     }
 
     override fun visit(visitor: (Any) -> Unit) {
+        dsl.visit(visitor)
         terraform.visit(visitor)
         optimization.visit(visitor)
         visitor(this)

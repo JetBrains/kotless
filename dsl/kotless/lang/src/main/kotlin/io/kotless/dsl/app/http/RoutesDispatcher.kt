@@ -41,7 +41,7 @@ internal object RoutesDispatcher {
         logger.debug("Found $func for key $resourceKey")
 
         val result = try {
-            FunctionCaller.call(func, request.allParams)
+            FunctionCaller.call(func, request.params.orEmpty())
         } catch (e: Exception) {
             logger.error("Failed on call of function ${func.name}", if (e is InvocationTargetException) e.targetException else e)
             return serverError(e.message)

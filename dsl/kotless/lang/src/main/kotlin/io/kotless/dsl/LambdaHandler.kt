@@ -49,7 +49,7 @@ class LambdaHandler : RequestStreamHandler {
             logger.info("Request is HTTP Event")
 
             val request = Json.parse(HttpRequest.serializer(), jsonRequest)
-            val resourceKey = RouteKey(HttpMethod.valueOf(request.httpMethod.toUpperCase()), request.path)
+            val resourceKey = RouteKey(request.method, request.path)
             RoutesDispatcher.dispatch(request, resourceKey)
 
         } catch (e: Throwable) {
