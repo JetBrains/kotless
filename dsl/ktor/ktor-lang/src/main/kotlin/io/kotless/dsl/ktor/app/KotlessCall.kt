@@ -11,7 +11,7 @@ class KotlessCall(application: Application, request: HttpRequest) : BaseApplicat
     override val request = KotlessRequest(request, this)
     override val response = KotlessResponse(this)
 
-    override val parameters: Parameters get() = request.queryParameters
+    override val parameters: Parameters by lazy { this.request.queryParameters }
 
     init {
         putResponseAttribute()

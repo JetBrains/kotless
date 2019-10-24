@@ -18,15 +18,17 @@ import java.io.OutputStream
 
 @Suppress("unused")
 abstract class Kotless : RequestStreamHandler {
-    private var prepared = false
+    companion object {
+        private val logger = LoggerFactory.getLogger(Kotless::class.java)
 
-    private val logger = LoggerFactory.getLogger(Kotless::class.java)
+        private var prepared = false
 
-    @EngineAPI
-    val engine = KotlessEngine(applicationEngineEnvironment {
-        log = logger
-    }).also {
-        it.start()
+        @EngineAPI
+        val engine = KotlessEngine(applicationEngineEnvironment {
+            log = logger
+        }).also {
+            it.start()
+        }
     }
 
     abstract fun prepare(app: Application)
@@ -40,13 +42,13 @@ abstract class Kotless : RequestStreamHandler {
 
         val response = try {
             runBlocking {
-                val jsonRequest = input.bufferedReader().use { it.readText() }
+                val json = input.bufferedReader().use { it.readText() }
 
                 logger.info("Started handling request")
-                logger.debug("Request is {}", jsonRequest)
+                logger.debug("Request is {}", json)
 
-                if (jsonRequest.contains("Scheduled Event")) {
-                    val event = Json.parse(CloudWatch.serializer(), jsonRequest)
+                if (json.contains("Scheduled Event")) {
+                    val event = Json.parse(CloudWatch.serializer(), json)
                     if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
                         logger.info("Request is Scheduled Event")
                         return@runBlocking null
@@ -55,7 +57,7 @@ abstract class Kotless : RequestStreamHandler {
 
                 logger.info("Request is HTTP Event")
 
-                val request = Json.parse(HttpRequest.serializer(), jsonRequest)
+                val request = Json.parse(HttpRequest.serializer(), json)
                 val call = KotlessCall(engine.application, request)
 
                 engine.pipeline.execute(call)
