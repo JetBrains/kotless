@@ -1,7 +1,8 @@
 package io.kotless.parser.processor.config
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
-import io.kotless.*
+import io.kotless.DSLType
+import io.kotless.Lambda
 import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor

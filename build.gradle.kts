@@ -11,7 +11,7 @@ plugins {
 }
 
 configureIdea {
-    for (example in setOf("examples/kotless-site", "examples/kotless-shortener")) {
+    for (example in setOf("kotless-site", "kotless-shortener", "ktor-site", "ktor-shortener").map { "examples/$it" }) {
         exclude += files("$example/.gradle", "$example/gradle", "$example/.idea", "$example/build", "$example/gradlew", "$example/gradlew.bat")
     }
 }

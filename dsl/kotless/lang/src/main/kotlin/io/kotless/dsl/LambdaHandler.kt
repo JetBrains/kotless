@@ -2,7 +2,6 @@ package io.kotless.dsl
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
-import io.kotless.HttpMethod
 import io.kotless.dsl.app.events.EventsDispatcher
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher

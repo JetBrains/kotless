@@ -1,7 +1,7 @@
 package io.kotless.parser.ktor
 
-import io.kotless.parser.ktor.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.Parser
+import io.kotless.parser.ktor.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.ktor.processor.route.StaticRoutesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 

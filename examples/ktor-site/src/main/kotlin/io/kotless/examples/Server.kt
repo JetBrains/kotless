@@ -1,7 +1,5 @@
 package io.kotless.examples
 
-import com.amazonaws.services.lambda.runtime.*
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import io.kotless.dsl.ktor.Kotless
 import io.kotless.examples.bootstrap.siteStatics
 import io.kotless.examples.page.FAQ.faq

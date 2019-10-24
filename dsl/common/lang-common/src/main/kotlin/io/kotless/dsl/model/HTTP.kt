@@ -62,8 +62,8 @@ data class HttpRequest(
 @Serializable
 data class HttpResponse(val statusCode: Int, val headers: HashMap<String, String> = HashMap(), val body: String?, val isBase64Encoded: Boolean) {
 
-    constructor(statusCode: Int, headers:  HashMap<String, String>, body: String) : this(statusCode, headers, body, false)
-    constructor(statusCode: Int, headers:  HashMap<String, String>, body: ByteArray) : this(statusCode, headers, Base64.getEncoder().encodeToString(body), true)
+    constructor(statusCode: Int, headers: HashMap<String, String>, body: String) : this(statusCode, headers, body, false)
+    constructor(statusCode: Int, headers: HashMap<String, String>, body: ByteArray) : this(statusCode, headers, Base64.getEncoder().encodeToString(body), true)
 
     constructor(statusCode: Int, mime: MimeType, body: String? = null) : this(statusCode, hashMapOf("Content-Type" to mime.mimeText), body, false)
     constructor(statusCode: Int, mime: MimeType, body: ByteArray) : this(statusCode, hashMapOf("Content-Type" to mime.mimeText), Base64.getEncoder().encodeToString(body), true) {

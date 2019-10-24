@@ -12,6 +12,6 @@ fun Routing.siteStatics() {
         file("shortener.js", "js/shortener.js")
     }
     static {
-        file("favicon.apng","favicon.apng")
+        file("favicon.apng", "favicon.apng")
     }
 }
