@@ -1,7 +1,8 @@
 package io.kotless.parser.processor.config
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
-import io.kotless.Lambda
+import io.kotless.*
+import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import org.jetbrains.kotlin.psi.KtFile
@@ -15,6 +16,10 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     override fun mayRun(context: ProcessorContext) = true
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
+        if (context.config.dsl.type == DSLType.Kotless) {
+            return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}", emptySet()))
+        }
+
         val entrypoint = ArrayList<Lambda.Entrypoint>()
         processClasses(files, binding) { klass, _ ->
             entrypoint.add(Lambda.Entrypoint("${klass.fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet()))
