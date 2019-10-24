@@ -1,8 +1,8 @@
 package io.kotless.parser.processor
 
+import io.kotless.parser.utils.psi.*
 import io.kotless.parser.utils.psi.annotation.getAnnotations
 import io.kotless.parser.utils.psi.annotation.isAnnotatedWith
-import io.kotless.parser.utils.psi.utils.*
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass

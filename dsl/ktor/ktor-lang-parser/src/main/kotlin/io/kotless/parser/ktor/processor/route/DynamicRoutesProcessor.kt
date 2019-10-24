@@ -6,19 +6,14 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
-import io.kotless.parser.utils.psi.utils.*
+import io.kotless.parser.utils.psi.*
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
-import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.constants.TypedCompileTimeConstant
-import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
-import org.slf4j.LoggerFactory
 
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
-    private val logger = LoggerFactory.getLogger(DynamicRoutesProcessor::class.java)
-
     override val klasses = setOf(Kotless::class)
 
     override fun mayRun(context: ProcessorContext) = context.output.check(EntrypointProcessor)
@@ -31,10 +26,10 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                 for (expr in it.gatherAllExpressions(binding).filterIsInstance<KtCallExpression>()) {
                     val res = when (expr.getFqName(binding)) {
                         "io.ktor.routing.get" -> {
-                            HttpMethod.GET to getPath(expr, binding, it, klass)
+                            HttpMethod.GET to URIPath(expr.getArgument("path", binding).asString(binding))
                         }
                         "io.ktor.routing.post" -> {
-                            HttpMethod.POST to getPath(expr, binding, it, klass)
+                            HttpMethod.POST to URIPath(expr.getArgument("path", binding).asString(binding))
                         }
                         else -> null
                     } ?: continue
@@ -55,22 +50,5 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                 }
             }
         }
-    }
-
-    private fun getPath(expr: KtCallExpression, binding: BindingContext, func: KtNamedFunction, klass: KtClass): URIPath {
-        require(expr.valueArguments.size == 2) {
-            "Error in function ${func.fqName}, class ${klass.fqName}: all routing functions should have path argument"
-        }
-        val arg = expr.valueArguments.first().getArgumentExpression()
-        require(arg != null) {
-            "Error in function ${func.fqName}, class ${klass.fqName}: routing path should be compile-time constant string"
-        }
-        val value = ConstantExpressionEvaluator.getConstant(arg, binding)
-        require(value is TypedCompileTimeConstant && value.type.nameIfStandardType?.identifier == "String") {
-            "Error in function ${func.fqName}, class ${klass.fqName}: routing path should be compile-time constant string"
-        }
-        val path = value.constantValue.value as String
-
-        return URIPath(path.split("/"))
     }
 }

@@ -6,7 +6,7 @@ import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.utils.psi.annotation.getEnumValue
 import io.kotless.parser.utils.psi.annotation.getURIPath
-import io.kotless.parser.utils.psi.utils.getTypeFqName
+import io.kotless.parser.utils.psi.getTypeFqName
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile

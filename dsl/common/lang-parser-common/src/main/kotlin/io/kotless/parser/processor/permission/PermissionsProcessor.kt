@@ -3,7 +3,7 @@ package io.kotless.parser.processor.permission
 import io.kotless.*
 import io.kotless.dsl.lang.*
 import io.kotless.parser.utils.psi.annotation.*
-import io.kotless.parser.utils.psi.utils.gatherAllExpressions
+import io.kotless.parser.utils.psi.gatherAllExpressions
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext

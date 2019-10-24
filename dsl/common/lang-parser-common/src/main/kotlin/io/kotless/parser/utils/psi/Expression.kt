@@ -1,4 +1,4 @@
-package io.kotless.parser.utils.psi.utils
+package io.kotless.parser.utils.psi
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.*

@@ -5,8 +5,8 @@ import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.ktor.utils.toMime
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
-import io.kotless.parser.utils.psi.utils.gatherCallsOf
-import io.kotless.parser.utils.psi.utils.gatherNamedFunctions
+import io.kotless.parser.utils.psi.gatherCallsOf
+import io.kotless.parser.utils.psi.gatherNamedFunctions
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile

@@ -1,7 +1,7 @@
 package io.kotless.parser.processor
 
-import io.kotless.parser.utils.psi.utils.gatherClassesWithSubtypes
-import io.kotless.parser.utils.psi.utils.gatherStaticObjectsWithSubtypes
+import io.kotless.parser.utils.psi.gatherClassesWithSubtypes
+import io.kotless.parser.utils.psi.gatherStaticObjectsWithSubtypes
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
