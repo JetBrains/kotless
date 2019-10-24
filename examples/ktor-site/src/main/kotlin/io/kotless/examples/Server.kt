@@ -8,8 +8,7 @@ import io.kotless.examples.page.Main.main
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.html.respondHtml
-import io.ktor.routing.get
-import io.ktor.routing.routing
+import io.ktor.routing.*
 
 class Server : Kotless() {
     override fun prepare(app: Application) {
@@ -20,12 +19,15 @@ class Server : Kotless() {
                 call.respondHtml { main() }
             }
 
-            get("/introduction") {
-                call.respondHtml { introduction() }
-            }
+            //Supports route inner calls
+            route("pages") {
+                get("/introduction") {
+                    call.respondHtml { introduction() }
+                }
 
-            get("/faq") {
-                call.respondHtml { faq() }
+                get("/faq") {
+                    call.respondHtml { faq() }
+                }
             }
         }
     }

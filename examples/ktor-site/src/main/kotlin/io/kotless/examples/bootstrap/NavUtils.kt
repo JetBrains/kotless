@@ -36,13 +36,13 @@ fun BODY.siteNavbar() {
 
             ul("navbar-nav") {
                 li("nav-item") {
-                    a(href = "/introduction", classes = "nav-link") {
+                    a(href = "/pages/introduction", classes = "nav-link") {
                         +"Getting Started"
                     }
                 }
 
                 li("nav-item") {
-                    a(href = "/faq", classes = "nav-link") {
+                    a(href = "/pages/faq", classes = "nav-link") {
                         +"FAQ"
                     }
                 }

@@ -6,11 +6,16 @@ import kotlinx.html.*
 
 
 fun Routing.siteStatics() {
+    //There are used almost all possible definitions of static resources
     static("css") {
-        files("css")
+        static {
+            files("css")
+        }
     }
     static("js") {
-        file("highlight.pack.js", "js/highlight.pack.js")
+        static("scripts") {
+            file("highlight.pack.js", "js/highlight.pack.js")
+        }
     }
     static {
         file("favicon.apng")
@@ -44,7 +49,7 @@ fun HTML.headerSite() {
         }
         link("/css/kotless-site.css", rel = "stylesheet")
         link("/css/highlight-style.css", rel = "stylesheet")
-        script { src = "/js/highlight.pack.js" }
+        script { src = "/js/scripts/highlight.pack.js" }
         script {
             src = "https://code.jquery.com/jquery-3.3.1.slim.min.js"
             crossorigin = "anonymous"
