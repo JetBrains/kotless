@@ -1,3 +1,5 @@
+import io.kotless.DSLType
+import io.kotless.plugin.gradle.dsl.Webapp
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
@@ -13,6 +15,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
@@ -33,6 +36,8 @@ kotless {
 
         workDirectory = file("src/main/static")
 
+        dsl = DSLType.Kotless
+
         terraform {
             profile = "kotless-jetbrains"
             region = "eu-west-1"
@@ -40,7 +45,10 @@ kotless {
     }
 
     webapp {
-        packages = setOf("io.kotless.examples")
+        lambda {
+            kotless(Webapp.Lambda.KotlessDSL(setOf("io.kotless.examples")))
+        }
+
         route53 = Route53("short", "kotless.io")
     }
 

@@ -34,6 +34,7 @@ class Webapp(project: Project) : Serializable {
         class KotlessDSL(val packages: Set<String>) : Serializable
 
         /** Setup configuration for Kotless DSL */
+        @KotlessDSLTag
         fun kotless(dsl: KotlessDSL) {
             environment[KotlessAppConfig.PACKAGE_ENV_NAME] = dsl.packages.joinToString(separator = ",")
         }
