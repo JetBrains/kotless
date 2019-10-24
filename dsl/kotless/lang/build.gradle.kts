@@ -4,24 +4,11 @@ group = rootProject.group
 version = rootProject.version
 
 
-plugins {
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50" apply true
-}
-
 dependencies {
     api(project(":dsl:common:lang-common"))
-    api(project(":model"))
 
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
-
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
-
-    api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
-
-    api("org.slf4j", "slf4j-log4j12", "1.7.25")
-    implementation("log4j", "log4j", "1.2.17")
-    implementation("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
 }
 
 publishJar {

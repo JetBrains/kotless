@@ -9,6 +9,7 @@ import io.ktor.response.ResponseHeaders
 import io.ktor.server.engine.BaseApplicationResponse
 import kotlinx.coroutines.*
 import kotlinx.coroutines.io.*
+import kotlinx.io.core.readBytes
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -18,15 +19,8 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
     private val output = ByteChannel(true)
     private val bytes = ArrayList<Byte>()
 
-    val reader = launch(Dispatchers.Unconfined) {
-        val packet = output.readRemaining()
-        var res = ByteArray(4096)
-        var size = packet.readAvailable(res)
-        while (size != 0) {
-            bytes.addAll(res.toList().take(size))
-            res = ByteArray(4096)
-            size = packet.readAvailable(res)
-        }
+    val reader = async(Dispatchers.Unconfined) {
+        output.readRemaining()
     }
 
     override val headers: ResponseHeaders = object : ResponseHeaders() {
@@ -59,7 +53,7 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
     }
 
     suspend fun toHttp(): HttpResponse {
-        reader.join()
+        val content = reader.await().readBytes()
 
         val status = status()?.value ?: 500
         val myHeaders = headers.allValues().entries().map { it.key to it.value.single() }.toMap().let { HashMap(it) }
