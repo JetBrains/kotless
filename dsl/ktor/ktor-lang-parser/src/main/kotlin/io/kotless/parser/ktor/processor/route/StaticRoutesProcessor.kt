@@ -32,7 +32,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                     for (fileCall in expr.gatherCallsOf("io.ktor.http.content.file", binding)) {
                         val (file, innerPath) = getFileValue(fileCall, binding, context.config.workDirectory)
 
-                        val path = URIPath(outer.parts + innerPath.parts)
+                        val path = URIPath(outer, innerPath)
 
                         val key = TypedStorage.Key<StaticResource>()
                         val resource = StaticResource(context.config.bucket, URIPath("static", path), file, MimeType.forFile(file)
