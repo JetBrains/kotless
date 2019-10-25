@@ -4,8 +4,7 @@ import io.kotless.*
 import io.kotless.Webapp.ApiGateway
 import io.kotless.Webapp.Events
 import io.kotless.dsl.config.KotlessAppConfig
-import io.kotless.dsl.lang.http.Get
-import io.kotless.dsl.lang.http.Post
+import io.kotless.dsl.lang.http.*
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor
@@ -19,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 
 internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
-    override val annotations = setOf(Get::class, Post::class)
+    override val annotations = setOf(Get::class, Post::class, Put::class, Patch::class, Delete::class, Head::class, Options::class)
 
     override fun mayRun(context: ProcessorContext) = context.output.check(GlobalActionsProcessor) && context.output.check(EntrypointProcessor)
 
@@ -38,6 +37,11 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             val (routeType, pathProperty) = when (klass) {
                 Get::class -> HttpMethod.GET to Get::path
                 Post::class -> HttpMethod.POST to Post::path
+                Put::class -> HttpMethod.PUT to Put::path
+                Patch::class -> HttpMethod.PATCH to Patch::path
+                Delete::class -> HttpMethod.DELETE to Delete::path
+                Head::class -> HttpMethod.HEAD to Head::path
+                Options::class -> HttpMethod.OPTIONS to Options::path
                 else -> error("Not supported class $entry")
             }
 

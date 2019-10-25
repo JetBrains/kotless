@@ -6,7 +6,12 @@ import java.io.File
 /** Http methods supported by Kotless Web application */
 enum class HttpMethod {
     GET,
-    POST
+    POST,
+    PUT,
+    PATCH,
+    DELETE,
+    HEAD,
+    OPTIONS
 }
 
 /** Mime types supported by StaticResource */

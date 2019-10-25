@@ -26,20 +26,21 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     if (element is KtCallExpression) {
                         val outer = getRoutePath(previous, binding)
 
-                        val res = when (element.getFqName(binding)) {
-                            "io.ktor.routing.get" -> {
-                                HttpMethod.GET to URIPath(outer, element.getArgument("path", binding).asPath(binding))
-                            }
-                            "io.ktor.routing.post" -> {
-                                HttpMethod.POST to URIPath(outer, element.getArgument("path", binding).asPath(binding))
-                            }
+                        val method = when (element.getFqName(binding)) {
+                            "io.ktor.routing.get" -> HttpMethod.GET
+                            "io.ktor.routing.post" -> HttpMethod.POST
+                            "io.ktor.routing.put" -> HttpMethod.PUT
+                            "io.ktor.routing.patch" -> HttpMethod.PATCH
+                            "io.ktor.routing.delete" -> HttpMethod.DELETE
+                            "io.ktor.routing.head" -> HttpMethod.HEAD
+                            "io.ktor.routing.options" -> HttpMethod.OPTIONS
                             else -> null
                         }
 
-                        if (res != null) {
+                        if (method != null) {
                             val permissions = PermissionsProcessor.process(element, binding)
 
-                            val (method, path) = res
+                            val path =  URIPath(outer, element.getArgument("path", binding).asPath(binding))
                             val name = "${path.parts.joinToString(separator = "_")}_${method.name}"
 
                             val key = TypedStorage.Key<Lambda>()
