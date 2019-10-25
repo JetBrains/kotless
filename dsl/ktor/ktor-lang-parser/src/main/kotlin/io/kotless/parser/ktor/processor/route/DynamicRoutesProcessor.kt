@@ -2,6 +2,7 @@ package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
 import io.kotless.dsl.ktor.Kotless
+import io.kotless.parser.ktor.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -15,9 +16,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     override val klasses = setOf(Kotless::class)
 
-    override fun mayRun(context: ProcessorContext) = context.output.check(EntrypointProcessor)
+    override fun mayRun(context: ProcessorContext) = context.output.check(GlobalActionsProcessor) && context.output.check(EntrypointProcessor)
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
+        val globalPermissions = context.output.get(GlobalActionsProcessor).permissions
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
         processClasses(files, binding) { klass, _ ->
@@ -38,7 +40,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                         }
 
                         if (method != null) {
-                            val permissions = PermissionsProcessor.process(element, binding)
+                            val permissions = PermissionsProcessor.process(element, binding) + globalPermissions
 
                             val path =  URIPath(outer, element.getArgument("path", binding).asPath(binding))
                             val name = "${path.parts.joinToString(separator = "_")}_${method.name}"

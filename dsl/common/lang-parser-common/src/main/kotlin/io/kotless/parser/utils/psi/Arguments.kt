@@ -1,10 +1,11 @@
 package io.kotless.parser.utils.psi
 
 import io.kotless.URIPath
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.constants.TypedCompileTimeConstant
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
 
@@ -39,6 +40,10 @@ fun KtValueArgument.asString(binding: BindingContext): String {
     }
 
     return value.constantValue.value as String
+}
+
+fun KtValueArgument.asReferencedDescriptorOrNull(binding: BindingContext): DeclarationDescriptor? {
+    return (getArgumentExpression() as? KtNameReferenceExpression)?.getReferenceTargets(binding)?.singleOrNull()
 }
 
 fun KtValueArgument.asPath(binding: BindingContext) = URIPath(asString(binding))
