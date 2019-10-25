@@ -1,6 +1,13 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 0.1.1 - 2019-10-?
+## Added
+* Ktor DSL -- Ktor Engine and parser for it. Support dynamic and static routes, warming of lambda,
+  granular permissions. Does not support Scheduled.
+* Support of all remaining HTTP methods in Kotless and Ktor DSL
+* Ktor examples: add shortener and site
+
 # 0.1.1 - 2019-10-14
 ## Added
 * Support of binary responses for binary MimeTypes
@@ -13,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * Minor style changes in Gradle DSL
 
 ## Fixed
-* Multiregionality -- now Kotless can be deployed to any region
+* Multiregional -- now Kotless can be deployed to any region
 * Default parameters in functions now back to working
 * Format of S3 resource arn in permissions
 * Deploy-time check of signatures of annotated functions

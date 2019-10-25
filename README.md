@@ -13,7 +13,11 @@ Its main focus lies in reducing the routine of serverless deployment creation an
 from the code of the application itself. 
 
 Kotless consists of two main parts:
-* Kotless DSL provides a way of defining serverless applications. It includes Post/Get annotations, lambda dispatcher, etc.;
+* DSL provides a way of defining serverless applications. There are two DSLs supported:
+    * **Planned for 0.1.2 version:** Ktor DSL &mdash; Ktor engine that will be introspected by Kotless. You will use standard Ktor syntax 
+      and Kotless will generate deployment for it.
+    * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
+      etc.
 * Kotless Gradle Plugin provides a way of deploying serverless application. It performs the tasks of generating Terraform 
   code from the application code and, subsequently, deploying it to AWS.
   
@@ -124,10 +128,16 @@ Kotless is in active development, so we are currently working on extending this 
 Any explanation becomes much better with a proper example.
 
 In the repository's `examples` folder, you can find example projects built with Kotless:
-* `kotless-site` &mdash; a site about Kotless written with Kotless ([site.kotless.io](https://site.kotless.io)). 
+* `kotless-site` &mdash; a site about Kotless written with Kotless DSL ([site.kotless.io](https://site.kotless.io)). 
 This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API
-* `kotless-shortener` &mdash; a simple URL shortener written with Kotless (see the result at [short.kotless.io](https://short.kotless.io)). 
+* `kotless-shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and Terraform extensions.
+
+Similar examples exist for Ktor DSL: 
+* `ktor-site` &mdash; a site about Kotless written with Ktor DSL ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
+This example demonstrates `static {...}` and `routing {...}`.
+* `ktor-shortener` &mdash; a simple URL shortener written with Ktor DSL (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
+This example demonstrates `routing { ... }` (dynamic routes), Permissions API (for DynamoDB access) and Terraform extensions.
 
 ## Want to know more?
 
