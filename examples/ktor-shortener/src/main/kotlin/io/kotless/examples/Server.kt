@@ -47,7 +47,7 @@ class Server : Kotless() {
                     call.respondText { "Non valid URL" }
                 } else {
                     val code = URLStorage.getByUrl(url) ?: URLStorage.createCode(url)
-                    call.respondText { "https://short.kotless.io/r?k=$code" }
+                    call.respondText { "https://ktor.short.kotless.io/r?k=$code" }
                 }
             }
         }

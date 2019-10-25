@@ -7,7 +7,7 @@ import io.kotless.dsl.lang.DynamoDBTable
 import io.kotless.examples.utils.RandomCode
 import org.slf4j.LoggerFactory
 
-private const val tableName: String = "short-url-table"
+private const val tableName: String = "ktor-short-url-table"
 
 @DynamoDBTable(tableName, PermissionLevel.ReadWrite)
 object URLStorage {

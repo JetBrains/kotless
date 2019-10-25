@@ -54,5 +54,13 @@ kotless {
     webapp {
         route53 = Route53("ktor.short", "kotless.io")
     }
+
+    extensions {
+        terraform {
+            files {
+                add(file("src/main/tf/extensions.tf"))
+            }
+        }
+    }
 }
 
