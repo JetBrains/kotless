@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
+import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.kotless.dsl.model.*
 import io.kotless.dsl.utils.Json
 import io.ktor.application.Application
@@ -51,6 +52,11 @@ abstract class Kotless : RequestStreamHandler {
                     val event = Json.parse(CloudWatch.serializer(), json)
                     if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
                         logger.info("Request is Scheduled Event")
+                        try {
+                            engine.environment.monitor.raise(LambdaWarming, engine.application)
+                        } catch (e: Throwable) {
+                            logger.error("One or more of the LambdaWarming handlers thrown an exception", e)
+                        }
                         return@runBlocking null
                     }
                 }

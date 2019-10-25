@@ -1,6 +1,8 @@
 package io.kotless.examples
 
 import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.lang.LambdaWarming
+import io.kotless.dsl.ktor.lang.event.events
 import io.kotless.examples.bootstrap.siteStatics
 import io.kotless.examples.page.FAQ.faq
 import io.kotless.examples.page.Introduction.introduction
@@ -28,6 +30,12 @@ class Server : Kotless() {
                 get("/faq") {
                     call.respondHtml { faq() }
                 }
+            }
+        }
+        
+        app.events {
+            subscribe(LambdaWarming) {
+                println("Lambda warming execution")
             }
         }
     }
