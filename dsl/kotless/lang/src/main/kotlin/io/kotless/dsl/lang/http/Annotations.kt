@@ -15,7 +15,7 @@ import io.kotless.MimeType
  * @param mime -- MimeType of payload.
  */
 @Target(AnnotationTarget.FUNCTION)
-annotation class Get(val path: String, val mime: MimeType = MimeType.JSON)
+annotation class Get(val path: String, val mime: MimeType = MimeType.HTML)
 
 /**
  * Post route of Kotless web application (dynamic function)
@@ -31,7 +31,7 @@ annotation class Get(val path: String, val mime: MimeType = MimeType.JSON)
  * @param mime -- MimeType of payload.
  */
 @Target(AnnotationTarget.FUNCTION)
-annotation class Post(val path: String, val mime: MimeType = MimeType.HTML)
+annotation class Post(val path: String, val mime: MimeType = MimeType.JSON)
 
 
 /**
