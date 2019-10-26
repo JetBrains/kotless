@@ -64,7 +64,7 @@ kotless {
             region = "us-east-1"
         }
     }
-    webapp(project) {
+    webapp {
         packages = setOf("com.example")
         route53 = Route53("kotless", "example.com")
     }
