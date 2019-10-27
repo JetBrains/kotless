@@ -8,20 +8,20 @@ import java.io.File
 
 fun Routing.siteStatics() {
     //There are used almost all possible definitions of static resources
-    static("css") {
-        staticRootFolder = File("src/main/static")
-        static {
-            files("css")
-        }
-    }
-    static("js") {
-        staticRootFolder = File("src/main/static")
-        static("scripts") {
-            file("highlight.pack.js", "js/highlight.pack.js")
-        }
-    }
+
     static {
         staticRootFolder = File("src/main/static")
+
+        static("css") {
+            files("css")
+        }
+
+        static("js") {
+            static("scripts") {
+                file("highlight.pack.js", "js/highlight.pack.js")
+            }
+        }
+
         file("favicon.apng")
     }
 }

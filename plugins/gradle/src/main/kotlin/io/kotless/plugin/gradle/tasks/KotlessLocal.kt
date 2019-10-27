@@ -7,7 +7,6 @@ import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils._local
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import org.gradle.api.DefaultTask
-import org.gradle.api.plugins.ApplicationPluginConvention
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.dependencies
 import java.io.File
@@ -37,9 +36,6 @@ open class KotlessLocal : DefaultTask() {
     @TaskAction
     fun generate() = with(myKotless.webapp.project(project)) {
         require(myKotless.config.dsl.type == DSLType.Ktor) { "Local runs are supported only for Ktor." }
-
-        val convention = convention.getPlugin(ApplicationPluginConvention::class.java)
-        convention.mainClassName = "io.kotless.dsl.ktor.MainKt"
 
         val local = LocalParser.parse(myKtSourceSet, configurations.getByName(kotless.config.configurationName).files.toSet())
 

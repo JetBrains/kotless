@@ -6,6 +6,7 @@ import io.kotless.plugin.gradle.tasks.*
 import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.ApplicationPluginConvention
 
 /**
  * Implementation of Kotless plugin
@@ -58,6 +59,8 @@ class KotlessPlugin : Plugin<Project> {
 
                     if (kotless.config.dsl.type == DSLType.Ktor) {
                         applyPluginSafely("application")
+
+                        convention.getPlugin(ApplicationPluginConvention::class.java).mainClassName = "io.kotless.dsl.ktor.MainKt"
 
                         configurations.create(localConfigurationName)
 

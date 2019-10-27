@@ -10,6 +10,9 @@ import org.jetbrains.kotlin.resolve.constants.TypedCompileTimeConstant
 import org.jetbrains.kotlin.resolve.constants.evaluate.ConstantExpressionEvaluator
 
 
+/** Use it in case of interaction with non-Kotlin code */
+fun KtCallExpression.getArgumentByIndexOrNull(index: Int): KtValueArgument? = valueArguments[index]
+
 fun KtCallExpression.getArgumentOrNull(name: String, binding: BindingContext): KtValueArgument? {
     val arg = valueArguments.find { it.name == name }
     if (arg != null) return arg

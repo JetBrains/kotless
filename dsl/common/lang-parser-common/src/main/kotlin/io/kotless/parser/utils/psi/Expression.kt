@@ -38,7 +38,7 @@ inline fun <reified Desc : DeclarationDescriptorWithSource, reified Elem : PsiEl
 fun KtElement.visit(context: BindingContext, body: (element: KtElement, previous: List<KtElement>) -> Boolean) {
     val stack = Stack<KtElement>()
     val previous = Stack<KtElement>()
-    stack.add(this)
+    stack.push(this)
 
     while (stack.isNotEmpty()) {
         val cur = stack.pop()
@@ -48,14 +48,13 @@ fun KtElement.visit(context: BindingContext, body: (element: KtElement, previous
             continue
         }
 
-        val next = body(cur, previous)
+        val next = body(cur, previous.reversed())
         if (!next || cur in previous) continue
 
         previous.add(cur)
-        stack.add(cur)
-        stack.addAll(cur.children.filterIsInstance<KtElement>())
-        if (cur is KtNameReferenceExpression) stack.addAll(cur.getTargets(context))
-
+        stack.push(cur)
+        cur.children.filterIsInstance<KtElement>().reversed().forEach { stack.push(it) }
+        if (cur is KtNameReferenceExpression) cur.getTargets(context).reversed().forEach { stack.push(it) }
     }
 }
 
