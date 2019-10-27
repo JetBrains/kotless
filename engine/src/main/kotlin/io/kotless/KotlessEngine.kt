@@ -2,18 +2,20 @@ package io.kotless
 
 import io.kotless.gen.Generator
 import io.kotless.opt.Optimizer
+import io.kotless.terraform.TFFile
 import java.io.File
 
 object KotlessEngine {
-    fun generate(schema: Schema): List<File> {
+    fun generate(schema: Schema): Set<TFFile> {
         val optimized = Optimizer.optimize(schema)
-        val files = Generator.generate(optimized)
-        return files.map { tfFile ->
-            schema.config.genDirectory.mkdir()
+        return Generator.generate(optimized)
+    }
 
-            File(schema.config.genDirectory, tfFile.nameWithExt).apply {
-                tfFile.write(this)
-            }
+    fun dump(genDirectory: File, files: Set<TFFile>) = files.map { tfFile ->
+        genDirectory.mkdir()
+
+        File(genDirectory, tfFile.nameWithExt).apply {
+            tfFile.write(this)
         }
     }
 }

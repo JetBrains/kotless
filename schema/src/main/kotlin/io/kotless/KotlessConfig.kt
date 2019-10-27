@@ -9,13 +9,11 @@ import java.io.File
  * @param bucket name of bucket Kotless will use to store all files
  * @param prefix name with which will be prepended all Kotless created entities
  * @param dsl configuration of DSL that will be used for Kotless application
- * @param genDirectory the local directory Kotless will use to store generated files
  * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
  */
 data class KotlessConfig(val bucket: String, val prefix: String,
                          val dsl: DSL,
-                         val genDirectory: File,
                          val terraform: Terraform,
                          val optimization: Optimization = Optimization()) : Visitable {
 

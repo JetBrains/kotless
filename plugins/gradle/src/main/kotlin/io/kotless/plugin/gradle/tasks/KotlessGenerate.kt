@@ -89,8 +89,10 @@ open class KotlessGenerate : DefaultTask() {
 
         val generated = KotlessEngine.generate(schema)
 
+        val files = KotlessEngine.dump(myGenDirectory, generated)
+
         for (file in myKotless.extensions.terraform.files.additional) {
-            require(generated.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
+            require(files.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
             FileUtils.copyFile(file, File(myGenDirectory, file.name))
         }
     }
