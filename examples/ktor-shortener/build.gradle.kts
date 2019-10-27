@@ -41,9 +41,9 @@ kotless {
         bucket = "eu.ktor-short.s3.ktls.aws.intellij.net"
         prefix = "ktor-short"
 
-        workDirectory = file("src/main/static")
-
-        dsl = DSLType.Ktor
+        dsl {
+            type = DSLType.Ktor
+        }
 
         terraform {
             profile = "kotless-jetbrains"

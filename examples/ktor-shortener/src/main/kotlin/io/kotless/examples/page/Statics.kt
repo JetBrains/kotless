@@ -1,17 +1,20 @@
 package io.kotless.examples.page
 
-import io.ktor.http.content.file
-import io.ktor.http.content.static
+import io.ktor.http.content.*
 import io.ktor.routing.Routing
+import java.io.File
 
 fun Routing.siteStatics() {
-    static("css") {
-        file("shortener.css", "css/shortener.css")
-    }
-    static("js") {
-        file("shortener.js", "js/shortener.js")
-    }
     static {
+        staticRootFolder = File("src/main/static")
+        
+        static("css") {
+            file("shortener.css", "css/shortener.css")
+        }
+        static("js") {
+            file("shortener.js", "js/shortener.js")
+        }
+        
         file("favicon.apng", "favicon.apng")
     }
 }
