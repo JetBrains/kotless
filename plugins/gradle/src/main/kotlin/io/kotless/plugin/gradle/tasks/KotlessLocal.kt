@@ -52,13 +52,11 @@ open class KotlessLocal : DefaultTask() {
             _local("io.kotless", "ktor-lang-local", version)
         }
 
-        val run = (tasks.getByName("run") as JavaExec).apply {
+        (tasks.getByName("run") as JavaExec).apply {
             classpath += files(_local().files)
 
             this.environment["KTOR_PORT"] = myKotless.extensions.local.port
             this.environment["CLASS_TO_START"] = local.entrypoint.qualifiedName.substringBefore("::")
         }
-
-        run.exec()
     }
 }

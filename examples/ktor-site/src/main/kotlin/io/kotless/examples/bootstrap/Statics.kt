@@ -3,21 +3,25 @@ package io.kotless.examples.bootstrap
 import io.ktor.http.content.*
 import io.ktor.routing.Routing
 import kotlinx.html.*
+import java.io.File
 
 
 fun Routing.siteStatics() {
     //There are used almost all possible definitions of static resources
     static("css") {
+        staticRootFolder = File("src/main/static")
         static {
             files("css")
         }
     }
     static("js") {
+        staticRootFolder = File("src/main/static")
         static("scripts") {
             file("highlight.pack.js", "js/highlight.pack.js")
         }
     }
     static {
+        staticRootFolder = File("src/main/static")
         file("favicon.apng")
     }
 }

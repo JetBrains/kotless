@@ -61,7 +61,9 @@ class KotlessPlugin : Plugin<Project> {
 
                         configurations.create(localConfigurationName)
 
-                        myCreate("local", KotlessLocal::class)
+                        myCreate("local", KotlessLocal::class) {
+                            dependsOn(tasks.getByName("classes"))
+                        }.finalizedBy("run")
                     }
                 }
             }
