@@ -13,7 +13,6 @@ class Webapp(project: Project) : Serializable {
     private val projectName: String = project.path
     internal fun project(project: Project): Project = project.project(projectName)
 
-
     internal val lambda: Lambda = Lambda()
     /** Optimizations applied during generation */
     @KotlessDSLTag

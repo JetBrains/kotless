@@ -22,6 +22,7 @@ class KotlessDSL(project: Project) : Serializable {
 
     internal val extensions: Extensions = Extensions()
 
+    /** Extensions for Kotless deployment pipeline */
     @KotlessDSLTag
     fun extensions(configure: Extensions.() -> Unit) {
         extensions.configure()

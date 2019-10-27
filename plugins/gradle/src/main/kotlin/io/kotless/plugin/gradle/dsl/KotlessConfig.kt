@@ -6,9 +6,7 @@ import org.gradle.api.Project
 import java.io.File
 import java.io.Serializable
 
-/**
- * Configuration of Kotless itself
- */
+/** Configuration of Kotless itself */
 @KotlessDSLTag
 class KotlessConfig(project: Project) : Serializable {
     /** Name of bucket Kotless will use to store all files */
@@ -34,6 +32,7 @@ class KotlessConfig(project: Project) : Serializable {
 
     internal val dsl: DSLConfig = DSLConfig(project)
 
+    /** Configuration of DSL used by Kotless */
     @KotlessDSLTag
     fun dsl(configure: DSLConfig.() -> Unit) {
         dsl.configure()
@@ -41,6 +40,7 @@ class KotlessConfig(project: Project) : Serializable {
 
     @KotlessDSLTag
     class DSLConfig(project: Project) : Serializable {
+        /** Type of DSL used by Kotless */
         lateinit var type: DSLType
 
         /**
