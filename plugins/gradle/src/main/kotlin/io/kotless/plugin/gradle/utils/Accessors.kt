@@ -6,6 +6,8 @@ import org.gradle.api.Task
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
+import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.accessors.runtime.addExternalModuleDependencyTo
 import org.gradle.kotlin.dsl.getByName
 import java.io.File
 import kotlin.reflect.KClass
@@ -29,3 +31,11 @@ internal fun <T : Task> TaskContainer.myCreate(name: String, klass: KClass<T>, c
 }
 
 internal fun Project.myShadowJar(name: String = "shadowJar"): ShadowJar = tasks.getByName(name) as ShadowJar
+
+const val localConfigurationName = "kotless-local"
+
+internal fun Project._local() = this.configurations.getByName(localConfigurationName)
+
+internal fun DependencyHandlerScope._local(group: String, name: String, version: String) {
+    addExternalModuleDependencyTo(this, localConfigurationName, group, name, version, null, null, null, null)
+}

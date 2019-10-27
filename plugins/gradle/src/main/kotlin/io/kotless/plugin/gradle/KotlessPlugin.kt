@@ -1,9 +1,9 @@
 package io.kotless.plugin.gradle
 
+import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.*
-import io.kotless.plugin.gradle.utils.applyPluginSafely
-import io.kotless.plugin.gradle.utils.myCreate
+import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -54,6 +54,14 @@ class KotlessPlugin : Plugin<Project> {
 
                             operation = TerraformOperation.Operation.DESTROY
                         }
+                    }
+
+                    if (kotless.config.dsl == DSLType.Ktor) {
+                        applyPluginSafely("application")
+
+                        configurations.create(localConfigurationName)
+
+                        myCreate("local", KotlessLocal::class)
                     }
                 }
             }

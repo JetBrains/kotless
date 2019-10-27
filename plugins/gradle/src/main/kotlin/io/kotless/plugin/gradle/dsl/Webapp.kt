@@ -31,11 +31,15 @@ class Webapp(project: Project) : Serializable {
 
         val environment: HashMap<String, String> = HashMap()
 
-        class KotlessDSL(val packages: Set<String>) : Serializable
+        @KotlessDSLTag
+        class KotlessDSLRuntime : Serializable {
+            lateinit var packages: Set<String>
+        }
 
         /** Setup configuration for Kotless DSL */
         @KotlessDSLTag
-        fun kotless(dsl: KotlessDSL) {
+        fun kotless(configure: KotlessDSLRuntime.() -> Unit) {
+            val dsl = KotlessDSLRuntime().apply(configure)
             environment[KotlessAppConfig.PACKAGE_ENV_NAME] = dsl.packages.joinToString(separator = ",")
         }
     }

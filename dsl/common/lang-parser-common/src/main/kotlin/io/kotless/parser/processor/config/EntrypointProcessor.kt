@@ -21,13 +21,18 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
             return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}", emptySet()))
         }
 
+        return Output(find(files, binding))
+    }
+
+    fun find(files: Set<KtFile>, binding: BindingContext): Lambda.Entrypoint {
         val entrypoint = ArrayList<Lambda.Entrypoint>()
         processClasses(files, binding) { klass, _ ->
             entrypoint.add(Lambda.Entrypoint("${klass.fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet()))
         }
 
+        require(entrypoint.size != 0) { "There should be a class inherited from ${RequestStreamHandler::class} in your app" }
         require(entrypoint.size == 1) { "There should be only one class inherited from ${RequestStreamHandler::class} in your app" }
 
-        return Output(entrypoint.single())
+        return entrypoint.single()
     }
 }

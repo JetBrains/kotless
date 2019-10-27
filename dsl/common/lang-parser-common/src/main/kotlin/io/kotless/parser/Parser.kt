@@ -8,11 +8,11 @@ import io.kotless.utils.TypedStorage
 import java.io.File
 
 /**
- * KotlessDslParser parses Kotlin code with Kotlin embeddable compiler looking
+ * Parser parses Kotlin code with Kotlin embeddable compiler looking
  * for Kotless DSL constructs.
  *
  * The result of parsing is a number of Lambdas and StaticResources and associated
- * with them Dynamic and Static routes
+ * with them Dynamic and Static routes.
  */
 abstract class Parser(val processors: Set<Processor<*>>) {
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
