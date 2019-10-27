@@ -1,10 +1,11 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-# 0.1.1 - 2019-10-?
+# 0.1.2 - 2019-10-?
 ## Added
 * Ktor DSL -- Ktor Engine and parser for it. Support dynamic and static routes, warming of lambda,
   granular permissions. Does not support Scheduled.
+* Add local run task for Ktor DSL -- now you can run server locally.
 * Support of all remaining HTTP methods in Kotless and Ktor DSL
 * Ktor examples: add shortener and site
 
