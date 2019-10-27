@@ -32,4 +32,16 @@ class Extensions : Serializable {
             }
         }
     }
+
+    internal val local = Local()
+
+    @KotlessDSLTag
+    class Local : Serializable {
+        var port: Int = 8080
+    }
+
+    @KotlessDSLTag
+    fun local(configure: Local.() -> Unit) {
+        local.configure()
+    }
 }

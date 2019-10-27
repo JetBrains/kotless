@@ -29,7 +29,7 @@ open class KotlessGenerate : DefaultTask() {
     }
 
     @get:Input
-    val dsl: KotlessDSL
+    val myKotless: KotlessDSL
         get() = project.kotless
 
     @get:InputFiles
@@ -43,19 +43,19 @@ open class KotlessGenerate : DefaultTask() {
         get() = project.kotless.extensions.terraform.files.additional
 
     @get:OutputDirectory
-    val genDir: File
+    val myGenDirectory: File
         get() = project.kotless.config.genDirectory
 
     @TaskAction
     fun generate() {
-        genDir.deleteRecursively()
+        myGenDirectory.deleteRecursively()
 
-        val config = dsl.toSchema()
+        val config = myKotless.toSchema()
 
         val lambdas = TypedStorage<Lambda>()
         val statics = TypedStorage<StaticResource>()
 
-        val webapp = dsl.webapp.let { webapp ->
+        val webapp = myKotless.webapp.let { webapp ->
             val project = webapp.project(project)
             val sources = project.myKtSourceSet
 
@@ -65,7 +65,7 @@ open class KotlessGenerate : DefaultTask() {
 
             val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.environment)
 
-            val result = when (dsl.config.dsl) {
+            val result = when (myKotless.config.dsl.type) {
                 DSLType.Kotless -> KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
                 DSLType.Ktor -> KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
             }
@@ -89,9 +89,9 @@ open class KotlessGenerate : DefaultTask() {
 
         val generated = KotlessEngine.generate(schema)
 
-        for (file in dsl.extensions.terraform.files.additional) {
+        for (file in myKotless.extensions.terraform.files.additional) {
             require(generated.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
-            FileUtils.copyFile(file, File(genDir, file.name))
+            FileUtils.copyFile(file, File(myGenDirectory, file.name))
         }
     }
 }

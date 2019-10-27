@@ -17,9 +17,6 @@ class KotlessConfig(project: Project) : Serializable {
     /** Prefix with which all created resources will be prepended */
     var prefix: String = ""
 
-    /** Type of DSL that is used for Kotless application */
-    lateinit var dsl: DSLType
-
     /**
      * A local directory Kotless will use to store needed binaries (like terraform)
      * By default it is `${buildDir}/kotless-bin`
@@ -32,14 +29,33 @@ class KotlessConfig(project: Project) : Serializable {
      */
     var genDirectory = File(project.buildDir, "kotless-gen")
 
-    /**
-     * Directory Kotless considers as root for File resolving
-     * By default it is `projectDir`
-     */
-    var workDirectory = project.projectDir as File
-
     /** Name of configuration to use as a classpath */
     var configurationName = "compileClasspath"
+
+    internal val dsl: DSLConfig = DSLConfig(project)
+
+    @KotlessDSLTag
+    fun dsl(configure: DSLConfig.() -> Unit) {
+        dsl.configure()
+    }
+
+    @KotlessDSLTag
+    class DSLConfig(project: Project) : Serializable {
+        lateinit var type: DSLType
+
+        /**
+         * Directory Kotless considers as root for File resolving
+         *
+         * Can be used only for Kotless DSL
+         *
+         * By default it is `projectDir`
+         */
+        var workDirectory = project.projectDir as File
+            set(value) {
+                require(type == DSLType.Kotless) { "Work directory cannot be reassigned for Ktor" }
+                field = value
+            }
+    }
 
 
     internal val terraform: Terraform = Terraform()

@@ -26,7 +26,7 @@ open class KotlessLocal : DefaultTask() {
     }
 
     @get:Input
-    val dsl: KotlessDSL
+    val myKotless: KotlessDSL
         get() = project.kotless
 
     @get:InputFiles
@@ -35,15 +35,15 @@ open class KotlessLocal : DefaultTask() {
         get() = project.myKtSourceSet.toSet()
 
     @TaskAction
-    fun generate() = with(dsl.webapp.project(project)) {
-        require(dsl.config.dsl == DSLType.Ktor) { "Local runs are supported only for Ktor." }
+    fun generate() = with(myKotless.webapp.project(project)) {
+        require(myKotless.config.dsl.type == DSLType.Ktor) { "Local runs are supported only for Ktor." }
 
         val convention = convention.getPlugin(ApplicationPluginConvention::class.java)
         convention.mainClassName = "io.kotless.dsl.ktor.MainKt"
 
         val local = LocalParser.parse(myKtSourceSet, configurations.getByName(kotless.config.configurationName).files.toSet())
 
-        val version = configurations.getByName(dsl.config.configurationName).allDependencies.find { it.group == "io.kotless" && it.name == "ktor-lang" }?.version
+        val version = configurations.getByName(myKotless.config.configurationName).allDependencies.find { it.group == "io.kotless" && it.name == "ktor-lang" }?.version
 
         require(version != null) { "Cannot find ktor-lang library in dependencies. It is required for ktor-lang" }
 
@@ -55,7 +55,7 @@ open class KotlessLocal : DefaultTask() {
         val run = (tasks.getByName("run") as JavaExec).apply {
             classpath += files(_local().files)
 
-            this.environment["KTOR_PORT"] = 8080
+            this.environment["KTOR_PORT"] = myKotless.extensions.local.port
             this.environment["CLASS_TO_START"] = local.entrypoint.qualifiedName.substringBefore("::")
         }
 

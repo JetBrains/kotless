@@ -15,5 +15,3 @@ internal var Project.kotless: KotlessDSL
 fun Project.kotless(configure: KotlessDSL.() -> Unit) {
     kotless = KotlessDSL(this).apply(configure)
 }
-
-

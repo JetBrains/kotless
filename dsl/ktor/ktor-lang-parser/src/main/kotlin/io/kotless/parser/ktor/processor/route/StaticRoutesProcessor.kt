@@ -30,13 +30,13 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                                 val remotePath = element.getArgument("remotePath", binding).asString(binding)
                                 val localPath = element.getArgumentOrNull("localPath", binding)?.asString(binding) ?: remotePath
 
-                                val file = File(context.config.workDirectory, localPath)
+                                val file = File(context.config.dsl.workDirectory, localPath)
                                 val path = URIPath(outer, remotePath)
 
                                 createResource(file, path, context)
                             }
                             "io.ktor.http.content.files" -> {
-                                val folder = File(context.config.workDirectory, element.getArgument("folder", binding).asString(binding))
+                                val folder = File(context.config.dsl.workDirectory, element.getArgument("folder", binding).asString(binding))
 
                                 val allFiles = folder.listFiles() ?: emptyArray()
 

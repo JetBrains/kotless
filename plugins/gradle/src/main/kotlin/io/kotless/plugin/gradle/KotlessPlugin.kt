@@ -56,7 +56,7 @@ class KotlessPlugin : Plugin<Project> {
                         }
                     }
 
-                    if (kotless.config.dsl == DSLType.Ktor) {
+                    if (kotless.config.dsl.type == DSLType.Ktor) {
                         applyPluginSafely("application")
 
                         configurations.create(localConfigurationName)
