@@ -1,6 +1,5 @@
 import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.Webapp
-import io.kotless.plugin.gradle.dsl.Webapp.Lambda.KotlessDSL
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
@@ -31,9 +30,11 @@ kotless {
         bucket = "eu.site.s3.ktls.aws.intellij.net"
         prefix = "site"
 
-        workDirectory = file("src/main/static")
+        dsl {
+            type = DSLType.Kotless
 
-        dsl = DSLType.Kotless
+            workDirectory = file("src/main/static")
+        }
 
         terraform {
             profile = "kotless-jetbrains"
@@ -43,7 +44,9 @@ kotless {
 
     webapp {
         lambda {
-            kotless(KotlessDSL(setOf("io.kotless.examples")))
+            kotless {
+                packages = setOf("io.kotless.examples")
+            }
         }
 
         route53 = Route53("site", "kotless.io")

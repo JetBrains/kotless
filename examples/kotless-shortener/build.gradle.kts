@@ -34,9 +34,11 @@ kotless {
         bucket = "eu.short.s3.ktls.aws.intellij.net"
         prefix = "short"
 
-        workDirectory = file("src/main/static")
+        dsl {
+            type = DSLType.Kotless
 
-        dsl = DSLType.Kotless
+            workDirectory = file("src/main/static")
+        }
 
         terraform {
             profile = "kotless-jetbrains"
@@ -46,7 +48,9 @@ kotless {
 
     webapp {
         lambda {
-            kotless(Webapp.Lambda.KotlessDSL(setOf("io.kotless.examples")))
+            kotless {
+                packages = setOf("io.kotless.examples")
+            }
         }
 
         route53 = Route53("short", "kotless.io")
