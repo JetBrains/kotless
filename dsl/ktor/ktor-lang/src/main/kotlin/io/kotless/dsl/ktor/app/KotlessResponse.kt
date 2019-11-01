@@ -8,6 +8,7 @@ import io.ktor.http.content.OutgoingContent
 import io.ktor.response.ResponseHeaders
 import io.ktor.server.engine.BaseApplicationResponse
 import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.io.*
 import kotlinx.io.core.readBytes
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
@@ -38,6 +39,10 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
     override suspend fun respondOutgoingContent(content: OutgoingContent) {
         try {
             super.respondOutgoingContent(content)
+        } catch (e: CancellationException) {
+            coroutineScope { cancel(e) }
+            output.cancel(e)
+            throw e
         } finally {
             output.close()
         }
