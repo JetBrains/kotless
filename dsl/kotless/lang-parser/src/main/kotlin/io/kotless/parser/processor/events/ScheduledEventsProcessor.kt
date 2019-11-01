@@ -10,6 +10,7 @@ import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.annotation.getValue
+import io.kotless.parser.utils.psi.withExceptionHeader
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -25,8 +26,12 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
         processFunctions(files, binding) { func, entry, _ ->
-            require(func.fqName != null) { "@Scheduled cannot be applied to anonymous function" }
-            require(func.valueParameters.isEmpty()) { "@Scheduled cannot be applied to ${func.fqName!!.asString()} since it has parameters" }
+            require(func.fqName != null) {
+                func.withExceptionHeader("@Scheduled cannot be applied to anonymous function")
+            }
+            require(func.valueParameters.isEmpty()) {
+                func.withExceptionHeader("@Scheduled cannot be applied to ${func.fqName!!.asString()} since it has parameters")
+            }
 
             val routePermissions = PermissionsProcessor.process(func, binding) + permissions
 

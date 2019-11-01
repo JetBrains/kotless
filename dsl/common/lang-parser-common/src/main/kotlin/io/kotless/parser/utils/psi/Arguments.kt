@@ -24,22 +24,18 @@ fun KtCallExpression.getArgumentOrNull(name: String, binding: BindingContext): K
 fun KtCallExpression.getArgument(name: String, binding: BindingContext): KtValueArgument {
     val arg = getArgumentOrNull(name, binding)
 
-    require(arg != null) {
-        "Error in expression ${this}: there is no argument with name $name"
-    }
+    require(arg != null) { withExceptionHeader("there is no argument with name $name") }
 
     return arg
 }
 
 fun KtValueArgument.asString(binding: BindingContext): String {
     val expr = this.getArgumentExpression()
-    require(expr != null) {
-        "Error in argument $this: argument is not an expression"
-    }
+    require(expr != null) { withExceptionHeader("argument is not an expression") }
 
     val value = ConstantExpressionEvaluator.getConstant(expr, binding)
     require(value is TypedCompileTimeConstant && value.type.nameIfStandardType?.identifier == "String") {
-        "Error in argument $this: argument should be compile-time constant string"
+        withExceptionHeader("argument should be compile-time constant string")
     }
 
     return value.constantValue.value as String

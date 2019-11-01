@@ -7,6 +7,7 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.utils.psi.annotation.getEnumValue
 import io.kotless.parser.utils.psi.annotation.getURIPath
 import io.kotless.parser.utils.psi.getTypeFqName
+import io.kotless.parser.utils.psi.withExceptionHeader
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -24,16 +25,16 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             val mime = entry.getEnumValue(binding, StaticGet::mime)!!
 
             require(variable.getTypeFqName(binding).toString() == File::class.qualifiedName) {
-                "Variable ${variable.fqName.toString()} is @StaticGet, but its type is not java.io.File"
+                variable.withExceptionHeader("Variable ${variable.fqName.toString()} is @StaticGet, but its type is not java.io.File")
             }
             require(variable.initializer is KtCallExpression) {
-                "Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")"
+                variable.withExceptionHeader("Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")")
             }
 
             val arguments = (variable.initializer as KtCallExpression).valueArguments
 
             require(arguments.size == 1) {
-                "Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")"
+                variable.withExceptionHeader("Variable ${variable.fqName.toString()} is @StaticGet, but is not created via File(\"...\")")
             }
 
             val file = File(context.config.dsl.workDirectory, arguments.single().text.trim('"'))

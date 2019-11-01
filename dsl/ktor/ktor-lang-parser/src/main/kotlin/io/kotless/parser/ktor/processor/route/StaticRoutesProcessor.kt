@@ -79,7 +79,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                             val right = el.getChildAt<KtCallExpression>(2)
 
                             require(right?.getFqName(binding) == "java.io.File.<init>") {
-                                "staticRootFolder should be assigned with java.io.File(...) constructor"
+                                el.withExceptionHeader("staticRootFolder should be assigned with java.io.File(...) constructor")
                             }
 
                             right!!.getArgumentByIndexOrNull(0)?.asString(binding)?.let { value ->
