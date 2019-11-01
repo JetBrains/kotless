@@ -12,7 +12,7 @@ import java.io.File
  * for static content beyond specified URI.
  *
  * For example, it can be used to server JS
- * and CSS files
+ * and CSS files.
  *
  * @param bucket name of bucket where file will be placed
  * @param path URI path under which this resource will be located

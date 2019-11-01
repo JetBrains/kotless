@@ -2,6 +2,7 @@
 
 ## 0.1.*
 * Extension for Cognito authentication
+* Support of Azure
 * DSL libraries for S3, DynamoDB, SSM at least
 * Event handlers - functions as handlers for different AWS events
 
