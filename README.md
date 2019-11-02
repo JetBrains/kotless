@@ -14,7 +14,7 @@ from the code of the application itself.
 
 Kotless consists of two main parts:
 * DSL provides a way of defining serverless applications. There are two DSLs supported:
-    * **Planned for 0.1.2 version:** Ktor DSL &mdash; Ktor engine that will be introspected by Kotless. You will use standard Ktor syntax 
+    * Ktor DSL &mdash; Ktor engine that will be introspected by Kotless. You will use standard Ktor syntax 
       and Kotless will generate deployment for it.
     * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
@@ -35,7 +35,9 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.1")
+    implementation("io.kotless", "lang", "0.1.2")
+    //or for Ktor
+    //implementation("io.kotless", "ktor-lang", "0.1.2")
 }
 ```
 
@@ -45,7 +47,7 @@ Secondly, set up Kotless Gradle plugin. You need to apply the plugin:
 
 ```kotlin
 plugins {
-    id("io.kotless") version "0.1.1" apply true
+    id("io.kotless") version "0.1.2" apply true
     
     //Version of Kotlin should 1.3.50+
     kotlin("jvm") version "1.3.50" apply true
@@ -58,31 +60,45 @@ Then you just set up Kotless in your `build.gradle.kts`. It's rather simple:
 kotless {
     config {
         bucket = "kotless.s3.example.com"
-        workDirectory = File(project.projectDir, "src/main/static")
+        
+        dsl {
+            type = DSLType.Kotless
+            //or for Ktor
+            //type = DSLType.Ktor
+        }
+
         terraform {
             profile = "example"
             region = "us-east-1"
         }
     }
     webapp {
-        packages = setOf("com.example")
         route53 = Route53("kotless", "example.com")
+
+        //configuration of lambda created
+        lambda {            
+            //needed only for Kotless DSL
+            kotless {
+                //Define packages in which scan for routes should be performed
+                packages = setOf("io.kotless.examples")
+            }
+        }
     }
 }
 ```
 
 Here we set up the config of Kotless itself:
 * the bucket, which will be used to store lambdas and configs;
-* the working directory, against which static resources will be resolved;
+* type of DSL that is used;
 * Terraform configuration with a name of the profile to access AWS.
 
 Then we set up webapp &mdash; a specific application to deploy: 
-* a set of packages that should be scanned for Kotless DSL annotations;
-* Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS record).
+* Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS record);
+* in case of Kotless DSL &mdash; a set of packages that should be scanned for Kotless DSL annotations.
 
 And that's the whole setup!
 
-Now you can create you first serverless application:
+Now you can create you first serverless application with Kotless DSL:
 
 ```kotlin
 
@@ -93,6 +109,20 @@ fun gettingStartedPage() = html {
     }
 }
 ```
+
+Or with Ktor:
+
+```kotlin
+class Server : Kotless() {
+    override fun prepare(app: Application) {
+        app.routing {
+            get("/") {
+                call.respondText { "Hello World!" }
+            }
+        }
+    }
+}
+``` 
 
 *HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency*
 
