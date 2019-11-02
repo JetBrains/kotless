@@ -72,6 +72,7 @@ kotless {
             region = "us-east-1"
         }
     }
+
     webapp {
         route53 = Route53("kotless", "example.com")
 
