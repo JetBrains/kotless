@@ -16,7 +16,7 @@ publishJar {
         username = "tanvd"
         repository = "io.kotless"
         info {
-            description = "Kotless DSL"
+            description = "Ktor DSL"
             githubRepo = "https://github.com/JetBrains/kotless"
             vcsUrl = "https://github.com/JetBrains/kotless"
             labels.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))

@@ -1,7 +1,7 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-# 0.1.2 - 2019-10-?
+# 0.1.2 - 2019-11-03
 ## Added
 * Ktor DSL -- Ktor Engine and parser for it. Support dynamic and static routes, warming of lambda,
   granular permissions. Does not support Scheduled.

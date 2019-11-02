@@ -4,14 +4,14 @@ import io.kotless.plugin.gradle.dsl.kotless
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless"
-version = "0.1.2-SNAPSHOT"
+version = "0.1.2"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.2-SNAPSHOT" apply true
+    id("io.kotless") version "0.1.2" apply true
 }
 
 repositories {
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "ktor-lang", "0.1.2-SNAPSHOT")
+    implementation("io.kotless", "ktor-lang", "0.1.2")
     implementation("io.ktor", "ktor-html-builder", "1.2.5")
 }
 
