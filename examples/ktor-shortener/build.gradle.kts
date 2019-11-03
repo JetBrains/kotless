@@ -15,7 +15,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
