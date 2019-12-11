@@ -1,5 +1,4 @@
 import io.kotless.DSLType
-import io.kotless.plugin.gradle.dsl.Webapp
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 

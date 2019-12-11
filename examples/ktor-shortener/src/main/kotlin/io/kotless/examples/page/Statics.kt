@@ -11,6 +11,7 @@ fun Routing.siteStatics() {
         static("css") {
             file("shortener.css", "css/shortener.css")
         }
+
         static("js") {
             file("shortener.js", "js/shortener.js")
         }

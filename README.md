@@ -46,11 +46,16 @@ This gives you access to Kotless DSL annotations in your code and sets up Lambda
 Secondly, set up Kotless Gradle plugin. You need to apply the plugin:
 
 ```kotlin
+//Imports needed for this example
+import io.kotless.DSLType
+import io.kotless.plugin.gradle.dsl.Webapp.Route53
+import io.kotless.plugin.gradle.dsl.kotless
+
 plugins {
-    id("io.kotless") version "0.1.2" apply true
-    
     //Version of Kotlin should 1.3.50+
     kotlin("jvm") version "1.3.50" apply true
+
+    id("io.kotless") version "0.1.2" apply true
 }
 ```
 
