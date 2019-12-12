@@ -27,6 +27,8 @@ class KotlessPlugin : Plugin<Project> {
 
             configurations.create(myLocalConfigurationName)
 
+            kotless = KotlessDSL(this)
+
             with(tasks) {
                 val download = myCreate<TerraformDownloadTask>("download_terraform")
 
