@@ -11,7 +11,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.io.*
 import kotlinx.io.core.readBytes
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -48,7 +47,7 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
         }
     }
 
-    override suspend fun respondUpgrade(upgrade: OutgoingContent.ProtocolUpgrade) = throw NotImplementedException()
+    override suspend fun respondUpgrade(upgrade: OutgoingContent.ProtocolUpgrade) = throw NotImplementedError()
 
     override suspend fun responseChannel() = output
 
