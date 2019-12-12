@@ -47,7 +47,7 @@ class KotlessConfig(project: Project) : Serializable {
     @KotlessDSLTag
     class DSLConfig(project: Project) : Serializable {
         /** Type of DSL used by Kotless */
-        lateinit var type: DSLType
+        var type: DSLType = DSLType.Kotless
 
         /**
          * Directory Kotless considers as root for File resolving
