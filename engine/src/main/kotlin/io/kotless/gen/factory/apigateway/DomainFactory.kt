@@ -14,6 +14,7 @@ object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Output
     data class Output(val domain_name: String, val zone_id: String)
 
     override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
+        && context.webapp.route53 != null
         && context.output.check(context.webapp.route53!!, ZoneFactory)
         && context.output.check(context.webapp.route53!!, CertificateFactory)
         && context.output.check(context.webapp.api.deployment, DeploymentFactory)
