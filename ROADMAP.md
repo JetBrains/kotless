@@ -2,7 +2,9 @@
 
 ## 0.1.3
 * Support of dynamic entrypoints in Ktor
+    * Support new mode -- map everything using catch-all path variables
 * Support deployment without Route53 DNS record
+    * Support correct work with stages
 
 ## 0.1.*
 * Extension for Cognito authentication
