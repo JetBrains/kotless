@@ -9,6 +9,7 @@ import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.eval
 import io.kotless.terraform.functions.timestamp
+import io.kotless.terraform.infra.TFOutput
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
 
 object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, DeploymentFactory.Output> {
@@ -38,6 +39,9 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
             }
         }
 
-        return GenerationFactory.GenerationResult(Output(deployment::stage_name.ref), deployment)
+        val url = context.webapp.route53?.fqdn?.let { "https://$it" } ?: deployment::invoke_url.ref
+        val output = TFOutput(context.names.tf("application", "url"), url)
+
+        return GenerationFactory.GenerationResult(Output(deployment::stage_name.ref), deployment, output)
     }
 }
