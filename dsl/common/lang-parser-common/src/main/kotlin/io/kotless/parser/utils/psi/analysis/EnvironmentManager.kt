@@ -2,6 +2,7 @@ package io.kotless.parser.utils.psi.analysis
 
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -25,6 +26,8 @@ import java.io.File
 object EnvironmentManager {
     /** Create KotlinCoreEnvironment with specified classpath */
     fun create(libraries: Set<File>): KotlinCoreEnvironment {
+        setIdeaIoUseFallback()
+
         val configuration = CompilerConfiguration().apply {
             addJvmClasspathRoots(PathUtil.getJdkClassesRootsFromCurrentJre() + libraries)
             put(CommonConfigurationKeys.MODULE_NAME, DEFAULT_MODULE_NAME)
