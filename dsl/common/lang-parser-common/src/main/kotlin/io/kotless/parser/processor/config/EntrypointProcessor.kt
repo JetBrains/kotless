@@ -6,6 +6,7 @@ import io.kotless.Lambda
 import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -27,12 +28,18 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     fun find(files: Set<KtFile>, binding: BindingContext): Lambda.Entrypoint {
         val entrypoint = ArrayList<Lambda.Entrypoint>()
         processClasses(files, binding) { klass, _ ->
-            entrypoint.add(Lambda.Entrypoint("${klass.fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet()))
+            entrypoint.add(klass.makeLambdaEntrypoint())
+        }
+        processObjects(files, binding) { klass, _ ->
+            entrypoint.add(klass.makeLambdaEntrypoint())
         }
 
-        require(entrypoint.size != 0) { "There should be a class inherited from ${RequestStreamHandler::class} in your app" }
-        require(entrypoint.size == 1) { "There should be only one class inherited from ${RequestStreamHandler::class} in your app" }
+        require(entrypoint.size != 0) { "There should be a class or object inherited from ${RequestStreamHandler::class} in your app" }
+        require(entrypoint.size == 1) { "There should be only one class or object inherited from ${RequestStreamHandler::class} in your app" }
 
         return entrypoint.single()
     }
+
+    private fun KtClassOrObject.makeLambdaEntrypoint() =
+        Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet())
 }
