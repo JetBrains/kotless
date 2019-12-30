@@ -13,15 +13,15 @@ import java.io.File
 import kotlin.reflect.KClass
 
 //Generated accessors to use in a plugin
-internal inline fun <reified T : Any> Project.extByName(name: String): T = extensions.getByName<T>(name)
+internal inline fun <reified T : Any> Project.myExtByName(name: String): T = extensions.getByName<T>(name)
 
-internal inline fun <reified T : Any> Project.ext(name: String) = myExt[name] as T
+internal inline fun <reified T : Any> Project.myExt(name: String) = myExt[name] as T
 
 internal val Project.myExt: ExtraPropertiesExtension
-    get() = extByName("ext")
+    get() = myExtByName("ext")
 
 internal val Project.mySourceSets: SourceSetContainer
-    get() = extByName("sourceSets")
+    get() = myExtByName("sourceSets")
 
 internal val Project.myKtSourceSet: Set<File>
     get() = mySourceSets.asMap["main"]!!.allSource.files.filter { it.extension == "kt" }.toSet()
@@ -32,10 +32,10 @@ internal fun <T : Task> TaskContainer.myCreate(name: String, klass: KClass<T>, c
 
 internal fun Project.myShadowJar(name: String = "shadowJar"): ShadowJar = tasks.getByName(name) as ShadowJar
 
-const val localConfigurationName = "kotless-local"
+internal const val myLocalConfigurationName = "kotless-local"
 
-internal fun Project._local() = this.configurations.getByName(localConfigurationName)
+internal fun Project.myLocal() = this.configurations.getByName(myLocalConfigurationName)
 
-internal fun DependencyHandlerScope._local(group: String, name: String, version: String) {
-    addExternalModuleDependencyTo(this, localConfigurationName, group, name, version, null, null, null, null)
+internal fun DependencyHandlerScope.myLocal(group: String, name: String, version: String) {
+    addExternalModuleDependencyTo(this, myLocalConfigurationName, group, name, version, null, null, null, null)
 }

@@ -62,7 +62,7 @@ class KotlessPlugin : Plugin<Project> {
 
                         convention.getPlugin(ApplicationPluginConvention::class.java).mainClassName = "io.kotless.dsl.ktor.MainKt"
 
-                        configurations.create(localConfigurationName)
+                        configurations.create(myLocalConfigurationName)
 
                         myCreate("local", KotlessLocal::class) {
                             dependsOn(tasks.getByName("classes"))

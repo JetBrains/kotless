@@ -1,11 +1,10 @@
 package io.kotless.plugin.gradle.dsl
 
-import io.kotless.plugin.gradle.utils.ext
 import io.kotless.plugin.gradle.utils.myExt
 import org.gradle.api.Project
 
 internal var Project.kotless: KotlessDSL
-    get() = this.ext("kotless")
+    get() = this.myExt("kotless")
     set(value) {
         this.myExt["kotless"] = value
     }

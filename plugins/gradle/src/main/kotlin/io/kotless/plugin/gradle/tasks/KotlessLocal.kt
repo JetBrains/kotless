@@ -4,7 +4,7 @@ import io.kotless.DSLType
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils._local
+import io.kotless.plugin.gradle.utils.myLocal
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
@@ -45,11 +45,11 @@ open class KotlessLocal : DefaultTask() {
 
 
         dependencies {
-            _local("io.kotless", "ktor-lang-local", version)
+            myLocal("io.kotless", "ktor-lang-local", version)
         }
 
         (tasks.getByName("run") as JavaExec).apply {
-            classpath += files(_local().files)
+            classpath += files(myLocal().files)
 
             this.environment["KTOR_PORT"] = myKotless.extensions.local.port
             this.environment["CLASS_TO_START"] = local.entrypoint.qualifiedName.substringBefore("::")

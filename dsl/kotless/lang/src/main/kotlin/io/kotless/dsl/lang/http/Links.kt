@@ -13,7 +13,13 @@ val KProperty0<File>.href
 
 /** Get path of the dynamic route. */
 val KFunction<*>.href
-    get() = this.findAnnotation<Get>()?.path ?: this.findAnnotation<Post>()!!.path
+    get() = this.findAnnotation<Get>()?.path
+        ?: this.findAnnotation<Post>()?.path
+        ?: this.findAnnotation<Put>()?.path
+        ?: this.findAnnotation<Patch>()?.path
+        ?: this.findAnnotation<Delete>()?.path
+        ?: this.findAnnotation<Head>()?.path
+        ?: this.findAnnotation<Options>()?.path!!
 
 fun Function0<*>.href() = (this as KFunction<*>).href
 
