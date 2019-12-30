@@ -37,6 +37,7 @@ data class HttpRequest(
 
     @Serializable
     data class RequestContext(
+        val resourcePath: String,
         val path: String,
         val accountId: String,
         val resourceId: String,
@@ -46,6 +47,9 @@ data class HttpRequest(
         val requestTimeEpoch: Long,
         val domainName: String
     ) {
+        //Path to stage is calculated as full path minus path to resource and first /
+        val stagePath = path.dropLast(resourcePath.length - 1)
+
         @Serializable
         data class RequestIdentity(val sourceIp: String, val userAgent: String)
     }

@@ -13,6 +13,7 @@ data class URIPath(var parts: Iterable<String>) {
     constructor(path: String) : this(path.split("/"))
 
     override fun toString() = parts.joinToString(separator = "/")
+    fun toAbsoluteString() = parts.joinToString(prefix = "/", separator = "/")
 }
 
 fun Iterable<String>.toURIPath() = URIPath(this)
