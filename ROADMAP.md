@@ -1,5 +1,9 @@
 # Kotless roadmap
 
+## 0.1.3
+* Support of dynamic entrypoints in Ktor
+* Support deployment without Route53 DNS record
+
 ## 0.1.*
 * Extension for Cognito authentication
 * Support of Azure
