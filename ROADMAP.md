@@ -1,7 +1,8 @@
 # Kotless roadmap
 
 ## 0.1.3
-* Support local start for Kotless
+* Support @Scheduled feature for local deployments
+* Use AWS Local Stack for mocking of AWS services during local start
 * Support of dynamic entrypoints in Ktor
     * Support new mode -- map everything using catch-all path variables
 
