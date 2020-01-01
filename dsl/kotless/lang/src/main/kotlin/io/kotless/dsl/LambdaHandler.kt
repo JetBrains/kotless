@@ -27,7 +27,7 @@ class LambdaHandler : RequestStreamHandler {
         private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)
     }
 
-    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
+    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context?) {
         val response = try {
             val jsonRequest = input.bufferedReader().use { it.readText() }
 

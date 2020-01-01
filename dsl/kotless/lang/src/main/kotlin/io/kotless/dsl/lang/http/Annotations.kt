@@ -105,7 +105,6 @@ annotation class Head(val path: String, val mime: MimeType = MimeType.JSON)
 annotation class Options(val path: String, val mime: MimeType = MimeType.JSON)
 
 
-
 /**
  * Static get route of Kotless web application (static resources).
  *
@@ -125,6 +124,6 @@ annotation class Options(val path: String, val mime: MimeType = MimeType.JSON)
  * @param path -- URI path for this static file.
  * @param mime -- MimeType of payload.
  */
-@Target(AnnotationTarget.PROPERTY)
+@Target(AnnotationTarget.FIELD)
 annotation class StaticGet(val path: String, val mime: MimeType)
 

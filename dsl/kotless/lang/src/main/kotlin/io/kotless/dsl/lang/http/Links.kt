@@ -9,10 +9,11 @@ import java.net.URI
 import java.net.URLEncoder
 import kotlin.reflect.*
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.jvm.javaField
 
 /** Get path of the static route. */
 val KProperty0<File>.href
-    get() = this.findAnnotation<StaticGet>()!!.path.toAbsoluteHref()
+    get() = this.javaField!!.getAnnotation(StaticGet::class.java).path
 
 /** Get path of the dynamic route. */
 val KFunction<*>.href

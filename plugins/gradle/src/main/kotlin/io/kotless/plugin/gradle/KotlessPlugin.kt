@@ -7,6 +7,7 @@ import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ApplicationPluginConvention
+import org.gradle.kotlin.dsl.getPlugin
 
 /**
  * Implementation of Kotless plugin
@@ -23,6 +24,7 @@ class KotlessPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             applyPluginSafely("com.github.johnrengelman.shadow")
+            applyPluginSafely("application")
 
             with(tasks) {
                 val shadowJar = getByName("shadowJar")
@@ -57,12 +59,13 @@ class KotlessPlugin : Plugin<Project> {
                         }
                     }
 
-                    if (kotless.config.dsl.type == DSLType.Ktor) {
-                        applyPluginSafely("application")
-
-                        convention.getPlugin(ApplicationPluginConvention::class.java).mainClassName = "io.kotless.dsl.ktor.MainKt"
-
+                    run {
                         configurations.create(myLocalConfigurationName)
+
+                        convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
+                            DSLType.Kotless -> "io.kotless.local.MainKt"
+                            DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
+                        }
 
                         myCreate("local", KotlessLocal::class) {
                             dependsOn(tasks.getByName("classes"))

@@ -10,7 +10,7 @@ plugins {
 
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.2" apply true
+    id("io.kotless") version "0.1.3" apply true
 }
 
 repositories {
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.2")
+    implementation("io.kotless", "lang", "0.1.3")
 
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")

@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.kotlinFunction
 
-internal object ReflectionScanner {
+object ReflectionScanner {
     private val reflections by lazy {
         val configurationBuilder = ConfigurationBuilder()
         Reflections(configurationBuilder
@@ -20,8 +20,18 @@ internal object ReflectionScanner {
             .filterInputsBy { file: String? ->
                 KotlessAppConfig.packages.any { pckg -> file?.startsWith(pckg) ?: false }
             }
-            .setScanners(MethodAnnotationsScanner(), TypeAnnotationsScanner(), SubTypesScanner())
+            .setScanners(MethodAnnotationsScanner(), TypeAnnotationsScanner(), SubTypesScanner(), FieldAnnotationsScanner())
         )
+    }
+
+    inline fun <reified T : Annotation, reified E : Any> fieldsWithAnnotation() = fieldsWithAnnotation<T, E>(T::class)
+
+    fun <T : Annotation, E : Any> fieldsWithAnnotation(annotation: KClass<T>): Map<T, E> {
+        val fields = reflections.getFieldsAnnotatedWith(annotation.java)
+        return fields.mapNotNull {
+            it.isAccessible = true
+            it.getAnnotation(annotation.java) as T to it.get(it.declaringClass) as E
+        }.toMap()
     }
 
     inline fun <reified T : Annotation> funcsWithAnnotation() = funcsWithAnnotation(T::class)
