@@ -1,6 +1,7 @@
 # Kotless roadmap
 
 ## 0.1.3
+* Support local start for Kotless
 * Support of dynamic entrypoints in Ktor
     * Support new mode -- map everything using catch-all path variables
 
