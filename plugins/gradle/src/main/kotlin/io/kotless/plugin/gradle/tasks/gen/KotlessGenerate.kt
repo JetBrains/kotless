@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.tasks
+package io.kotless.plugin.gradle.tasks.gen
 
 import io.kotless.*
 import io.kotless.Webapp

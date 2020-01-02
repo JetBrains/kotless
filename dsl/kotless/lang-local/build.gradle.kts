@@ -6,7 +6,6 @@ version = rootProject.version
 
 dependencies {
     api(project(":dsl:kotless:lang"))
-
     implementation("org.eclipse.jetty", "jetty-server", "9.4.25.v20191220")
 }
 

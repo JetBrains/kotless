@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.tasks
+package io.kotless.plugin.gradle.tasks.terraform
 
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.CommandLine

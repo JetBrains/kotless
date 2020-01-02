@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Handler
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 
+
 class LocalServer(port: Int, handlers: List<Handler>) {
     private val server: Server = Server(port)
 
@@ -14,6 +15,15 @@ class LocalServer(port: Int, handlers: List<Handler>) {
         server.stopAtShutdown = true
     }
 
-    fun start() = server.start()
-    fun join() = server.join()
+    fun start() {
+        server.start()
+    }
+
+    fun join() {
+        server.join()
+    }
+
+    fun stop() {
+        server.stop()
+    }
 }

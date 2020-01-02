@@ -1,8 +1,13 @@
 package io.kotless.plugin.gradle
 
+import io.kotless.AwsResource
 import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.tasks.*
+import io.kotless.plugin.gradle.tasks.local.KotlessLocal
+import io.kotless.plugin.gradle.tasks.gen.KotlessGenerate
+import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
+import io.kotless.plugin.gradle.tasks.terraform.TerraformDownload
+import io.kotless.plugin.gradle.tasks.terraform.TerraformOperation
 import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -60,6 +65,8 @@ class KotlessPlugin : Plugin<Project> {
                     }
 
                     run {
+                        val localstack = LocalStackRunner(kotless.extensions.local.useAwsEmulation, setOf(AwsResource.S3, AwsResource.DynamoDB))
+
                         configurations.create(myLocalConfigurationName)
 
                         convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
@@ -67,9 +74,18 @@ class KotlessPlugin : Plugin<Project> {
                             DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
                         }
 
+
+                        val start = myCreate("localstack_start", LocalStackRunner.Start::class) {
+                            runner = localstack
+                        }
+                        val stop = myCreate("localstack_stop", LocalStackRunner.Stop::class) {
+                            runner = localstack
+                        }
+
                         myCreate("local", KotlessLocal::class) {
-                            dependsOn(tasks.getByName("classes"))
-                        }.finalizedBy("run")
+                            dependsOn(tasks.getByName("classes"), start)
+                        }.finalizedBy("run", stop)
+
                     }
                 }
             }

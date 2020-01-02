@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.tasks
+package io.kotless.plugin.gradle.tasks.local
 
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
@@ -19,6 +19,7 @@ import java.io.File
  */
 @CacheableTask
 open class KotlessLocal : DefaultTask() {
+
     init {
         group = "kotless"
     }
@@ -67,6 +68,10 @@ open class KotlessLocal : DefaultTask() {
 
             for ((key, value) in myKotless.webapp.lambda.environment) {
                 environment[key] = value
+            }
+
+            if (myKotless.extensions.local.useAwsEmulation) {
+                environment.putAll(LocalStackRunner.envMap)
             }
         }
     }
