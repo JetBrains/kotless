@@ -42,7 +42,7 @@ open class TerraformDownloadTask : DefaultTask() {
 
         Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), file.parentFile, Archiver.ZIP)
 
-        CommandLine.execute("chmod", listOf("+x", file.absolutePath), file.parentFile, false)
+        CommandLine.execute("chmod", listOf("+x", file.absolutePath), emptyMap(), file.parentFile, redirectStdout = false, redirectErr = true)
 
         logger.lifecycle("Terraform version $version for OS $os successfully downloaded")
     }

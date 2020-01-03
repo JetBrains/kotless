@@ -21,6 +21,20 @@ open class TFProvider(val tf_provider: String) : HCLEntity(), HCLNamed {
     override val owner: HCLNamed?
         get() = this
 
+    class Endpoints(val urls: Map<String, String>) : HCLEntity() {
+        override fun render(): String {
+            return """
+            |endpoints {
+            |${urls.entries.joinToString(separator = "\n") { (key, value) -> "$key = \"$value\"" }.withIndent()}
+            |}
+            """.trimMargin()
+        }
+    }
+
+    fun endpoints(urls: Map<String, String>) {
+        inner(Endpoints(urls))
+    }
+
     override fun render(): String {
         return """
             |provider "$tf_provider" {
@@ -39,6 +53,10 @@ class AWSProvider : TFProvider("aws") {
     var region by text()
     var profile by text()
     var version by text()
+
+    var skip_credentials_validation by bool()
+    var skip_metadata_api_check by bool()
+    var skip_requesting_account_id by bool()
 }
 
 fun aws_provider(configure: AWSProvider.() -> Unit) = AWSProvider().apply(configure)

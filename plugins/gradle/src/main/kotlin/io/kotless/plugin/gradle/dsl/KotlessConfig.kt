@@ -27,6 +27,12 @@ class KotlessConfig(project: Project) : Serializable {
      */
     var genDirectory = File(project.buildDir, "kotless-gen")
 
+    internal val deployGenDirectory: File
+        get() = File(genDirectory, "deploy")
+
+    internal val localGenDirectory: File
+        get() = File(genDirectory, "local")
+
     /** Name of configuration to use as a classpath */
     var configurationName = "compileClasspath"
 

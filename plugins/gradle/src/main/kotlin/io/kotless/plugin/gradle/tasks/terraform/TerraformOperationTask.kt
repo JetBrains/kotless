@@ -33,11 +33,14 @@ open class TerraformOperationTask : DefaultTask() {
     lateinit var operation: Operation
 
     @get:InputDirectory
-    val root: File
-        get() = project.kotless.config.genDirectory
+    lateinit var root: File
+
+    @get:Input
+    var environment: Map<String, String> = emptyMap()
 
     @TaskAction
     fun act() {
-        CommandLine.execute(TerraformDownloadTask.tfBin(project).absolutePath, operation.op, root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(TerraformDownloadTask.tfBin(project).absolutePath, operation.op, environment,
+            workingDir = root, redirectStdout = true, redirectErr = true)
     }
 }

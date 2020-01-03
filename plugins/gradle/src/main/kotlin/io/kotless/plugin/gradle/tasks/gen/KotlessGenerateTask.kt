@@ -44,11 +44,12 @@ open class KotlessGenerateTask : DefaultTask() {
 
     @get:OutputDirectory
     val myGenDirectory: File
-        get() = project.kotless.config.genDirectory
+        get() = project.kotless.config.deployGenDirectory
 
     @TaskAction
     fun act() {
         myGenDirectory.deleteRecursively()
+        myGenDirectory.mkdirs()
 
         val config = myKotless.toSchema()
 

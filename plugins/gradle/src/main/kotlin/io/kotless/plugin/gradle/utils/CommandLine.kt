@@ -15,11 +15,13 @@ internal object CommandLine {
         }
     }
 
-    fun execute(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean = false, redirectErr: Boolean = true): Int {
+    fun execute(exec: String, args: List<String>, envs: Map<String, String>, workingDir: File,
+                redirectStdout: Boolean, redirectErr: Boolean): Int {
         return CommandLineUtils.executeCommandLine(
             Commandline().apply {
                 workingDirectory = workingDir
                 executable = exec
+                for ((key, value) in envs) addEnvironment(key, value)
                 addArguments(args.toTypedArray())
             }, getConsumer(redirectStdout), getConsumer(redirectErr)
         )

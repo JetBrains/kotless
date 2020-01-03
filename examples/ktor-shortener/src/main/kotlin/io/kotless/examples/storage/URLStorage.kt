@@ -1,17 +1,25 @@
 package io.kotless.examples.storage
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.model.*
+import io.kotless.AwsResource
 import io.kotless.PermissionLevel
-import io.kotless.dsl.lang.DynamoDBTable
+import io.kotless.dsl.lang.*
 import io.kotless.examples.utils.RandomCode
-import org.slf4j.LoggerFactory
 
 private const val tableName: String = "ktor-short-url-table"
 
 @DynamoDBTable(tableName, PermissionLevel.ReadWrite)
 object URLStorage {
-    private val client = AmazonDynamoDBClientBuilder.defaultClient()
+    private val client = AmazonDynamoDBClientBuilder.standard()
+        .withLocalEndpoint(AwsResource.DynamoDB) { url, region ->
+            setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(url, region))
+        }.withLocalCredentials(AwsResource.DynamoDB) { accessKey, secretKey ->
+            credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey))
+        }.build()
 
     fun getByCode(code: String): String? {
         val req = GetItemRequest().withKey(mapOf(

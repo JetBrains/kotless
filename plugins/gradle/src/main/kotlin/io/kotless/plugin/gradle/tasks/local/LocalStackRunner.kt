@@ -29,7 +29,12 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     private var container: LocalStackContainer? = null
 
     private val myEnvMap = HashMap<String, String>()
-    val envMap: Map<String, String> = myEnvMap
+    val envMap: Map<String, String>
+        get() = myEnvMap
+
+    private val myServiceMap = HashMap<AwsResource, String>()
+    val serviceMap: Map<AwsResource, String>
+        get() = myServiceMap
 
     fun start() {
         if (!isEnabled) return
@@ -44,6 +49,8 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
             val endpoint = container!!.getEndpointConfiguration(service)
             myEnvMap["LOCALSTACK_${service.localStackName.toUpperCase()}_URL"] = endpoint.serviceEndpoint
             myEnvMap["LOCALSTACK_${service.localStackName.toUpperCase()}_REGION"] = endpoint.signingRegion
+
+            myServiceMap[service.toResource()] = endpoint.serviceEndpoint
         }
 
         val credentials = container!!.defaultCredentialsProvider.credentials
@@ -57,4 +64,5 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     }
 
     private fun AwsResource.toService() = LocalStackContainer.Service.valueOf(prefix.toUpperCase())
+    private fun LocalStackContainer.Service.toResource() = AwsResource.values().find { it.prefix.toUpperCase() == name }!!
 }
