@@ -25,10 +25,9 @@ internal object CommandLine {
         )
     }
 
-    private fun getConsumer(redirectOutput: Boolean): StreamConsumer {
-        return if (redirectOutput)
-            DefaultConsumer()
-        else
-            CommandLineUtils.StringStreamConsumer()
+    private fun getConsumer(redirectOutput: Boolean): StreamConsumer = if (redirectOutput) {
+        DefaultConsumer()
+    } else {
+        CommandLineUtils.StringStreamConsumer()
     }
 }

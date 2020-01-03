@@ -3,11 +3,11 @@ package io.kotless.plugin.gradle
 import io.kotless.AwsResource
 import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.tasks.local.KotlessLocal
-import io.kotless.plugin.gradle.tasks.gen.KotlessGenerate
+import io.kotless.plugin.gradle.tasks.local.KotlessLocalTask
+import io.kotless.plugin.gradle.tasks.gen.KotlessGenerateTask
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
-import io.kotless.plugin.gradle.tasks.terraform.TerraformDownload
-import io.kotless.plugin.gradle.tasks.terraform.TerraformOperation
+import io.kotless.plugin.gradle.tasks.terraform.TerraformDownloadTask
+import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
 import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -34,33 +34,33 @@ class KotlessPlugin : Plugin<Project> {
             with(tasks) {
                 val shadowJar = getByName("shadowJar")
 
-                val generate = myCreate("generate", KotlessGenerate::class)
-                val download = myCreate("download_terraform", TerraformDownload::class)
+                val generate = myCreate("generate", KotlessGenerateTask::class)
+                val download = myCreate("download_terraform", TerraformDownloadTask::class)
 
-                val init = myCreate("initialize", TerraformOperation::class) {
+                val init = myCreate("initialize", TerraformOperationTask::class) {
                     dependsOn(download, generate, shadowJar)
 
-                    operation = TerraformOperation.Operation.INIT
+                    operation = TerraformOperationTask.Operation.INIT
                 }
 
-                myCreate("plan", TerraformOperation::class) {
+                myCreate("plan", TerraformOperationTask::class) {
                     dependsOn(init)
 
-                    operation = TerraformOperation.Operation.PLAN
+                    operation = TerraformOperationTask.Operation.PLAN
                 }
 
-                myCreate("deploy", TerraformOperation::class) {
+                myCreate("deploy", TerraformOperationTask::class) {
                     dependsOn(init)
 
-                    operation = TerraformOperation.Operation.APPLY
+                    operation = TerraformOperationTask.Operation.APPLY
                 }
 
                 afterEvaluate {
                     if (kotless.extensions.terraform.allowDestroy) {
-                        myCreate("destroy", TerraformOperation::class) {
+                        myCreate("destroy", TerraformOperationTask::class) {
                             dependsOn(init)
 
-                            operation = TerraformOperation.Operation.DESTROY
+                            operation = TerraformOperationTask.Operation.DESTROY
                         }
                     }
 
@@ -81,7 +81,7 @@ class KotlessPlugin : Plugin<Project> {
                             localstack = localStackRunner
                         }
 
-                        myCreate("local", KotlessLocal::class) {
+                        myCreate("local", KotlessLocalTask::class) {
                             localstack = localStackRunner
 
                             dependsOn(tasks.getByName("classes"), startLocalStack)

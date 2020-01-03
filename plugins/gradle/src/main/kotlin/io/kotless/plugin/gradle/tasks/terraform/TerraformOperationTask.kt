@@ -16,7 +16,7 @@ import java.io.File
  *
  * Note: Apply will not require approve in a console, kotless passes to it `-auto-approve`
  */
-open class TerraformOperation : DefaultTask() {
+open class TerraformOperationTask : DefaultTask() {
     init {
         group = "kotless"
         outputs.upToDateWhen { false }
@@ -38,6 +38,6 @@ open class TerraformOperation : DefaultTask() {
 
     @TaskAction
     fun act() {
-        CommandLine.execute(TerraformDownload.tfBin(project).absolutePath, operation.op, root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(TerraformDownloadTask.tfBin(project).absolutePath, operation.op, root, redirectStdout = true, redirectErr = true)
     }
 }

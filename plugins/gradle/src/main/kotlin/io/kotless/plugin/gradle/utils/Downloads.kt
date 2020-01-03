@@ -13,6 +13,7 @@ internal object Downloads {
 
     fun download(url: URL, toFile: File, archiver: Archiver) {
         toFile.parentFile.mkdirs()
+
         val archive = File(toFile.absolutePath + "." + archiver.extension)
 
         download(url, archive)

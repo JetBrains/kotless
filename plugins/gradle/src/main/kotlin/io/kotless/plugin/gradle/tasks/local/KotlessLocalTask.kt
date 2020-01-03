@@ -18,7 +18,7 @@ import java.io.File
  * Note: Task is cacheable and will regenerate code only if sources or configuration has changed.
  */
 @CacheableTask
-open class KotlessLocal : DefaultTask() {
+open class KotlessLocalTask : DefaultTask() {
 
     init {
         group = "kotless"
