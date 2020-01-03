@@ -47,7 +47,7 @@ open class KotlessGenerate : DefaultTask() {
         get() = project.kotless.config.genDirectory
 
     @TaskAction
-    fun generate() {
+    fun act() {
         myGenDirectory.deleteRecursively()
 
         val config = myKotless.toSchema()

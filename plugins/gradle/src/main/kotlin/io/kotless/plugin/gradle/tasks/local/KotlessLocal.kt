@@ -33,8 +33,10 @@ open class KotlessLocal : DefaultTask() {
     val allSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
+    lateinit var localstack: LocalStackRunner
+
     @TaskAction
-    fun generate() = with(myKotless.webapp.project(project)) {
+    fun act() = with(myKotless.webapp.project(project)) {
         val depsConfiguration = configurations.getByName(myKotless.config.configurationName)
         val deps = depsConfiguration.allDependencies
 
@@ -71,7 +73,7 @@ open class KotlessLocal : DefaultTask() {
             }
 
             if (myKotless.extensions.local.useAwsEmulation) {
-                environment.putAll(LocalStackRunner.envMap)
+                environment.putAll(localstack.envMap)
             }
         }
     }

@@ -37,7 +37,7 @@ open class TerraformOperation : DefaultTask() {
         get() = project.kotless.config.genDirectory
 
     @TaskAction
-    fun execute() {
+    fun act() {
         CommandLine.execute(TerraformDownload.tfBin(project).absolutePath, operation.op, root, redirectStdout = true, redirectErr = true)
     }
 }

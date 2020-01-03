@@ -65,7 +65,7 @@ class KotlessPlugin : Plugin<Project> {
                     }
 
                     run {
-                        val localstack = LocalStackRunner(kotless.extensions.local.useAwsEmulation, setOf(AwsResource.S3, AwsResource.DynamoDB))
+                        val localStackRunner = LocalStackRunner(kotless.extensions.local.useAwsEmulation, setOf(AwsResource.S3, AwsResource.DynamoDB))
 
                         configurations.create(myLocalConfigurationName)
 
@@ -74,17 +74,18 @@ class KotlessPlugin : Plugin<Project> {
                             DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
                         }
 
-
-                        val start = myCreate("localstack_start", LocalStackRunner.Start::class) {
-                            runner = localstack
+                        val startLocalStack = myCreate("localstack_start", LocalStackRunner.Start::class) {
+                            localstack = localStackRunner
                         }
-                        val stop = myCreate("localstack_stop", LocalStackRunner.Stop::class) {
-                            runner = localstack
+                        val stopLocalStack = myCreate("localstack_stop", LocalStackRunner.Stop::class) {
+                            localstack = localStackRunner
                         }
 
                         myCreate("local", KotlessLocal::class) {
-                            dependsOn(tasks.getByName("classes"), start)
-                        }.finalizedBy("run", stop)
+                            localstack = localStackRunner
+
+                            dependsOn(tasks.getByName("classes"), startLocalStack)
+                        }.finalizedBy("run", stopLocalStack)
 
                     }
                 }

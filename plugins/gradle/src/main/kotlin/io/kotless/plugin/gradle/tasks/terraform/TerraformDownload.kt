@@ -37,7 +37,7 @@ open class TerraformDownload : DefaultTask() {
         get() = tfBin(project)
 
     @TaskAction
-    fun download() {
+    fun act() {
         logger.lifecycle("Downloading terraform version $version for OS $os")
 
         Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), file.parentFile, Archiver.ZIP)

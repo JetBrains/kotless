@@ -7,33 +7,29 @@ import org.testcontainers.containers.localstack.LocalStackContainer
 
 class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     open class Start : DefaultTask() {
-        lateinit var runner: LocalStackRunner
+        lateinit var localstack: LocalStackRunner
 
         @TaskAction
         fun act() {
-            runner.start()
+            localstack.start()
         }
     }
 
     open class Stop : DefaultTask() {
-        lateinit var runner: LocalStackRunner
+        lateinit var localstack: LocalStackRunner
 
         @TaskAction
         fun act() {
-            runner.stop()
+            localstack.stop()
         }
     }
 
-    val services = resources.map { it.toService() }
+    private val services = resources.map { it.toService() }
 
     private var container: LocalStackContainer? = null
 
-    companion object {
-        private val myEnvMap = HashMap<String, String>()
-
-        val envMap: Map<String, String> = myEnvMap
-
-    }
+    private val myEnvMap = HashMap<String, String>()
+    val envMap: Map<String, String> = myEnvMap
 
     fun start() {
         if (!isEnabled) return
