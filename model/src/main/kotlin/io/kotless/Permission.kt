@@ -34,7 +34,11 @@ enum class AwsResource(val prefix: String, val glob: (region: String, account: S
             "CreateLogGroup", "DeleteLogGroup", "CreateLogStream", "DeleteLogStream", "PutLogEvents",
             "DeleteMetricFilter", "PutMetricFilter"
         )
-    )
+    );
+
+    companion object {
+        val forLocalStart = setOf(S3, SSM, DynamoDB)
+    }
 }
 
 /** Level of access -- Read/Write/ReadWrite */

@@ -31,7 +31,7 @@ open class KotlessLocalRunTask : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val allSources: Set<File>
+    val myAllSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
     lateinit var localstack: LocalStackRunner
@@ -61,7 +61,7 @@ open class KotlessLocalRunTask : DefaultTask() {
             environment["SERVER_PORT"] = myKotless.extensions.local.port
 
             if (ktorVersion != null) {
-                val local = LocalParser.parse(myKtSourceSet, depsConfiguration.files.toSet())
+                val local = LocalParser.parse(myAllSources, depsConfiguration.files.toSet())
                 environment["CLASS_TO_START"] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 

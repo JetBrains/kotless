@@ -9,7 +9,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer
 class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     open class Start : DefaultTask() {
         init {
-            group = Groups.setup
+            group = Groups.`kotless setup`
         }
 
         lateinit var localstack: LocalStackRunner
@@ -22,7 +22,7 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
 
     open class Stop : DefaultTask() {
         init {
-            group = Groups.setup
+            group = Groups.`kotless setup`
         }
 
         lateinit var localstack: LocalStackRunner

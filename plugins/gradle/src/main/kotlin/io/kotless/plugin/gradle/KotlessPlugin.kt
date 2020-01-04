@@ -10,8 +10,7 @@ import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
 import io.kotless.plugin.gradle.tasks.terraform.TerraformDownloadTask
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
 import io.kotless.plugin.gradle.utils.*
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.*
 import org.gradle.api.plugins.ApplicationPluginConvention
 import org.gradle.kotlin.dsl.getPlugin
 
@@ -32,110 +31,117 @@ class KotlessPlugin : Plugin<Project> {
             applyPluginSafely("com.github.johnrengelman.shadow")
             applyPluginSafely("application")
 
-            with(tasks) {
-                val shadowJar = getByName("shadowJar")
+            configurations.create(myLocalConfigurationName)
 
-                val generate = myCreate("generate", KotlessGenerateTask::class)
-                val download = myCreate("download_terraform", TerraformDownloadTask::class)
+            with(tasks) {
+                val download = myCreate<TerraformDownloadTask>("download_terraform")
 
                 afterEvaluate {
-                    val init = myCreate("initialize", TerraformOperationTask::class) {
-                        group = Groups.setup
+                    setupDeployTasks(download)
+                    setupLocalTasks(download)
+                }
+            }
+        }
+    }
 
-                        dependsOn(download, generate, shadowJar)
+    private fun Project.setupLocalTasks(download: Task) {
+        with(tasks) {
+            val run = tasks.getByName("run")
+            val classes = tasks.getByName("classes")
 
-                        root = kotless.config.deployGenDirectory
+            val local = LocalStackRunner(kotless.extensions.local.useAwsEmulation, AwsResource.forLocalStart)
 
-                        operation = TerraformOperationTask.Operation.INIT
-                    }
+            convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
+                DSLType.Kotless -> "io.kotless.local.MainKt"
+                DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
+            }
 
-                    myCreate("plan", TerraformOperationTask::class) {
-                        group = Groups.kotless
+            val startLocalStack = myCreate<LocalStackRunner.Start>("localstack_start") {
+                localstack = local
+            }
+            val stopLocalStack = myCreate<LocalStackRunner.Stop>("localstack_stop") {
+                localstack = local
+            }
 
-                        dependsOn(init)
+            val generate = myCreate<KotlessLocalGenerateTask>("local_generate") {
+                dependsOn(startLocalStack)
 
-                        root = kotless.config.deployGenDirectory
+                services = local.serviceMap
+            }
 
-                        operation = TerraformOperationTask.Operation.PLAN
-                    }
+            val initialize = myCreate<TerraformOperationTask>("local_initialize") {
+                group = Groups.`kotless setup`
 
-                    myCreate("deploy", TerraformOperationTask::class) {
-                        group = Groups.kotless
+                dependsOn(download, generate)
 
-                        dependsOn(init)
+                root = kotless.config.localGenDirectory
 
-                        root = kotless.config.deployGenDirectory
+                operation = TerraformOperationTask.Operation.INIT
+            }
 
-                        operation = TerraformOperationTask.Operation.APPLY
-                    }
+            val configure = myCreate<TerraformOperationTask>("local_configure") {
+                group = Groups.`kotless setup`
 
-                    if (kotless.extensions.terraform.allowDestroy) {
-                        myCreate("destroy", TerraformOperationTask::class) {
-                            group = Groups.kotless
+                dependsOn(initialize)
 
-                            dependsOn(init)
+                root = kotless.config.localGenDirectory
 
-                            root = kotless.config.deployGenDirectory
+                environment = AWSUtils.fakeCredentials
 
-                            operation = TerraformOperationTask.Operation.DESTROY
-                        }
-                    }
+                operation = TerraformOperationTask.Operation.APPLY
+            }
 
-                    run {
-                        val localStackRunner = LocalStackRunner(kotless.extensions.local.useAwsEmulation, setOf(AwsResource.S3, AwsResource.DynamoDB))
+            myCreate<KotlessLocalRunTask>("local") {
+                localstack = local
 
-                        configurations.create(myLocalConfigurationName)
+                dependsOn(classes, configure)
+            }.finalizedBy(run, stopLocalStack)
+        }
+    }
 
-                        convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
-                            DSLType.Kotless -> "io.kotless.local.MainKt"
-                            DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
-                        }
+    private fun Project.setupDeployTasks(download: Task) {
+        with(tasks) {
+            val generate = myCreate<KotlessGenerateTask>("generate")
 
-                        val startLocalStack = myCreate("localstack_start", LocalStackRunner.Start::class) {
-                            localstack = localStackRunner
-                        }
-                        val stopLocalStack = myCreate("localstack_stop", LocalStackRunner.Stop::class) {
-                            localstack = localStackRunner
-                        }
+            val init = myCreate<TerraformOperationTask>("initialize") {
+                group = Groups.`kotless setup`
 
-                        val localGenerate = myCreate("local_generate", KotlessLocalGenerateTask::class) {
-                            dependsOn(startLocalStack)
+                dependsOn(download, generate, myShadowJar())
 
-                            services = localStackRunner.serviceMap
-                        }
+                root = kotless.config.deployGenDirectory
 
-                        val initLocal = myCreate("local_initialize", TerraformOperationTask::class) {
-                            group = Groups.setup
+                operation = TerraformOperationTask.Operation.INIT
+            }
 
-                            dependsOn(download, localGenerate)
+            myCreate<TerraformOperationTask>("plan") {
+                group = Groups.kotless
 
-                            root = kotless.config.localGenDirectory
+                dependsOn(init)
 
-                            operation = TerraformOperationTask.Operation.INIT
-                        }
+                root = kotless.config.deployGenDirectory
 
-                        val applyLocal = myCreate("local_deploy", TerraformOperationTask::class) {
-                            group = Groups.setup
+                operation = TerraformOperationTask.Operation.PLAN
+            }
 
-                            dependsOn(initLocal)
+            myCreate<TerraformOperationTask>("deploy") {
+                group = Groups.kotless
 
-                            root = kotless.config.localGenDirectory
+                dependsOn(init)
 
-                            environment = mapOf(
-                                "AWS_SECRET_ACCESS_KEY" to "secretkey",
-                                "AWS_ACCESS_KEY_ID" to "accesskey"
-                            )
+                root = kotless.config.deployGenDirectory
 
-                            operation = TerraformOperationTask.Operation.APPLY
-                        }
+                operation = TerraformOperationTask.Operation.APPLY
+            }
 
-                        myCreate("local", KotlessLocalRunTask::class) {
-                            localstack = localStackRunner
+            if (kotless.extensions.terraform.allowDestroy) {
+                myCreate<TerraformOperationTask>("destroy") {
+                    group = Groups.kotless
 
-                            dependsOn(tasks.getByName("classes"), applyLocal)
-                        }.finalizedBy("run", stopLocalStack)
+                    dependsOn(init)
 
-                    }
+                    root = kotless.config.deployGenDirectory
+
+                    operation = TerraformOperationTask.Operation.DESTROY
                 }
             }
         }
