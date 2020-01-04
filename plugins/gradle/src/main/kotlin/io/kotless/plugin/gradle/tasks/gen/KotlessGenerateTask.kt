@@ -24,7 +24,7 @@ import java.io.File
 @CacheableTask
 open class KotlessGenerateTask : DefaultTask() {
     init {
-        group = "kotless"
+        group = Groups.kotless
     }
 
     @get:Input

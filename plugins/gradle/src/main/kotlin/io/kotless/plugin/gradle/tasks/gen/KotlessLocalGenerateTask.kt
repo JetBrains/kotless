@@ -3,6 +3,7 @@ package io.kotless.plugin.gradle.tasks.gen
 import io.kotless.AwsResource
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
+import io.kotless.plugin.gradle.utils.Groups
 import io.kotless.plugin.gradle.utils.clearDirectory
 import io.kotless.terraform.TFFile
 import io.kotless.terraform.infra.aws_provider
@@ -16,7 +17,7 @@ import java.io.File
 @CacheableTask
 open class KotlessLocalGenerateTask : DefaultTask() {
     init {
-        group = "build setup"
+        group = Groups.setup
     }
 
     @get:Input

@@ -3,6 +3,7 @@ package io.kotless.plugin.gradle.tasks.local
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
+import io.kotless.plugin.gradle.utils.*
 import io.kotless.plugin.gradle.utils.myKtSourceSet
 import io.kotless.plugin.gradle.utils.myLocal
 import org.gradle.api.DefaultTask
@@ -21,7 +22,7 @@ import java.io.File
 open class KotlessLocalRunTask : DefaultTask() {
 
     init {
-        group = "kotless"
+        group = Groups.kotless
     }
 
     @get:Input

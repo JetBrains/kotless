@@ -40,6 +40,8 @@ class KotlessPlugin : Plugin<Project> {
 
                 afterEvaluate {
                     val init = myCreate("initialize", TerraformOperationTask::class) {
+                        group = Groups.setup
+
                         dependsOn(download, generate, shadowJar)
 
                         root = kotless.config.deployGenDirectory
@@ -48,6 +50,8 @@ class KotlessPlugin : Plugin<Project> {
                     }
 
                     myCreate("plan", TerraformOperationTask::class) {
+                        group = Groups.kotless
+
                         dependsOn(init)
 
                         root = kotless.config.deployGenDirectory
@@ -56,6 +60,8 @@ class KotlessPlugin : Plugin<Project> {
                     }
 
                     myCreate("deploy", TerraformOperationTask::class) {
+                        group = Groups.kotless
+
                         dependsOn(init)
 
                         root = kotless.config.deployGenDirectory
@@ -65,6 +71,8 @@ class KotlessPlugin : Plugin<Project> {
 
                     if (kotless.extensions.terraform.allowDestroy) {
                         myCreate("destroy", TerraformOperationTask::class) {
+                            group = Groups.kotless
+
                             dependsOn(init)
 
                             root = kotless.config.deployGenDirectory
@@ -76,8 +84,6 @@ class KotlessPlugin : Plugin<Project> {
                     run {
                         val localStackRunner = LocalStackRunner(kotless.extensions.local.useAwsEmulation, setOf(AwsResource.S3, AwsResource.DynamoDB))
 
-
-
                         configurations.create(myLocalConfigurationName)
 
                         convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
@@ -85,20 +91,22 @@ class KotlessPlugin : Plugin<Project> {
                             DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
                         }
 
-                        val startLocalStack = myCreate("local_start", LocalStackRunner.Start::class) {
+                        val startLocalStack = myCreate("localstack_start", LocalStackRunner.Start::class) {
                             localstack = localStackRunner
                         }
-                        val stopLocalStack = myCreate("local_stop", LocalStackRunner.Stop::class) {
+                        val stopLocalStack = myCreate("localstack_stop", LocalStackRunner.Stop::class) {
                             localstack = localStackRunner
                         }
 
                         val localGenerate = myCreate("local_generate", KotlessLocalGenerateTask::class) {
-                            dependsOn( startLocalStack)
+                            dependsOn(startLocalStack)
 
                             services = localStackRunner.serviceMap
                         }
 
                         val initLocal = myCreate("local_initialize", TerraformOperationTask::class) {
+                            group = Groups.setup
+
                             dependsOn(download, localGenerate)
 
                             root = kotless.config.localGenDirectory
@@ -107,6 +115,8 @@ class KotlessPlugin : Plugin<Project> {
                         }
 
                         val applyLocal = myCreate("local_deploy", TerraformOperationTask::class) {
+                            group = Groups.setup
+
                             dependsOn(initLocal)
 
                             root = kotless.config.localGenDirectory

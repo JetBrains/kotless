@@ -1,12 +1,17 @@
 package io.kotless.plugin.gradle.tasks.local
 
 import io.kotless.AwsResource
+import io.kotless.plugin.gradle.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
 
 class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     open class Start : DefaultTask() {
+        init {
+            group = Groups.setup
+        }
+
         lateinit var localstack: LocalStackRunner
 
         @TaskAction
@@ -16,6 +21,10 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     }
 
     open class Stop : DefaultTask() {
+        init {
+            group = Groups.setup
+        }
+
         lateinit var localstack: LocalStackRunner
 
         @TaskAction

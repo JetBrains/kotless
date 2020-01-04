@@ -21,7 +21,7 @@ import java.net.URL
  */
 open class TerraformDownloadTask : DefaultTask() {
     init {
-        group = "build setup"
+        group = Groups.setup
     }
 
     companion object {

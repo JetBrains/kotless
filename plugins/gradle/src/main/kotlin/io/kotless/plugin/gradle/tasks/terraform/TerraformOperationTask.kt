@@ -18,7 +18,6 @@ import java.io.File
  */
 open class TerraformOperationTask : DefaultTask() {
     init {
-        group = "kotless"
         outputs.upToDateWhen { false }
     }
 
