@@ -40,7 +40,13 @@ open class TerraformOperationTask : DefaultTask() {
 
     @TaskAction
     fun act() {
-        CommandLine.execute(TerraformDownloadTask.tfBin(project).absolutePath, operation.op, environment,
-            workingDir = root, redirectStdout = true, redirectErr = true)
+        CommandLine.execute(
+            exec = TerraformDownloadTask.tfBin(project).absolutePath,
+            args = operation.op,
+            envs = environment,
+            workingDir = root,
+            redirectStdout = true,
+            redirectErr = true
+        )
     }
 }

@@ -34,7 +34,6 @@ dependencies {
 
     implementation("com.github.jengelman.gradle.plugins", "shadow", "5.0.0")
 
-
     implementation("com.amazonaws", "aws-java-sdk-core", "1.11.699")
     implementation("org.testcontainers", "localstack", "1.12.3")
 

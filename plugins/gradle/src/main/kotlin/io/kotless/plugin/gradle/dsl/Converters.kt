@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.KotlessConfig
+import org.gradle.api.Project
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
@@ -30,4 +31,7 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
 }
 
 internal fun Webapp.Route53.toSchema(): io.kotless.Webapp.Route53 = io.kotless.Webapp.Route53(zone, alias, certificate)
-internal fun Webapp.Deployment.toSchema(): io.kotless.Webapp.ApiGateway.Deployment = io.kotless.Webapp.ApiGateway.Deployment(name, version)
+internal fun Webapp.Deployment.toSchema(path: String): io.kotless.Webapp.ApiGateway.Deployment = io.kotless.Webapp.ApiGateway.Deployment(
+    name ?: path.trim(':').let { if (it.isBlank()) "root" else it.replace(':', '_') },
+    version
+)

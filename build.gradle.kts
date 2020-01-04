@@ -40,7 +40,7 @@ subprojects {
     detekt {
         parallel = true
         failFast = false
-        config = files(File(project.rootProject.projectDir, "buildScripts/detekt/detekt.yml"))
+        config = files(rootProject.file("buildScripts/detekt/detekt.yml"))
         reports {
             xml {
                 enabled = false

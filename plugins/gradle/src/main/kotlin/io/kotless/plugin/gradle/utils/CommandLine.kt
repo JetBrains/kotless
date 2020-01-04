@@ -15,8 +15,11 @@ internal object CommandLine {
         }
     }
 
-    fun execute(exec: String, args: List<String>, envs: Map<String, String>, workingDir: File,
-                redirectStdout: Boolean, redirectErr: Boolean): Int {
+    fun execute(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean, redirectErr: Boolean = true): Int {
+        return execute(exec, args, emptyMap(), workingDir, redirectStdout, redirectErr)
+    }
+
+    fun execute(exec: String, args: List<String>, envs: Map<String, String>, workingDir: File, redirectStdout: Boolean, redirectErr: Boolean): Int {
         return CommandLineUtils.executeCommandLine(
             Commandline().apply {
                 workingDirectory = workingDir

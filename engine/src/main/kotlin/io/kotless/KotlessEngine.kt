@@ -11,11 +11,5 @@ object KotlessEngine {
         return Generator.generate(optimized)
     }
 
-    fun dump(genDirectory: File, files: Set<TFFile>) = files.map { tfFile ->
-        genDirectory.mkdir()
-
-        File(genDirectory, tfFile.nameWithExt).apply {
-            tfFile.write(this)
-        }
-    }
+    fun dump(genDirectory: File, files: Set<TFFile>) = files.map { file -> file.writeToDirectory(genDirectory) }
 }

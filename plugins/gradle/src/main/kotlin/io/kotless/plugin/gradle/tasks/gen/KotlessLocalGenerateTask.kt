@@ -3,7 +3,8 @@ package io.kotless.plugin.gradle.tasks.gen
 import io.kotless.AwsResource
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils.myKtSourceSet
+import io.kotless.plugin.gradle.utils.clearDirectory
+import io.kotless.terraform.TFFile
 import io.kotless.terraform.infra.aws_provider
 import io.kotless.terraform.infra.terraform
 import io.kotless.terraform.tf
@@ -15,7 +16,7 @@ import java.io.File
 @CacheableTask
 open class KotlessLocalGenerateTask : DefaultTask() {
     init {
-        group = "kotless"
+        group = "build setup"
     }
 
     @get:Input
@@ -27,12 +28,7 @@ open class KotlessLocalGenerateTask : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val allSources: Set<File>
-        get() = project.myKtSourceSet.toSet()
-
-    @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    val allTerraformAddition: Set<File>
+    val myTerraformAdditional: Set<File>
         get() = project.kotless.extensions.terraform.files.additional
 
     @get:OutputDirectory
@@ -41,14 +37,12 @@ open class KotlessLocalGenerateTask : DefaultTask() {
 
     @TaskAction
     fun act() {
-        myGenDirectory.deleteRecursively()
-        myGenDirectory.mkdirs()
+        myGenDirectory.clearDirectory()
 
-        val infra_file = tf("infra") {
+        val infra = tf("infra") {
             terraform {
                 required_version = myKotless.config.terraform.version
             }
-
 
             aws_provider {
                 region = "us-east-1"
@@ -62,8 +56,12 @@ open class KotlessLocalGenerateTask : DefaultTask() {
             }
         }
 
-        infra_file.write(File(myGenDirectory, infra_file.nameWithExt))
-        for (file in allTerraformAddition) {
+        dumpGeneratedFiles(infra)
+    }
+
+    private fun dumpGeneratedFiles(infra: TFFile) {
+        infra.writeToDirectory(myGenDirectory)
+        for (file in myTerraformAdditional) {
             FileUtils.copyFile(file, File(myGenDirectory, file.name))
         }
     }

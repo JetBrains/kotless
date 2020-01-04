@@ -36,7 +36,7 @@ open class KotlessLocalRunTask : DefaultTask() {
     lateinit var localstack: LocalStackRunner
 
     @TaskAction
-    fun act() = with(myKotless.webapp.project(project)) {
+    fun act() = with(project) {
         val depsConfiguration = configurations.getByName(myKotless.config.configurationName)
         val deps = depsConfiguration.allDependencies
 

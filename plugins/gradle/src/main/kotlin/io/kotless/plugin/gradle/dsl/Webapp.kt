@@ -1,7 +1,6 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.dsl.config.KotlessAppConfig
-import org.gradle.api.Project
 import java.io.Serializable
 
 /**
@@ -9,10 +8,7 @@ import java.io.Serializable
  * It includes ApiGateway REST API definition and Route53 alias with SSL certificate, if present.
  */
 @KotlessDSLTag
-class Webapp(project: Project) : Serializable {
-    private val projectName: String = project.path
-    internal fun project(project: Project): Project = project.project(projectName)
-
+class Webapp : Serializable {
     internal val lambda: Lambda = Lambda()
     /** Optimizations applied during generation */
     @KotlessDSLTag
@@ -51,7 +47,7 @@ class Webapp(project: Project) : Serializable {
          * By default it is `projectName`
          * (in case of unnamed rootProject -- `root`)
          */
-        var name: String = this@Webapp.projectName.trim(':').let { if (it.isBlank()) "root" else it.replace(':', '_') }
+        var name: String? = null
         /**
          * Version of this deployment.
          * By default, it is `1`

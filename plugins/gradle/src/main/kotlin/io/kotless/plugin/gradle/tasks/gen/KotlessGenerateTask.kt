@@ -5,9 +5,8 @@ import io.kotless.Webapp
 import io.kotless.parser.KotlessParser
 import io.kotless.parser.ktor.KTorParser
 import io.kotless.plugin.gradle.dsl.*
-import io.kotless.plugin.gradle.utils.myKtSourceSet
-import io.kotless.plugin.gradle.utils.myShadowJar
-import io.kotless.utils.TypedStorage
+import io.kotless.plugin.gradle.utils.*
+import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
@@ -34,12 +33,12 @@ open class KotlessGenerateTask : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val allSources: Set<File>
+    val myAllSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    val allTerraformAddition: Set<File>
+    val myTerraformAdditional: Set<File>
         get() = project.kotless.extensions.terraform.files.additional
 
     @get:OutputDirectory
@@ -48,51 +47,50 @@ open class KotlessGenerateTask : DefaultTask() {
 
     @TaskAction
     fun act() {
-        myGenDirectory.deleteRecursively()
-        myGenDirectory.mkdirs()
+        myGenDirectory.clearDirectory()
 
+        val schema = parseSources()
+        val generated = KotlessEngine.generate(schema)
+        dumpGeneratedFiles(generated)
+    }
+
+    private fun parseSources(): Schema {
         val config = myKotless.toSchema()
 
-        val lambdas = TypedStorage<Lambda>()
-        val statics = TypedStorage<StaticResource>()
+        val myWebapp = myKotless.webapp
 
-        val webapp = myKotless.webapp.let { webapp ->
-            val project = webapp.project(project)
-            val sources = project.myKtSourceSet
+        val shadowJar = project.myShadowJar().archiveFile.get().asFile
+        val dependencies = project.configurations.getByName(myKotless.config.configurationName).files.toSet()
 
-            @Suppress("UnstableApiUsage")
-            val shadowJar = project.myShadowJar().archiveFile.get().asFile
-            val dependencies = project.configurations.getByName(project.kotless.config.configurationName).files.toSet()
+        val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, myWebapp.lambda.environment)
 
-            val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, webapp.lambda.environment)
-
-            val result = when (myKotless.config.dsl.type) {
-                DSLType.Kotless -> KotlessParser.parse(sources, shadowJar, config, lambda, dependencies)
-                DSLType.Ktor -> KTorParser.parse(sources, shadowJar, config, lambda, dependencies)
-            }
-
-            lambdas.addAll(result.resources.dynamics)
-            statics.addAll(result.resources.statics)
-
-            val route53 = webapp.route53?.toSchema()
-            Webapp(
-                route53,
-                Webapp.ApiGateway(project.name,
-                    webapp.deployment.toSchema(),
-                    result.routes.dynamics,
-                    result.routes.statics
-                ),
-                Webapp.Events(result.events.scheduled)
-            )
+        val parsed = when (myKotless.config.dsl.type) {
+            DSLType.Kotless -> KotlessParser.parse(myAllSources, shadowJar, config, lambda, dependencies)
+            DSLType.Ktor -> KTorParser.parse(myAllSources, shadowJar, config, lambda, dependencies)
         }
 
-        val schema = Schema(config, webapp, lambdas, statics)
+        val webapp = Webapp(
+            route53 = myWebapp.route53?.toSchema(),
+            api = Webapp.ApiGateway(
+                name = project.name,
+                deployment = myWebapp.deployment.toSchema(project.path),
+                dynamics = parsed.routes.dynamics,
+                statics = parsed.routes.statics
+            ),
+            events = Webapp.Events(parsed.events.scheduled)
+        )
 
-        val generated = KotlessEngine.generate(schema)
+        return Schema(
+            config = config,
+            webapp = webapp,
+            lambdas = parsed.resources.dynamics,
+            statics = parsed.resources.statics
+        )
+    }
 
+    private fun dumpGeneratedFiles(generated: Set<TFFile>) {
         val files = KotlessEngine.dump(myGenDirectory, generated)
-
-        for (file in myKotless.extensions.terraform.files.additional) {
+        for (file in myTerraformAdditional) {
             require(files.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
             FileUtils.copyFile(file, File(myGenDirectory, file.name))
         }

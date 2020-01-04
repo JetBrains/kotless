@@ -28,7 +28,7 @@ internal enum class Archiver(val extension: String) {
     };
 
     companion object {
-        const val plexusErrorLevel: Int = 5
+        private const val plexusErrorLevel: Int = 5
     }
 
     abstract fun unarchive(from: File, to: File)

@@ -33,16 +33,16 @@ open class TerraformDownloadTask : DefaultTask() {
         get() = project.kotless.config.terraform.version
 
     @get:OutputFile
-    val file: File
+    val binFile: File
         get() = tfBin(project)
 
     @TaskAction
     fun act() {
         logger.lifecycle("Downloading terraform version $version for OS $os")
 
-        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), file.parentFile, Archiver.ZIP)
+        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), binFile.parentFile, Archiver.ZIP)
 
-        CommandLine.execute("chmod", listOf("+x", file.absolutePath), emptyMap(), file.parentFile, redirectStdout = false, redirectErr = true)
+        CommandLine.execute("chmod", listOf("+x", binFile.absolutePath), binFile.parentFile, redirectStdout = false)
 
         logger.lifecycle("Terraform version $version for OS $os successfully downloaded")
     }

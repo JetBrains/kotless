@@ -16,8 +16,8 @@ class KotlessDSL(project: Project) : Serializable {
     internal lateinit var webapp: Webapp
     /** Configuration of Kotless Web application */
     @KotlessDSLTag
-    fun Project.webapp(configure: Webapp.() -> Unit) {
-        webapp = Webapp(this).apply(configure)
+    fun webapp(configure: Webapp.() -> Unit) {
+        webapp = Webapp().apply(configure)
     }
 
     internal val extensions: Extensions = Extensions()
