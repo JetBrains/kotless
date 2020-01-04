@@ -32,7 +32,7 @@ class Server : Kotless() {
                 }
             }
         }
-        
+
         app.events {
             subscribe(LambdaWarming) {
                 println("Lambda warming execution")

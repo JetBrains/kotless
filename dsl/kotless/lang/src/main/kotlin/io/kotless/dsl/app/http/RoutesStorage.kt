@@ -50,7 +50,7 @@ internal object RoutesStorage {
         return cache[key] ?: return null
     }
 
-    private fun Annotation.toRouteKey(): RouteKey = when(this) {
+    private fun Annotation.toRouteKey(): RouteKey = when (this) {
         is Get -> RouteKey(HttpMethod.GET, path)
         is Post -> RouteKey(HttpMethod.POST, path)
         is Put -> RouteKey(HttpMethod.PUT, path)

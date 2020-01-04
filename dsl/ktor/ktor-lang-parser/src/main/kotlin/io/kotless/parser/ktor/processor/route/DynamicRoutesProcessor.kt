@@ -42,7 +42,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                         if (method != null) {
                             val permissions = PermissionsProcessor.process(element, binding) + globalPermissions
 
-                            val path =  URIPath(outer, element.getArgument("path", binding).asPath(binding))
+                            val path = URIPath(outer, element.getArgument("path", binding).asPath(binding))
                             val name = "${path.parts.joinToString(separator = "_")}_${method.name}"
 
                             val key = TypedStorage.Key<Lambda>()

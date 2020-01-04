@@ -7,7 +7,7 @@ import java.io.File
 fun Routing.siteStatics() {
     static {
         staticRootFolder = File("src/main/static")
-        
+
         static("css") {
             file("shortener.css", "css/shortener.css")
         }
@@ -15,7 +15,7 @@ fun Routing.siteStatics() {
         static("js") {
             file("shortener.js", "js/shortener.js")
         }
-        
+
         file("favicon.apng", "favicon.apng")
     }
 }

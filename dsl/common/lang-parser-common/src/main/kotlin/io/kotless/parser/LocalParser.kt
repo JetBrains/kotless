@@ -9,7 +9,7 @@ import java.io.File
  * LocalParser parses Kotlin code with Kotlin embeddable compiler looking
  * for Kotless DSL constructs that needed for local execution.
  */
-object  LocalParser {
+object LocalParser {
     data class Result(val entrypoint: Lambda.Entrypoint)
 
     fun parse(files: Set<File>, libs: Set<File>): Result {
