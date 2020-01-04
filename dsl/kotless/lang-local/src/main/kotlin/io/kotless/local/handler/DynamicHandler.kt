@@ -58,12 +58,13 @@ class DynamicHandler : AbstractHandler() {
             response.setHeader(name, value)
         }
 
-        val apiResponseBody = apiResponse.body ?: return
-
-        if (apiResponse.isBase64Encoded) {
-            response.outputStream.write(Base64.getDecoder().decode(apiResponseBody))
-        } else {
-            response.outputStream.write(apiResponseBody.toUtf8Bytes())
+        val apiResponseBody = apiResponse.body
+        if (apiResponseBody != null) {
+            if (apiResponse.isBase64Encoded) {
+                response.outputStream.write(Base64.getDecoder().decode(apiResponseBody))
+            } else {
+                response.outputStream.write(apiResponseBody.toUtf8Bytes())
+            }
         }
 
         baseRequest.isHandled = true
