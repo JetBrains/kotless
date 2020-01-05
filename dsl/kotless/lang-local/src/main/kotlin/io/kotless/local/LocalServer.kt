@@ -3,7 +3,7 @@ package io.kotless.local
 import io.kotless.dsl.LambdaHandler
 import io.kotless.local.handler.DynamicHandler
 import io.kotless.local.handler.StaticHandler
-import io.kotless.local.mock.ScheduledRunner
+import io.kotless.local.scheduled.ScheduledRunner
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 

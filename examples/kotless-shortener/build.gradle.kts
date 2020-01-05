@@ -1,4 +1,5 @@
 import io.kotless.DSLType
+import io.kotless.plugin.gradle.dsl.KotlessConfig
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
@@ -37,6 +38,10 @@ kotless {
             type = DSLType.Kotless
 
             workDirectory = file("src/main/static")
+        }
+
+        optimization {
+            autowarm = KotlessConfig.Optimization.Autowarm(true, 1)
         }
 
         terraform {

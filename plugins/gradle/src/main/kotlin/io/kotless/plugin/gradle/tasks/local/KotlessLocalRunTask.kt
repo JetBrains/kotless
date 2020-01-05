@@ -55,7 +55,7 @@ open class KotlessLocalRunTask : DefaultTask() {
             }
         }
 
-        (tasks.getByName("run") as JavaExec).apply {
+        tasks.myGetByName<JavaExec>("run").apply {
             classpath += files(myLocal().files)
 
             environment["SERVER_PORT"] = myKotless.extensions.local.port
@@ -67,6 +67,10 @@ open class KotlessLocalRunTask : DefaultTask() {
 
             if (kotlessVersion != null) {
                 environment["WORKING_DIR"] = myKotless.config.dsl.workDirectory.canonicalPath
+            }
+
+            if (myKotless.config.optimization.autowarm.enable) {
+                environment["AUTOWARM_MINUTES"] = myKotless.config.optimization.autowarm.minutes
             }
 
             for ((key, value) in myKotless.webapp.lambda.environment) {

@@ -29,7 +29,9 @@ internal inline fun <reified T : Task> TaskContainer.myCreate(name: String, cros
     configure(it)
 }
 
-internal fun Project.myShadowJar(name: String = "shadowJar"): ShadowJar = tasks.getByName(name) as ShadowJar
+internal fun Project.myShadowJar(name: String = "shadowJar"): ShadowJar = tasks.myGetByName(name)
+
+internal inline fun <reified T : Task> TaskContainer.myGetByName(name: String) = getByName(name) as T
 
 internal const val myLocalConfigurationName = "kotless-local"
 
