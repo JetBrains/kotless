@@ -2,6 +2,7 @@ package io.kotless.local.handler
 
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.dsl.reflection.ReflectionScanner
+import io.kotless.local.Environment
 import io.kotless.toURIPath
 import kotlinx.serialization.toUtf8Bytes
 import org.eclipse.jetty.server.Request
@@ -12,9 +13,7 @@ import javax.servlet.http.HttpServletResponse
 
 
 class StaticHandler : AbstractHandler() {
-    private val workingDir by lazy { File(System.getenv("WORKING_DIR")) }
-
-    private val fields by lazy { ReflectionScanner.fieldsWithAnnotation<StaticGet, File>().mapValues { File(workingDir, it.value.path) } }
+    private val fields by lazy { ReflectionScanner.fieldsWithAnnotation<StaticGet, File>().mapValues { File(Environment.workingDir, it.value.path) } }
 
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
         val path = request.requestURI.toURIPath()

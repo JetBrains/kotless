@@ -4,6 +4,7 @@ import io.kotless.ScheduledEventType
 import io.kotless.dsl.LambdaHandler
 import io.kotless.dsl.model.CloudWatch
 import io.kotless.dsl.utils.Json
+import io.kotless.local.Environment
 import io.kotless.utils.everyNMinutes
 import org.quartz.*
 import java.io.ByteArrayOutputStream
@@ -13,7 +14,7 @@ class AutowarmJob : Job {
         const val HANDLER_KEY = "LAMBDA_HANDLER"
 
         fun getJob(handler: LambdaHandler): Pair<Trigger, JobDetail>? {
-            val minutes = System.getenv("AUTOWARM_MINUTES")?.toInt() ?: return null
+            val minutes = Environment.autowarmMinutes ?: return null
 
             val id = ScheduledEventType.Autowarm.prefix
 

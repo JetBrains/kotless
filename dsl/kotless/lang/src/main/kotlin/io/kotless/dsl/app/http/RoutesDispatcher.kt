@@ -35,7 +35,7 @@ internal object RoutesDispatcher {
     }
 
     private fun processRequest(request: HttpRequest, resourceKey: RouteKey): HttpResponse {
-        logger.info("Passing request to route {}", resourceKey)
+        logger.debug("Passing request to route {}", resourceKey)
 
         val (func, mime) = RoutesStorage[resourceKey] ?: return notFound()
         logger.debug("Found $func for key $resourceKey")
@@ -47,7 +47,7 @@ internal object RoutesDispatcher {
             return serverError(e.message)
         }
 
-        logger.info("Route returned result")
+        logger.debug("Route returned result")
         return when (result) {
             is HttpResponse -> result
             else -> okResponse(result?.toString(), mime)

@@ -20,7 +20,7 @@ import java.io.OutputStream
  *
  * It supports:
  * * ApiGateway Post and Get requests
- * * CloudWatch events (used for warming)
+ * * CloudWatch events (used for warming and scheduling)
  */
 class LambdaHandler : RequestStreamHandler {
     companion object {
@@ -31,21 +31,21 @@ class LambdaHandler : RequestStreamHandler {
         val response = try {
             val jsonRequest = input.bufferedReader().use { it.readText() }
 
-            logger.info("Started handling request")
-            logger.debug("Request is {}", jsonRequest)
+            logger.debug("Started handling request")
+            logger.trace("Request is {}", jsonRequest)
 
             Application.init()
 
             if (jsonRequest.contains("Scheduled Event")) {
                 val event = Json.parse(CloudWatch.serializer(), jsonRequest)
                 if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
-                    logger.info("Request is Scheduled Event")
+                    logger.debug("Request is Scheduled Event")
                     EventsDispatcher.process(event)
                     return
                 }
             }
 
-            logger.info("Request is HTTP Event")
+            logger.debug("Request is HTTP Event")
 
             val request = Json.parse(HttpRequest.serializer(), jsonRequest)
             val resourceKey = RouteKey(request.method, request.path)
@@ -57,6 +57,6 @@ class LambdaHandler : RequestStreamHandler {
         }
 
         output.write(Json.bytes(HttpResponse.serializer(), response))
-        logger.info("Ended handling request")
+        logger.debug("Ended handling request")
     }
 }

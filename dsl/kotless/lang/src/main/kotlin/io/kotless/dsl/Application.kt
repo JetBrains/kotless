@@ -11,10 +11,9 @@ internal object Application {
 
     private var isInitialized = false
 
-
     fun init() {
         if (isInitialized) return
-        logger.info("Started initialization of Lambda")
+        logger.debug("Started initialization of Lambda")
 
         RoutesStorage.scan()
 
@@ -22,7 +21,7 @@ internal object Application {
 
         warmup()
 
-        logger.info("Lambda is initialized")
+        logger.debug("Lambda is initialized")
         isInitialized = true
     }
 

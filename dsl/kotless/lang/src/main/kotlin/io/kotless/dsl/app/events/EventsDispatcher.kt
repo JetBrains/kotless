@@ -13,16 +13,16 @@ internal object EventsDispatcher {
         for (resource in event.resources.map { it.substringAfter("/") }) {
             when {
                 resource.contains(ScheduledEventType.Autowarm.prefix) -> {
-                    logger.info("Executing warmup sequence")
+                    logger.trace("Executing warmup sequence")
                     Application.warmup()
-                    logger.info("Warmup sequence executed")
+                    logger.trace("Warmup sequence executed")
                 }
                 resource.contains(ScheduledEventType.General.prefix) -> {
                     val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
 
-                    logger.info("Executing scheduled lambda with key $key")
+                    logger.trace("Executing scheduled lambda with key $key")
                     EventsStorage[key]?.let { FunctionCaller.call(it, emptyMap()) }
-                    logger.info("Scheduled lambda with key $key was executed")
+                    logger.trace("Scheduled lambda with key $key was executed")
                 }
             }
         }

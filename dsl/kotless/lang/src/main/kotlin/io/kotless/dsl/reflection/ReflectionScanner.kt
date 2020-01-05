@@ -10,6 +10,14 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.kotlinFunction
 
+/**
+ * Reflection-based annotation scanner of Kotless.
+ *
+ * Used to find methods, fields, classes and objects that are relevant for
+ * Kotless Runtime.
+ *
+ * For example, it is used to find HTTP handlers and @Scheduled functions
+ */
 object ReflectionScanner {
     private val reflections by lazy {
         val configurationBuilder = ConfigurationBuilder()
@@ -30,6 +38,7 @@ object ReflectionScanner {
         val fields = reflections.getFieldsAnnotatedWith(annotation.java)
         return fields.mapNotNull {
             it.isAccessible = true
+            @Suppress("UNCHECKED_CAST")
             it.getAnnotation(annotation.java) as T to it.get(it.declaringClass) as E
         }.toMap()
     }
