@@ -1,7 +1,6 @@
 # Kotless roadmap
 
 ## 0.1.3
-* Support @Scheduled feature for local deployments
 * Support of dynamic entrypoints in Ktor
     * Support new mode -- map everything using catch-all path variables
 

@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Added
 * Output to console URL of deployed application
 * Support local start for Kotless DSL
+* Support @Scheduled execution for local starts
 * Use AWS Local Stack for mocking of AWS services during local start
    * Extension files will be automatically applied to LocalStack instance
 
