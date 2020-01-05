@@ -1,22 +1,27 @@
 package io.kotless.local
 
-import org.eclipse.jetty.server.Handler
+import io.kotless.dsl.LambdaHandler
+import io.kotless.local.handler.DynamicHandler
+import io.kotless.local.handler.StaticHandler
+import io.kotless.local.mock.ScheduledRunner
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 
 
-class LocalServer(port: Int, handlers: List<Handler>) {
-    private val server: Server = Server(port)
+class LocalServer(port: Int) {
+    private val handler = LambdaHandler()
 
-    constructor(port: Int, vararg handlers: Handler) : this(port, handlers.toList())
+    private val server: Server = Server(port)
+    private val scheduler: ScheduledRunner = ScheduledRunner(handler)
 
     init {
-        server.handler = HandlerList(*handlers.toTypedArray())
+        server.handler = HandlerList(StaticHandler(), DynamicHandler(handler))
         server.stopAtShutdown = true
     }
 
     fun start() {
         server.start()
+        scheduler.start()
     }
 
     fun join() {
@@ -24,6 +29,7 @@ class LocalServer(port: Int, handlers: List<Handler>) {
     }
 
     fun stop() {
+        scheduler.stop()
         server.stop()
     }
 }

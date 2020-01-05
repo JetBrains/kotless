@@ -5,7 +5,11 @@ version = rootProject.version
 
 
 dependencies {
+    api(kotlin("reflect"))
+
     api(project(":dsl:kotless:lang"))
+
+    implementation("org.quartz-scheduler", "quartz", "2.3.2")
     implementation("org.eclipse.jetty", "jetty-server", "9.4.25.v20191220")
 }
 

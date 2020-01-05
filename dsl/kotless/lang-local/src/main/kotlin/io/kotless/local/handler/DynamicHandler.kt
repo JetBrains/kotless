@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-class DynamicHandler : AbstractHandler() {
-    private val handler = LambdaHandler()
-
+class DynamicHandler(private val handler: LambdaHandler) : AbstractHandler() {
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
         val apiRequest = HttpRequest(
             resource = request.requestURI,
@@ -43,14 +41,14 @@ class DynamicHandler : AbstractHandler() {
             isBase64Encoded = false
         )
 
-        val outputStream = ByteArrayOutputStream()
+        val output = ByteArrayOutputStream()
         handler.handleRequest(
             input = Json.string(HttpRequest.serializer(), apiRequest).byteInputStream(),
-            output = outputStream,
+            output = output,
             any = null
         )
 
-        val apiResponse = Json.parse(HttpResponse.serializer(), outputStream.toString(Charsets.UTF_8.name()))
+        val apiResponse = Json.parse(HttpResponse.serializer(), output.toString(Charsets.UTF_8.name()))
 
         response.status = apiResponse.statusCode
 
