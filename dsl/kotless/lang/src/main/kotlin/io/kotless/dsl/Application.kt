@@ -1,11 +1,13 @@
 package io.kotless.dsl
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.app.http.RoutesStorage
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 
+@InternalAPI
 internal object Application {
     private val logger = LoggerFactory.getLogger(Application::class.java)
 

@@ -1,5 +1,6 @@
 package io.kotless.dsl.conversion
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.lang.LambdaInit
 import java.lang.reflect.Type
 import kotlin.reflect.KType
@@ -31,6 +32,7 @@ abstract class ConversionService : LambdaInit {
     protected abstract fun convertTo(value: Any): String
 
     companion object {
+        @UseExperimental(InternalAPI::class)
         private val registered: HashSet<ConversionService> = hashSetOf(DefaultConversionService)
 
         fun register(service: ConversionService) {

@@ -3,7 +3,6 @@ package io.kotless.local.scheduled
 import io.kotless.dsl.LambdaHandler
 import org.quartz.impl.StdSchedulerFactory
 
-
 class Scheduler(private val handler: LambdaHandler) {
     private val quartz by lazy { StdSchedulerFactory().scheduler }
 

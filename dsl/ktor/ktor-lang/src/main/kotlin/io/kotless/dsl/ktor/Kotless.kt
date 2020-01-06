@@ -2,6 +2,7 @@ package io.kotless.dsl.ktor
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
+import io.kotless.InternalAPI
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
 import io.kotless.dsl.ktor.lang.LambdaWarming
@@ -35,6 +36,7 @@ abstract class Kotless : RequestStreamHandler {
     abstract fun prepare(app: Application)
 
     @EngineAPI
+    @UseExperimental(InternalAPI::class)
     override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
         if (!prepared) {
             prepare(engine.application)

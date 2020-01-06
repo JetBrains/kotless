@@ -2,6 +2,7 @@ package io.kotless.dsl
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
+import io.kotless.InternalAPI
 import io.kotless.dsl.app.events.EventsDispatcher
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
@@ -22,6 +23,7 @@ import java.io.OutputStream
  * * ApiGateway Post and Get requests
  * * CloudWatch events (used for warming and scheduling)
  */
+@InternalAPI
 class LambdaHandler : RequestStreamHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)

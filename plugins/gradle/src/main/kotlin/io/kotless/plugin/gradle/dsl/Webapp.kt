@@ -1,5 +1,6 @@
 package io.kotless.plugin.gradle.dsl
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.config.KotlessAppConfig
 import java.io.Serializable
 
@@ -32,6 +33,7 @@ class Webapp : Serializable {
         }
 
         /** Setup configuration for Kotless DSL */
+        @UseExperimental(InternalAPI::class)
         @KotlessDSLTag
         fun kotless(configure: KotlessDSLRuntime.() -> Unit) {
             val dsl = KotlessDSLRuntime().apply(configure)

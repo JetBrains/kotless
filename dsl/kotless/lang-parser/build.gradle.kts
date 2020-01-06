@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -19,5 +20,11 @@ publishJar {
             vcsUrl = "https://github.com/JetBrains/kotless"
             labels.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
         }
+    }
+}
+
+tasks.withType<KotlinJvmCompile> {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
     }
 }

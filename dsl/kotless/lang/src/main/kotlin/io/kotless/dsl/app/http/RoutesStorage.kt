@@ -1,13 +1,13 @@
 package io.kotless.dsl.app.http
 
-import io.kotless.HttpMethod
-import io.kotless.MimeType
+import io.kotless.*
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotation
 
+@InternalAPI
 internal object RoutesStorage {
     data class Descriptor(val func: KFunction<*>, val mime: MimeType)
 

@@ -1,5 +1,6 @@
 package io.kotless.dsl.lang
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.model.HttpRequest
 
 /**
@@ -12,6 +13,7 @@ object KotlessContext {
     object HTTP {
         private var currentRequest: ThreadLocal<HttpRequest?> = ThreadLocal.withInitial { null }
 
+        @InternalAPI
         internal fun reset() {
             currentRequest.remove()
         }

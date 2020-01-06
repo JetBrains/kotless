@@ -1,5 +1,6 @@
 package io.kotless.dsl.reflection
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.config.KotlessAppConfig
 import org.reflections.Reflections
 import org.reflections.scanners.*
@@ -18,6 +19,7 @@ import kotlin.reflect.jvm.kotlinFunction
  *
  * For example, it is used to find HTTP handlers and @Scheduled functions
  */
+@InternalAPI
 object ReflectionScanner {
     private val reflections by lazy {
         val configurationBuilder = ConfigurationBuilder()

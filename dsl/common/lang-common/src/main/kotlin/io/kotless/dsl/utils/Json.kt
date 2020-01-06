@@ -1,10 +1,12 @@
 package io.kotless.dsl.utils
 
+import io.kotless.InternalAPI
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 import kotlinx.serialization.json.JsonConfiguration
 
+@InternalAPI
 object Json {
     @Suppress("EXPERIMENTAL_API_USAGE")
     val mapper = Json(JsonConfiguration(

@@ -1,5 +1,6 @@
 package io.kotless.dsl.app.http
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.lang.KotlessContext
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.model.HttpRequest
@@ -9,6 +10,7 @@ import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 
+@InternalAPI
 internal object RoutesDispatcher {
     private val logger = LoggerFactory.getLogger(RoutesDispatcher::class.java)
 

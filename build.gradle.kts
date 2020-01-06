@@ -34,6 +34,8 @@ subprojects {
             jvmTarget = "1.8"
             languageVersion = "1.3"
             apiVersion = "1.3"
+
+            freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=kotlin.Experimental")
         }
     }
 
