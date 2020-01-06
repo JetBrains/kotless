@@ -1,6 +1,6 @@
 package io.kotless.plugin.gradle.tasks.local
 
-import io.kotless.AwsResource
+import io.kotless.*
 import io.kotless.plugin.gradle.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -45,6 +45,7 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     val serviceMap: Map<AwsResource, String>
         get() = myServiceMap
 
+    @UseExperimental(InternalAPI::class)
     fun start() {
         if (!isEnabled) return
 
@@ -52,20 +53,21 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
 
         container!!.start()
 
-        myEnvMap["LOCALSTACK_ENABLED"] = "true"
+        myEnvMap[Constants.LocalStack.enabled] = "true"
 
         for (service in services) {
             val endpoint = container!!.getEndpointConfiguration(service)
-            myEnvMap["LOCALSTACK_${service.localStackName.toUpperCase()}_URL"] = endpoint.serviceEndpoint
-            myEnvMap["LOCALSTACK_${service.localStackName.toUpperCase()}_REGION"] = endpoint.signingRegion
+
+            myEnvMap[Constants.LocalStack.url(service.toResource())] = endpoint.serviceEndpoint
+            myEnvMap[Constants.LocalStack.region(service.toResource())] = endpoint.signingRegion
 
             myServiceMap[service.toResource()] = endpoint.serviceEndpoint
         }
 
         val credentials = container!!.defaultCredentialsProvider.credentials
 
-        myEnvMap["LOCALSTACK_ACCESSKEY"] = credentials.awsAccessKeyId
-        myEnvMap["LOCALSTACK_SECRETKEY"] = credentials.awsSecretKey
+        myEnvMap[Constants.LocalStack.accessKey] = credentials.awsAccessKeyId
+        myEnvMap[Constants.LocalStack.secretKey] = credentials.awsSecretKey
     }
 
     fun stop() {

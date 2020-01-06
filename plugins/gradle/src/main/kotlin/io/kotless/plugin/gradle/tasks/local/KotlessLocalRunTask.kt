@@ -1,5 +1,7 @@
 package io.kotless.plugin.gradle.tasks.local
 
+import io.kotless.Constants
+import io.kotless.InternalAPI
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
@@ -37,6 +39,7 @@ open class KotlessLocalRunTask : DefaultTask() {
     lateinit var localstack: LocalStackRunner
 
     @TaskAction
+    @UseExperimental(InternalAPI::class)
     fun act() = with(project) {
         val depsConfiguration = configurations.getByName(myKotless.config.configurationName)
         val deps = depsConfiguration.allDependencies
@@ -58,19 +61,19 @@ open class KotlessLocalRunTask : DefaultTask() {
         tasks.myGetByName<JavaExec>("run").apply {
             classpath += files(myLocal().files)
 
-            environment["SERVER_PORT"] = myKotless.extensions.local.port
+            environment[Constants.Local.serverPort] = myKotless.extensions.local.port
 
             if (ktorVersion != null) {
                 val local = LocalParser.parse(myAllSources, depsConfiguration.files.toSet())
-                environment["CLASS_TO_START"] = local.entrypoint.qualifiedName.substringBefore("::")
+                environment[Constants.Local.Ktor.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 
             if (kotlessVersion != null) {
-                environment["WORKING_DIR"] = myKotless.config.dsl.workDirectory.canonicalPath
+                environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.workDirectory.canonicalPath
             }
 
             if (myKotless.config.optimization.autowarm.enable) {
-                environment["AUTOWARM_MINUTES"] = myKotless.config.optimization.autowarm.minutes
+                environment[Constants.Local.autowarmMinutes] = myKotless.config.optimization.autowarm.minutes
             }
 
             for ((key, value) in myKotless.webapp.lambda.environment) {
