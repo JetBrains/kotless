@@ -14,12 +14,7 @@ private const val tableName: String = "ktor-short-url-table"
 
 @DynamoDBTable(tableName, PermissionLevel.ReadWrite)
 object URLStorage {
-    private val client = AmazonDynamoDBClientBuilder.standard()
-        .withLocalEndpoint(AwsResource.DynamoDB) { url, region ->
-            setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(url, region))
-        }.withLocalCredentials(AwsResource.DynamoDB) { accessKey, secretKey ->
-            credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey))
-        }.build()
+    private val client = AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()
 
     fun getByCode(code: String): String? {
         val req = GetItemRequest().withKey(mapOf(

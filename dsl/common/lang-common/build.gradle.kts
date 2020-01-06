@@ -11,6 +11,8 @@ plugins {
 dependencies {
     api(project(":model"))
 
+    api("com.amazonaws", "aws-java-sdk-core", "1.11.699")
+
     api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.14.0")
 
     api("com.amazonaws", "aws-lambda-java-core", "1.2.0")

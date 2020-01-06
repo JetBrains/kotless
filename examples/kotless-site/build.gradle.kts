@@ -50,5 +50,11 @@ kotless {
 
         route53 = Route53("site", "kotless.io")
     }
+
+    extensions {
+        local {
+            useAWSEmulation = false
+        }
+    }
 }
 

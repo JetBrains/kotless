@@ -1,31 +1,27 @@
 package io.kotless.dsl.lang
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.client.builder.AwsClientBuilder
 import io.kotless.*
+import io.kotless.Constants.LocalStack
+import java.lang.System.getenv
+
 
 /**
- * Returns url and region that should be used during local run
- * Will do nothing during run in cloud
+ * Sets up access and endpoint configuration for Kotless local start.
+ *
+ * It will do nothing and cost nothing, when app is deployed to cloud.
+ *
+ * **Note**: you should use it for all clients, that will be used by app during local start. Most likely - just for all clients
+ *
+ * **Example**: *AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()*
  */
 @UseExperimental(InternalAPI::class)
-fun <T> T.withLocalEndpoint(resource: AwsResource, body: T.(url: String, region: String) -> Unit): T {
-    if (System.getenv(Constants.LocalStack.enabled)?.toBoolean() == true) {
-        val url = System.getenv(Constants.LocalStack.url(resource))
-        val region = System.getenv(Constants.LocalStack.region(resource))
-        body(url, region)
-    }
-    return this
-}
-
-/**
- * Returns credentials that should be used during local run
- * Will do nothing during run in cloud
- */
-@UseExperimental(InternalAPI::class)
-fun <T> T.withLocalCredentials(resource: AwsResource, body: T.(accessKey: String, secretKey: String) -> Unit): T {
-    if (System.getenv(Constants.LocalStack.enabled)?.toBoolean() == true) {
-        val accessKey = System.getenv(Constants.LocalStack.accessKey)
-        val secretKey = System.getenv(Constants.LocalStack.secretKey)
-        body(accessKey, secretKey)
+fun <E, T: AwsClientBuilder<T, E>> AwsClientBuilder<T, E>.withKotlessLocal(resource: AwsResource): AwsClientBuilder<T, E> {
+    if (getenv(LocalStack.enabled)?.toBoolean() == true) {
+        setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(getenv(LocalStack.url(resource)), getenv(LocalStack.region(resource))))
+        credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(getenv(LocalStack.accessKey), getenv(LocalStack.secretKey)))
     }
     return this
 }
