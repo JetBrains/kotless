@@ -8,7 +8,7 @@ version = "0.1.3"
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
-    kotlin("jvm") version "1.3.50" apply true
+    kotlin("jvm") version "1.3.61" apply true
 
     id("io.kotless") version "0.1.3" apply true
 }

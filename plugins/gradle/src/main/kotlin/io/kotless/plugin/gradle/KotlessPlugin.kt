@@ -49,7 +49,7 @@ class KotlessPlugin : Plugin<Project> {
             val run = tasks.getByName("run")
             val classes = tasks.getByName("classes")
 
-            val local = LocalStackRunner(kotless.extensions.local.useAwsEmulation, AwsResource.forLocalStart)
+            val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)
 
             convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
                 DSLType.Kotless -> "io.kotless.local.MainKt"

@@ -77,7 +77,7 @@ open class KotlessLocalRunTask : DefaultTask() {
                 environment[key] = value
             }
 
-            if (myKotless.extensions.local.useAwsEmulation) {
+            if (myKotless.extensions.local.useAWSEmulation) {
                 environment.putAll(localstack.envMap)
             }
         }

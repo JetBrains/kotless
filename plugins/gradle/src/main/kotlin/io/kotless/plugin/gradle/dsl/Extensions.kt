@@ -45,7 +45,8 @@ class Extensions : Serializable {
         /** Port to use for local run of Kotless */
         var port: Int = 8080
 
-        var useAwsEmulation: Boolean = true
+        /** Run AWS Mock for local development */
+        var useAWSEmulation: Boolean = true
     }
 
     /**

@@ -5,13 +5,13 @@ version = rootProject.version
 
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.61" apply true
 }
 
 dependencies {
-    api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.13.0")
-
     api(project(":model"))
+
+    api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.14.0")
 
     api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
 

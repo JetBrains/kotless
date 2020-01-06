@@ -4,15 +4,13 @@ group = rootProject.group
 version = rootProject.version
 
 dependencies {
+    api(kotlin("reflect"))
+    api(kotlin("compiler-embeddable"))
+
     api(project(":schema"))
     api(project(":dsl:common:lang-common"))
 
     implementation(project(":dsl:kotless:lang"))
-
-    api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
-
-    api(kotlin("reflect"))
-    api(kotlin("compiler-embeddable"))
 }
 
 publishJar {

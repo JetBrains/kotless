@@ -50,18 +50,20 @@ class DynamicHandler(private val handler: LambdaHandler) : AbstractHandler() {
 
         val apiResponse = Json.parse(HttpResponse.serializer(), output.toString(Charsets.UTF_8.name()))
 
-        response.status = apiResponse.statusCode
+        response.apply {
+            status = apiResponse.statusCode
 
-        for ((name, value) in apiResponse.headers) {
-            response.setHeader(name, value)
-        }
+            for ((name, value) in apiResponse.headers) {
+                setHeader(name, value)
+            }
 
-        val apiResponseBody = apiResponse.body
-        if (apiResponseBody != null) {
-            if (apiResponse.isBase64Encoded) {
-                response.outputStream.write(Base64.getDecoder().decode(apiResponseBody))
-            } else {
-                response.outputStream.write(apiResponseBody.toUtf8Bytes())
+            val apiResponseBody = apiResponse.body
+            if (apiResponseBody != null) {
+                if (apiResponse.isBase64Encoded) {
+                    outputStream.write(Base64.getDecoder().decode(apiResponseBody))
+                } else {
+                    outputStream.write(apiResponseBody.toUtf8Bytes())
+                }
             }
         }
 

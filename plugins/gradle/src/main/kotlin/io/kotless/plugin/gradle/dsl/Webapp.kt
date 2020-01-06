@@ -41,7 +41,7 @@ class Webapp : Serializable {
 
     /** Deployment definition of ApiGateway. Recreated each redeploy. */
     @KotlessDSLTag
-    inner class Deployment : Serializable {
+    class Deployment : Serializable {
         /**
          * A unique name of deployment
          * By default it is `projectName`

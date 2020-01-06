@@ -20,13 +20,17 @@ class StaticHandler : AbstractHandler() {
         val route = fields.entries.find { it.key.path.toURIPath() == path }
         if (route != null) {
             val (ann, file) = route
-            response.status = 200
-            response.setHeader("Content-Type", ann.mime.mimeText)
-            if (ann.mime.isBinary) {
-                response.outputStream.write(file.readBytes())
-            } else {
-                response.outputStream.write(file.readText().toUtf8Bytes())
+
+            response.apply {
+                status = 200
+                setHeader("Content-Type", ann.mime.mimeText)
+                if (ann.mime.isBinary) {
+                    outputStream.write(file.readBytes())
+                } else {
+                    outputStream.write(file.readText().toUtf8Bytes())
+                }
             }
+
             baseRequest.isHandled = true
         }
     }

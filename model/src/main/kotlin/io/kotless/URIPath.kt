@@ -16,5 +16,4 @@ data class URIPath(var parts: Iterable<String>) {
     fun toAbsoluteString() = parts.joinToString(prefix = "/", separator = "/")
 }
 
-fun Iterable<String>.toURIPath() = URIPath(this)
 fun String.toURIPath() = URIPath(this.split("/"))

@@ -21,6 +21,7 @@ class AutowarmJob : Job {
             val map = JobDataMap().apply {
                 this[HANDLER_KEY] = handler
             }
+
             val job = JobBuilder
                 .newJob(AutowarmJob::class.java)
                 .withIdentity(id)
