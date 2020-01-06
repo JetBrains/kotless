@@ -40,10 +40,6 @@ kotless {
             workDirectory = file("src/main/static")
         }
 
-        optimization {
-            autowarm = KotlessConfig.Optimization.Autowarm(true, 1)
-        }
-
         terraform {
             profile = "kotless-jetbrains"
             region = "eu-west-1"

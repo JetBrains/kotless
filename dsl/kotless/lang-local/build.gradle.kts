@@ -6,8 +6,6 @@ version = rootProject.version
 
 
 dependencies {
-    api(kotlin("reflect"))
-
     api(project(":dsl:kotless:lang"))
 
     implementation("org.quartz-scheduler", "quartz", "2.3.2")
