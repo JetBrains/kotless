@@ -10,7 +10,7 @@ import java.io.Serializable
 @KotlessDSLTag
 class KotlessConfig(project: Project) : Serializable {
     /** Name of bucket Kotless will use to store all files */
-    lateinit var bucket: String
+    var bucket: String = ""
 
     /** Prefix with which all created resources will be prepended */
     var prefix: String = ""
@@ -47,7 +47,7 @@ class KotlessConfig(project: Project) : Serializable {
     @KotlessDSLTag
     class DSLConfig(project: Project) : Serializable {
         /** Type of DSL used by Kotless */
-        lateinit var type: DSLType
+        var type: DSLType = DSLType.Kotless
 
         /**
          * Directory Kotless considers as root for File resolving
