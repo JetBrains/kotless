@@ -6,8 +6,6 @@ import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.*
-import io.kotless.plugin.gradle.utils.myKtSourceSet
-import io.kotless.plugin.gradle.utils.myLocal
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.dependencies
@@ -41,15 +39,11 @@ open class KotlessLocalRunTask : DefaultTask() {
     @TaskAction
     @UseExperimental(InternalAPI::class)
     fun act() = with(project) {
-        val depsConfiguration = configurations.getByName(myKotless.config.configurationName)
-        val deps = depsConfiguration.allDependencies
-
-        val ktorVersion = deps.find { it.group == "io.kotless" && (it.name == "ktor-lang") }?.version
-        val kotlessVersion = deps.find { it.group == "io.kotless" && (it.name == "lang") }?.version
+        val ktorVersion = Dependencies.getKtorDependency(this)?.version
+        val kotlessVersion = Dependencies.getKotlessDependency(this)?.version
 
         require(ktorVersion != null || kotlessVersion != null) { "Cannot find \"lang\" or \"ktor-lang\" dependencies. One of them required for local start." }
         require(ktorVersion == null || kotlessVersion == null) { "Both \"lang\" and \"ktor-lang\" dependencies found. Only one of them should be used." }
-
 
         dependencies {
             when {
@@ -64,7 +58,7 @@ open class KotlessLocalRunTask : DefaultTask() {
             environment[Constants.Local.serverPort] = myKotless.extensions.local.port
 
             if (ktorVersion != null) {
-                val local = LocalParser.parse(myAllSources, depsConfiguration.files.toSet())
+                val local = LocalParser.parse(myAllSources, Dependencies.getDependencies(project))
                 environment[Constants.Local.Ktor.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 

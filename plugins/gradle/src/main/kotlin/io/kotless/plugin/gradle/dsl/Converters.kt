@@ -1,11 +1,10 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.KotlessConfig
-import org.gradle.api.Project
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
-        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.type, dsl.workDirectory),
+        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.workDirectory),
             with(terraform) {
                 KotlessConfig.Terraform(
                     version,

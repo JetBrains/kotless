@@ -60,13 +60,12 @@ open class KotlessGenerateTask : DefaultTask() {
         val myWebapp = myKotless.webapp
 
         val shadowJar = project.myShadowJar().archiveFile.get().asFile
-        val dependencies = project.configurations.getByName(myKotless.config.configurationName).files.toSet()
 
         val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, myWebapp.lambda.mergedEnvironment)
 
-        val parsed = when (myKotless.config.dsl.type) {
-            DSLType.Kotless -> KotlessParser.parse(myAllSources, shadowJar, config, lambda, dependencies)
-            DSLType.Ktor -> KTorParser.parse(myAllSources, shadowJar, config, lambda, dependencies)
+        val parsed = when (myKotless.config.dsl.typeOrDefault) {
+            DSLType.Kotless -> KotlessParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Ktor -> KTorParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
         }
 
         val webapp = Webapp(

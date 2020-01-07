@@ -2,6 +2,7 @@ package io.kotless.plugin.gradle.dsl
 
 import io.kotless.DSLType
 import io.kotless.KotlessConfig.Optimization.MergeLambda
+import io.kotless.plugin.gradle.utils.Dependencies
 import org.gradle.api.Project
 import java.io.File
 import java.io.Serializable
@@ -37,9 +38,19 @@ class KotlessConfig(project: Project) : Serializable {
     var configurationName = "compileClasspath"
 
     @KotlessDSLTag
-    class DSLConfig(project: Project) : Serializable {
-        /** Type of DSL used by Kotless */
-        var type: DSLType = DSLType.Kotless
+    inner class DSLConfig(project: Project) : Serializable {
+        internal val defaultType by lazy {
+            when {
+                Dependencies.getKotlessDependency(project) != null -> DSLType.Kotless
+                Dependencies.getKtorDependency(project) != null -> DSLType.Ktor
+                else -> DSLType.Kotless
+            }
+        }
+        internal val typeOrDefault: DSLType
+            get() = type ?: defaultType
+
+        /** Type of DSL used by Kotless. By default, will be used inferred from used library */
+        var type: DSLType? = null
 
         /**
          * Directory Kotless considers as root for File resolving

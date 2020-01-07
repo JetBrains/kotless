@@ -20,7 +20,7 @@ object KotlessLocalTasks {
         with(tasks) {
             val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)
 
-            convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.type) {
+            convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.typeOrDefault) {
                 DSLType.Kotless -> "io.kotless.local.MainKt"
                 DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
             }
