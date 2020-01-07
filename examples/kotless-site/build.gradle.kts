@@ -30,8 +30,6 @@ kotless {
         prefix = "site"
 
         dsl {
-            type = DSLType.Kotless
-
             workDirectory = file("src/main/static")
         }
 

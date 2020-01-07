@@ -38,10 +38,6 @@ kotless {
         bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
         prefix = "ktor-site"
 
-        dsl {
-            type = DSLType.Ktor
-        }
-
         terraform {
             profile = "kotless-jetbrains"
             region = "eu-west-1"

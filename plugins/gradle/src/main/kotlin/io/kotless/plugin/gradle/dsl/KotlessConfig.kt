@@ -61,7 +61,7 @@ class KotlessConfig(project: Project) : Serializable {
          */
         var workDirectory: File = project.projectDir
             set(value) {
-                require(type == DSLType.Kotless) { "Work directory cannot be reassigned for Ktor" }
+                require(type == null || type == DSLType.Kotless) { "Work directory cannot be reassigned for Ktor" }
                 field = value
             }
     }
