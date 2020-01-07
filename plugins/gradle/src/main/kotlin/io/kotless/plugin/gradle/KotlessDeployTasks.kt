@@ -13,7 +13,7 @@ object KotlessDeployTasks {
     fun Project.setupDeployTasks(download: Task) {
         if (kotless.config.bucket.isEmpty()) {
             logger.warn("Configuration succeeded, but Kotless requires `kotless { bucket = \"...\" }` for actual deployment")
-            logger.warn("Terraform deployment tasks will NOT be added to this project")
+            logger.warn("Deployment tasks will NOT be added to this project")
             return
         }
         

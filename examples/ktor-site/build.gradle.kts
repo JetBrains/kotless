@@ -15,6 +15,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
@@ -49,6 +50,12 @@ kotless {
 
     webapp {
         route53 = Route53("ktor.site", "kotless.io")
+    }
+
+    extensions {
+        local {
+            useAWSEmulation = false
+        }
     }
 }
 
