@@ -2,6 +2,7 @@ package io.kotless.plugin.gradle.dsl
 
 import io.kotless.InternalAPI
 import io.kotless.dsl.config.KotlessAppConfig
+import org.gradle.api.Project
 import java.io.Serializable
 
 /**
@@ -9,16 +10,9 @@ import java.io.Serializable
  * It includes ApiGateway REST API definition and Route53 alias with SSL certificate, if present.
  */
 @KotlessDSLTag
-class Webapp : Serializable {
-    internal val lambda: Lambda = Lambda()
-    /** Optimizations applied during generation */
+class Webapp(project: Project) : Serializable {
     @KotlessDSLTag
-    fun lambda(configure: Lambda.() -> Unit) {
-        lambda.apply(configure)
-    }
-
-    @KotlessDSLTag
-    class Lambda : Serializable {
+    class Lambda(project: Project) : Serializable {
         /** Memory in megabytes available for a lambda */
         var memoryMb: Int = 1024
 
@@ -27,18 +21,31 @@ class Webapp : Serializable {
 
         val environment: HashMap<String, String> = HashMap()
 
+        @UseExperimental(InternalAPI::class)
+        internal val mergedEnvironment: Map<String, String>
+            get() = environment + mapOf(KotlessAppConfig.PACKAGE_ENV_NAME to kotlessDSL.packages.joinToString(separator = ","))
+
         @KotlessDSLTag
-        class KotlessDSLRuntime : Serializable {
-            lateinit var packages: Set<String>
+        class KotlessDSLRuntime(project: Project) : Serializable {
+            /** Default value is the group of project */
+            var packages: Set<String> = setOf(project.group.toString())
         }
 
+        internal val kotlessDSL = KotlessDSLRuntime(project)
+
         /** Setup configuration for Kotless DSL */
-        @UseExperimental(InternalAPI::class)
         @KotlessDSLTag
         fun kotless(configure: KotlessDSLRuntime.() -> Unit) {
-            val dsl = KotlessDSLRuntime().apply(configure)
-            environment[KotlessAppConfig.PACKAGE_ENV_NAME] = dsl.packages.joinToString(separator = ",")
+            kotlessDSL.configure()
         }
+    }
+
+    internal val lambda: Lambda = Lambda(project)
+
+    /** Optimizations applied during generation */
+    @KotlessDSLTag
+    fun lambda(configure: Lambda.() -> Unit) {
+        lambda.configure()
     }
 
     /** Deployment definition of ApiGateway. Recreated each redeploy. */
@@ -58,10 +65,11 @@ class Webapp : Serializable {
     }
 
     internal val deployment = Deployment()
+
     /** Deployment resource of ApiGateway */
     @KotlessDSLTag
     fun deployment(configure: Deployment.() -> Unit) {
-        deployment.apply(configure)
+        deployment.configure()
     }
 
     /** Alias to RestAPI, if present */

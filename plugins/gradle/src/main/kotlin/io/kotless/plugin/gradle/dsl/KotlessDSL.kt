@@ -6,18 +6,18 @@ import java.io.Serializable
 /** Kotless DSL root */
 @KotlessDSLTag
 class KotlessDSL(project: Project) : Serializable {
-    internal var config: KotlessConfig = KotlessConfig(project)
+    internal val config: KotlessConfig = KotlessConfig(project)
     /** Declaration of Kotless configuration itself */
     @KotlessDSLTag
     fun config(configure: KotlessConfig.() -> Unit) {
-        config = config.apply(configure)
+        config.configure()
     }
 
-    internal var webapp: Webapp = Webapp()
+    internal val webapp: Webapp = Webapp(project)
     /** Configuration of Kotless Web application */
     @KotlessDSLTag
     fun webapp(configure: Webapp.() -> Unit) {
-        webapp = Webapp().apply(configure)
+        webapp.configure()
     }
 
     internal val extensions: Extensions = Extensions()

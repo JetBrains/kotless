@@ -76,7 +76,7 @@ open class KotlessLocalRunTask : DefaultTask() {
                 environment[Constants.Local.autowarmMinutes] = myKotless.config.optimization.autowarm.minutes
             }
 
-            for ((key, value) in myKotless.webapp.lambda.environment) {
+            for ((key, value) in myKotless.webapp.lambda.mergedEnvironment) {
                 environment[key] = value
             }
 

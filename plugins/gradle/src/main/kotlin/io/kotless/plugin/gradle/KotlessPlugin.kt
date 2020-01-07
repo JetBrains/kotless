@@ -2,6 +2,8 @@ package io.kotless.plugin.gradle
 
 import io.kotless.plugin.gradle.KotlessDeployTasks.setupDeployTasks
 import io.kotless.plugin.gradle.KotlessLocalTasks.setupLocalTasks
+import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.terraform.TerraformDownloadTask
 import io.kotless.plugin.gradle.utils.*
 import org.gradle.api.Plugin

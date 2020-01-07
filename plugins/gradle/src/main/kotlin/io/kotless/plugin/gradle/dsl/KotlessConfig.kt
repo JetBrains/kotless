@@ -36,14 +36,6 @@ class KotlessConfig(project: Project) : Serializable {
     /** Name of configuration to use as a classpath */
     var configurationName = "compileClasspath"
 
-    internal val dsl: DSLConfig = DSLConfig(project)
-
-    /** Configuration of DSL used by Kotless */
-    @KotlessDSLTag
-    fun dsl(configure: DSLConfig.() -> Unit) {
-        dsl.configure()
-    }
-
     @KotlessDSLTag
     class DSLConfig(project: Project) : Serializable {
         /** Type of DSL used by Kotless */
@@ -63,12 +55,12 @@ class KotlessConfig(project: Project) : Serializable {
             }
     }
 
+    internal val dsl: DSLConfig = DSLConfig(project)
 
-    internal val terraform: Terraform = Terraform()
-    /** Configuration of Terraform */
+    /** Configuration of DSL used by Kotless */
     @KotlessDSLTag
-    fun terraform(configure: Terraform.() -> Unit) {
-        terraform.apply(configure)
+    fun dsl(configure: DSLConfig.() -> Unit) {
+        dsl.configure()
     }
 
     @KotlessDSLTag
@@ -78,17 +70,12 @@ class KotlessConfig(project: Project) : Serializable {
          * By default, `0.11.14`
          */
         var version: String = "0.11.14"
+
         /** AWS profile from a local machine to use for Terraform operations authentication */
         lateinit var profile: String
+
         /** AWS region in context of which all Terraform operations should be performed */
         lateinit var region: String
-
-        internal val backend = Backend()
-        /** Configuration of Terraform backend */
-        @KotlessDSLTag
-        fun backend(configure: Backend.() -> Unit) {
-            backend.apply(configure)
-        }
 
         @KotlessDSLTag
         class Backend : Serializable {
@@ -109,11 +96,12 @@ class KotlessConfig(project: Project) : Serializable {
             var region: String? = null
         }
 
-        internal val provider = AWSProvider()
-        /** Configuration of Terraform AWS provider */
+        internal val backend = Backend()
+
+        /** Configuration of Terraform backend */
         @KotlessDSLTag
-        fun provider(configure: AWSProvider.() -> Unit) {
-            provider.apply(configure)
+        fun backend(configure: Backend.() -> Unit) {
+            backend.configure()
         }
 
         @KotlessDSLTag
@@ -125,13 +113,22 @@ class KotlessConfig(project: Project) : Serializable {
 
             var region: String? = null
         }
+
+        internal val provider = AWSProvider()
+
+        /** Configuration of Terraform AWS provider */
+        @KotlessDSLTag
+        fun provider(configure: AWSProvider.() -> Unit) {
+            provider.configure()
+        }
     }
 
-    internal val optimization: Optimization = Optimization()
-    /** Optimizations applied during generation */
+    internal val terraform: Terraform = Terraform()
+
+    /** Configuration of Terraform */
     @KotlessDSLTag
-    fun optimization(configure: Optimization.() -> Unit) {
-        optimization.apply(configure)
+    fun terraform(configure: Terraform.() -> Unit) {
+        terraform.configure()
     }
 
     @KotlessDSLTag
@@ -157,5 +154,13 @@ class KotlessConfig(project: Project) : Serializable {
         data class Autowarm(val enable: Boolean, val minutes: Int) : Serializable
 
         var autowarm: Autowarm = Autowarm(true, 5)
+    }
+
+    internal val optimization: Optimization = Optimization()
+
+    /** Optimizations applied during generation */
+    @KotlessDSLTag
+    fun optimization(configure: Optimization.() -> Unit) {
+        optimization.configure()
     }
 }
