@@ -182,3 +182,9 @@ You may take a look at [Wiki](https://github.com/JetBrains/kotless/wiki) where t
 Apart from that, Kotless code itself is widely documented, and you can take a look into its interfaces to get to know Kotless better. 
 
 You may ask questions and participate in discussions in `#kotless` channel in [KotlinLang slack](http://slack.kotlinlang.org).
+
+## Special thanks
+Special thanks goes to:
+
+* Alexandra Pavlova (aka sunalex) for our beautiful icon
+* [Gregor Billing](https://github.com/suushiemaniac) for help with Gradle plugin and more
