@@ -3,7 +3,7 @@ package io.kotless.plugin.gradle.tasks.gen
 import io.kotless.*
 import io.kotless.Webapp
 import io.kotless.parser.KotlessParser
-import io.kotless.parser.SpringParser
+import io.kotless.parser.spring.SpringParser
 import io.kotless.parser.ktor.KTorParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.*
@@ -11,6 +11,8 @@ import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+import org.gradle.kotlin.dsl.get
 import java.io.File
 
 /**
@@ -60,14 +62,14 @@ open class KotlessGenerateTask : DefaultTask() {
 
         val myWebapp = myKotless.webapp
 
-        val shadowJar = project.myShadowJar().archiveFile.get().asFile
+        val jar = (project.tasks[myKotless.config.myArchiveTask] as AbstractArchiveTask).archiveFile.get().asFile
 
         val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, myWebapp.lambda.mergedEnvironment)
 
         val parsed = when (myKotless.config.dsl.typeOrDefault) {
-            DSLType.Kotless -> KotlessParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Ktor -> KTorParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Spring -> SpringParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Kotless -> KotlessParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Ktor -> KTorParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Spring -> SpringParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
         }
 
         val webapp = Webapp(

@@ -42,8 +42,9 @@ open class KotlessLocalRunTask : DefaultTask() {
         val ktorVersion = Dependencies.getKtorDependency(this)?.version
         val kotlessVersion = Dependencies.getKotlessDependency(this)?.version
 
-        require(ktorVersion != null || kotlessVersion != null) { "Cannot find \"lang\" or \"ktor-lang\" dependencies. One of them required for local start." }
-        require(ktorVersion == null || kotlessVersion == null) { "Both \"lang\" and \"ktor-lang\" dependencies found. Only one of them should be used." }
+        //TODO-tanvd fix
+//        require(ktorVersion != null || kotlessVersion != null) { "Cannot find \"lang\" or \"ktor-lang\" dependencies. One of them required for local start." }
+//        require(ktorVersion == null || kotlessVersion == null) { "Both \"lang\" and \"ktor-lang\" dependencies found. Only one of them should be used." }
 
         dependencies {
             when {

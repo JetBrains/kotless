@@ -7,6 +7,7 @@ import io.kotless.plugin.gradle.utils.*
 import io.kotless.plugin.gradle.utils.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.kotlin.dsl.get
 
 object KotlessDeployTasks {
 
@@ -23,7 +24,7 @@ object KotlessDeployTasks {
             val init = myCreate<TerraformOperationTask>("initialize") {
                 group = Groups.`kotless setup`
 
-                dependsOn(download, generate, myShadowJar())
+                dependsOn(download, generate, project.tasks[kotless.config.myArchiveTask])
 
                 root = kotless.config.deployGenDirectory
 

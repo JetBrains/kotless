@@ -3,7 +3,9 @@ package io.kotless.plugin.gradle.dsl
 import io.kotless.DSLType
 import io.kotless.KotlessConfig.Optimization.MergeLambda
 import io.kotless.plugin.gradle.utils.Dependencies
+import io.kotless.plugin.gradle.utils.myShadowJar
 import org.gradle.api.Project
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 import java.io.File
 import java.io.Serializable
 
@@ -37,12 +39,18 @@ class KotlessConfig(project: Project) : Serializable {
     /** Name of configuration to use as a classpath */
     var configurationName = "compileClasspath"
 
+    internal var myArchiveTask: String = project.myShadowJar().name
+    fun setArchiveTask(task: AbstractArchiveTask) {
+        myArchiveTask = task.name
+    }
+
     @KotlessDSLTag
     inner class DSLConfig(project: Project) : Serializable {
         internal val defaultType by lazy {
             when {
-                Dependencies.getKotlessDependency(project) != null -> DSLType.Kotless
-                Dependencies.getKtorDependency(project) != null -> DSLType.Ktor
+                Dependencies.hasKotlessDependency(project) -> DSLType.Kotless
+                Dependencies.hasKtorDependency(project)  -> DSLType.Ktor
+                Dependencies.hasSpringDependency(project) || Dependencies.hasSpringBootDependency(project) -> DSLType.Spring
                 else -> DSLType.Kotless
             }
         }

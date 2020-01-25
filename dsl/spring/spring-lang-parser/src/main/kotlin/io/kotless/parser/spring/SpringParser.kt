@@ -1,7 +1,8 @@
-package io.kotless.parser
+package io.kotless.parser.spring
 
+import io.kotless.parser.Parser
 import io.kotless.parser.processor.config.EntrypointProcessor
-import io.kotless.parser.processor.route.DynamicRoutesProcessor
+import io.kotless.parser.spring.processor.route.DynamicRoutesProcessor
 
 /**
  * SpringParser parses Kotlin code with Kotlin embeddable compiler looking

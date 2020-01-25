@@ -9,6 +9,10 @@ dependencies {
 
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
+
+    implementation("org.slf4j", "slf4j-log4j12", "1.7.25")
+    implementation("log4j", "log4j", "1.2.17")
+    implementation("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
 }
 
 publishJar {

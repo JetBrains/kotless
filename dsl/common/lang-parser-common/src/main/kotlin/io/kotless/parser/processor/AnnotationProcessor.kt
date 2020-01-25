@@ -10,6 +10,18 @@ import kotlin.reflect.KClass
 abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
     abstract val annotations: Set<KClass<out Annotation>>
 
+    fun processClassesOrObjects(files: Set<KtFile>, binding: BindingContext, body: (KtClassOrObject, KtAnnotationEntry, KClass<*>) -> Unit) {
+        for (file in files) {
+            for (func in gatherClassesOrObjects(binding, file)) {
+                for (annotationKClass in annotations) {
+                    func.getAnnotations(binding, annotationKClass).forEach { annotation ->
+                        body(func, annotation, annotationKClass)
+                    }
+                }
+            }
+        }
+    }
+
     fun processFunctions(files: Set<KtFile>, binding: BindingContext, body: (KtNamedFunction, KtAnnotationEntry, KClass<*>) -> Unit) {
         for (file in files) {
             for (func in gatherFunctions(binding, file)) {
@@ -32,6 +44,13 @@ abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
                 }
             }
         }
+    }
+
+    /** Get annotated @Get and @Post top-level functions and object functions */
+    private fun gatherClassesOrObjects(context: BindingContext, ktFile: KtFile): Set<KtClassOrObject> {
+        val named = ktFile.gatherClasses { it.isAnnotatedWith(context, annotations) }
+        val objects = ktFile.gatherStaticObjects { it.isAnnotatedWith(context, annotations) }
+        return (named + objects).toSet()
     }
 
     /** Get annotated @Get and @Post top-level functions and object functions */
