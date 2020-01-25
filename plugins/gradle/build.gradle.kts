@@ -30,6 +30,7 @@ dependencies {
 
     implementation(project(":dsl:kotless:lang-parser"))
     implementation(project(":dsl:ktor:ktor-lang-parser"))
+    implementation(project(":dsl:spring:spring-lang-parser"))
     implementation(project(":engine"))
 
     implementation("com.github.jengelman.gradle.plugins", "shadow", "5.0.0")

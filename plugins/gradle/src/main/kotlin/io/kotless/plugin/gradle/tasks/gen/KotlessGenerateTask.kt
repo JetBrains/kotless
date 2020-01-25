@@ -3,6 +3,7 @@ package io.kotless.plugin.gradle.tasks.gen
 import io.kotless.*
 import io.kotless.Webapp
 import io.kotless.parser.KotlessParser
+import io.kotless.parser.SpringParser
 import io.kotless.parser.ktor.KTorParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.*
@@ -66,6 +67,7 @@ open class KotlessGenerateTask : DefaultTask() {
         val parsed = when (myKotless.config.dsl.typeOrDefault) {
             DSLType.Kotless -> KotlessParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
             DSLType.Ktor -> KTorParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Spring -> SpringParser.parse(myAllSources, shadowJar, config, lambda, Dependencies.getDependencies(project))
         }
 
         val webapp = Webapp(

@@ -25,6 +25,7 @@ inline fun <reified T> KtAnnotationEntry.getValue(context: BindingContext, param
 inline fun <reified T> AnnotationDescriptor.getValue(param: KProperty<T>): T? = argumentValue(param.name)?.value as T?
 
 fun KtAnnotationEntry.getURIPath(context: BindingContext, param: KProperty<String>) = getValue(context, param)?.toURIPath()
+fun KtAnnotationEntry.getURIPaths(context: BindingContext, param: KProperty<Array<String>>) = getValue(context, param)?.map { it.toURIPath() }
 
 
 inline fun <reified T : Any> KtAnnotationEntry.getArrayValue(context: BindingContext, param: KProperty1<out Annotation, Array<out T>>): Array<T> {

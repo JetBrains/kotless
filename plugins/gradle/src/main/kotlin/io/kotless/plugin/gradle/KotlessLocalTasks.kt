@@ -23,6 +23,7 @@ object KotlessLocalTasks {
             convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.typeOrDefault) {
                 DSLType.Kotless -> "io.kotless.local.MainKt"
                 DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
+                DSLType.Spring -> error("Local start is not supported for spring right now")
             }
 
             if (kotless.extensions.local.useAWSEmulation) {
