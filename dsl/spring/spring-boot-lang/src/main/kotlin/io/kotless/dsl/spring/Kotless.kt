@@ -28,6 +28,7 @@ abstract class Kotless : RequestStreamHandler {
     override fun handleRequest(input: InputStream, output: OutputStream, context: Context) {
         if (!prepared) {
             handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(bootKlass.java)
+            prepared = true
         }
 
         val json = input.bufferedReader().use { it.readText() }
