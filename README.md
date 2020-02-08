@@ -9,7 +9,7 @@
 
 Kotless stands for Kotlin serverless framework. 
 
-Its main focus lies in reducing the routine of serverless deployment creation and generating it straight
+Its focus lies in reducing the routine of serverless deployment creation and generating it straight
 from the code of the application itself. 
 
 Kotless consists of two main parts:
@@ -18,8 +18,10 @@ Kotless consists of two main parts:
       and Kotless will generate deployment for it.
     * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
-* Kotless Gradle Plugin provides a way of deploying serverless application. It performs the tasks of generating Terraform 
-  code from the application code and, subsequently, deploying it to AWS.
+* Kotless Gradle Plugin provides a way of deploying serverless application. 
+    * It performs the tasks of generating Terraform code from the application code and, 
+      subsequently, deploying it to AWS.
+    * It runs application locally, emulates AWS environment and provides possibility for in-IDE debug
   
 ## Getting started
 
@@ -59,7 +61,9 @@ plugins {
 }
 ```
 
-Then you just set up Kotless in your `build.gradle.kts`. It's rather simple:
+If you don't have AWS account -- stop here. Now you can use `local` task to run application locally and debug it.
+
+If you have AWS account and want to perform real deploy -- let's set up everything for it! It's rather simple:
 
 ```kotlin
 kotless {
@@ -79,6 +83,7 @@ kotless {
     }
 
     webapp {
+        //Optional parameter, by default technical name will be generated
         route53 = Route53("kotless", "example.com")
 
         //configuration of lambda created
@@ -86,6 +91,7 @@ kotless {
             //needed only for Kotless DSL
             kotless {
                 //Define packages in which scan for routes should be performed
+                //By default, will be set to gradle module group
                 packages = setOf("io.kotless.examples")
             }
         }
@@ -132,6 +138,20 @@ class Server : Kotless() {
 
 *HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency*
 
+## Local start
+
+Kotless' application can be started locally. This functionality is supported for Kotless and Ktor DSL. 
+
+Moreover, Kotless local start may include AWS emulation. Just instantiate your AWS Service client using override for Kotless local starts:
+```kotlin
+val client = AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()
+```
+
+During local run LocalStack will be started and all clients will be pointed to it automatically. 
+
+Local start functionality does not require any access to cloud provider, so you may check how your application
+behaves without an AWS account. Also, it gives you possibility to debug application locally from your IDE. 
+
 ## Advanced features
 
 While Kotless can be used as a framework for a rapid creation of serverless
@@ -165,7 +185,7 @@ Any explanation becomes much better with a proper example.
 
 In the repository's `examples` folder, you can find example projects built with Kotless:
 * `kotless-site` &mdash; a site about Kotless written with Kotless DSL ([site.kotless.io](https://site.kotless.io)). 
-This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API
+This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API.
 * `kotless-shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and Terraform extensions.
 

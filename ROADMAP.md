@@ -1,10 +1,9 @@
 # Kotless roadmap
 
-## 0.1.3
+## 0.1.*
 * Support of dynamic entrypoints in Ktor
     * Support new mode -- map everything using catch-all path variables
-
-## 0.1.*
+* Support of Spring Boot
 * Extension for Cognito authentication
 * Support of Azure
 * DSL libraries for S3, DynamoDB, SSM at least
