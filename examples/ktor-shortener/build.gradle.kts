@@ -51,6 +51,10 @@ kotless {
     }
 
     extensions {
+        local {
+            useAWSEmulation = true
+        }
+
         terraform {
             files {
                 add(file("src/main/tf/extensions.tf"))

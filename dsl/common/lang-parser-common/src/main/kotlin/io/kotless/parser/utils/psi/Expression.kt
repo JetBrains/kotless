@@ -34,7 +34,11 @@ inline fun <reified Desc : DeclarationDescriptorWithSource, reified Elem : PsiEl
     }
 }
 
-/** Gather all expressions inside current — recursively */
+/**
+ * Gather all expressions inside current — recursively
+ *
+ * Previous is sorted from the nearest element (at the start) to the most distant
+ */
 fun KtElement.visit(context: BindingContext, body: (element: KtElement, previous: List<KtElement>) -> Boolean) {
     val stack = Stack<KtElement>()
     val previous = Stack<KtElement>()

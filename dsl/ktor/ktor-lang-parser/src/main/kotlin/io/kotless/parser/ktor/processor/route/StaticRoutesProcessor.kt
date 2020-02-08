@@ -63,7 +63,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         val staticCalls = previous.filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.http.content.static" }
         val path = staticCalls.map {
             (it as KtCallExpression).getArgumentOrNull("remotePath", binding)?.asString(binding) ?: ""
-        }
+        }.filter { it.isNotBlank() }.reversed()
         return URIPath(path.joinToString(separator = "/"))
     }
 
