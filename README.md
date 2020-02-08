@@ -40,7 +40,7 @@ plugins {
     //Version of Kotlin should 1.3.50+
     kotlin("jvm") version "1.3.50" apply true
 
-    id("io.kotless") version "0.1.2" apply true
+    id("io.kotless") version "0.1.3" apply true
 }
 ```
 
@@ -53,9 +53,9 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.2")
+    implementation("io.kotless", "lang", "0.1.3")
     //or for Ktor
-    //implementation("io.kotless", "ktor-lang", "0.1.2")
+    //implementation("io.kotless", "ktor-lang", "0.1.3")
 }
 ```
 
