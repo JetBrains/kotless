@@ -136,9 +136,23 @@ class Server : Kotless() {
 Kotless' application can start locally as an HTTP server. This functionality is supported for Kotless 
 and Ktor DSL. 
 
-Moreover, Kotless local start may include AWS emulation. Just instantiate your AWS Service client using override for Kotless local starts:
+Moreover, Kotless local start may spin up AWS emulation. Just instantiate your AWS Service client using override for Kotless local starts:
 ```kotlin
 val client = AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()
+```
+
+And enable it in Gradle:
+
+```kotlin
+kotless {
+    //<...>
+    extensions {
+        local {
+            //enable AWS emulation (disabled by default)
+            useAWSEmulation = true
+        }   
+    }
+}
 ```
 
 During local run LocalStack will be started and all clients will be pointed to its endpoint automatically. 

@@ -44,7 +44,7 @@ class Extensions : Serializable {
         var port: Int = 8080
 
         /** Run AWS Mock for local development */
-        var useAWSEmulation: Boolean = true
+        var useAWSEmulation: Boolean = false
     }
 
     internal val local = Local()
