@@ -14,14 +14,14 @@ from the code of the application itself.
 
 Kotless consists of two main parts:
 * DSL provides a way of defining serverless applications. There are two DSLs supported:
-    * Ktor DSL &mdash; Ktor engine that will be introspected by Kotless. You will use standard Ktor syntax 
-      and Kotless will generate deployment for it.
+    * Ktor DSL &mdash; Ktor engine that is introspected by Kotless. You use standard Ktor syntax 
+      and Kotless generates deployment for it.
     * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
-* Kotless Gradle Plugin provides a way of deploying serverless application. 
-    * Performs the tasks of generating Terraform code from the application code and, 
-      subsequently, deploying it to AWS.
-    * Runs application locally, emulates AWS environment and provides possibility for in-IDE debug
+* Kotless Gradle Plugin provides a way of deploying serverless application. For that, it: 
+    * performs the tasks of generating Terraform code from the application code and, 
+      subsequently, deploying it to AWS;
+    * runs application locally, emulates AWS environment and provides the possibility for in-IDE debugging.
   
 ## Getting started
 
@@ -61,9 +61,9 @@ dependencies {
 
 This gives you access to Kotless DSL annotations in your code and sets up Lambda dispatcher inside of your application.
 
-If you don't have AWS account -- stop here. Now you can use `local` task to run application locally and debug it.
+If you don't have an AWS account -- stop here. Now you can use `local` task to run the application locally and debug it.
 
-If you have AWS account and want to perform real deploy -- let's set up everything for it! It's rather simple:
+If you have an AWS account and want to perform the real deployment -- let's set up everything for it! It's rather simple:
 
 ```kotlin
 kotless {
@@ -95,9 +95,9 @@ kotless {
 
 Here we set up the config of Kotless itself:
 * the bucket, which will be used to store lambdas and configs;
-* Terraform configuration with a name of the profile to access AWS.
+* Terraform configuration with the name of the profile to access AWS.
 
-Then we set up webapp &mdash; a specific application to deploy: 
+Then we set up a specific application to deploy: 
 * Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS record);
 * in case of Kotless DSL &mdash; a set of packages that should be scanned for Kotless DSL annotations.
 
@@ -129,14 +129,14 @@ class Server : Kotless() {
 }
 ``` 
 
-*HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency*
+*HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency.*
 
 ## Local start
 
-Kotless' application can start locally as an HTTP server. This functionality is supported for Kotless 
+Kotless application can start locally as an HTTP server. This functionality is supported for both Kotless 
 and Ktor DSL. 
 
-Moreover, Kotless local start may spin up AWS emulation. Just instantiate your AWS Service client using override for Kotless local starts:
+Moreover, Kotless local start may spin up an AWS emulation. Just instantiate your AWS service client using override for Kotless local starts:
 ```kotlin
 val client = AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()
 ```
@@ -155,10 +155,10 @@ kotless {
 }
 ```
 
-During local run LocalStack will be started and all clients will be pointed to its endpoint automatically. 
+During local run, LocalStack will be started and all clients will be pointed to its endpoint automatically. 
 
 Local start functionality does not require any access to cloud provider, so you may check how your application
-behaves without AWS account. Also, it gives you possibility to debug application locally from your IDE. 
+behaves without AWS account. Also, it gives you the possibility to debug your application locally from your IDE. 
 
 ## Advanced features
 
@@ -169,10 +169,10 @@ Including, but not limited to:
 * Lambdas auto-warming &mdash; Kotless creates schedulers to execute warming sequences to never leave your lambdas cold. 
   It is possible to add various actions to the warming sequence via `@Warming` annotation;
 * Granular permissions &mdash; you can declare which permissions to which AWS resources are required for the code that
-  calls the function via annotations on kotlin functions. Permissions will be granted automatically.
+  calls the function via annotations on Kotlin functions. Permissions will be granted automatically.
 * Static resources &mdash; Kotless will deploy files annotated with `@StaticResource` to S3 and create specified HTTP 
   routes for them.
-* Scheduled events &mdash; Kotless setups timers to execute `@Scheduled` jobs on schedule;
+* Scheduled events &mdash; Kotless sets up timers to execute `@Scheduled` jobs on schedule;
 * Terraform extensions &mdash; Kotless-generated code can be extended by custom Terraform code;
 * Serialization and deserialization &mdash; Kotless will automatically deserialize parameters from an HTTP request into 
   function parameters and will serialize the result of the function as well. You can extend the number of supported 
@@ -180,8 +180,8 @@ Including, but not limited to:
   added to the list of supported conversions.
 
 Kotless is in active development, so we are currently working on extending this list with such features as:
-* Support of other clouds &mdash; Kotless is based on a cloud-agnostic schema, so we are working on supporting of other clouds
-* Support of multiplatform applications &mdash; Kotless will not use any platform-specific libraries to give you a choice of a Lambda runtime (JVM/JS/Native)
+* Support of other clouds &mdash; Kotless is based on a cloud-agnostic schema, so we are working on supporting other clouds.
+* Support of multiplatform applications &mdash; Kotless will not use any platform-specific libraries to give you a choice of a Lambda runtime (JVM/JS/Native).
 * Versioned deployment &mdash; Kotless will be able to deploy several versions of the application and maintain one of them
   as active.
 * Implicit permissions granting &mdash; Kotless will be able to deduce permissions from AWS SDK function calls.
@@ -195,13 +195,13 @@ In the repository's `examples` folder, you can find example projects built with 
 * `kotless-site` &mdash; a site about Kotless written with Kotless DSL ([site.kotless.io](https://site.kotless.io)). 
 This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API.
 * `kotless-shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
-This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access) and Terraform extensions.
+This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access), and Terraform extensions.
 
 Similar examples exist for Ktor DSL: 
 * `ktor-site` &mdash; a site about Kotless written with Ktor DSL ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
 This example demonstrates `static {...}` and `routing {...}`.
 * `ktor-shortener` &mdash; a simple URL shortener written with Ktor DSL (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
-This example demonstrates `routing { ... }` (dynamic routes), Permissions API (for DynamoDB access) and Terraform extensions.
+This example demonstrates `routing { ... }` (dynamic routes), Permissions API (for DynamoDB access), and Terraform extensions.
 
 ## Want to know more?
 
@@ -211,9 +211,9 @@ Apart from that, Kotless code itself is widely documented, and you can take a lo
 
 You may ask questions and participate in discussions in `#kotless` channel in [KotlinLang slack](http://slack.kotlinlang.org).
 
-## Special thanks
-Special thanks goes to:
+## Acknowledgements
+Special thanks to:
 
-* Alexandra Pavlova (aka sunalex) for our beautiful icon
-* Yaroslav Golubev for help with documentation
-* [Gregor Billing](https://github.com/suushiemaniac) for help with Gradle plugin and more
+* Alexandra Pavlova (aka sunalex) for our beautiful logo;
+* Yaroslav Golubev for the help with documentation;
+* [Gregor Billing](https://github.com/suushiemaniac) for the help with Gradle plugin and more.
