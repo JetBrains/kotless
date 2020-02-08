@@ -201,4 +201,5 @@ You may ask questions and participate in discussions in `#kotless` channel in [K
 Special thanks goes to:
 
 * Alexandra Pavlova (aka sunalex) for our beautiful icon
+* Yaroslav Golubev for help with documentation
 * [Gregor Billing](https://github.com/suushiemaniac) for help with Gradle plugin and more
