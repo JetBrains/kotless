@@ -19,9 +19,9 @@ Kotless consists of two main parts:
     * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
 * Kotless Gradle Plugin provides a way of deploying serverless application. 
-    * It performs the tasks of generating Terraform code from the application code and, 
+    * Performs the tasks of generating Terraform code from the application code and, 
       subsequently, deploying it to AWS.
-    * It runs application locally, emulates AWS environment and provides possibility for in-IDE debug
+    * Runs application locally, emulates AWS environment and provides possibility for in-IDE debug
   
 ## Getting started
 
@@ -29,7 +29,23 @@ Kotless uses Gradle to wrap around the existing build process and insert the dep
 
 Basically, if you already use Gradle, you only need to do two things.
 
-Firstly, add Kotless DSL as a library to your application:
+Firstly, set up Kotless Gradle plugin. You need to apply the plugin:
+
+```kotlin
+//Imports needed for this example
+import io.kotless.plugin.gradle.dsl.Webapp.Route53
+import io.kotless.plugin.gradle.dsl.kotless
+
+plugins {
+    //Version of Kotlin should 1.3.50+
+    kotlin("jvm") version "1.3.50" apply true
+
+    id("io.kotless") version "0.1.2" apply true
+}
+```
+
+ 
+Secondly, add Kotless DSL as a library to your application:
 
 ```kotlin
 repositories {
@@ -45,22 +61,6 @@ dependencies {
 
 This gives you access to Kotless DSL annotations in your code and sets up Lambda dispatcher inside of your application.
 
-Secondly, set up Kotless Gradle plugin. You need to apply the plugin:
-
-```kotlin
-//Imports needed for this example
-import io.kotless.DSLType
-import io.kotless.plugin.gradle.dsl.Webapp.Route53
-import io.kotless.plugin.gradle.dsl.kotless
-
-plugins {
-    //Version of Kotlin should 1.3.50+
-    kotlin("jvm") version "1.3.50" apply true
-
-    id("io.kotless") version "0.1.2" apply true
-}
-```
-
 If you don't have AWS account -- stop here. Now you can use `local` task to run application locally and debug it.
 
 If you have AWS account and want to perform real deploy -- let's set up everything for it! It's rather simple:
@@ -69,12 +69,6 @@ If you have AWS account and want to perform real deploy -- let's set up everythi
 kotless {
     config {
         bucket = "kotless.s3.example.com"
-        
-        dsl {
-            type = DSLType.Kotless
-            //or for Ktor
-            //type = DSLType.Ktor
-        }
 
         terraform {
             profile = "example"
@@ -101,7 +95,6 @@ kotless {
 
 Here we set up the config of Kotless itself:
 * the bucket, which will be used to store lambdas and configs;
-* type of DSL that is used;
 * Terraform configuration with a name of the profile to access AWS.
 
 Then we set up webapp &mdash; a specific application to deploy: 
@@ -140,17 +133,18 @@ class Server : Kotless() {
 
 ## Local start
 
-Kotless' application can be started locally. This functionality is supported for Kotless and Ktor DSL. 
+Kotless' application can start locally as an HTTP server. This functionality is supported for Kotless 
+and Ktor DSL. 
 
 Moreover, Kotless local start may include AWS emulation. Just instantiate your AWS Service client using override for Kotless local starts:
 ```kotlin
 val client = AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()
 ```
 
-During local run LocalStack will be started and all clients will be pointed to it automatically. 
+During local run LocalStack will be started and all clients will be pointed to its endpoint automatically. 
 
 Local start functionality does not require any access to cloud provider, so you may check how your application
-behaves without an AWS account. Also, it gives you possibility to debug application locally from your IDE. 
+behaves without AWS account. Also, it gives you possibility to debug application locally from your IDE. 
 
 ## Advanced features
 
