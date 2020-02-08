@@ -2,8 +2,11 @@ package io.kotless.terraform.functions
 
 import java.io.File
 
+//Escaping required for Windows
+private fun escape(value: String) = value.replace("\\", "\\\\")
+
 /** Get a canonical path of file */
-fun path(file: File): String = file.canonicalPath
+fun path(file: File): String = escape(file.canonicalPath)
 
 fun md5(field: String) = "md5($field)"
 fun base64sha256(field: String) = "base64sha256($field)"
