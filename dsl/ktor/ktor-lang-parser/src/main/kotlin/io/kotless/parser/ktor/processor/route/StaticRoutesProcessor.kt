@@ -15,7 +15,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
 internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
-    private val funcs = setOf("io.ktor.http.content.file", "io.ktor.http.content.files")
+    private val funcs = setOf(
+        "io.ktor.http.content.file",
+        "io.ktor.http.content.files",
+        "io.ktor.http.content.default"
+    )
 
     override val klasses = setOf(Kotless::class)
 
@@ -38,6 +42,13 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                                 val path = URIPath(outer, remotePath)
 
                                 createResource(file, path, context)
+                            }
+                            "io.ktor.http.content.default" -> {
+                                val localPath = element.getArgument("localPath", binding).asString(binding)
+
+                                val file = File(base, localPath)
+
+                                createResource(file, outer, context)
                             }
                             "io.ktor.http.content.files" -> {
                                 val folder = File(base, element.getArgument("folder", binding).asString(binding))
