@@ -42,19 +42,27 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                             "io.ktor.http.content.files" -> {
                                 val folder = File(base, element.getArgument("folder", binding).asString(binding))
 
-                                val allFiles = folder.listFiles() ?: emptyArray()
-
-                                for (file in allFiles) {
-                                    val remotePath = file.toRelativeString(folder).toURIPath()
-                                    val path = URIPath(outer, remotePath)
-
-                                    createResource(file, path, context)
-                                }
+                                addStaticFolder(folder, outer, context)
                             }
                         }
                     }
                     true
                 }
+            }
+        }
+    }
+
+    private fun addStaticFolder(folder: File, outer: URIPath, context: ProcessorContext) {
+        val allFiles = folder.listFiles() ?: emptyArray()
+
+        for (file in allFiles) {
+            if (file.isDirectory) {
+                addStaticFolder(file, URIPath(outer, file.name), context)
+            } else {
+                val remotePath = file.toRelativeString(folder).toURIPath()
+                val path = URIPath(outer, remotePath)
+
+                createResource(file, path, context)
             }
         }
     }
