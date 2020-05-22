@@ -20,24 +20,26 @@ object LambdaMergeOptimizer : SchemaOptimizer {
      * @param level -- level of merge optimization
      * @return list of MergedLambda
      */
-    fun merge(lambdas: TypedStorage<Lambda>, level: Optimization.MergeLambda, context: OptimizationContext): Map<TypedStorage.Key<Lambda>, Lambda> = when (level) {
-        Optimization.MergeLambda.None -> lambdas.entries.map { it.key to it.value }.toMap()
-        else -> {
-            val grouped = when (level) {
-                Optimization.MergeLambda.PerPermissions -> lambdas.entries.groupBy { (_, it) -> listOf(it.config, it.entrypoint, it.file, it.permissions) }
-                Optimization.MergeLambda.All -> lambdas.entries.groupBy { (_, it) -> listOf(it.config, it.entrypoint, it.file) }
-                Optimization.MergeLambda.None -> error("Merge mode could not be None, but was")
-            }
-            grouped.flatMap { (_, group) ->
-                if (group.size > 1) {
-                    val (_, fst) = group.first()
-                    val permissions = group.flatMap { it.value.permissions }.toSet()
-                    val merged = Lambda("merged-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, permissions)
-                    group.map { it.key to merged }
-                } else {
-                    listOf(group.single().key to group.single().value)
+    fun merge(lambdas: TypedStorage<Lambda>, level: Optimization.MergeLambda, context: OptimizationContext): Map<TypedStorage.Key<Lambda>, Lambda> {
+        return when (level) {
+            Optimization.MergeLambda.None -> lambdas.entries.map { it.key to it.value }.toMap()
+            Optimization.MergeLambda.All, Optimization.MergeLambda.PerPermissions -> {
+                val grouped = when (level) {
+                    Optimization.MergeLambda.PerPermissions -> lambdas.entries.groupBy { (_, it) -> listOf(it.config, it.entrypoint, it.file, it.permissions) }
+                    Optimization.MergeLambda.All -> lambdas.entries.groupBy { (_, it) -> listOf(it.config, it.entrypoint, it.file) }
+                    Optimization.MergeLambda.None -> error("Merge mode could not be None, but was")
                 }
-            }.toMap()
+                grouped.flatMap { (_, group) ->
+                    if (group.size > 1) {
+                        val (_, fst) = group.first()
+                        val permissions = group.flatMap { it.value.permissions }.toSet()
+                        val merged = Lambda("merged-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, permissions)
+                        group.map { it.key to merged }
+                    } else {
+                        listOf(group.single().key to group.single().value)
+                    }
+                }.toMap()
+            }
         }
     }
 

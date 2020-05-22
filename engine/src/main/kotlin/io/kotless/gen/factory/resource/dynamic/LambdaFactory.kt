@@ -88,6 +88,9 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
             }
         }
 
-        return GenerationFactory.GenerationResult(Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy)
+        return GenerationFactory.GenerationResult(
+            Output(lambda::arn.ref, lambda::function_name.ref),
+            obj, lambda, assume, iam_role, policy_document, role_policy
+        )
     }
 }

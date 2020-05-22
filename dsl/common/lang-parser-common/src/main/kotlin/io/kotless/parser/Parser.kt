@@ -14,7 +14,7 @@ import java.io.File
  * The result of parsing is a number of Lambdas and StaticResources and associated
  * with them Dynamic and Static routes.
  */
-abstract class Parser(val processors: Set<Processor<*>>) {
+open class Parser(private val processors: Set<Processor<*>>) {
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
         data class Routes(val dynamics: Set<Webapp.ApiGateway.DynamicRoute>, val statics: Set<Webapp.ApiGateway.StaticRoute>)
         data class Resources(val dynamics: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>)

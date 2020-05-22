@@ -36,17 +36,17 @@ class GenerationContext(val schema: Schema, val webapp: Webapp) {
     val entities = Entities()
 
     class Entities {
-        private val entities: HashSet<HCLEntity> = HashSet()
+        private val all: HashSet<HCLEntity> = HashSet()
 
         fun register(entities: Iterable<HCLEntity>) {
-            this.entities.addAll(entities)
+            this.all.addAll(entities)
         }
 
         fun register(vararg entities: HCLEntity) {
             register(entities.toList())
         }
 
-        fun all() = entities.toSet()
+        fun all() = all.toSet()
     }
 
     inner class Names {
@@ -55,7 +55,9 @@ class GenerationContext(val schema: Schema, val webapp: Webapp) {
         fun tf(name: Iterable<String>) = name.flatMap { Text.deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
 
         fun aws(vararg name: String) = aws(name.toList())
-        fun aws(name: Iterable<String>) = (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+        fun aws(name: Iterable<String>): String {
+            return (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+        }
     }
 
     val names = Names()

@@ -12,7 +12,7 @@ import io.kotless.utils.Storage
  *
  * Will create all intermediate resources
  */
-abstract class AbstractRouteFactory {
+open class AbstractRouteFactory {
     data class ResourceDescriptor(val ref: String, val id: String)
 
     companion object {
