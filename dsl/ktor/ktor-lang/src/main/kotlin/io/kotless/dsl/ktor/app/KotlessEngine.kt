@@ -1,7 +1,9 @@
 package io.kotless.dsl.ktor.app
 
-import io.ktor.server.engine.*
-import java.util.concurrent.TimeUnit
+import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.engine.ApplicationEngineEnvironment
+import io.ktor.server.engine.BaseApplicationEngine
+import io.ktor.server.engine.EngineAPI
 
 @EngineAPI
 class KotlessEngine(environment: ApplicationEngineEnvironment) : BaseApplicationEngine(environment) {
@@ -10,7 +12,7 @@ class KotlessEngine(environment: ApplicationEngineEnvironment) : BaseApplication
         return this
     }
 
-    override fun stop(gracePeriod: Long, timeout: Long, timeUnit: TimeUnit) {
+    override fun stop(gracePeriodMillis: Long, timeoutMillis: Long) {
         environment.stop()
     }
 }

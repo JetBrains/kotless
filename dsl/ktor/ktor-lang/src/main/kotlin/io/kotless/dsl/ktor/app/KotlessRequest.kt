@@ -6,7 +6,7 @@ import io.ktor.http.*
 import io.ktor.request.ApplicationReceivePipeline
 import io.ktor.request.RequestCookies
 import io.ktor.server.engine.BaseApplicationRequest
-import kotlinx.coroutines.io.ByteReadChannel
+import io.ktor.utils.io.ByteReadChannel
 
 class KotlessRequest(val query: HttpRequest, call: ApplicationCall) : BaseApplicationRequest(call) {
     override val pipeline = ApplicationReceivePipeline().apply {

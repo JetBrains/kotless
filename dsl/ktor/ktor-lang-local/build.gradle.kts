@@ -8,7 +8,7 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:ktor:ktor-lang"))
 
-    api("io.ktor", "ktor-server-netty", "1.2.5")
+    api("io.ktor", "ktor-server-netty", "1.3.2")
 }
 
 publishJar {

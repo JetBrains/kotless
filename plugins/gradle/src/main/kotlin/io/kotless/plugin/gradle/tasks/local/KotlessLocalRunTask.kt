@@ -38,7 +38,7 @@ open class KotlessLocalRunTask : DefaultTask() {
     lateinit var localstack: LocalStackRunner
 
     @TaskAction
-    @UseExperimental(InternalAPI::class)
+    @OptIn(InternalAPI::class)
     fun act() = with(project) {
         val ktorVersion = Dependencies.getKtorDependency(this)?.version
         val kotlessVersion = Dependencies.getKotlessDependency(this)?.version

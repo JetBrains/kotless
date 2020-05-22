@@ -7,7 +7,7 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:common:lang-common"))
 
-    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot2", "1.4")
+    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot2", "1.5")
 }
 
 publishJar {

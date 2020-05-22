@@ -17,7 +17,7 @@ import java.lang.System.getenv
  *
  * **Example**: *AmazonDynamoDBClientBuilder.standard().withKotlessLocal(AwsResource.DynamoDB).build()*
  */
-@UseExperimental(InternalAPI::class)
+@OptIn(InternalAPI::class)
 fun <E, T: AwsClientBuilder<T, E>> AwsClientBuilder<T, E>.withKotlessLocal(resource: AwsResource): AwsClientBuilder<T, E> {
     if (getenv(LocalStack.enabled)?.toBoolean() == true) {
         setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(getenv(LocalStack.url(resource)), getenv(LocalStack.region(resource))))

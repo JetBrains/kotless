@@ -5,7 +5,7 @@ group = "io.kotless"
 version = "0.1.3"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.7" apply true
+    id("tanvd.kosogor") version "1.0.9" apply true
     id("io.gitlab.arturbosch.detekt") version("1.8.0") apply true
     kotlin("jvm") version "1.3.72" apply false
 }

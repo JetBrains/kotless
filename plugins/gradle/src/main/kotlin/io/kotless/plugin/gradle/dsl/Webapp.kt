@@ -21,7 +21,7 @@ class Webapp(project: Project) : Serializable {
 
         val environment: HashMap<String, String> = HashMap()
 
-        @UseExperimental(InternalAPI::class)
+        @OptIn(InternalAPI::class)
         internal val mergedEnvironment: Map<String, String>
             get() = environment + mapOf(KotlessAppConfig.PACKAGE_ENV_NAME to kotlessDSL.packages.joinToString(separator = ","))
 

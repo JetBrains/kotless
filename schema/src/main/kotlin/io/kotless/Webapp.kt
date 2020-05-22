@@ -17,9 +17,9 @@ data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events
      * @param zone a qualified name of zone, alias is created in
      * @param alias name of alias
      * @param certificate a fully qualified name of certificate, for SSL connection
-     * @param fqdn a fully qualified name of route53 record
      */
     data class Route53(val zone: String, val alias: String, val certificate: String) : Visitable {
+        /** fully qualified name of route53 record */
         val fqdn = "$alias.$zone"
     }
 

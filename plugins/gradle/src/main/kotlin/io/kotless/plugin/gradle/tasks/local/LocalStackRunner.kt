@@ -49,7 +49,7 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
     val serviceMap: Map<AwsResource, String>
         get() = myServiceMap
 
-    @UseExperimental(InternalAPI::class)
+    @OptIn(InternalAPI::class)
     fun start() {
         if (!isEnabled) return
 

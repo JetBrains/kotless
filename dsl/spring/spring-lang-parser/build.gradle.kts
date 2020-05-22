@@ -7,7 +7,7 @@ version = rootProject.version
 dependencies {
     api(project(":schema"))
 
-    api("org.springframework", "spring-web", "5.2.2.RELEASE")
+    api("org.springframework", "spring-web", "5.2.5.RELEASE")
 
     api(project(":dsl:common:lang-parser-common"))
 }

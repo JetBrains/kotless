@@ -133,7 +133,7 @@ class Server : Kotless() {
 
 ## Local start
 
-Kotless application can start locally as an HTTP server. This functionality is supported for both Kotless 
+Kotless-based application can start locally as an HTTP server. This functionality is supported for both Kotless 
 and Ktor DSL. 
 
 Moreover, Kotless local start may spin up an AWS emulation. Just instantiate your AWS service client using override for Kotless local starts:
