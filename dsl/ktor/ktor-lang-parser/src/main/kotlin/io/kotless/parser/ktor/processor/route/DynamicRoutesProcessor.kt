@@ -65,7 +65,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         val routeCalls = previous.filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.routing.route" }
         val path = routeCalls.map {
             (it as KtCallExpression).getArgumentOrNull("path", binding)?.asString(binding) ?: ""
-        }
+        }.filter { it.isNotBlank() }.reversed()
         return URIPath(path.joinToString(separator = "/"))
     }
 }

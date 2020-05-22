@@ -15,7 +15,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
 internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
-    private val funcs = setOf("io.ktor.http.content.file", "io.ktor.http.content.files")
+    private val funcs = setOf(
+        "io.ktor.http.content.file",
+        "io.ktor.http.content.files",
+        "io.ktor.http.content.default"
+    )
 
     override val klasses = setOf(Kotless::class)
 
@@ -39,17 +43,17 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
 
                                 createResource(file, path, context)
                             }
+                            "io.ktor.http.content.default" -> {
+                                val localPath = element.getArgument("localPath", binding).asString(binding)
+
+                                val file = File(base, localPath)
+
+                                createResource(file, outer, context)
+                            }
                             "io.ktor.http.content.files" -> {
                                 val folder = File(base, element.getArgument("folder", binding).asString(binding))
 
-                                val allFiles = folder.listFiles() ?: emptyArray()
-
-                                for (file in allFiles) {
-                                    val remotePath = file.toRelativeString(folder).toURIPath()
-                                    val path = URIPath(outer, remotePath)
-
-                                    createResource(file, path, context)
-                                }
+                                addStaticFolder(folder, outer, context)
                             }
                         }
                     }
@@ -59,11 +63,26 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         }
     }
 
+    private fun addStaticFolder(folder: File, outer: URIPath, context: ProcessorContext) {
+        val allFiles = folder.listFiles() ?: emptyArray()
+
+        for (file in allFiles) {
+            if (file.isDirectory) {
+                addStaticFolder(file, URIPath(outer, file.name), context)
+            } else {
+                val remotePath = file.toRelativeString(folder).toURIPath()
+                val path = URIPath(outer, remotePath)
+
+                createResource(file, path, context)
+            }
+        }
+    }
+
     private fun getStaticPath(previous: List<KtElement>, binding: BindingContext): URIPath {
         val staticCalls = previous.filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.http.content.static" }
         val path = staticCalls.map {
             (it as KtCallExpression).getArgumentOrNull("remotePath", binding)?.asString(binding) ?: ""
-        }
+        }.filter { it.isNotBlank() }.reversed()
         return URIPath(path.joinToString(separator = "/"))
     }
 

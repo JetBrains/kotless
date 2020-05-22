@@ -17,6 +17,7 @@ enum class HttpMethod {
 /** Mime types supported by StaticResource */
 enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: String) {
     PLAIN("text/plain", false, "txt"),
+    MARKDOWN("text/markdown", false, "md"),
     HTML("text/html", false, "html"),
     CSS("text/css", false, "css"),
 
@@ -26,8 +27,10 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: 
     JPEG("image/jpeg", true, "jpeg"),
     BMP("image/bmp", true, "bmp"),
     WEBP("image/webp", true, "webp"),
+    TTF("font/ttf", true, "ttf"),
 
     JS("application/javascript", false, "js"),
+    JSMAP("application/json", false, "map"),
     JSON("application/json", false, "json"),
     XML("application/xml", false, "xml"),
     ZIP("application/zip", true, "zip"),

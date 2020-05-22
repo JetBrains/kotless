@@ -1,8 +1,7 @@
-import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
-group = "io.kotless"
+group = "io.kotless.examples"
 version = "0.1.3"
 
 plugins {
@@ -14,7 +13,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
@@ -40,19 +38,7 @@ kotless {
     }
 
     webapp {
-        lambda {
-            kotless {
-                packages = setOf("io.kotless.examples")
-            }
-        }
-
         route53 = Route53("site", "kotless.io")
-    }
-
-    extensions {
-        local {
-            useAWSEmulation = false
-        }
     }
 }
 

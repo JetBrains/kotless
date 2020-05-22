@@ -1,4 +1,3 @@
-import io.kotless.DSLType
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
@@ -15,7 +14,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
@@ -46,12 +44,6 @@ kotless {
 
     webapp {
         route53 = Route53("ktor.site", "kotless.io")
-    }
-
-    extensions {
-        local {
-            useAWSEmulation = false
-        }
     }
 }
 
