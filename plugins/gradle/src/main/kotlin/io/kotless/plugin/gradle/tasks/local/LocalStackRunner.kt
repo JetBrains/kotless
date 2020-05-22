@@ -3,6 +3,8 @@ package io.kotless.plugin.gradle.tasks.local
 import io.kotless.*
 import io.kotless.plugin.gradle.utils.Groups
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
 
@@ -12,6 +14,7 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
             group = Groups.`kotless setup`
         }
 
+        @get:Internal
         lateinit var localstack: LocalStackRunner
 
         @TaskAction
@@ -25,6 +28,7 @@ class LocalStackRunner(val isEnabled: Boolean, resources: Set<AwsResource>) {
             group = Groups.`kotless setup`
         }
 
+        @get:Internal
         lateinit var localstack: LocalStackRunner
 
         @TaskAction

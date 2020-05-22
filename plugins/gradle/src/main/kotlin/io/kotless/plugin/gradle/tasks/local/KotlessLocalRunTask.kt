@@ -34,6 +34,7 @@ open class KotlessLocalRunTask : DefaultTask() {
     val myAllSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
+    @get:Internal
     lateinit var localstack: LocalStackRunner
 
     @TaskAction
