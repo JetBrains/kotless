@@ -5,6 +5,7 @@ import kotlinx.html.*
 
 object Main {
     fun HTML.main() = landing {
+
         h1 {
             +"Kotlin Serverless Framework"
         }

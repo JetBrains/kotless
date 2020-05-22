@@ -63,36 +63,36 @@ object Introduction {
         }
 
         kotlin("""
-            kotless {
-                config {
-                    //bucket that kotless will use to store its artifacts
-                    bucket = "kotless-example-bucket"
-                    //prefix that will be added to all resources created in AWS
-                    prefix = "dev"
+                kotless {
+                    config {
+                        //bucket that kotless will use to store its artifacts
+                        bucket = "kotless-example-bucket"
+                        //prefix that will be added to all resources created in AWS
+                        prefix = "dev"
 
-                    //directory against which @StaticGet annotated files are resolved
-                    workDirectory = file("src/main/static")
+                        //directory against which @StaticGet annotated files are resolved
+                        workDirectory = file("src/main/static")
 
-                    terraform {
-                        profile = "example-profile"
-                        region = "us-east-1"
-                    }
-                }
-
-                //webapp for this gradle project
-                webapp {
-                    //configuration of lambda created
-                    lambda {
-                        memoryMb = 1024
-                        timeoutSec = 120
+                        terraform {
+                            profile = "example-profile"
+                            region = "us-east-1"
+                        }
                     }
 
-                    //packages in which kotless should search for code
-                    packages = setOf("org.example.kotless")
-                    //route53 alias for deployed application
-                    route53 = Route53("kotless", "example.org")
-                }
-            }"""
+                    //webapp for this gradle project
+                    webapp {
+                        //configuration of lambda created
+                        lambda {
+                            memoryMb = 1024
+                            timeoutSec = 120
+                        }
+
+                        //packages in which kotless should search for code
+                        packages = setOf("org.example.kotless")
+                        //route53 alias for deployed application
+                        route53 = Route53("kotless", "example.org")
+                    }
+                }"""
         )
 
         h3 {
