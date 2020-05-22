@@ -17,7 +17,7 @@ fun KtAnnotated.isAnnotatedWith(context: BindingContext, klasses: Collection<KCl
 }
 
 inline fun <reified T : Annotation> KtAnnotated.getAnnotations(context: BindingContext) = getAnnotations(context, T::class)
-inline fun <reified T : Annotation> KtAnnotated.getAnnotation(context: BindingContext) = getAnnotations(context, T::class).single()
+inline fun <reified T : Annotation> KtAnnotated.getAnnotation(context: BindingContext): KtAnnotationEntry = getAnnotations(context, T::class).single()
 
 fun KtAnnotated.getAnnotations(context: BindingContext, ann: KClass<*>) = annotationEntries.filter {
     it.getDescriptor(context).qualifiedName == ann.qualifiedName

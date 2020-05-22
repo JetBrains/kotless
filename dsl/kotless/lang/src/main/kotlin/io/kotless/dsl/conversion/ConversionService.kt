@@ -32,7 +32,7 @@ abstract class ConversionService : LambdaInit {
     protected abstract fun convertTo(value: Any): String
 
     companion object {
-        @UseExperimental(InternalAPI::class)
+        @OptIn(InternalAPI::class)
         private val registered: HashSet<ConversionService> = hashSetOf(DefaultConversionService)
 
         fun register(service: ConversionService) {

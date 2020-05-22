@@ -1,10 +1,11 @@
 package io.kotless.plugin.gradle.tasks.local
 
-import io.kotless.*
+import io.kotless.AwsResource
+import io.kotless.Constants
+import io.kotless.InternalAPI
 import io.kotless.plugin.gradle.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
 
