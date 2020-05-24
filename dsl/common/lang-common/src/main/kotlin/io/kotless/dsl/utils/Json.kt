@@ -9,7 +9,9 @@ import kotlinx.serialization.json.JsonConfiguration
 @InternalAPI
 object Json {
     @Suppress("EXPERIMENTAL_API_USAGE")
-    val mapper = Json(JsonConfiguration.Default)
+    val mapper = Json(JsonConfiguration(
+        ignoreUnknownKeys = true
+    ))
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : Any> string(serializer: KSerializer<T>, obj: Any): String = mapper.stringify(serializer as KSerializer<Any>, obj)

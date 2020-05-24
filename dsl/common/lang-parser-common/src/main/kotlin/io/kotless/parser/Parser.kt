@@ -21,13 +21,15 @@ open class Parser(private val processors: Set<Processor<*>>) {
         data class Events(val scheduled: Set<Webapp.Events.Scheduled>)
     }
 
-    fun parse(files: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {
+    fun parse(sources: Set<File>, resources: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {
         val environment = EnvironmentManager.create(libs)
 
-        val ktFiles = ParseUtil.analyze(files, environment)
+        val ktFiles = ParseUtil.analyze(sources, environment)
         val binding = ResolveUtil.analyze(ktFiles, environment).bindingContext
 
         val context = ProcessorContext(jar, config, lambda)
+
+        processResources(resources, context)
 
         var newExecuted = true
         while (newExecuted) {
@@ -45,5 +47,8 @@ open class Parser(private val processors: Set<Processor<*>>) {
             Result.Resources(context.resources.dynamics, context.resources.statics),
             Result.Events(context.events.scheduled)
         )
+    }
+
+    open fun processResources(resources: Set<File>, context: ProcessorContext) {
     }
 }

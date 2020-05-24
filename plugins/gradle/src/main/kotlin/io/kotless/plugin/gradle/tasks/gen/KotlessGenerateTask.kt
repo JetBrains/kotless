@@ -41,6 +41,12 @@ open class KotlessGenerateTask : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
+    val myAllResources: Set<File>
+        get() = project.myResourcesSet.toSet()
+
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     val myTerraformAdditional: Set<File>
         get() = project.kotless.extensions.terraform.files.additional
 
@@ -67,9 +73,9 @@ open class KotlessGenerateTask : DefaultTask() {
         val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, myWebapp.lambda.mergedEnvironment)
 
         val parsed = when (myKotless.config.dsl.typeOrDefault) {
-            DSLType.Kotless -> KotlessParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Ktor -> KTorParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Spring -> SpringParser.parse(myAllSources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Kotless -> KotlessParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Ktor -> KTorParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.Spring -> SpringParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
         }
 
         val webapp = Webapp(

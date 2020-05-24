@@ -25,6 +25,9 @@ internal val Project.mySourceSets: SourceSetContainer
 internal val Project.myKtSourceSet: Set<File>
     get() = mySourceSets.asMap["main"]!!.allSource.files.filter { it.extension == "kt" }.toSet()
 
+internal val Project.myResourcesSet: Set<File>
+    get() = mySourceSets.asMap["main"]!!.resources.files.toSet()
+
 internal inline fun <reified T : Task> TaskContainer.myCreate(name: String, crossinline configure: T.() -> Unit = {}): Task = create(name, T::class.java) {
     configure(it)
 }

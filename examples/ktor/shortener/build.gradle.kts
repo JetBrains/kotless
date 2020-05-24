@@ -3,14 +3,14 @@ import io.kotless.plugin.gradle.dsl.kotless
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless"
-version = "0.1.3"
+version = "0.1.4"
 
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
-    kotlin("jvm") version "1.3.61" apply true
+    kotlin("jvm") version "1.3.72" apply true
 
-    id("io.kotless") version "0.1.3" apply true
+    id("io.kotless") version "0.1.4" apply true
 }
 
 repositories {
@@ -22,7 +22,7 @@ dependencies {
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
-    implementation("io.kotless", "ktor-lang", "0.1.3")
+    implementation("io.kotless", "ktor-lang", "0.1.4")
     implementation("io.ktor", "ktor-html-builder", "1.2.5")
 }
 

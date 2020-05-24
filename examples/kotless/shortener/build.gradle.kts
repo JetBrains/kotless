@@ -7,9 +7,9 @@ version = "0.1.0"
 plugins {
     id("tanvd.kosogor") version "1.0.7" apply true
 
-    kotlin("jvm") version "1.3.61" apply true
+    kotlin("jvm") version "1.3.72" apply true
 
-    id("io.kotless") version "0.1.3" apply true
+    id("io.kotless") version "0.1.4" apply true
 }
 
 repositories {
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.3")
+    implementation("io.kotless", "lang", "0.1.4")
 
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
