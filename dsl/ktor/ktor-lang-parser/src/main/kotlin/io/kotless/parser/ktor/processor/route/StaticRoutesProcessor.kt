@@ -26,8 +26,8 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     override fun mayRun(context: ProcessorContext) = true
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
-        processClasses(files, binding) { klass, _ ->
-            klass.gatherNamedFunctions { func -> func.name == Kotless::prepare.name }.forEach { func ->
+        processClassOrObject(files, binding) { klass, _ ->
+            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
                 func.visit(binding) { element, previous ->
                     if (element is KtCallExpression && element.getFqName(binding) in funcs) {
                         val outer = getStaticPath(previous, binding)

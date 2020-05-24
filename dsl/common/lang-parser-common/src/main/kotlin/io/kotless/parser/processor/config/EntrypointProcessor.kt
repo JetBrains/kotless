@@ -26,10 +26,7 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
 
     fun find(files: Set<KtFile>, binding: BindingContext): Lambda.Entrypoint {
         val entrypoint = ArrayList<Lambda.Entrypoint>()
-        processClasses(files, binding) { klass, _ ->
-            entrypoint.add(klass.makeLambdaEntrypoint())
-        }
-        processObjects(files, binding) { klass, _ ->
+        processClassOrObject(files, binding) { klass, _ ->
             entrypoint.add(klass.makeLambdaEntrypoint())
         }
 

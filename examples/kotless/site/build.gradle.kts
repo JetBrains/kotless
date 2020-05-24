@@ -13,12 +13,14 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
 
 dependencies {
     implementation("io.kotless", "lang", "0.1.4")
+
     implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 

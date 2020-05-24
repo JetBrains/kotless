@@ -11,7 +11,6 @@ include(":dsl:kotless:lang")
 include(":dsl:kotless:lang-local")
 include(":dsl:kotless:lang-parser")
 
-include(":dsl:spring:spring-lang")
 include(":dsl:spring:spring-boot-lang")
 include(":dsl:spring:spring-lang-parser")
 

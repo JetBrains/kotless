@@ -1,7 +1,8 @@
-rootProject.name = "kotless-site"
+rootProject.name = "site"
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
     }
 }

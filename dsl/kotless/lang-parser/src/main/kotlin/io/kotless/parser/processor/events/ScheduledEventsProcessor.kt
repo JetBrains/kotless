@@ -25,7 +25,7 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
         val permissions = context.output.get(GlobalActionsProcessor).permissions
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
-        processFunctions(files, binding) { func, entry, _ ->
+        processStaticFunctions(files, binding) { func, entry, _ ->
             require(func.fqName != null) {
                 func.withExceptionHeader("@Scheduled cannot be applied to anonymous function")
             }

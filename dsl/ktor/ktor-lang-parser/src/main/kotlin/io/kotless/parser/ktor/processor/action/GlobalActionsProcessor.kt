@@ -2,7 +2,6 @@ package io.kotless.parser.ktor.processor.action
 
 import io.kotless.Permission
 import io.kotless.dsl.ktor.Kotless
-import io.kotless.parser.ktor.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -24,8 +23,8 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         val permissions = HashSet<Permission>()
 
-        DynamicRoutesProcessor.processClasses(files, binding) { klass, _ ->
-            klass.gatherNamedFunctions { func -> func.name == Kotless::prepare.name }.forEach { func ->
+        processClass(files, binding) { klass, _ ->
+            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
                 func.visit(binding) { element, _ ->
                     if (element is KtCallExpression && element.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe") {
                         val event = element.getArgument("definition", binding)

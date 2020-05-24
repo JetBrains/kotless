@@ -26,7 +26,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
         val permissions = context.output.get(GlobalActionsProcessor).permissions
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
-        processFunctions(files, binding) { func, entry, klass ->
+        processStaticFunctions(files, binding) { func, entry, klass ->
             val routePermissions = PermissionsProcessor.process(func, binding) + permissions
 
             val name = prepareFunctionName(func, KotlessAppConfig.packages(context.lambda.environment.getValue(KotlessAppConfig.PACKAGE_ENV_NAME)))

@@ -12,19 +12,19 @@ abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
 
     fun processClassesOrObjects(files: Set<KtFile>, binding: BindingContext, body: (KtClassOrObject, KtAnnotationEntry, KClass<*>) -> Unit) {
         for (file in files) {
-            for (func in gatherClassesOrObjects(binding, file)) {
+            file.visitClassOrObject(filter = { classOrObject -> classOrObject.isAnnotatedWith(binding, annotations) }) { classOrObject ->
                 for (annotationKClass in annotations) {
-                    func.getAnnotations(binding, annotationKClass).forEach { annotation ->
-                        body(func, annotation, annotationKClass)
+                    classOrObject.getAnnotations(binding, annotationKClass).forEach { annotation ->
+                        body(classOrObject, annotation, annotationKClass)
                     }
                 }
             }
         }
     }
 
-    fun processFunctions(files: Set<KtFile>, binding: BindingContext, body: (KtNamedFunction, KtAnnotationEntry, KClass<*>) -> Unit) {
+    fun processStaticFunctions(files: Set<KtFile>, binding: BindingContext, body: (KtNamedFunction, KtAnnotationEntry, KClass<*>) -> Unit) {
         for (file in files) {
-            for (func in gatherFunctions(binding, file)) {
+            file.visitNamedFunctions(filter = { function -> function.isAnnotatedWith(binding, annotations) && function.isStatic() }) { func: KtNamedFunction ->
                 for (annotationKClass in annotations) {
                     func.getAnnotations(binding, annotationKClass).forEach { annotation ->
                         body(func, annotation, annotationKClass)
@@ -36,33 +36,13 @@ abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
 
     fun processStaticVariables(files: Set<KtFile>, binding: BindingContext, body: (KtProperty, KtAnnotationEntry, KClass<*>) -> Unit) {
         for (file in files) {
-            for (variable in gatherStaticVariables(binding, file)) {
+            file.visitVariables(filter = { property -> property.isAnnotatedWith(binding, annotations) }) { property ->
                 for (annotationKClass in annotations) {
-                    variable.getAnnotations(binding, annotationKClass).forEach { annotation ->
-                        body(variable, annotation, annotationKClass)
+                    property.getAnnotations(binding, annotationKClass).forEach { annotation ->
+                        body(property, annotation, annotationKClass)
                     }
                 }
             }
         }
-    }
-
-    /** Get annotated @Get and @Post top-level functions and object functions */
-    private fun gatherClassesOrObjects(context: BindingContext, ktFile: KtFile): Set<KtClassOrObject> {
-        val named = ktFile.gatherClasses { it.isAnnotatedWith(context, annotations) }
-        val objects = ktFile.gatherStaticObjects { it.isAnnotatedWith(context, annotations) }
-        return (named + objects).toSet()
-    }
-
-    /** Get annotated @Get and @Post top-level functions and object functions */
-    private fun gatherFunctions(context: BindingContext, ktFile: KtFile): Set<KtNamedFunction> {
-        val named = ktFile.gatherNamedFunctions { it.isAnnotatedWith(context, annotations) }
-        val objects = ktFile.gatherStaticObjects().flatMap { obj -> obj.gatherNamedFunctions { it.isAnnotatedWith(context, annotations) } }
-        return (named + objects).toSet()
-    }
-
-    private fun gatherStaticVariables(context: BindingContext, ktFile: KtFile): Set<KtProperty> {
-        val topLevel = ktFile.gatherVariables { it.isAnnotatedWith(context, annotations) }
-        val objects = ktFile.gatherStaticObjects().flatMap { obj -> obj.gatherVariables { it.isAnnotatedWith(context, annotations) } }
-        return (topLevel + objects).toSet()
     }
 }

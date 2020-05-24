@@ -22,8 +22,8 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         val globalPermissions = context.output.get(GlobalActionsProcessor).permissions
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
-        processClasses(files, binding) { klass, _ ->
-            klass.gatherNamedFunctions { func -> func.name == Kotless::prepare.name }.forEach { func ->
+        processClass(files, binding) { klass, _ ->
+            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
                 func.visit(binding) { element, previous ->
                     if (element is KtCallExpression) {
                         val outer = getRoutePath(previous, binding)
