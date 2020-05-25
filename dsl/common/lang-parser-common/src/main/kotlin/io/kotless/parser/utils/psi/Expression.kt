@@ -1,38 +1,56 @@
 package io.kotless.parser.utils.psi
 
+import io.kotless.parser.utils.psi.visitor.KtDefaultVisitor
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiverOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.source.getPsi
 import java.util.*
-import kotlin.collections.HashSet
 
-/** Gather all expressions inside current — recursively */
-fun KtExpression.gatherAllExpressions(context: BindingContext, alreadyGot: Set<KtExpression> = emptySet(), andSelf: Boolean = false): Set<KtExpression> {
-    val expressions = HashSet<KtExpression>()
-    expressions.addAll(gatherExpressions())
+fun KtExpression.visitAllExpressions(context: BindingContext, alreadyGot: Set<KtElement> = setOf(this), body: (KtExpression) -> Unit) {
+    body(this)
 
-    expressions.addAll(gatherReferencedExpressions<ClassDescriptor, KtClass>(context))
-    expressions.addAll(gatherReferencedExpressions<ClassDescriptor, KtObjectDeclaration>(context))
-    expressions.addAll(gatherReferencedExpressions<ClassDescriptor, KtProperty>(context))
-    expressions.addAll(gatherReferencedExpressions<FunctionDescriptor, KtNamedFunction>(context))
+    visitReferencedExpressions(context) { _, target ->
+        if (target in alreadyGot) return@visitReferencedExpressions
 
-    if (andSelf) expressions.add(this@gatherAllExpressions)
-    if (this is KtNamedFunction) expressions.add(this.getQualifiedExpressionForReceiverOrThis())
+        when (target) {
+            is KtClassOrObject -> target.visitAllExpressions(context, alreadyGot + target, body)
+            is KtProperty -> target.visitAllExpressions(context, alreadyGot + target, body)
+            is KtNamedFunction -> target.visitAllExpressions(context, alreadyGot + target, body)
+        }
+    }
 
-    return expressions + expressions.filterNot { it in alreadyGot }.flatMap { it.gatherAllExpressions(context, alreadyGot + expressions + it) }
-}
+    if (this is KtNamedFunction) {
+        val thisExpr = this.getQualifiedExpressionForReceiverOrThis()
 
-fun KtExpression.gatherExpressions(filter: (KtExpression) -> Boolean = { true }) = filterFor<KtExpression>().filter(filter)
+        if (thisExpr in alreadyGot) return
 
-inline fun <reified Desc : DeclarationDescriptorWithSource, reified Elem : PsiElement> KtExpression.gatherReferencedExpressions(context: BindingContext): List<Elem> {
-    return filterFor<KtNameReferenceExpression>().flatMap { ref ->
-        ref.getReferenceTargets(context).mapNotNull { (it as? Desc)?.source?.getPsi() as? Elem }
+        thisExpr.visitAllExpressions(context, alreadyGot + thisExpr, body)
     }
 }
+
+fun KtExpression.visitExpressions(body: (KtExpression) -> Unit) = accept(object: KtDefaultVisitor() {
+    override fun visitKtElement(element: KtElement) {
+        if (element is KtExpression) body(element)
+    }
+})
+fun KtExpression.visitExpressions(filter: (KtExpression) -> Boolean, body: (KtExpression) -> Unit) = accept(object: KtDefaultVisitor() {
+    override fun visitKtElement(element: KtElement) {
+        if (element is KtExpression && filter(element)) body(element)
+    }
+})
+
+fun KtExpression.visitReferencedExpressions(binding: BindingContext, body: (KtExpression, PsiElement) -> Unit) = accept(object: KtDefaultVisitor() {
+    override fun visitReferenceExpression(expression: KtReferenceExpression) {
+        val targets = expression.getReferenceTargets(binding).mapNotNull { (it as? DeclarationDescriptorWithSource)?.source?.getPsi() }
+        for (target in targets) {
+            body(expression, target)
+        }
+    }
+})
 
 /**
  * Gather all expressions inside current — recursively
