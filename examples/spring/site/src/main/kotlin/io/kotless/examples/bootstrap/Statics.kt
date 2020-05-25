@@ -36,7 +36,7 @@ fun  <T, C : TagConsumer<T>> C.headerSite() {
         }
         link("/css/kotless-site.css", rel = "stylesheet")
         link("/css/highlight-style.css", rel = "stylesheet")
-        script { src = "/js/scripts/highlight.pack.js" }
+        script { src = "/js/highlight.pack.js" }
         script {
             src = "https://code.jquery.com/jquery-3.3.1.slim.min.js"
             crossorigin = "anonymous"
