@@ -26,7 +26,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
         processClasses(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visitAllCallExpressions(binding = binding) { element ->
+                func.visitCallExpressionsWithReferences(binding = binding) { element ->
                     val previous = element.parents.filterIsInstance(KtElement::class.java)
                     val outer = getRoutePath(previous, binding)
 

@@ -26,11 +26,12 @@ inline fun <reified T> KtAnnotationEntry.getValue(context: BindingContext, param
 inline fun <reified T> AnnotationDescriptor.getValue(param: KProperty<T>): T? = argumentValue(param.name)?.value as T?
 
 fun KtAnnotationEntry.getURIPath(context: BindingContext, param: KProperty<String>) = getValue(context, param)?.toURIPath()
-fun KtAnnotationEntry.getURIPaths(context: BindingContext, param: KProperty<Array<String>>) = getArrayValue(context, param )?.map { it.toURIPath() }
+fun KtAnnotationEntry.getURIPaths(context: BindingContext, param: KProperty<Array<String>>) = getArrayValue(context, param)?.map { it.toURIPath() }
 
 inline fun <reified T : Any> KtAnnotationEntry.getArrayValue(context: BindingContext, param: KProperty<Array<T>>): Array<T>? {
     return getDescriptor(context).getArrayValue(param)
 }
+
 inline fun <reified T : Any> AnnotationDescriptor.getArrayValue(param: KProperty<Array<T>>): Array<T>? {
     @Suppress("UNCHECKED_CAST")
     return (argumentValue(param.name)?.value as? List<T>)?.map { (it as? ConstantValue<T>)?.value ?: it }?.toTypedArray()
@@ -39,6 +40,7 @@ inline fun <reified T : Any> AnnotationDescriptor.getArrayValue(param: KProperty
 inline fun <reified T : Enum<out T>> KtAnnotationEntry.getEnumValue(context: BindingContext, param: KProperty1<out Annotation, Enum<out T>>): T? {
     return getDescriptor(context).getEnumValue(param)
 }
+
 inline fun <reified T : Enum<out T>> AnnotationDescriptor.getEnumValue(param: KProperty1<out Annotation, Enum<out T>>): T? {
     return T::class.java.enumConstants.find { it.name == (argumentValue(param.name) as EnumValue).enumEntryName.identifier }
 }

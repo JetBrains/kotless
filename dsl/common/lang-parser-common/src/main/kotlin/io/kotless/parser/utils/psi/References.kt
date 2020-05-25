@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.resolve.source.getPsi
 fun KtReferenceExpression.getTargets(binding: BindingContext): List<KtElement> {
     return getReferenceTargets(binding).mapNotNull { (it as? DeclarationDescriptorWithSource)?.source?.getPsi() as? KtElement }
 }
+
 fun KtReferenceExpression.getFqName(binding: BindingContext): String? {
     return getReferenceTargets(binding).singleOrNull()?.fqNameSafe?.asString()
 }

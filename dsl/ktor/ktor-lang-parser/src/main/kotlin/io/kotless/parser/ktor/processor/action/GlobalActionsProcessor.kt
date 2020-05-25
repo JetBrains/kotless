@@ -24,7 +24,7 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
 
         processClasses(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visitCallExpressions(filter = { it.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe" }) { element ->
+                func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe" }, binding = binding) { element ->
                     val event = element.getArgument("definition", binding)
                     if (event.asReferencedDescriptorOrNull(binding)?.fqNameSafe?.asString() == "io.kotless.dsl.ktor.lang.LambdaWarming") {
                         permissions += PermissionsProcessor.process(element, binding)

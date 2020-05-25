@@ -29,7 +29,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
         processClassesOrObjects(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visitAllCallExpressions(filter = { it.getFqName(binding) in funcs }, binding = binding) { element ->
+                func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) in funcs }, binding = binding) { element ->
                     val previous = element.parents.filterIsInstance(KtElement::class.java)
                     val outer = getStaticPath(previous, binding)
                     val base = getBaseFolder(previous, binding, context)
@@ -88,7 +88,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     private fun getBaseFolder(previous: Sequence<KtElement>, binding: BindingContext, context: ProcessorContext): File {
         return previous.toList().reversed().filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.http.content.static" }.mapNotNull {
             var folder: File? = null
-            it.visitAllCallExpressions(filter = { el -> el.getFqName(binding) == "io.ktor.http.content.static" }, binding = binding) { call ->
+            it.visitCallExpressionsWithReferences(filter = { el -> el.getFqName(binding) == "io.ktor.http.content.static" }, binding = binding) { call ->
                 call.visitBinaryExpressions(filter = { (it.operationToken as? KtSingleValueToken)?.value == "=" }) { binary ->
                     if (binary.getChildAt<KtNameReferenceExpression>(0)?.getFqName(binding) == "io.ktor.http.content.staticRootFolder") {
                         val right = binary.getChildAt<KtCallExpression>(2)
