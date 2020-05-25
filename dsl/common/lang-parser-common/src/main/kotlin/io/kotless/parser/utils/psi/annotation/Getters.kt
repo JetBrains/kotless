@@ -11,9 +11,8 @@ import org.jetbrains.kotlin.resolve.constants.EnumValue
 import kotlin.reflect.*
 
 inline fun <reified T : Annotation> KtAnnotated.isAnnotatedWith(context: BindingContext) = getAnnotations<T>(context).isNotEmpty()
-fun KtAnnotated.isAnnotatedWith(context: BindingContext, klass: KClass<*>) = getAnnotations(context, klass).isNotEmpty()
-fun KtAnnotated.isAnnotatedWith(context: BindingContext, klasses: Collection<KClass<*>>): Boolean {
-    return klasses.any { getAnnotations(context, it).isNotEmpty() }
+fun KtAnnotated.isAnnotatedWith(context: BindingContext, classes: Collection<KClass<*>>): Boolean {
+    return classes.any { getAnnotations(context, it).isNotEmpty() }
 }
 
 inline fun <reified T : Annotation> KtAnnotated.getAnnotations(context: BindingContext) = getAnnotations(context, T::class)
@@ -37,8 +36,7 @@ inline fun <reified T : Any> AnnotationDescriptor.getArrayValue(param: KProperty
     return (argumentValue(param.name)?.value as? List<T>)?.map { (it as? ConstantValue<T>)?.value ?: it }?.toTypedArray()
 }
 
-inline fun <reified T : Enum<out T>> KtAnnotationEntry.getEnumValue(context: BindingContext,
-                                                                    param: KProperty1<out Annotation, Enum<out T>>): T? {
+inline fun <reified T : Enum<out T>> KtAnnotationEntry.getEnumValue(context: BindingContext, param: KProperty1<out Annotation, Enum<out T>>): T? {
     return getDescriptor(context).getEnumValue(param)
 }
 

@@ -11,6 +11,7 @@ import io.kotless.parser.spring.processor.route.DynamicRoutesProcessor
 import io.kotless.utils.TypedStorage
 import java.io.File
 import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * SpringParser parses Kotlin code with Kotlin embeddable compiler looking
@@ -21,7 +22,7 @@ import java.nio.file.Path
  */
 object SpringParser : Parser(setOf(EntrypointProcessor, DynamicRoutesProcessor)) {
     override fun processResources(resources: Set<File>, context: ProcessorContext) {
-        val filtered = resources.filter { it.toPath().contains(Path.of("static")) }.map { it.toPath() }.takeIf { it.isNotEmpty() } ?: return
+        val filtered = resources.filter { it.toPath().contains(Paths.get("static")) }.map { it.toPath() }.takeIf { it.isNotEmpty() } ?: return
         val static = filtered.first().getParent("static") ?: return
 
         for (file in filtered) {

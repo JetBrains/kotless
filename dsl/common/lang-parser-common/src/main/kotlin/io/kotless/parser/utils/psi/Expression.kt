@@ -32,18 +32,7 @@ fun KtExpression.visitAllExpressions(context: BindingContext, alreadyGot: Set<Kt
     }
 }
 
-fun KtExpression.visitExpressions(body: (KtExpression) -> Unit) = accept(object: KtDefaultVisitor() {
-    override fun visitKtElement(element: KtElement) {
-        if (element is KtExpression) body(element)
-    }
-})
-fun KtExpression.visitExpressions(filter: (KtExpression) -> Boolean, body: (KtExpression) -> Unit) = accept(object: KtDefaultVisitor() {
-    override fun visitKtElement(element: KtElement) {
-        if (element is KtExpression && filter(element)) body(element)
-    }
-})
-
-fun KtExpression.visitReferencedExpressions(binding: BindingContext, body: (KtExpression, PsiElement) -> Unit) = accept(object: KtDefaultVisitor() {
+fun KtExpression.visitReferencedExpressions(binding: BindingContext, body: (KtExpression, PsiElement) -> Unit) = accept(object : KtDefaultVisitor() {
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         val targets = expression.getReferenceTargets(binding).mapNotNull { (it as? DeclarationDescriptorWithSource)?.source?.getPsi() }
         for (target in targets) {

@@ -10,17 +10,15 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import kotlin.reflect.KClass
 
-fun KtElement.visitClassOrObject(filter: (KtClassOrObject) -> Boolean, body: (KtClassOrObject) -> Unit) = acceptChildren(object : KtDefaultVisitor() {
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (!filter(classOrObject)) return
+fun KtElement.visitClassOrObject(filter: (KtClassOrObject) -> Boolean = { true }, body: (KtClassOrObject) -> Unit) {
+    acceptChildren(object : KtDefaultVisitor() {
+        override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+            if (!filter(classOrObject)) return
 
-        body(classOrObject)
-    }
-})
-
-fun KtElement.visitClassOrObject(body: (KtClassOrObject) -> Unit) = acceptChildren(object : KtDefaultVisitor() {
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) = body(classOrObject)
-})
+            body(classOrObject)
+        }
+    })
+}
 
 
 fun KtClassOrObject.isSubtypeOf(klass: KClass<*>, context: BindingContext): Boolean {
