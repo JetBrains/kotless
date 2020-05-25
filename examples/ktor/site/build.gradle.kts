@@ -14,13 +14,14 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     //artifacts are located at JCenter
     jcenter()
 }
 
 dependencies {
     implementation("io.kotless", "ktor-lang", "0.1.4")
-    implementation("io.ktor", "ktor-html-builder", "1.2.5")
+    implementation("io.ktor", "ktor-html-builder", "1.3.2")
 }
 
 tasks.withType<KotlinJvmCompile> {

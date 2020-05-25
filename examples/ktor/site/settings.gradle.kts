@@ -1,7 +1,8 @@
-rootProject.name = "ktor-site"
+rootProject.name = "site"
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
     }
 }

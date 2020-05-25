@@ -2,73 +2,91 @@ package io.kotless.parser.utils.psi
 
 import io.kotless.parser.utils.psi.visitor.KtDefaultVisitor
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiverOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
-import org.jetbrains.kotlin.resolve.source.getPsi
-import java.util.*
 
-fun KtExpression.visitAllExpressions(context: BindingContext, filter: (KtExpression) -> Boolean = { true },
-                                     alreadyGot: Set<KtElement> = setOf(this), body: (KtExpression) -> Unit) {
-    if (filter(this)) {
+
+fun KtElement.visitAnnotated(filter: (KtAnnotated) -> Boolean = { true }, body: (KtAnnotated) -> Unit) {
+    accept(object : KtDefaultVisitor() {
+        override fun visitKtElement(element: KtElement) {
+            if (element is KtAnnotated && filter(element)) body(element)
+
+            super.visitKtElement(element)
+        }
+    })
+}
+
+fun KtElement.visitAllAnnotated(context: BindingContext, filter: (KtAnnotated) -> Boolean = { true },
+                                alreadyGot: Set<KtElement> = setOf(this), body: (KtAnnotated) -> Unit) {
+    if (this is KtAnnotated && filter(this)) {
         body(this)
     }
+
+    visitAnnotated(filter, body)
 
     visitReferencedExpressions(context) { _, target ->
         if (target in alreadyGot) return@visitReferencedExpressions
 
         when (target) {
-            is KtClassOrObject -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
-            is KtProperty -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
-            is KtNamedFunction -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
+            is KtAnnotated -> target.visitAllAnnotated(context, filter, alreadyGot + target, body)
         }
     }
 
     if (this is KtNamedFunction) {
         val thisExpr = this.getQualifiedExpressionForReceiverOrThis()
 
-        if (thisExpr in alreadyGot) return
+        if (thisExpr in alreadyGot || thisExpr !is KtAnnotated) return
 
-        thisExpr.visitAllExpressions(context, filter, alreadyGot + thisExpr, body)
+        thisExpr.visitAllAnnotated(context, filter, alreadyGot + thisExpr, body)
     }
 }
 
-fun KtExpression.visitReferencedExpressions(binding: BindingContext, body: (KtExpression, PsiElement) -> Unit) = accept(object : KtDefaultVisitor() {
+fun KtElement.visitBinaryExpressions(filter: (KtBinaryExpression) -> Boolean = { true }, body: (KtBinaryExpression) -> Unit) {
+    accept(object : KtDefaultVisitor() {
+        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            if (filter(expression)) body(expression)
+
+            super.visitBinaryExpression(expression)
+        }
+    })
+}
+
+fun KtElement.visitReferencedExpressions(binding: BindingContext, body: (KtExpression, PsiElement) -> Unit) = accept(object : KtDefaultVisitor() {
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        val targets = expression.getReferenceTargets(binding).mapNotNull { (it as? DeclarationDescriptorWithSource)?.source?.getPsi() }
+        val targets = expression.getTargets(binding)
         for (target in targets) {
             body(expression, target)
         }
+
+        super.visitReferenceExpression(expression)
     }
 })
 
-/**
- * Gather all expressions inside current — recursively
- *
- * Previous is sorted from the nearest element (at the start) to the most distant
- */
-fun KtElement.visit(context: BindingContext, body: (element: KtElement, previous: List<KtElement>) -> Boolean) {
-    val stack = Stack<KtElement>()
-    val previous = Stack<KtElement>()
-    stack.push(this)
+fun KtElement.visitCallExpressions(filter: (KtCallExpression) -> Boolean = { true },
+                                   body: (KtCallExpression) -> Unit) = accept(object : KtDefaultVisitor() {
+    override fun visitCallExpression(expression: KtCallExpression) {
+        if (filter(expression)) body(expression)
 
-    while (stack.isNotEmpty()) {
-        val cur = stack.pop()
+        super.visitCallExpression(expression)
+    }
+})
 
-        if (previous.isNotEmpty() && cur == previous.peek()) {
-            previous.pop()
-            continue
+fun KtElement.visitAllCallExpressions(binding: BindingContext, filter: (KtCallExpression) -> Boolean = { true },
+                                      alreadyGot: Set<KtElement> = setOf(this), body: (KtCallExpression) -> Unit) {
+    if (this is KtCallExpression && filter(this)) {
+        body(this)
+    }
+
+    visitCallExpressions(filter, body)
+
+    visitReferencedExpressions(binding) { _, target ->
+        if (target in alreadyGot) return@visitReferencedExpressions
+
+        when (target) {
+            is KtFunction -> target.visitAllCallExpressions(binding, filter, alreadyGot + target, body)
         }
-
-        val next = body(cur, previous.reversed())
-        if (!next || cur in previous) continue
-
-        previous.add(cur)
-        stack.push(cur)
-        cur.children.filterIsInstance<KtElement>().reversed().forEach { stack.push(it) }
-        if (cur is KtNameReferenceExpression) cur.getTargets(context).reversed().forEach { stack.push(it) }
     }
 }
+
 

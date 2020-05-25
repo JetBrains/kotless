@@ -10,9 +10,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 fun KtElement.visitVariables(filter: (KtProperty) -> Boolean = { true }, body: (KtProperty) -> Unit) = accept(object : KtDefaultVisitor() {
     override fun visitProperty(property: KtProperty) {
-        if (!filter(property)) return
+        if (filter(property)) body(property)
 
-        body(property)
+        super.visitProperty(property)
     }
 })
 

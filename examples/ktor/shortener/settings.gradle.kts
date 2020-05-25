@@ -1,7 +1,8 @@
-rootProject.name = "ktor-shortener"
+rootProject.name = "shortener"
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
     }
 }

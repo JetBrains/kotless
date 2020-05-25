@@ -37,7 +37,7 @@ abstract class Kotless : RequestStreamHandler {
 
     @EngineAPI
     @OptIn(InternalAPI::class)
-    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context) {
+    override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context?) {
         if (!prepared) {
             prepare(engine.application)
             prepared = true

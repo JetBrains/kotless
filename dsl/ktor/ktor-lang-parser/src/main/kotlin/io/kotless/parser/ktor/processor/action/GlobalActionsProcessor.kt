@@ -7,7 +7,6 @@ import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.*
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -25,14 +24,11 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
 
         processClasses(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visit(binding) { element, _ ->
-                    if (element is KtCallExpression && element.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe") {
-                        val event = element.getArgument("definition", binding)
-                        if (event.asReferencedDescriptorOrNull(binding)?.fqNameSafe?.asString() == "io.kotless.dsl.ktor.lang.LambdaWarming") {
-                            permissions += PermissionsProcessor.process(element, binding)
-                        }
+                func.visitCallExpressions(filter = { it.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe" }) { element ->
+                    val event = element.getArgument("definition", binding)
+                    if (event.asReferencedDescriptorOrNull(binding)?.fqNameSafe?.asString() == "io.kotless.dsl.ktor.lang.LambdaWarming") {
+                        permissions += PermissionsProcessor.process(element, binding)
                     }
-                    true
                 }
             }
         }

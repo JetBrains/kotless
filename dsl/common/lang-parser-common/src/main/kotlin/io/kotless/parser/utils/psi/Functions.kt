@@ -12,16 +12,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
-fun KtElement.visitNamedFunctions(filter: (KtNamedFunction) -> Boolean, body: (KtNamedFunction) -> Unit) = accept(object : KtDefaultVisitor() {
+fun KtElement.visitNamedFunctions(filter: (KtNamedFunction) -> Boolean = { true }, body: (KtNamedFunction) -> Unit) = accept(object : KtDefaultVisitor() {
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!filter(function)) return
+        if (filter(function)) body(function)
 
-        body(function)
+        super.visitNamedFunction(function)
     }
-})
-
-fun KtElement.visitNamedFunctions(body: (KtNamedFunction) -> Unit) = acceptChildren(object : KtDefaultVisitor() {
-    override fun visitNamedFunction(function: KtNamedFunction) = body(function)
 })
 
 

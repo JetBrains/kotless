@@ -15,9 +15,9 @@ import kotlin.reflect.KClass
 fun KtElement.visitClassOrObject(filter: (KtClassOrObject) -> Boolean = { true }, body: (KtClassOrObject) -> Unit) {
     acceptChildren(object : KtDefaultVisitor() {
         override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-            if (!filter(classOrObject)) return
+            if (filter(classOrObject)) body(classOrObject)
 
-            body(classOrObject)
+            super.visitClassOrObject(classOrObject)
         }
     })
 }
@@ -25,9 +25,9 @@ fun KtElement.visitClassOrObject(filter: (KtClassOrObject) -> Boolean = { true }
 fun KtElement.visitClass(filter: (KtClass) -> Boolean = { true }, body: (KtClass) -> Unit) {
     acceptChildren(object : KtDefaultVisitor() {
         override fun visitClass(klass: KtClass) {
-            if (!filter(klass)) return
+            if (filter(klass)) body(klass)
 
-            body(klass)
+            super.visitClass(klass)
         }
     })
 }
@@ -35,9 +35,9 @@ fun KtElement.visitClass(filter: (KtClass) -> Boolean = { true }, body: (KtClass
 fun KtElement.visitObject(filter: (KtObjectDeclaration) -> Boolean = { true }, body: (KtObjectDeclaration) -> Unit) {
     acceptChildren(object : KtDefaultVisitor() {
         override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-            if (!filter(declaration)) return
+            if (filter(declaration)) body(declaration)
 
-            body(declaration)
+            super.visitObjectDeclaration(declaration)
         }
     })
 }

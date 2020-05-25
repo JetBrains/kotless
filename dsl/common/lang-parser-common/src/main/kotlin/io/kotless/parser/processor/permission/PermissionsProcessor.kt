@@ -3,7 +3,7 @@ package io.kotless.parser.processor.permission
 import io.kotless.*
 import io.kotless.dsl.lang.*
 import io.kotless.parser.utils.psi.annotation.*
-import io.kotless.parser.utils.psi.visitAllExpressions
+import io.kotless.parser.utils.psi.visitAllAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -14,7 +14,7 @@ object PermissionsProcessor {
     fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val permissions = HashSet<Permission>()
 
-        func.visitAllExpressions(context, filter = { it is KtAnnotated }) {
+        func.visitAllAnnotated(context, filter = { it is KtAnnotated }) {
             permissions.addAll(processAnnotated(it as KtAnnotated, context))
         }
 

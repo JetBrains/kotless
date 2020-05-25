@@ -21,7 +21,7 @@ class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), Co
     override val coroutineContext: CoroutineContext = EmptyCoroutineContext
     private val output = ByteChannel(true)
 
-    val reader = async(Dispatchers.Unconfined) {
+    private val reader = async(Dispatchers.Unconfined) {
         output.readRemaining()
     }
 
