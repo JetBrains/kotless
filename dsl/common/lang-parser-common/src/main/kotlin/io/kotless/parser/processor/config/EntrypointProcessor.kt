@@ -26,7 +26,7 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
 
     fun find(files: Set<KtFile>, binding: BindingContext): Lambda.Entrypoint {
         val entrypoint = ArrayList<Lambda.Entrypoint>()
-        processClassOrObject(files, binding) { klass, _ ->
+        processClassesOrObjects(files, binding) { klass, _ ->
             entrypoint.add(klass.makeLambdaEntrypoint())
         }
 
@@ -36,6 +36,7 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
         return entrypoint.single()
     }
 
-    private fun KtClassOrObject.makeLambdaEntrypoint() =
-        Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet())
+    private fun KtClassOrObject.makeLambdaEntrypoint(): Lambda.Entrypoint {
+        return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet())
+    }
 }

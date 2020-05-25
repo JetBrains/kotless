@@ -10,16 +10,19 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.source.getPsi
 import java.util.*
 
-fun KtExpression.visitAllExpressions(context: BindingContext, alreadyGot: Set<KtElement> = setOf(this), body: (KtExpression) -> Unit) {
-    body(this)
+fun KtExpression.visitAllExpressions(context: BindingContext, filter: (KtExpression) -> Boolean = { true },
+                                     alreadyGot: Set<KtElement> = setOf(this), body: (KtExpression) -> Unit) {
+    if (filter(this)) {
+        body(this)
+    }
 
     visitReferencedExpressions(context) { _, target ->
         if (target in alreadyGot) return@visitReferencedExpressions
 
         when (target) {
-            is KtClassOrObject -> target.visitAllExpressions(context, alreadyGot + target, body)
-            is KtProperty -> target.visitAllExpressions(context, alreadyGot + target, body)
-            is KtNamedFunction -> target.visitAllExpressions(context, alreadyGot + target, body)
+            is KtClassOrObject -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
+            is KtProperty -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
+            is KtNamedFunction -> target.visitAllExpressions(context, filter, alreadyGot + target, body)
         }
     }
 
@@ -28,7 +31,7 @@ fun KtExpression.visitAllExpressions(context: BindingContext, alreadyGot: Set<Kt
 
         if (thisExpr in alreadyGot) return
 
-        thisExpr.visitAllExpressions(context, alreadyGot + thisExpr, body)
+        thisExpr.visitAllExpressions(context, filter, alreadyGot + thisExpr, body)
     }
 }
 

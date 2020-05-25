@@ -29,11 +29,9 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         val permissions = HashSet<Permission>()
 
-        processObject(files, binding) { obj, klass ->
-            obj.visitNamedFunctions {
-                if (it.name == functions.getValue(klass)) {
-                    permissions.addAll(PermissionsProcessor.process(it, binding))
-                }
+        processObjects(files, binding) { obj, klass ->
+            obj.visitNamedFunctions(filter = { it.name == functions.getValue(klass) }) {
+                permissions.addAll(PermissionsProcessor.process(it, binding))
             }
         }
 

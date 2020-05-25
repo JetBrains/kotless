@@ -14,10 +14,8 @@ object PermissionsProcessor {
     fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val permissions = HashSet<Permission>()
 
-        func.visitAllExpressions(context) {
-            if (it is KtAnnotated) {
-                permissions.addAll(processAnnotated(it, context))
-            }
+        func.visitAllExpressions(context, filter = { it is KtAnnotated }) {
+            permissions.addAll(processAnnotated(it as KtAnnotated, context))
         }
 
         return (permissions + Permission(AwsResource.CloudWatchLogs, PermissionLevel.ReadWrite, setOf("*"))).toSet()
@@ -25,6 +23,7 @@ object PermissionsProcessor {
 
     private fun processAnnotated(expression: KtAnnotated, context: BindingContext): HashSet<Permission> {
         val permissions = HashSet<Permission>()
+
         PERMISSION_ANNOTATIONS_CLASSES.forEach { routeClass ->
             expression.getAnnotations(context, routeClass).forEach { annotation ->
                 when (routeClass) {
@@ -46,6 +45,7 @@ object PermissionsProcessor {
                 }
             }
         }
+
         return permissions
     }
 }

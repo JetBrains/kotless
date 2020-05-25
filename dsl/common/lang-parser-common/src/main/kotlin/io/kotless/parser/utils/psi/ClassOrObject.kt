@@ -2,8 +2,10 @@ package io.kotless.parser.utils.psi
 
 import io.kotless.parser.utils.psi.visitor.KtDefaultVisitor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.synthetics.findClassDescriptor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -20,9 +22,36 @@ fun KtElement.visitClassOrObject(filter: (KtClassOrObject) -> Boolean = { true }
     })
 }
 
+fun KtElement.visitClass(filter: (KtClass) -> Boolean = { true }, body: (KtClass) -> Unit) {
+    acceptChildren(object : KtDefaultVisitor() {
+        override fun visitClass(klass: KtClass) {
+            if (!filter(klass)) return
+
+            body(klass)
+        }
+    })
+}
+
+fun KtElement.visitObject(filter: (KtObjectDeclaration) -> Boolean = { true }, body: (KtObjectDeclaration) -> Unit) {
+    acceptChildren(object : KtDefaultVisitor() {
+        override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+            if (!filter(declaration)) return
+
+            body(declaration)
+        }
+    })
+}
+
 
 fun KtClassOrObject.isSubtypeOf(klass: KClass<*>, context: BindingContext): Boolean {
     return findClassDescriptor(context).getAllSuperClassifiers().filter { it is ClassDescriptor }.any {
         it.fqNameOrNull()?.asString() == klass.qualifiedName
+    }
+}
+
+fun KtClassOrObject.isSubtypeOf(klasses: Set<KClass<*>>, context: BindingContext): Boolean {
+    val names = klasses.mapNotNull { it.qualifiedName }
+    return findClassDescriptor(context).getAllSuperClassifiers().filter { it is ClassDescriptor }.any {
+        it.fqNameOrNull()?.asString() in names
     }
 }

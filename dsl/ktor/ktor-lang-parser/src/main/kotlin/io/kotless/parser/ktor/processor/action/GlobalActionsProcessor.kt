@@ -23,7 +23,7 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         val permissions = HashSet<Permission>()
 
-        processClass(files, binding) { klass, _ ->
+        processClasses(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
                 func.visit(binding) { element, _ ->
                     if (element is KtCallExpression && element.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe") {
