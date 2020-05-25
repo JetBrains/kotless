@@ -44,9 +44,7 @@ fun KtElement.visitObject(filter: (KtObjectDeclaration) -> Boolean = { true }, b
 
 
 fun KtClassOrObject.isSubtypeOf(klass: KClass<*>, context: BindingContext): Boolean {
-    return findClassDescriptor(context).getAllSuperClassifiers().filter { it is ClassDescriptor }.any {
-        it.fqNameOrNull()?.asString() == klass.qualifiedName
-    }
+    return isSubtypeOf(setOf(klass), context)
 }
 
 fun KtClassOrObject.isSubtypeOf(klasses: Set<KClass<*>>, context: BindingContext): Boolean {

@@ -1,45 +1,32 @@
 package io.kotless.parser.utils.psi
 
 import io.kotless.parser.utils.psi.visitor.KtDefaultVisitor
+import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiverOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 
 
-fun KtElement.visitAnnotated(filter: (KtAnnotated) -> Boolean = { true }, body: (KtAnnotated) -> Unit) {
-    accept(object : KtDefaultVisitor() {
+fun KtElement.visitAnnotatedWithReferences(context: BindingContext, filter: (KtAnnotated) -> Boolean = { true }, body: (KtAnnotated) -> Unit) {
+    accept(object : KtReferenceFollowingVisitor(context) {
         override fun visitKtElement(element: KtElement) {
             if (element is KtAnnotated && filter(element)) body(element)
 
             super.visitKtElement(element)
         }
-    })
-}
 
-fun KtElement.visitAllAnnotated(context: BindingContext, filter: (KtAnnotated) -> Boolean = { true },
-                                alreadyGot: Set<KtElement> = setOf(this), body: (KtAnnotated) -> Unit) {
-    if (this is KtAnnotated && filter(this)) {
-        body(this)
-    }
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            val thisExpr = function.getQualifiedExpressionForReceiverOrThis()
 
-    visitAnnotated(filter, body)
+            if (thisExpr in alreadySeen || thisExpr !is KtAnnotated) return
 
-    visitReferencedExpressions(context) { _, target ->
-        if (target in alreadyGot) return@visitReferencedExpressions
+            alreadySeen.add(thisExpr)
+            thisExpr.accept(this)
 
-        when (target) {
-            is KtAnnotated -> target.visitAllAnnotated(context, filter, alreadyGot + target, body)
+            super.visitNamedFunction(function)
         }
-    }
-
-    if (this is KtNamedFunction) {
-        val thisExpr = this.getQualifiedExpressionForReceiverOrThis()
-
-        if (thisExpr in alreadyGot || thisExpr !is KtAnnotated) return
-
-        thisExpr.visitAllAnnotated(context, filter, alreadyGot + thisExpr, body)
-    }
+    })
 }
 
 fun KtElement.visitBinaryExpressions(filter: (KtBinaryExpression) -> Boolean = { true }, body: (KtBinaryExpression) -> Unit) {
