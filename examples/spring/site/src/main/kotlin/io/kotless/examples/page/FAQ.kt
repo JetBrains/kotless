@@ -2,8 +2,14 @@ package io.kotless.examples.page
 
 import io.kotless.examples.bootstrap.doc
 import kotlinx.html.*
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
+@RestController
+@RequestMapping("/pages")
 object FAQ {
+
+    @RequestMapping("/faq")
     fun faq() = doc {
         div("card") {
             div("card-header") {

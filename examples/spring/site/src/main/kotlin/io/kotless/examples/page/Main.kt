@@ -5,9 +5,13 @@ import kotlinx.html.br
 import kotlinx.html.h1
 import kotlinx.html.i
 import kotlinx.html.p
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 
 
+@RestController
 object Main {
+    @GetMapping("/")
     fun root() = landing {
 
         h1 {

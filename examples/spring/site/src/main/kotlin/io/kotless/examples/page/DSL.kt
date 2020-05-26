@@ -3,8 +3,14 @@ package io.kotless.examples.page
 import io.kotless.examples.bootstrap.doc
 import io.kotless.examples.bootstrap.kotlin
 import kotlinx.html.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
+@RestController
+@RequestMapping("/pages/dsl")
 object DSL {
+    @GetMapping("/overview")
     fun overview() = doc {
         h1 {
             +"Overview"
@@ -43,6 +49,7 @@ object DSL {
         }
     }
 
+    @GetMapping("/lifecycle")
     fun lifecycle() = doc {
         h1 {
             +"Lifecycle API"
@@ -108,7 +115,7 @@ object DSL {
         }
     }
 
-
+    @GetMapping("/permissions")
     fun permissions() = doc {
         h1 {
             +"Permissions API"
@@ -187,7 +194,7 @@ object DSL {
         }
     }
 
-
+    @GetMapping("/http")
     fun http() = doc {
         h1 {
             +"HTTP API"
@@ -410,6 +417,7 @@ object DSL {
     }
 
 
+    @GetMapping("/events")
     fun events() = doc {
         h1 {
             +"Events API"

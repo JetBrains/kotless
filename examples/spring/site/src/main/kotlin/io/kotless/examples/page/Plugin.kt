@@ -3,8 +3,14 @@ package io.kotless.examples.page
 import io.kotless.examples.bootstrap.doc
 import io.kotless.examples.bootstrap.kotlin
 import kotlinx.html.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
+@RestController
+@RequestMapping("/pages/plugin")
 object Plugin {
+    @GetMapping("/overview")
     fun overview() = doc {
         h1 {
             +"Overview"
@@ -95,6 +101,7 @@ object Plugin {
         """)
     }
 
+    @GetMapping("/configuration")
     fun configuration() = doc {
         h1 {
             +"Configuration"
@@ -350,6 +357,7 @@ object Plugin {
 
     }
 
+    @GetMapping("/tasks")
     fun tasks() = doc {
         h1 {
             +"Tasks"
@@ -402,6 +410,7 @@ object Plugin {
         }
     }
 
+    @GetMapping("/extensions")
     fun extensions() = doc {
         h1 {
             +"Extensions"
