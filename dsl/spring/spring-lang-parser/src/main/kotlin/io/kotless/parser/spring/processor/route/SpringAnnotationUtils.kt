@@ -26,16 +26,13 @@ object SpringAnnotationUtils {
         return func.isAnnotatedWith(binding, anyMethodAnnotation) || func.isAnnotatedWith(binding, methodAnnotations.keys)
     }
 
-    fun getMethod(binding: BindingContext, func: KtNamedFunction): HttpMethod {
+    fun getMethods(binding: BindingContext, func: KtNamedFunction): Set<HttpMethod> {
         return executeOnAnnotation(binding, func, onMethodAnnotation = { annotation ->
             val fq = annotation.fqName(binding)
-            methodAnnotations.entries.find { it.key.qualifiedName == fq }!!.value
+            setOf(methodAnnotations.entries.find { it.key.qualifiedName == fq }!!.value)
         }, onAnyMethodAnnotation = { annotation ->
             val methods = annotation.getArrayEnumValue(binding, RequestMapping::method) ?: arrayOf(RequestMethod.GET)
-            require(methods.size == 1) {
-                func.withExceptionHeader("Method should be have only one RequestMethod at @RequestMapping. Kotless does not support arrays of methods right now.")
-            }
-            HttpMethod.valueOf(methods.single().name)
+            methods.map { HttpMethod.valueOf(it.name) }.toSet()
         })
     }
 

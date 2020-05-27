@@ -24,6 +24,7 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: 
     PNG("image/png", true, "png"),
     APNG("image/apng", true, "apng"),
     GIF("image/gif", true, "gif"),
+    SVG("image/svg", true, "svg"),
     JPEG("image/jpeg", true, "jpeg"),
     BMP("image/bmp", true, "bmp"),
     WEBP("image/webp", true, "webp"),

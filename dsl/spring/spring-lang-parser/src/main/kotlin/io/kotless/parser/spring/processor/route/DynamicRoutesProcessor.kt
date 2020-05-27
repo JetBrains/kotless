@@ -25,21 +25,22 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             classOrObj.visitNamedFunctions(filter = { SpringAnnotationUtils.isHTTPHandler(binding, it) }) { el ->
                 val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
-                val method = SpringAnnotationUtils.getMethod(binding, el)
-                val path = SpringAnnotationUtils.getRoutePath(binding, el)
-                val permissions = PermissionsProcessor.process(el, binding)
-                val name = el.fqName!!.asString()
+                for (method in SpringAnnotationUtils.getMethods(binding, el)) {
+                    val path = SpringAnnotationUtils.getRoutePath(binding, el)
+                    val permissions = PermissionsProcessor.process(el, binding)
+                    val name = el.fqName!!.asString() + "_" + method.name
 
-                val key = TypedStorage.Key<Lambda>()
-                val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
+                    val key = TypedStorage.Key<Lambda>()
+                    val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
-                context.resources.register(key, function)
-                context.routes.register(ApiGateway.DynamicRoute(method, path, key))
+                    context.resources.register(key, function)
+                    context.routes.register(ApiGateway.DynamicRoute(method, path, key))
 
-                if (context.config.optimization.autowarm.enable) {
-                    context.events.register(
-                        Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
-                    )
+                    if (context.config.optimization.autowarm.enable) {
+                        context.events.register(
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                        )
+                    }
                 }
             }
         }

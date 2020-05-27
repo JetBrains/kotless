@@ -26,7 +26,10 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, D
 
         val resourceApi = getResource(entity.path, api, context)
 
-        val method = api_gateway_method(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
+        val tf_name = context.names.tf(entity.path.parts, entity.method.name).ifBlank { "root_resource" }
+        val aws_name = context.names.aws(entity.path.parts, entity.method.name).ifBlank { "root_resource" }
+
+        val method = api_gateway_method(tf_name) {
             depends_on = arrayOf(resourceApi.ref)
 
             rest_api_id = api.rest_api_id
@@ -36,15 +39,15 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, D
             http_method = entity.method.name
         }
 
-        val permission = lambda_permission(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
-            statement_id = context.names.aws(entity.path.parts).ifBlank { "root_resource" }
+        val permission = lambda_permission(tf_name) {
+            statement_id = aws_name
             action = "lambda:InvokeFunction"
             function_name = lambda.lambda_arn
             principal = "apigateway.amazonaws.com"
             source_arn = "arn:aws:execute-api:${info.region_name}:${info.account_id}:${api.rest_api_id}/*/${method.http_method}/${entity.path}"
         }
 
-        val integration = api_gateway_integration(context.names.tf(entity.path.parts).ifEmpty { "root_resource" }) {
+        val integration = api_gateway_integration(tf_name) {
             depends_on = arrayOf(resourceApi.ref)
 
             rest_api_id = api.rest_api_id
