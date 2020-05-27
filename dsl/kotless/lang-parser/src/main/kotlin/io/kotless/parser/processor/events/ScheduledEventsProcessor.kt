@@ -10,7 +10,7 @@ import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.annotation.getValue
-import io.kotless.parser.utils.psi.withExceptionHeader
+import io.kotless.parser.utils.errors.withExceptionHeader
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext

@@ -2,9 +2,11 @@ package io.kotless.parser.spring.processor.route
 
 import io.kotless.HttpMethod
 import io.kotless.URIPath
+import io.kotless.parser.utils.errors.error
+import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.parents
-import io.kotless.parser.utils.psi.withExceptionHeader
+import io.kotless.parser.utils.errors.withExceptionHeader
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
@@ -40,23 +42,15 @@ object SpringAnnotationUtils {
         return executeOnAnnotation(binding, func, onMethodAnnotation = { annotation ->
             val existingPath = getRoutePath(func, binding)
             val currentPath = annotation.getURIPaths(binding, "value")
-            require(currentPath != null) {
-                func.withExceptionHeader("`value` parameter is required for @GetMapping/@PostMapping/... style annotations")
-            }
-            require(currentPath.size == 1) {
-                func.withExceptionHeader("`value` parameter of @GetMapping/@PostMapping/... annotations should have only one path")
-            }
+                ?: error(func, "`value` parameter is required for @GetMapping/@PostMapping/... style annotations")
 
             URIPath(existingPath, currentPath.single())
         }, onAnyMethodAnnotation = { annotation ->
             val existingPath = getRoutePath(func, binding)
             val currentPath = annotation.getURIPaths(binding, "value")
-            require(currentPath != null) {
-                func.withExceptionHeader("`value` parameter is required for @RequestMapping annotation")
-            }
-            require(currentPath.size == 1) {
-                func.withExceptionHeader("`value` parameter of @RequestMapping annotation should have only one path")
-            }
+                ?: error(func, "`value` parameter is required for @RequestMapping annotation")
+
+            require(func, currentPath.size == 1) { "`value` parameter of @RequestMapping annotation should have only one path" }
 
             URIPath(existingPath, currentPath.single())
         })
@@ -77,20 +71,16 @@ object SpringAnnotationUtils {
         val myMethodAnnotations = func.getAnnotations(binding, methodAnnotations.keys)
         val myAnyMethodAnnotations = func.getAnnotations(binding, anyMethodAnnotation)
 
-        require(myMethodAnnotations.isEmpty() || myAnyMethodAnnotations.isEmpty()) {
-            func.withExceptionHeader("Method should be annotated either with @GetMapping/@PostMapping/... or @RequestMapping. Not both at once!")
+        require(func, myMethodAnnotations.isEmpty() || myAnyMethodAnnotations.isEmpty()) {
+            "Method should be annotated either with @GetMapping/@PostMapping/... or @RequestMapping. Not both at once!"
         }
 
         return if (myMethodAnnotations.isNotEmpty()) {
-            require(myMethodAnnotations.size == 1) {
-                func.withExceptionHeader("Method should be annotated only with one annotation of @GetMapping/@PostMapping/... type")
-            }
+            require(func, myMethodAnnotations.size == 1) { "Method should be annotated only with one annotation of @GetMapping/@PostMapping/... type" }
             val annotation = myMethodAnnotations.single()
             onMethodAnnotation(annotation)
         } else {
-            require(myAnyMethodAnnotations.size == 1) {
-                func.withExceptionHeader("Method should be annotated only with one annotation of @RequestMapping type")
-            }
+            require(func, myAnyMethodAnnotations.size == 1) { "Method should be annotated only with one annotation of @RequestMapping type" }
             val annotation = myAnyMethodAnnotations.single()
             onAnyMethodAnnotation(annotation)
         }

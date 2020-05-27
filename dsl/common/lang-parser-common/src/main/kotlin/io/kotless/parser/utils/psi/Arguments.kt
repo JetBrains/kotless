@@ -1,6 +1,7 @@
 package io.kotless.parser.utils.psi
 
 import io.kotless.URIPath
+import io.kotless.parser.utils.errors.withExceptionHeader
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.psi.*

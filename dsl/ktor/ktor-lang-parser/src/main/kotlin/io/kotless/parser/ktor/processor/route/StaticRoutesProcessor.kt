@@ -5,18 +5,21 @@ import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.ktor.utils.toMime
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
+import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.*
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
-import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
 internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
-    private val funcs = setOf(
+    private val functions = setOf(
         "io.ktor.http.content.file",
         "io.ktor.http.content.files",
         "io.ktor.http.content.default"
@@ -29,10 +32,9 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
         processClassesOrObjects(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) in funcs }, binding = binding) { element ->
-                    val previous = element.parents.filterIsInstance(KtElement::class.java)
-                    val outer = getStaticPath(previous, binding)
-                    val base = getBaseFolder(previous, binding, context)
+                func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) in functions }, binding = binding) { element ->
+                    val outer = getStaticPath(element, binding)
+                    val base = getBaseFolder(element, binding, context)
 
                     when (element.getFqName(binding)) {
                         "io.ktor.http.content.file" -> {
@@ -77,24 +79,27 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         }
     }
 
-    private fun getStaticPath(previous: Sequence<KtElement>, binding: BindingContext): URIPath {
-        val staticCalls = previous.filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.http.content.static" }
+    private fun getStaticPath(element: KtElement, binding: BindingContext): URIPath {
+        val previous = element.parents<KtCallExpression>()
+        val staticCalls = previous.filter { it.getFqName(binding) == "io.ktor.http.content.static" }
         val path = staticCalls.map {
-            (it as KtCallExpression).getArgumentOrNull("remotePath", binding)?.asString(binding) ?: ""
+            it.getArgumentOrNull("remotePath", binding)?.asString(binding) ?: ""
         }.filter { it.isNotBlank() }.toList().reversed()
-        return URIPath(path.joinToString(separator = "/"))
+        return URIPath(path)
     }
 
-    private fun getBaseFolder(previous: Sequence<KtElement>, binding: BindingContext, context: ProcessorContext): File {
-        return previous.toList().reversed().filter { it is KtCallExpression && it.getFqName(binding) == "io.ktor.http.content.static" }.mapNotNull {
+    //TODO-tanvd Have to rethink this logic
+    private fun getBaseFolder(element: KtElement, binding: BindingContext, context: ProcessorContext): File {
+        val previous = element.parents<KtCallExpression>()
+        return previous.filter { it.getFqName(binding) == "io.ktor.http.content.static" }.mapNotNull { static ->
             var folder: File? = null
-            it.visitCallExpressionsWithReferences(filter = { el -> el.getFqName(binding) == "io.ktor.http.content.static" }, binding = binding) { call ->
+            static.visitCallExpressionsWithReferences(filter = { el -> el.getFqName(binding) == "io.ktor.http.content.static" }, binding = binding) { call ->
                 call.visitBinaryExpressions(filter = { (it.operationToken as? KtSingleValueToken)?.value == "=" }) { binary ->
                     if (binary.getChildAt<KtNameReferenceExpression>(0)?.getFqName(binding) == "io.ktor.http.content.staticRootFolder") {
                         val right = binary.getChildAt<KtCallExpression>(2)
 
-                        require(right?.getFqName(binding) == "java.io.File.<init>") {
-                            binary.withExceptionHeader("staticRootFolder should be assigned with java.io.File(...) constructor")
+                        require(binary, right?.getFqName(binding) == "java.io.File.<init>") {
+                            "staticRootFolder should be assigned with java.io.File(...) constructor"
                         }
 
                         right!!.getArgumentByIndexOrNull(0)?.asString(binding)?.let { value ->
