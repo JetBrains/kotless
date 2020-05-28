@@ -16,8 +16,6 @@ dependencies {
     api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.20.0")
 
     api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
-
-    api("org.slf4j", "slf4j-api", "1.7.30")
 }
 
 publishJar {
