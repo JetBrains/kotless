@@ -13,8 +13,6 @@ object Dependencies {
     fun hasKtorDependency(project: Project) = getKtorDependency(project) != null
     fun getKtorDependency(project: Project) = getDependency(project, group = "io.kotless", name = "ktor-lang")
 
-    fun hasSpringDependency(project: Project) = getSpringDependency(project) != null
-    fun getSpringDependency(project: Project) = getDependency(project, group = "io.kotless", name = "spring-lang")
     fun hasSpringBootDependency(project: Project) = getSpringBootDependency(project) != null
     fun getSpringBootDependency(project: Project) = getDependency(project, group = "io.kotless", name = "spring-boot-lang")
 

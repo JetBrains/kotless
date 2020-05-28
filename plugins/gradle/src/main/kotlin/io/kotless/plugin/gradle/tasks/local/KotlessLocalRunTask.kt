@@ -42,15 +42,18 @@ open class KotlessLocalRunTask : DefaultTask() {
     fun act() = with(project) {
         val ktorVersion = Dependencies.getKtorDependency(this)?.version
         val kotlessVersion = Dependencies.getKotlessDependency(this)?.version
+        val springVersion = Dependencies.getSpringBootDependency(this)?.version
 
-        //TODO-tanvd fix
-//        require(ktorVersion != null || kotlessVersion != null) { "Cannot find \"lang\" or \"ktor-lang\" dependencies. One of them required for local start." }
-//        require(ktorVersion == null || kotlessVersion == null) { "Both \"lang\" and \"ktor-lang\" dependencies found. Only one of them should be used." }
+        val all = listOf(ktorVersion, kotlessVersion, springVersion)
+
+        require(all.any { it != null }) { "Cannot find \"lang\", \"ktor-lang\" or \"spring-boot-lang\" dependencies. One of them required for local start." }
+        require(all.count { it != null } <= 1) { "Only one dependency should be used for DSL: either \"lang\", \"ktor-lang\" or \"spring-boot-lang\"." }
 
         dependencies {
             when {
                 ktorVersion != null -> myLocal("io.kotless", "ktor-lang-local", ktorVersion)
                 kotlessVersion != null -> myLocal("io.kotless", "lang-local", kotlessVersion)
+                springVersion != null -> myLocal("io.kotless", "spring-boot-lang-local", springVersion)
             }
         }
 
@@ -59,9 +62,9 @@ open class KotlessLocalRunTask : DefaultTask() {
 
             environment[Constants.Local.serverPort] = myKotless.extensions.local.port
 
-            if (ktorVersion != null) {
+            if (ktorVersion != null || springVersion != null) {
                 val local = LocalParser.parse(myAllSources, Dependencies.getDependencies(project))
-                environment[Constants.Local.Ktor.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
+                environment[Constants.Local.KtorOrSpring.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 
             if (kotlessVersion != null) {

@@ -49,8 +49,8 @@ class KotlessConfig(project: Project) : Serializable {
         internal val defaultType by lazy {
             when {
                 Dependencies.hasKotlessDependency(project) -> DSLType.Kotless
-                Dependencies.hasKtorDependency(project)  -> DSLType.Ktor
-                Dependencies.hasSpringDependency(project) || Dependencies.hasSpringBootDependency(project) -> DSLType.Spring
+                Dependencies.hasKtorDependency(project) -> DSLType.Ktor
+                Dependencies.hasSpringBootDependency(project) -> DSLType.Spring
                 else -> DSLType.Kotless
             }
         }
