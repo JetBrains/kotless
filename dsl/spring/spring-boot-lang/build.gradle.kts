@@ -7,7 +7,9 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:common:lang-common"))
 
-    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot2", "1.5")
+    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot2", "1.5") {
+        exclude("org.slf4j", "slf4j-api")
+    }
 
     api("org.springframework.boot","spring-boot-starter-web", "2.3.0.RELEASE") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
