@@ -43,7 +43,6 @@ fun KtElement.visitBinaryExpressions(filter: (KtBinaryExpression) -> Boolean = {
 }
 
 fun KtElement.visitCallExpressionsWithReferences(binding: BindingContext, filter: (KtCallExpression) -> Boolean = { true }, body: (KtCallExpression) -> Unit) {
-
     accept(object : KtReferenceFollowingVisitor(binding) {
         override fun shouldFollowReference(expression: KtReferenceExpression, target: KtElement): Boolean {
             return target is KtFunction

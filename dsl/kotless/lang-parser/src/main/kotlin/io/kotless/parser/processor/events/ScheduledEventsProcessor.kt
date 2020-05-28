@@ -9,8 +9,9 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
+import io.kotless.parser.utils.errors.error
+import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.getValue
-import io.kotless.parser.utils.errors.withExceptionHeader
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -26,12 +27,8 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
         processStaticFunctions(files, binding) { func, entry, _ ->
-            require(func.fqName != null) {
-                func.withExceptionHeader("@Scheduled cannot be applied to anonymous function")
-            }
-            require(func.valueParameters.isEmpty()) {
-                func.withExceptionHeader("@Scheduled cannot be applied to ${func.fqName!!.asString()} since it has parameters")
-            }
+            require(func, func.fqName != null) { "@Scheduled cannot be applied to anonymous function" }
+            require(func, func.valueParameters.isEmpty()) { "@Scheduled cannot be applied to ${func.fqName!!.asString()} since it has parameters" }
 
             val routePermissions = PermissionsProcessor.process(func, binding) + permissions
 
@@ -40,7 +37,7 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
             val key = TypedStorage.Key<Lambda>()
             val function = Lambda(id, context.jar, entrypoint, context.lambda, routePermissions)
 
-            val cron = entry.getValue(binding, Scheduled::cron)!!
+            val cron = entry.getValue(binding, Scheduled::cron) ?: error(func, "@Scheduled annotation must have `cron` parameter set")
 
             context.resources.register(key, function)
             context.events.register(Events.Scheduled(id, cron, ScheduledEventType.General, key))

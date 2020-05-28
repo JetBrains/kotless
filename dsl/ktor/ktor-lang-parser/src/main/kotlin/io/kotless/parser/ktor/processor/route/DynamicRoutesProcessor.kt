@@ -64,11 +64,12 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     }
 
     private fun getDynamicPath(element: KtElement, binding: BindingContext): URIPath {
-        val previous = element.parents<KtCallExpression>()
-        val routeCalls = previous.filter { it.getFqName(binding) == "io.ktor.routing.route" }
-        val path = routeCalls.map {
+        val calls = element.parents<KtCallExpression> { it.getFqName(binding) == "io.ktor.routing.route" }
+
+        val path = calls.map {
             it.getArgumentOrNull("path", binding)?.asString(binding) ?: ""
         }.filter { it.isNotBlank() }.toList().reversed()
+
         return URIPath(path)
     }
 }

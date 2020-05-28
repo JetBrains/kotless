@@ -7,6 +7,7 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.*
+import io.kotless.parser.utils.reversed
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile
@@ -34,7 +35,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
                 func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) in functions }, binding = binding) { element ->
                     val outer = getStaticPath(element, binding)
-                    val base = getBaseFolder(element, binding, context)
+                    val base = getStaticRootFolder(element, binding, context)
 
                     when (element.getFqName(binding)) {
                         "io.ktor.http.content.file" -> {
@@ -65,33 +66,35 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     }
 
     private fun addStaticFolder(folder: File, outer: URIPath, context: ProcessorContext) {
-        val allFiles = folder.listFiles() ?: emptyArray()
+        val allFiles = folder.listFiles() ?: return
 
         for (file in allFiles) {
-            if (file.isDirectory) {
-                addStaticFolder(file, URIPath(outer, file.name), context)
-            } else {
-                val remotePath = file.toRelativeString(folder).toURIPath()
-                val path = URIPath(outer, remotePath)
+            when {
+                file.isDirectory -> addStaticFolder(file, URIPath(outer, file.name), context)
+                file.isFile -> {
+                    val remotePath = file.toRelativeString(folder).toURIPath()
+                    val path = URIPath(outer, remotePath)
 
-                createResource(file, path, context)
+                    createResource(file, path, context)
+                }
             }
         }
     }
 
     private fun getStaticPath(element: KtElement, binding: BindingContext): URIPath {
-        val previous = element.parents<KtCallExpression>()
-        val staticCalls = previous.filter { it.getFqName(binding) == "io.ktor.http.content.static" }
-        val path = staticCalls.map {
-            it.getArgumentOrNull("remotePath", binding)?.asString(binding) ?: ""
-        }.filter { it.isNotBlank() }.toList().reversed()
+        val calls = element.parents<KtCallExpression> { it.getFqName(binding) == "io.ktor.http.content.static" }
+
+        val path = calls.mapNotNull {
+            it.getArgumentOrNull("remotePath", binding)?.asString(binding)
+        }.reversed().toList()
+
         return URIPath(path)
     }
 
     //TODO-tanvd Have to rethink this logic
-    private fun getBaseFolder(element: KtElement, binding: BindingContext, context: ProcessorContext): File {
-        val previous = element.parents<KtCallExpression>()
-        return previous.filter { it.getFqName(binding) == "io.ktor.http.content.static" }.mapNotNull { static ->
+    private fun getStaticRootFolder(element: KtElement, binding: BindingContext, context: ProcessorContext): File {
+        val previous = element.parents<KtCallExpression> { it.getFqName(binding) == "io.ktor.http.content.static" }
+        return previous.mapNotNull { static ->
             var folder: File? = null
             static.visitCallExpressionsWithReferences(filter = { el -> el.getFqName(binding) == "io.ktor.http.content.static" }, binding = binding) { call ->
                 call.visitBinaryExpressions(filter = { (it.operationToken as? KtSingleValueToken)?.value == "=" }) { binary ->

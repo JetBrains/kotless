@@ -7,6 +7,7 @@ import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.parents
 import io.kotless.parser.utils.errors.withExceptionHeader
+import io.kotless.parser.utils.reversed
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
@@ -22,6 +23,7 @@ object SpringAnnotationUtils {
         PatchMapping::class to HttpMethod.PATCH,
         DeleteMapping::class to HttpMethod.DELETE
     )
+
     private val anyMethodAnnotation = setOf(RequestMapping::class)
 
     fun isHTTPHandler(binding: BindingContext, func: KtNamedFunction): Boolean {
@@ -57,11 +59,11 @@ object SpringAnnotationUtils {
     }
 
     private fun getRoutePath(element: KtElement, binding: BindingContext): URIPath {
-        val routeCalls = element.parents<KtClassOrObject>().filter { it.isAnnotatedWith<RequestMapping>(binding) }.toList().reversed()
+        val routeCalls = element.parents<KtClassOrObject> { it.isAnnotatedWith<RequestMapping>(binding) }.reversed()
         val path = routeCalls.mapNotNull {
             it.getAnnotation<RequestMapping>(binding).getURIPaths(binding, RequestMapping::value)?.singleOrNull()
         }
-        return URIPath(path.asSequence())
+        return URIPath(path)
     }
 
 

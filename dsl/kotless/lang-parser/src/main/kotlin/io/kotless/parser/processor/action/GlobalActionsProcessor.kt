@@ -31,7 +31,7 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
 
         processObjects(files, binding) { obj, klass ->
             obj.visitNamedFunctions(filter = { it.name == functions.getValue(klass) }) {
-                permissions.addAll(PermissionsProcessor.process(it, binding))
+                permissions += PermissionsProcessor.process(it, binding)
             }
         }
 
