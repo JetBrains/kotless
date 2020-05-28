@@ -11,24 +11,34 @@ import kotlin.reflect.KClass
 
 abstract class KtReferenceFollowingVisitor(
     private val binding: BindingContext,
-    protected val references: Stack<KtElement> = Stack(),
-    protected val targets: Stack<KtElement> = Stack()
+    private val references: Stack<KtElement> = Stack(),
+    private val targets: Stack<KtElement> = Stack()
 ) : KtDefaultVisitor() {
     protected open fun shouldFollowReference(reference: KtElement, target: KtElement) = true
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         val targets = expression.getTargets(binding)
         for (target in targets) {
-            if (target in this.targets || !shouldFollowReference(expression, target)) continue
-
-            this.references.push(expression)
-            this.targets.push(target)
-            target.accept(this)
-            this.targets.pop()
-            this.references.pop()
+            visitReferenceTree(expression, target)
         }
 
         super.visitReferenceExpression(expression)
+    }
+
+    /**
+     * Will invoke visitor on reference target if it should be followed (via [shouldFollowReference])
+     *
+     * Reference will be visited safely, seen nodes are tracked and will not be visited again -- so
+     * no danger of cycle.
+     */
+    protected fun visitReferenceTree(reference: KtElement, target: KtElement) {
+        if (target in this.targets || !shouldFollowReference(reference, target)) return
+
+        this.references.push(reference)
+        this.targets.push(target)
+        target.accept(this)
+        this.targets.pop()
+        this.references.pop()
     }
 
     fun <T : Any> PsiElement.parentsWithReferences(klass: KClass<T>, filter: (T) -> Boolean = { true }): Sequence<T> = sequence {

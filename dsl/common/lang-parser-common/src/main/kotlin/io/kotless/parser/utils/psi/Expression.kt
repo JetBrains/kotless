@@ -22,13 +22,7 @@ fun KtElement.visitAnnotatedWithReferences(binding: BindingContext, filter: (KtA
         override fun visitNamedFunction(function: KtNamedFunction) {
             val targetThis = function.getQualifiedExpressionForReceiverOrThis()
 
-            if (targetThis in targets || !shouldFollowReference(function, targetThis)) return
-
-            this.references.add(function)
-            this.targets.add(targetThis)
-            targetThis.accept(this)
-            this.targets.pop()
-            this.references.pop()
+            visitReferenceTree(function, targetThis)
 
             super.visitNamedFunction(function)
         }
