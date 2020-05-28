@@ -10,6 +10,8 @@ import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.psi.*
+import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
+import io.kotless.parser.utils.reversed
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.*
@@ -36,8 +38,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
         processClasses(files, binding) { klass, _ ->
             klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
-                func.visitCallExpressionsWithReferences(binding = binding, filter = { it.getFqName(binding) in functions.keys}) { element ->
-                    //TODO-tanvd fix routing between few methods
+                func.visitCallExpressionsWithReferences(binding = binding, filter = { it.getFqName(binding) in functions.keys }) { element ->
                     val outer = getDynamicPath(element, binding)
 
                     val method = functions[element.getFqName(binding)] ?: error(element, "Unknown Ktor HTTP handler definition")
@@ -63,12 +64,12 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         }
     }
 
-    private fun getDynamicPath(element: KtElement, binding: BindingContext): URIPath {
-        val calls = element.parents<KtCallExpression> { it.getFqName(binding) == "io.ktor.routing.route" }
+    private fun KtReferenceFollowingVisitor.getDynamicPath(element: KtElement, binding: BindingContext): URIPath {
+        val calls = element.parentsWithReferences(KtCallExpression::class) { it.getFqName(binding) == "io.ktor.routing.route" }
 
-        val path = calls.map {
-            it.getArgumentOrNull("path", binding)?.asString(binding) ?: ""
-        }.filter { it.isNotBlank() }.toList().reversed()
+        val path = calls.mapNotNull {
+            it.getArgumentOrNull("path", binding)?.asString(binding)
+        }.reversed().toList()
 
         return URIPath(path)
     }

@@ -3,7 +3,7 @@ package io.kotless
 /** Representation of URI path. Removes blank parts. */
 data class URIPath(var parts: Iterable<String>) {
     init {
-        parts = parts.filter { it.isNotBlank() }
+        parts = parts.flatMap { it.split("/") }.map { it.trim() }.filter { it.isNotBlank() }
     }
 
     constructor() : this(emptyList())

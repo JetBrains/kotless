@@ -4,5 +4,11 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtVisitorVoid
 
 abstract class KtDefaultVisitor : KtVisitorVoid() {
-    override fun visitElement(element: PsiElement) = element.acceptChildren(this)
+    protected open fun shouldVisitElement(element: PsiElement) = true
+
+    override fun visitElement(element: PsiElement) {
+        if (!shouldVisitElement(element)) return
+
+        element.acceptChildren(this)
+    }
 }

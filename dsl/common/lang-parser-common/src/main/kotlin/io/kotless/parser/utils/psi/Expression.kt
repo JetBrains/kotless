@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 fun KtElement.visitAnnotatedWithReferences(binding: BindingContext, filter: (KtAnnotated) -> Boolean = { true }, body: (KtAnnotated) -> Unit) {
     accept(object : KtReferenceFollowingVisitor(binding) {
-        override fun shouldFollowReference(expression: KtReferenceExpression, target: KtElement): Boolean {
+        override fun shouldFollowReference(reference: KtElement, target: KtElement): Boolean {
             return target is KtAnnotated
         }
 
@@ -20,12 +20,15 @@ fun KtElement.visitAnnotatedWithReferences(binding: BindingContext, filter: (KtA
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            val thisExpr = function.getQualifiedExpressionForReceiverOrThis()
+            val targetThis = function.getQualifiedExpressionForReceiverOrThis()
 
-            if (thisExpr in alreadySeen || thisExpr !is KtAnnotated) return
+            if (targetThis in targets || !shouldFollowReference(function, targetThis)) return
 
-            alreadySeen.add(thisExpr)
-            thisExpr.accept(this)
+            this.references.add(function)
+            this.targets.add(targetThis)
+            targetThis.accept(this)
+            this.targets.pop()
+            this.references.pop()
 
             super.visitNamedFunction(function)
         }
@@ -42,9 +45,10 @@ fun KtElement.visitBinaryExpressions(filter: (KtBinaryExpression) -> Boolean = {
     })
 }
 
-fun KtElement.visitCallExpressionsWithReferences(binding: BindingContext, filter: (KtCallExpression) -> Boolean = { true }, body: (KtCallExpression) -> Unit) {
+fun KtElement.visitCallExpressionsWithReferences(binding: BindingContext, filter: (KtCallExpression) -> Boolean = { true },
+                                                 body: KtReferenceFollowingVisitor.(KtCallExpression) -> Unit) {
     accept(object : KtReferenceFollowingVisitor(binding) {
-        override fun shouldFollowReference(expression: KtReferenceExpression, target: KtElement): Boolean {
+        override fun shouldFollowReference(reference: KtElement, target: KtElement): Boolean {
             return target is KtFunction
         }
 
