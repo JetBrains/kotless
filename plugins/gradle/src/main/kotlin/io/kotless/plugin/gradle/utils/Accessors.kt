@@ -9,6 +9,7 @@ import org.gradle.api.tasks.TaskContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.accessors.runtime.addExternalModuleDependencyTo
 import org.gradle.kotlin.dsl.getByName
+import org.jetbrains.kotlin.incremental.isKotlinFile
 import java.io.File
 
 //Generated accessors to use in a plugin
@@ -23,7 +24,7 @@ internal val Project.mySourceSets: SourceSetContainer
     get() = myExtByName("sourceSets")
 
 internal val Project.myKtSourceSet: Set<File>
-    get() = mySourceSets.asMap["main"]!!.allSource.files.filter { it.extension == "kt" }.toSet()
+    get() = mySourceSets.asMap["main"]!!.allSource.files.filter { it.isKotlinFile(sourceFilesExtensions = listOf("kt")) }.toSet()
 
 internal val Project.myResourcesSet: Set<File>
     get() = mySourceSets.asMap["main"]!!.resources.files.toSet()

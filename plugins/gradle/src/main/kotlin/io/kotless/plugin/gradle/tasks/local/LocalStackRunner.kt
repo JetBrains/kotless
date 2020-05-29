@@ -48,9 +48,9 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
 
     private var container: LocalStackContainer? = null
 
-    private val myEnvMap = HashMap<String, String>()
-    val envMap: Map<String, String>
-        get() = myEnvMap
+    private val myEnvironment = HashMap<String, String>()
+    val environment: Map<String, String>
+        get() = myEnvironment
 
     private val myServiceMap = HashMap<AwsResource, String>()
     val serviceMap: Map<AwsResource, String>
@@ -64,21 +64,21 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
 
         container!!.start()
 
-        myEnvMap[Constants.LocalStack.enabled] = "true"
+        myEnvironment[Constants.LocalStack.enabled] = "true"
 
         for (service in services) {
             val endpoint = container!!.getEndpointConfiguration(service)
 
-            myEnvMap[Constants.LocalStack.url(service.toResource())] = endpoint.serviceEndpoint
-            myEnvMap[Constants.LocalStack.region(service.toResource())] = endpoint.signingRegion
+            myEnvironment[Constants.LocalStack.url(service.toResource())] = endpoint.serviceEndpoint
+            myEnvironment[Constants.LocalStack.region(service.toResource())] = endpoint.signingRegion
 
             myServiceMap[service.toResource()] = endpoint.serviceEndpoint
         }
 
         val credentials = container!!.defaultCredentialsProvider.credentials
 
-        myEnvMap[Constants.LocalStack.accessKey] = credentials.awsAccessKeyId
-        myEnvMap[Constants.LocalStack.secretKey] = credentials.awsSecretKey
+        myEnvironment[Constants.LocalStack.accessKey] = credentials.awsAccessKeyId
+        myEnvironment[Constants.LocalStack.secretKey] = credentials.awsSecretKey
     }
 
     fun stop() {

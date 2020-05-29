@@ -12,10 +12,13 @@ import java.io.File
  * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
  */
-data class KotlessConfig(val bucket: String, val prefix: String,
-                         val dsl: DSL,
-                         val terraform: Terraform,
-                         val optimization: Optimization = Optimization()) : Visitable {
+data class KotlessConfig(
+    val bucket: String,
+    val prefix: String,
+    val dsl: DSL,
+    val terraform: Terraform,
+    val optimization: Optimization = Optimization()
+) : Visitable {
 
     /**
      * Configuration of DSL used for this application

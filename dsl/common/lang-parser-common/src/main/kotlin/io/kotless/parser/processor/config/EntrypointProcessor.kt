@@ -6,6 +6,7 @@ import io.kotless.Lambda
 import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
+import io.kotless.parser.utils.errors.require
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -31,13 +32,15 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
             entrypoint.add(klass.makeLambdaEntrypoint())
         }
 
-        require(entrypoint.size != 0) { "There should be a class or object inherited from ${RequestStreamHandler::class} in your app" }
-        require(entrypoint.size == 1) { "There should be only one class or object inherited from ${RequestStreamHandler::class} in your app" }
+        require(entrypoint.size != 0) { "There should be a class or object inherited from ${RequestStreamHandler::class} or Kotless in your app" }
+        require(entrypoint.size == 1) { "There should be only one class or object inherited from ${RequestStreamHandler::class} or Kotless in your app" }
 
         return entrypoint.single()
     }
 
     private fun KtClassOrObject.makeLambdaEntrypoint(): Lambda.Entrypoint {
+        require(this, fqName != null) { "Anonymous class cannot be inherited from RequestStreamHandler or Kotless class" }
+
         return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}")
     }
 }

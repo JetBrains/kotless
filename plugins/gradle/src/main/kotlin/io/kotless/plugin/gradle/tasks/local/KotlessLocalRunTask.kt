@@ -57,12 +57,12 @@ internal open class KotlessLocalRunTask : DefaultTask() {
 
             environment[Constants.Local.serverPort] = myKotless.extensions.local.port
 
-            if (type != DSLType.Ktor || type != DSLType.SpringBoot) {
+            if (type == DSLType.Ktor || type == DSLType.SpringBoot) {
                 val local = LocalParser.parse(myAllSources, Dependencies.getDependencies(project))
                 environment[Constants.Local.KtorOrSpring.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 
-            if (type != DSLType.Kotless) {
+            if (type == DSLType.Kotless) {
                 environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.staticsRoot.canonicalPath
             }
 
@@ -75,7 +75,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             }
 
             if (myKotless.extensions.local.useAWSEmulation) {
-                environment.putAll(localstack.envMap)
+                environment.putAll(localstack.environment)
             }
         }
     }

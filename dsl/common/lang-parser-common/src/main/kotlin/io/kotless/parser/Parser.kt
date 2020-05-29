@@ -54,6 +54,5 @@ open class Parser(private val processors: Set<Processor<*>>) {
         )
     }
 
-    open fun processResources(resources: Set<File>, context: ProcessorContext) {
-    }
+    open fun processResources(resources: Set<File>, context: ProcessorContext) {}
 }
