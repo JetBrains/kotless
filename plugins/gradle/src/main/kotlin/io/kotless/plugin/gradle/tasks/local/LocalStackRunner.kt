@@ -3,6 +3,8 @@ package io.kotless.plugin.gradle.tasks.local
 import io.kotless.AwsResource
 import io.kotless.Constants
 import io.kotless.InternalAPI
+import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Start
+import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Stop
 import io.kotless.plugin.gradle.utils.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal

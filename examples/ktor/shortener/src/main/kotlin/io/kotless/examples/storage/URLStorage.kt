@@ -1,13 +1,14 @@
 package io.kotless.examples.storage
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider
-import com.amazonaws.auth.BasicAWSCredentials
-import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
-import com.amazonaws.services.dynamodbv2.model.*
+import com.amazonaws.services.dynamodbv2.model.AttributeValue
+import com.amazonaws.services.dynamodbv2.model.GetItemRequest
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest
+import com.amazonaws.services.dynamodbv2.model.ScanRequest
 import io.kotless.AwsResource
 import io.kotless.PermissionLevel
-import io.kotless.dsl.lang.*
+import io.kotless.dsl.lang.DynamoDBTable
+import io.kotless.dsl.lang.withKotlessLocal
 import io.kotless.examples.utils.RandomCode
 
 private const val tableName: String = "ktor-short-url-table"
