@@ -1,13 +1,9 @@
 # Kotless roadmap
 
 ## 0.1.*
-* Support of dynamic entrypoints in Ktor
-    * Support new mode -- map everything using catch-all path variables
 * Support of Spring Boot
-* Extension for Cognito authentication
+* GraalVM as a target platform
 * Support of Azure
-* DSL libraries for S3, DynamoDB, SSM at least
-* Event handlers - functions as handlers for different AWS events
 
 ## 0.2.*
 * IDEA plugin
@@ -17,6 +13,9 @@
       specific lambda
 
 ## To discuss
+* Extension for Cognito authentication
+* Event handlers - functions as handlers for different AWS events
+* DSL libraries for S3, DynamoDB, SSM at least
 * Implicit permissions flow - possibility to deduce permissions from AWS SDK functions
   only.
 
