@@ -20,9 +20,9 @@ data class KotlessConfig(val bucket: String, val prefix: String,
     /**
      * Configuration of DSL used for this application
      * @param type type of dsl that is used
-     * @param workDirectory directory Kotless considers as root for a file resolving
+     * @param staticsRoot directory Kotless considers as root for a file resolving
      */
-    data class DSL(val type: DSLType, val workDirectory: File) : Visitable
+    data class DSL(val type: DSLType, val staticsRoot: File) : Visitable
 
     /**
      * Terraform configuration used by Kotless

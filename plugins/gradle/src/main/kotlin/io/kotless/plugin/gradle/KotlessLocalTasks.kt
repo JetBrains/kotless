@@ -2,6 +2,7 @@ package io.kotless.plugin.gradle
 
 import io.kotless.AwsResource
 import io.kotless.DSLType
+import io.kotless.InternalAPI
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.gen.KotlessLocalGenerateTask
 import io.kotless.plugin.gradle.tasks.local.KotlessLocalRunTask
@@ -20,6 +21,7 @@ import org.gradle.kotlin.dsl.getPlugin
  * Utils to setup local tasks for all DSLs
  */
 internal object KotlessLocalTasks {
+    @OptIn(InternalAPI::class)
     fun Project.setupLocalTasks(download: Task) {
         with(tasks) {
             val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)

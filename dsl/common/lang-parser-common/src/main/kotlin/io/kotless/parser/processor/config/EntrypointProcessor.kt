@@ -19,7 +19,7 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         if (context.config.dsl.type == DSLType.Kotless) {
-            return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}", emptySet()))
+            return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}"))
         }
 
         return Output(find(files, binding))
@@ -38,6 +38,6 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     }
 
     private fun KtClassOrObject.makeLambdaEntrypoint(): Lambda.Entrypoint {
-        return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}", emptySet())
+        return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}")
     }
 }

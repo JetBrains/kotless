@@ -40,6 +40,7 @@ class KotlessConfig(project: Project) : Serializable {
     var configurationName = "compileClasspath"
 
     internal var myArchiveTask: String = project.myShadowJar().name
+    /** Set custom archive task that should be used to pack lambda instead of default ShadowJar */
     fun setArchiveTask(task: AbstractArchiveTask) {
         myArchiveTask = task.name
     }
@@ -67,17 +68,13 @@ class KotlessConfig(project: Project) : Serializable {
         var type: DSLType? = null
 
         /**
-         * Directory Kotless considers as root for File resolving
+         * Directory Kotless considers as root for Static Resources resolving
          *
-         * Can be used only for Kotless DSL
+         * Will be used for Kotless DSL and SpringBoot to search for static resources.
          *
-         * By default it is `projectDir`
+         * By default, it is `src/main/resources`
          */
-        var workDirectory: File = project.projectDir
-            set(value) {
-                require(type == null || type == DSLType.Kotless) { "Work directory cannot be reassigned for Ktor" }
-                field = value
-            }
+        var staticsRoot: File = project.projectDir.resolve("src/main/resources")
     }
 
     internal val dsl: DSLConfig = DSLConfig(project)

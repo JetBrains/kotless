@@ -63,7 +63,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             }
 
             if (type != DSLType.Kotless) {
-                environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.workDirectory.canonicalPath
+                environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.staticsRoot.canonicalPath
             }
 
             if (myKotless.config.optimization.autowarm.enable) {

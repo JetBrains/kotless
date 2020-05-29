@@ -23,11 +23,8 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
      * Entrypoint function definition
      *
      * @param qualifiedName a qualified name of entrypoint function
-     * @param params params of entrypoint function
      */
-    data class Entrypoint(val qualifiedName: String, val params: Set<Param>) {
-        data class Param(val name: String, val type: String)
-    }
+    data class Entrypoint(val qualifiedName: String)
 
     /**
      * Configuration of lambda deployment

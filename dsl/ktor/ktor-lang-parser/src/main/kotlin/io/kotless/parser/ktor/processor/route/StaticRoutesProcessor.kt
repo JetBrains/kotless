@@ -113,7 +113,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     right.getArgumentByIndexOrNull(0)?.asString(binding)?.let { value ->
                         folder = if (!value.startsWith("/")) {
-                            File(context.config.dsl.workDirectory, value)
+                            File(context.config.dsl.staticsRoot, value)
                         } else {
                             File(value)
                         }
@@ -121,7 +121,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
                 }
             }
             folder
-        }.firstOrNull() ?: context.config.dsl.workDirectory
+        }.firstOrNull() ?: context.config.dsl.staticsRoot
     }
 
     private fun createResource(file: File, path: URIPath, context: ProcessorContext) {
@@ -129,7 +129,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         val mime = MimeType.forFile(file) ?: ContentType.defaultForFile(file).toMime()
         require(mime != null) { "Unknown mime type for file $file" }
 
-        val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
+        val resource = StaticResource(URIPath("static", path), file, mime)
 
         context.resources.register(key, resource)
         context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))

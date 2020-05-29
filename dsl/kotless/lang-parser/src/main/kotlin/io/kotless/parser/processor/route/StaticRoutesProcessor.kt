@@ -42,10 +42,10 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
                 "Variable annotated with @StaticGet should be created via File(\"...\") constructor with one argument"
             }
 
-            val file = File(context.config.dsl.workDirectory, arguments.single().text.trim('"'))
+            val file = File(context.config.dsl.staticsRoot, arguments.single().text.trim('"'))
 
             val key = TypedStorage.Key<StaticResource>()
-            val resource = StaticResource(context.config.bucket, URIPath("static", path), file, mime)
+            val resource = StaticResource(URIPath("static", path), file, mime)
 
             context.resources.register(key, resource)
             context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))

@@ -14,9 +14,8 @@ import java.io.File
  * For example, it can be used to server JS
  * and CSS files.
  *
- * @param bucket name of bucket where file will be placed
  * @param path URI path under which this resource will be located
  * @param file File with actual content of resource
  * @param mime MIME type of content, will be used to set right headers on http response
  */
-data class StaticResource(val bucket: String, val path: URIPath, val file: File, val mime: MimeType) : Visitable
+data class StaticResource(val path: URIPath, val file: File, val mime: MimeType) : Visitable

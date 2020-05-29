@@ -16,8 +16,8 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
 
     override fun generate(entity: StaticResource, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
 
-        val obj = s3_object(context.names.tf(entity.bucket, entity.path.parts)) {
-            bucket = entity.bucket
+        val obj = s3_object(context.names.tf(context.schema.config.bucket, entity.path.parts)) {
+            bucket = context.schema.config.bucket
             key = entity.path.toString()
             source = path(entity.file)
             etag = eval(filemd5(entity.file))

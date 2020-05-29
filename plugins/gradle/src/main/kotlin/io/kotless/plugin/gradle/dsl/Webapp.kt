@@ -19,6 +19,7 @@ class Webapp(project: Project) : Serializable {
         /** Limit of lambda execution in seconds */
         var timeoutSec: Int = 300
 
+        /** Environment that should be additionally passed to lambda */
         val environment: HashMap<String, String> = HashMap()
 
         @OptIn(InternalAPI::class)
