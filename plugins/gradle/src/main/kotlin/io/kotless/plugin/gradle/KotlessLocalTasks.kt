@@ -16,6 +16,9 @@ import org.gradle.api.plugins.ApplicationPluginConvention
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.kotlin.dsl.getPlugin
 
+/**
+ * Utils to setup local tasks for all DSLs
+ */
 internal object KotlessLocalTasks {
     fun Project.setupLocalTasks(download: Task) {
         with(tasks) {
@@ -24,7 +27,7 @@ internal object KotlessLocalTasks {
             convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.typeOrDefault) {
                 DSLType.Kotless -> "io.kotless.local.MainKt"
                 DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
-                DSLType.Spring -> "io.kotless.local.spring.MainKt"
+                DSLType.SpringBoot -> "io.kotless.local.spring.MainKt"
             }
 
             if (kotless.extensions.local.useAWSEmulation) {

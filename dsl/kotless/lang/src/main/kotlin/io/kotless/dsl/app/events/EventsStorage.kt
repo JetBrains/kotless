@@ -15,7 +15,7 @@ internal object EventsStorage {
 
     private var scanned = false
 
-    fun scan() {
+    private fun scan() {
         if (scanned) return
 
         for ((ids, method, _) in EventsReflectionScanner.getEvents()) {

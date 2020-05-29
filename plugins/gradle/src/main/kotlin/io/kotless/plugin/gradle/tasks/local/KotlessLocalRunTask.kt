@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.tasks.local
 
 import io.kotless.Constants
+import io.kotless.DSLType
 import io.kotless.InternalAPI
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
@@ -40,21 +41,15 @@ internal open class KotlessLocalRunTask : DefaultTask() {
     @TaskAction
     @OptIn(InternalAPI::class)
     fun act() = with(project) {
-        val ktorVersion = Dependencies.getKtorDependency(this)?.version
-        val kotlessVersion = Dependencies.getKotlessDependency(this)?.version
-        val springVersion = Dependencies.getSpringBootDependency(this)?.version
+        val dsl = Dependencies.dsl(project)
 
-        val all = listOf(ktorVersion, kotlessVersion, springVersion)
+        require(dsl.isNotEmpty()) { "Cannot find \"lang\", \"ktor-lang\" or \"spring-boot-lang\" dependencies. One of them required for local start." }
+        require(dsl.size <= 1) { "Only one dependency should be used for DSL: either \"lang\", \"ktor-lang\" or \"spring-boot-lang\"." }
 
-        require(all.any { it != null }) { "Cannot find \"lang\", \"ktor-lang\" or \"spring-boot-lang\" dependencies. One of them required for local start." }
-        require(all.count { it != null } <= 1) { "Only one dependency should be used for DSL: either \"lang\", \"ktor-lang\" or \"spring-boot-lang\"." }
+        val (type, dependency) = dsl.entries.single()
 
         dependencies {
-            when {
-                ktorVersion != null -> myLocal("io.kotless", "ktor-lang-local", ktorVersion)
-                kotlessVersion != null -> myLocal("io.kotless", "lang-local", kotlessVersion)
-                springVersion != null -> myLocal("io.kotless", "spring-boot-lang-local", springVersion)
-            }
+            myLocal("io.kotless", type.lib, dependency.version.toString())
         }
 
         tasks.myGetByName<JavaExec>("run").apply {
@@ -62,12 +57,12 @@ internal open class KotlessLocalRunTask : DefaultTask() {
 
             environment[Constants.Local.serverPort] = myKotless.extensions.local.port
 
-            if (ktorVersion != null || springVersion != null) {
+            if (type != DSLType.Ktor || type != DSLType.SpringBoot) {
                 val local = LocalParser.parse(myAllSources, Dependencies.getDependencies(project))
                 environment[Constants.Local.KtorOrSpring.classToStart] = local.entrypoint.qualifiedName.substringBefore("::")
             }
 
-            if (kotlessVersion != null) {
+            if (type != DSLType.Kotless) {
                 environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.workDirectory.canonicalPath
             }
 

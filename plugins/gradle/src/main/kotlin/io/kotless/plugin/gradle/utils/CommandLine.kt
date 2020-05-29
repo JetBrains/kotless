@@ -27,7 +27,9 @@ internal object CommandLine {
             Commandline().apply {
                 workingDirectory = workingDir
                 executable = exec
-                for ((key, value) in envs) addEnvironment(key, value)
+                for ((key, value) in envs) {
+                    addEnvironment(key, value)
+                }
                 addArguments(args.toTypedArray())
             }, getConsumer(redirectStdout), getConsumer(redirectErr)
         )

@@ -46,14 +46,20 @@ class KotlessConfig(project: Project) : Serializable {
 
     @KotlessDSLTag
     inner class DSLConfig(project: Project) : Serializable {
-        internal val defaultType by lazy {
-            when {
-                Dependencies.hasKotlessDependency(project) -> DSLType.Kotless
-                Dependencies.hasKtorDependency(project) -> DSLType.Ktor
-                Dependencies.hasSpringBootDependency(project) -> DSLType.Spring
-                else -> DSLType.Kotless
+        private val defaultType by lazy {
+            val types = Dependencies.dsl(project).keys
+            require(types.isNotEmpty()) {
+                "Kotless was unable to determine DSL type of application. " +
+                    "Either dependency with one of the DSLs (`lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually."
             }
+            require(types.size <= 1) {
+                "Kotless was unable to determine DSL type of application. " +
+                    "There was more than one DSL dependency (of type `lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually."
+            }
+
+            types.single()
         }
+
         internal val typeOrDefault: DSLType
             get() = type ?: defaultType
 

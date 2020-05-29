@@ -9,6 +9,12 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
 
+/**
+ * Class composing tasks to work with LocalStack.
+ *
+ * Includes [Start] task that starts LocalStack and
+ * [Stop] task that stops LocalStack
+ */
 internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<AwsResource>) {
     open class Start : DefaultTask() {
         init {

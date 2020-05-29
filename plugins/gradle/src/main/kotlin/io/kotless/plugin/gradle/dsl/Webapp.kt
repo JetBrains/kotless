@@ -31,7 +31,7 @@ class Webapp(project: Project) : Serializable {
             var packages: Set<String> = setOf(project.group.toString())
         }
 
-        internal val kotlessDSL = KotlessDSLRuntime(project)
+        private val kotlessDSL = KotlessDSLRuntime(project)
 
         /** Setup configuration for Kotless DSL */
         @KotlessDSLTag

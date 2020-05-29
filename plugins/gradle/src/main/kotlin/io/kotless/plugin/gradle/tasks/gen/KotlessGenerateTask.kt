@@ -76,7 +76,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
         val parsed = when (myKotless.config.dsl.typeOrDefault) {
             DSLType.Kotless -> KotlessParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
             DSLType.Ktor -> KTorParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Spring -> SpringParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
+            DSLType.SpringBoot -> SpringParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
         }
 
         val webapp = Webapp(
@@ -101,7 +101,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
     private fun dumpGeneratedFiles(generated: Set<TFFile>) {
         val files = KotlessEngine.dump(myGenDirectory, generated)
         for (file in myTerraformAdditional) {
-            require(files.all { it.name != file.name }) { "Extending terraform file with name ${file.name} clashes with generated file" }
+            require(files.all { it.name != file.name }) { "Extending terraform file `${file.absolutePath}` clashes with generated file" }
             FileUtils.copyFile(file, File(myGenDirectory, file.name))
         }
     }

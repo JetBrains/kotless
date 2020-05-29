@@ -9,6 +9,9 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.get
 
+/**
+ * Utils to setup deploy tasks for all DSLs
+ */
 internal object KotlessDeployTasks {
     fun Project.setupDeployTasks(download: Task) {
         if (kotless.config.bucket.isEmpty()) {

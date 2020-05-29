@@ -17,6 +17,7 @@ package io.kotless.dsl.lang.event
  */
 @Target(AnnotationTarget.FUNCTION)
 annotation class Scheduled(val cron: String, val id: String = "") {
+    @Suppress("unused")
     companion object {
         const val everyMinute = "0/1 * * * ? *"
         const val every5Minutes = "0/5 * * * ? *"

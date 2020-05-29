@@ -10,7 +10,7 @@ import io.kotless.utils.withIndent
  *
  *  @see <a href="https://www.terraform.io/docs/providers/index.html">All providers</a>
  */
-open class TFProvider(val tf_provider: String) : HCLEntity(), HCLNamed {
+open class TFProvider(private val tf_provider: String) : HCLEntity(), HCLNamed {
     var alias by text()
 
     override val hcl_name: String
@@ -21,7 +21,7 @@ open class TFProvider(val tf_provider: String) : HCLEntity(), HCLNamed {
     override val owner: HCLNamed?
         get() = this
 
-    class Endpoints(val urls: Map<String, String>) : HCLEntity() {
+    class Endpoints(private val urls: Map<String, String>) : HCLEntity() {
         override fun render(): String {
             return """
             |endpoints {
