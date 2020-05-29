@@ -1,35 +1,17 @@
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
-group = "io.kotless"
-version = "0.1.4"
+group = rootProject.group
+version = rootProject.version
 
 plugins {
-    id("tanvd.kosogor") version "1.0.7" apply true
-
-    kotlin("jvm") version "1.3.72" apply true
-
     id("io.kotless") version "0.1.4" apply true
-}
-
-repositories {
-    mavenLocal()
-    //artifacts are located at JCenter
-    jcenter()
 }
 
 dependencies {
     implementation("io.kotless", "ktor-lang", "0.1.4")
-    implementation("io.ktor", "ktor-html-builder", "1.3.2")
-}
 
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        languageVersion = "1.3"
-        apiVersion = "1.3"
-    }
+    implementation(project(":common:site-shared"))
 }
 
 kotless {

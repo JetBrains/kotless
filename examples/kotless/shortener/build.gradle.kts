@@ -1,22 +1,13 @@
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
-group = "io.kotless.examples"
-version = "0.1.0"
+group = rootProject.group
+version = rootProject.version
 
 plugins {
-    id("tanvd.kosogor") version "1.0.7" apply true
-
-    kotlin("jvm") version "1.3.72" apply true
-
     id("io.kotless") version "0.1.4" apply true
 }
 
-repositories {
-    mavenLocal()
-    //artifacts are located at JCenter
-    jcenter()
-}
 
 dependencies {
     implementation("io.kotless", "lang", "0.1.4")
@@ -31,10 +22,6 @@ kotless {
     config {
         bucket = "eu.short.s3.ktls.aws.intellij.net"
         prefix = "short"
-
-        dsl {
-            workDirectory = file("src/main/static")
-        }
 
         terraform {
             profile = "kotless-jetbrains"

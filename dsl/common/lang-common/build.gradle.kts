@@ -12,6 +12,8 @@ plugins {
 dependencies {
     api(project(":model"))
 
+    api("org.slf4j", "slf4j-api", Versions.slf4j)
+
     api("com.amazonaws", "aws-java-sdk-core", Versions.aws)
 
     api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", Versions.serialization)
