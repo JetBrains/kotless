@@ -1,3 +1,4 @@
+import io.kotless.buildsrc.Versions
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -8,12 +9,12 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:common:lang-common"))
 
-    api("io.ktor", "ktor-server-core", "1.3.2")
-    api("io.ktor", "ktor-server-host-common", "1.3.2")
+    api("io.ktor", "ktor-server-core", Versions.ktor)
+    api("io.ktor", "ktor-server-host-common", Versions.ktor)
 
-    implementation("org.slf4j", "slf4j-log4j12", "1.7.30")
-    implementation("log4j", "log4j", "1.2.17")
-    implementation("com.amazonaws", "aws-lambda-java-log4j", "1.0.0")
+    implementation("org.slf4j", "slf4j-log4j12", Versions.slf4j)
+    implementation("log4j", "log4j", Versions.log4j)
+    implementation("com.amazonaws", "aws-lambda-java-log4j", Versions.lambdaJavaLog4J)
 }
 
 publishJar {

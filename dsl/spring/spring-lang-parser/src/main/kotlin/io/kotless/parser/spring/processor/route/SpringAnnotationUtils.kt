@@ -6,7 +6,6 @@ import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.parents
-import io.kotless.parser.utils.errors.withExceptionHeader
 import io.kotless.parser.utils.reversed
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClassOrObject

@@ -1,4 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import io.kotless.buildsrc.Versions
+import io.kotless.buildsrc.optInInternalAPI
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -8,7 +9,7 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:ktor:ktor-lang"))
 
-    api("io.ktor", "ktor-server-netty", "1.3.2")
+    api("io.ktor", "ktor-server-netty", Versions.ktor)
 }
 
 publishJar {
@@ -24,8 +25,4 @@ publishJar {
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
-    }
-}
+optInInternalAPI()

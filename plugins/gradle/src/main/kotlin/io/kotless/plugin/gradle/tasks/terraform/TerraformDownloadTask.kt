@@ -19,7 +19,7 @@ import java.net.URL
  *
  * Note: OS for binary is determined automatically and assumed to be `amd64`.
  */
-open class TerraformDownloadTask : DefaultTask() {
+internal open class TerraformDownloadTask : DefaultTask() {
     init {
         group = Groups.setup
     }

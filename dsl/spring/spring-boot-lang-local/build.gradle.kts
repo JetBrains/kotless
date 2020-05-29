@@ -1,4 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import io.kotless.buildsrc.Versions
+import io.kotless.buildsrc.optInInternalAPI
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -9,7 +10,7 @@ dependencies {
     api(project(":dsl:spring:spring-boot-lang"))
     implementation(kotlin("reflect"))
 
-    api("org.springframework.boot","spring-boot-starter-tomcat", "2.3.0.RELEASE")
+    api("org.springframework.boot","spring-boot-starter-tomcat", Versions.springBoot)
 }
 
 publishJar {
@@ -25,8 +26,4 @@ publishJar {
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
-    }
-}
+optInInternalAPI()

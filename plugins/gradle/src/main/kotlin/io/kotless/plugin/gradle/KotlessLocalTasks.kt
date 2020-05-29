@@ -15,7 +15,7 @@ import org.gradle.api.plugins.ApplicationPluginConvention
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.kotlin.dsl.getPlugin
 
-object KotlessLocalTasks {
+internal object KotlessLocalTasks {
     fun Project.setupLocalTasks(download: Task) {
         with(tasks) {
             val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)

@@ -9,8 +9,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.get
 
-object KotlessDeployTasks {
-
+internal object KotlessDeployTasks {
     fun Project.setupDeployTasks(download: Task) {
         if (kotless.config.bucket.isEmpty()) {
             logger.warn("Configuration succeeded, but Kotless requires `kotless { bucket = \"...\" }` for actual deployment")

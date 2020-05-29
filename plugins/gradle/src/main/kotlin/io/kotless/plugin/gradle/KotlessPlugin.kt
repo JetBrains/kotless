@@ -21,7 +21,7 @@ import org.gradle.api.Project
  * already KotlessPlugin will apply it to project.
  */
 @Suppress("unused")
-class KotlessPlugin : Plugin<Project> {
+internal class KotlessPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             applyPluginSafely("com.github.johnrengelman.shadow")
@@ -41,5 +41,4 @@ class KotlessPlugin : Plugin<Project> {
             }
         }
     }
-
 }

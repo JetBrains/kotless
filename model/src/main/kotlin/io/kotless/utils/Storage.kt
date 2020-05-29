@@ -1,6 +1,9 @@
 package io.kotless.utils
 
+import io.kotless.InternalAPI
+
 /** Interface for type-full singleton storage */
+@InternalAPI
 class Storage {
     private val storage = HashMap<Key<*>, Any>()
 

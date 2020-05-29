@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 import java.io.File
 
-object Dependencies {
+internal object Dependencies {
     fun hasKotlessDependency(project: Project) = getKotlessDependency(project) != null
     fun getKotlessDependency(project: Project) = getDependency(project, group = "io.kotless", name = "lang")
 

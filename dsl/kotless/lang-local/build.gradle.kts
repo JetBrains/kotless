@@ -1,4 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import io.kotless.buildsrc.Versions
+import io.kotless.buildsrc.optInInternalAPI
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -8,8 +9,8 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:kotless:lang"))
 
-    implementation("org.quartz-scheduler", "quartz", "2.3.2")
-    implementation("org.eclipse.jetty", "jetty-server", "9.4.25.v20191220")
+    implementation("org.quartz-scheduler", "quartz", Versions.quartz)
+    implementation("org.eclipse.jetty", "jetty-server", "9.4.29.v20200521")
 }
 
 publishJar {
@@ -25,9 +26,4 @@ publishJar {
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
-    }
-}
-
+optInInternalAPI()

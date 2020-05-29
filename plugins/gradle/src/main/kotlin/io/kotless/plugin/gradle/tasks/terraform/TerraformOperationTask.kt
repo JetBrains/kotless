@@ -16,7 +16,7 @@ import java.io.File
  *
  * Note: Apply will not require approve in a console, kotless passes to it `-auto-approve`
  */
-open class TerraformOperationTask : DefaultTask() {
+internal open class TerraformOperationTask : DefaultTask() {
     init {
         outputs.upToDateWhen { false }
     }

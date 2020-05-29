@@ -1,3 +1,4 @@
+import io.kotless.buildsrc.optInInternalAPI
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -20,3 +21,6 @@ publishJar {
         }
     }
 }
+
+
+optInInternalAPI()

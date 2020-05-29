@@ -1,4 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import io.kotless.buildsrc.Versions
+import io.kotless.buildsrc.optInInternalAPI
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -7,7 +8,7 @@ version = rootProject.version
 dependencies {
     api(project(":schema"))
 
-    api("org.springframework", "spring-web", "5.2.6.RELEASE")
+    api("org.springframework", "spring-web", Versions.spring)
 
     api(project(":dsl:common:lang-parser-common"))
 }
@@ -25,8 +26,4 @@ publishJar {
     }
 }
 
-tasks.withType<KotlinJvmCompile> {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
-    }
-}
+optInInternalAPI()

@@ -1,3 +1,4 @@
+import io.kotless.buildsrc.Versions
 import tanvd.kosogor.proxy.publishJar
 import tanvd.kosogor.proxy.publishPlugin
 
@@ -33,10 +34,10 @@ dependencies {
     implementation(project(":dsl:spring:spring-lang-parser"))
     implementation(project(":engine"))
 
-    implementation("com.github.jengelman.gradle.plugins", "shadow", "5.0.0")
+    implementation("com.github.jengelman.gradle.plugins", "shadow", "5.2.0")
 
-    implementation("com.amazonaws", "aws-java-sdk-core", "1.11.699")
-    implementation("org.testcontainers", "localstack", "1.12.3")
+    implementation("com.amazonaws", "aws-java-sdk-core", Versions.aws)
+    implementation("org.testcontainers", "localstack", "1.14.2")
 
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")

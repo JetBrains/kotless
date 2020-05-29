@@ -15,7 +15,7 @@ import org.gradle.api.tasks.*
 import java.io.File
 
 @CacheableTask
-open class KotlessLocalGenerateTask : DefaultTask() {
+internal open class KotlessLocalGenerateTask : DefaultTask() {
     init {
         group = Groups.`kotless setup`
     }

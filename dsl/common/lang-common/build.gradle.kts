@@ -1,3 +1,4 @@
+import io.kotless.buildsrc.Versions
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -11,11 +12,11 @@ plugins {
 dependencies {
     api(project(":model"))
 
-    api("com.amazonaws", "aws-java-sdk-core", "1.11.788")
+    api("com.amazonaws", "aws-java-sdk-core", Versions.aws)
 
-    api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", "0.20.0")
+    api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", Versions.serialization)
 
-    api("com.amazonaws", "aws-lambda-java-core", "1.2.0")
+    api("com.amazonaws", "aws-lambda-java-core", Versions.lambdaJavaCore)
 }
 
 publishJar {
