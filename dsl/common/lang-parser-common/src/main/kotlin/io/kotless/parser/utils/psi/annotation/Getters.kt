@@ -8,7 +8,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.annotations.argumentValue
 import org.jetbrains.kotlin.resolve.constants.ConstantValue
 import org.jetbrains.kotlin.resolve.constants.EnumValue
-import kotlin.reflect.*
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
+import kotlin.reflect.KProperty1
 
 fun KtAnnotationEntry.fqName(context: BindingContext) = getDescriptor(context).qualifiedName
 
@@ -51,6 +53,7 @@ inline fun <reified T : Any> AnnotationDescriptor.getArrayValue(param: String): 
 inline fun <reified T : Enum<out T>> KtAnnotationEntry.getEnumValue(context: BindingContext, param: KProperty1<out Annotation, Enum<out T>>): T? {
     return getDescriptor(context).getEnumValue(param)
 }
+
 inline fun <reified T : Enum<out T>> AnnotationDescriptor.getEnumValue(param: KProperty1<out Annotation, Enum<out T>>): T? {
     return T::class.java.enumConstants.find { it.name == (argumentValue(param.name) as EnumValue).enumEntryName.identifier }
 }
@@ -60,6 +63,6 @@ inline fun <reified T : Enum<out T>> KtAnnotationEntry.getArrayEnumValue(context
 }
 
 inline fun <reified T : Enum<out T>> AnnotationDescriptor.getArrayEnumValue(param: String): Array<T>? {
-    val values = (argumentValue(param)?.value as? List<*>)?.map { (it as EnumValue).enumEntryName.identifier  }
+    val values = (argumentValue(param)?.value as? List<*>)?.map { (it as EnumValue).enumEntryName.identifier }
     return values?.map { value -> T::class.java.enumConstants.find { it.name == value }!! }?.toTypedArray()
 }

@@ -7,7 +7,8 @@ import io.kotless.plugin.gradle.tasks.gen.KotlessLocalGenerateTask
 import io.kotless.plugin.gradle.tasks.local.KotlessLocalRunTask
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
-import io.kotless.plugin.gradle.utils.*
+import io.kotless.plugin.gradle.utils.AWSUtils
+import io.kotless.plugin.gradle.utils.Groups
 import io.kotless.plugin.gradle.utils.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task

@@ -4,7 +4,9 @@ import io.kotless.StaticResource
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.hcl.ref
-import io.kotless.terraform.functions.*
+import io.kotless.terraform.functions.eval
+import io.kotless.terraform.functions.filemd5
+import io.kotless.terraform.functions.path
 import io.kotless.terraform.provider.aws.resource.s3.s3_object
 
 object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceFactory.Output> {

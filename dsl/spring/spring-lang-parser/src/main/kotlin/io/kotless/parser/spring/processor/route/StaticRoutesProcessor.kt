@@ -44,5 +44,5 @@ object StaticRoutesProcessor {
         context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
     }
 
-    private fun Set<Path>.filterInDirectory(directory: String) = filter { it.getParent(directory) != null  }.toSet()
+    private fun Set<Path>.filterInDirectory(directory: String) = filter { it.getParent(directory) != null }.toSet()
 }

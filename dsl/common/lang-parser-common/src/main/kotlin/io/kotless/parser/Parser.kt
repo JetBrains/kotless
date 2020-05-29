@@ -1,9 +1,14 @@
 package io.kotless.parser
 
-import io.kotless.*
+import io.kotless.KotlessConfig
+import io.kotless.Lambda
+import io.kotless.StaticResource
+import io.kotless.Webapp
 import io.kotless.parser.processor.Processor
 import io.kotless.parser.processor.ProcessorContext
-import io.kotless.parser.utils.psi.analysis.*
+import io.kotless.parser.utils.psi.analysis.EnvironmentManager
+import io.kotless.parser.utils.psi.analysis.ParseUtil
+import io.kotless.parser.utils.psi.analysis.ResolveUtil
 import io.kotless.utils.TypedStorage
 import java.io.File
 

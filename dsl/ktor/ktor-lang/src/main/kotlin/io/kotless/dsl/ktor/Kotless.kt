@@ -6,7 +6,9 @@ import io.kotless.InternalAPI
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
 import io.kotless.dsl.ktor.lang.LambdaWarming
-import io.kotless.dsl.model.*
+import io.kotless.dsl.model.CloudWatch
+import io.kotless.dsl.model.HttpRequest
+import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.Json
 import io.ktor.application.Application
 import io.ktor.server.engine.EngineAPI

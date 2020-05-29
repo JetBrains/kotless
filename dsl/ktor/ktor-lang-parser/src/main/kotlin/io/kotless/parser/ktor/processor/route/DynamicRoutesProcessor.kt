@@ -14,7 +14,9 @@ import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
 import io.kotless.parser.utils.reversed
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {

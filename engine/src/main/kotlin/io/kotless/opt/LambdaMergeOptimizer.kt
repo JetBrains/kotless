@@ -1,8 +1,13 @@
 package io.kotless.opt
 
-import io.kotless.*
 import io.kotless.KotlessConfig.Optimization
-import io.kotless.utils.*
+import io.kotless.Lambda
+import io.kotless.ScheduledEventType
+import io.kotless.Schema
+import io.kotless.Webapp
+import io.kotless.utils.Storage
+import io.kotless.utils.TypedStorage
+import io.kotless.utils.everyNMinutes
 
 object LambdaMergeOptimizer : SchemaOptimizer {
     private val key = Storage.Key<Int>()

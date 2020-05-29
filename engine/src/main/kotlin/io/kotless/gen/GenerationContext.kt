@@ -3,7 +3,9 @@ package io.kotless.gen
 import io.kotless.Schema
 import io.kotless.Webapp
 import io.kotless.hcl.HCLEntity
-import io.kotless.utils.*
+import io.kotless.utils.Storage
+import io.kotless.utils.Text
+import io.kotless.utils.plusIterable
 
 /**
  * Context of current Terraform generation

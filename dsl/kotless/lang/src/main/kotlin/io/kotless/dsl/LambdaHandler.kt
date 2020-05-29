@@ -7,7 +7,9 @@ import io.kotless.dsl.app.events.EventsDispatcher
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
 import io.kotless.dsl.lang.http.serverError
-import io.kotless.dsl.model.*
+import io.kotless.dsl.model.CloudWatch
+import io.kotless.dsl.model.HttpRequest
+import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.Json
 import org.slf4j.LoggerFactory
 import java.io.InputStream

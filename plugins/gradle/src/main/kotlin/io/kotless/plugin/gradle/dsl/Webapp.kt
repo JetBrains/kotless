@@ -57,6 +57,7 @@ class Webapp(project: Project) : Serializable {
          * (in case of unnamed rootProject -- `root`)
          */
         var name: String? = null
+
         /**
          * Version of this deployment.
          * By default, it is `1`

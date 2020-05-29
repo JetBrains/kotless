@@ -1,6 +1,8 @@
 package io.kotless.dsl.app.http
 
-import io.kotless.*
+import io.kotless.HttpMethod
+import io.kotless.InternalAPI
+import io.kotless.MimeType
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory

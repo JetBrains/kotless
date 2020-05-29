@@ -2,7 +2,10 @@ package io.kotless.dsl.ktor.app
 
 import io.kotless.dsl.model.HttpRequest
 import io.ktor.application.ApplicationCall
-import io.ktor.http.*
+import io.ktor.http.Headers
+import io.ktor.http.HttpMethod
+import io.ktor.http.Parameters
+import io.ktor.http.RequestConnectionPoint
 import io.ktor.request.ApplicationReceivePipeline
 import io.ktor.request.RequestCookies
 import io.ktor.server.engine.BaseApplicationRequest
@@ -22,6 +25,7 @@ class KotlessRequest(val query: HttpRequest, call: ApplicationCall) : BaseApplic
     override val local: RequestConnectionPoint = object : RequestConnectionPoint {
         override val host: String = query.requestContext.domainName
         override val method: HttpMethod = HttpMethod.parse(query.method.name)
+
         //Port is not applicable in case of Serverless execution
         override val port: Int = -1
         override val remoteHost: String = query.requestContext.identity.sourceIp

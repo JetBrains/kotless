@@ -16,7 +16,7 @@ private var HTMLTag.integrity: String
     }
 
 
-fun  <T, C : TagConsumer<T>> C.headerSite() {
+fun <T, C : TagConsumer<T>> C.headerSite() {
     head {
         title {
             +"Kotless Serverless Framework"

@@ -5,6 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import kotlin.reflect.KClass
 
 @SpringBootApplication
-open class Application: Kotless() {
+open class Application : Kotless() {
     override val bootKlass: KClass<*> = this::class
 }

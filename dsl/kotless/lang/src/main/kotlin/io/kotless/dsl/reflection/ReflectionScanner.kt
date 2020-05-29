@@ -3,7 +3,10 @@ package io.kotless.dsl.reflection
 import io.kotless.InternalAPI
 import io.kotless.dsl.config.KotlessAppConfig
 import org.reflections.Reflections
-import org.reflections.scanners.*
+import org.reflections.scanners.FieldAnnotationsScanner
+import org.reflections.scanners.MethodAnnotationsScanner
+import org.reflections.scanners.SubTypesScanner
+import org.reflections.scanners.TypeAnnotationsScanner
 import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 import java.lang.reflect.Method

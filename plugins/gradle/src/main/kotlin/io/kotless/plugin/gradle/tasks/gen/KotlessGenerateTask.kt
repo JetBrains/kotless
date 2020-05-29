@@ -1,11 +1,12 @@
 package io.kotless.plugin.gradle.tasks.gen
 
 import io.kotless.*
-import io.kotless.Webapp
 import io.kotless.parser.KotlessParser
-import io.kotless.parser.spring.SpringParser
 import io.kotless.parser.ktor.KTorParser
-import io.kotless.plugin.gradle.dsl.*
+import io.kotless.parser.spring.SpringParser
+import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.plugin.gradle.dsl.kotless
+import io.kotless.plugin.gradle.dsl.toSchema
 import io.kotless.plugin.gradle.utils.*
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils

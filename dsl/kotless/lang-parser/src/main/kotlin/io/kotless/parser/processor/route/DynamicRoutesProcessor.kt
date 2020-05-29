@@ -1,6 +1,8 @@
 package io.kotless.parser.processor.route
 
-import io.kotless.*
+import io.kotless.HttpMethod
+import io.kotless.Lambda
+import io.kotless.ScheduledEventType
 import io.kotless.Webapp.ApiGateway
 import io.kotless.Webapp.Events
 import io.kotless.dsl.config.KotlessAppConfig

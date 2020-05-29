@@ -4,7 +4,10 @@ import io.kotless.parser.utils.psi.isSubtypeOf
 import io.kotless.parser.utils.psi.visitClass
 import io.kotless.parser.utils.psi.visitClassOrObject
 import io.kotless.parser.utils.psi.visitObject
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
 

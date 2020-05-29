@@ -12,7 +12,7 @@ dependencies {
         exclude("org.slf4j", "slf4j-api")
     }
 
-    api("org.springframework.boot","spring-boot-starter-web", Versions.springBoot) {
+    api("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot) {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
 }

@@ -3,7 +3,9 @@ package io.kotless.dsl.reflection
 import io.kotless.InternalAPI
 import io.kotless.dsl.conversion.ConversionService
 import kotlin.jvm.internal.FunctionReference
-import kotlin.reflect.*
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
 import kotlin.reflect.jvm.isAccessible
 
 @InternalAPI

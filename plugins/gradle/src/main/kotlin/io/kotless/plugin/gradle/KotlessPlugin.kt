@@ -5,7 +5,9 @@ import io.kotless.plugin.gradle.KotlessLocalTasks.setupLocalTasks
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.terraform.TerraformDownloadTask
-import io.kotless.plugin.gradle.utils.*
+import io.kotless.plugin.gradle.utils.applyPluginSafely
+import io.kotless.plugin.gradle.utils.myCreate
+import io.kotless.plugin.gradle.utils.myLocalConfigurationName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

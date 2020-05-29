@@ -9,7 +9,7 @@ data class URIPath(var parts: Iterable<String>) {
     constructor() : this(emptyList())
     constructor(path: URIPath, part: String) : this(path.parts + part)
     constructor(path: URIPath, other: URIPath) : this(path.parts + other.parts)
-    constructor(path: Sequence<URIPath>): this(path.toList().flatMap { it.parts })
+    constructor(path: Sequence<URIPath>) : this(path.toList().flatMap { it.parts })
     constructor(part: String, path: URIPath) : this(listOf(part) + path.parts)
     constructor(path: String) : this(path.split("/"))
 

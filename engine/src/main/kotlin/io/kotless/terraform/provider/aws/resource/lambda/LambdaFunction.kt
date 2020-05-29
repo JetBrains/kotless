@@ -13,6 +13,7 @@ class LambdaFunction(id: String) : TFResource(id, "aws_lambda_function") {
     val arn by text(inner = true)
 
     var function_name by text()
+
     /** ARN of role */
     var role by text()
 

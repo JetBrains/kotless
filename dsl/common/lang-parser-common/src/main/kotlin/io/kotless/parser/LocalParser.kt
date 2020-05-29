@@ -2,7 +2,9 @@ package io.kotless.parser
 
 import io.kotless.Lambda
 import io.kotless.parser.processor.config.EntrypointProcessor
-import io.kotless.parser.utils.psi.analysis.*
+import io.kotless.parser.utils.psi.analysis.EnvironmentManager
+import io.kotless.parser.utils.psi.analysis.ParseUtil
+import io.kotless.parser.utils.psi.analysis.ResolveUtil
 import java.io.File
 
 /**

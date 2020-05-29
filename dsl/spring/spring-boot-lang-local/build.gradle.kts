@@ -10,7 +10,7 @@ dependencies {
     api(project(":dsl:spring:spring-boot-lang"))
     implementation(kotlin("reflect"))
 
-    api("org.springframework.boot","spring-boot-starter-tomcat", Versions.springBoot)
+    api("org.springframework.boot", "spring-boot-starter-tomcat", Versions.springBoot)
 }
 
 publishJar {

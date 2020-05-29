@@ -1,6 +1,9 @@
 package io.kotless.parser.processor
 
-import io.kotless.*
+import io.kotless.KotlessConfig
+import io.kotless.Lambda
+import io.kotless.StaticResource
+import io.kotless.Webapp
 import io.kotless.utils.TypedStorage
 import java.io.File
 

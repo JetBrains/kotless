@@ -27,7 +27,7 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             val path = entry.getURIPath(binding, StaticGet::path)
                 ?: error(variable, "For @StaticGet annotation `path` parameter is required")
             val mime = entry.getEnumValue(binding, StaticGet::mime)
-                ?:  error(variable, "For @StaticGet annotation `path` parameter is required")
+                ?: error(variable, "For @StaticGet annotation `path` parameter is required")
 
             require(variable, variable.getTypeFqName(binding).toString() == File::class.qualifiedName) {
                 "Variable annotated with @StaticGet should have type java.io.File"

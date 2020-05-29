@@ -1,8 +1,14 @@
 package io.kotless.parser.processor.permission
 
-import io.kotless.*
-import io.kotless.dsl.lang.*
-import io.kotless.parser.utils.psi.annotation.*
+import io.kotless.AwsResource
+import io.kotless.Permission
+import io.kotless.PermissionLevel
+import io.kotless.dsl.lang.DynamoDBTable
+import io.kotless.dsl.lang.S3Bucket
+import io.kotless.dsl.lang.SSMParameters
+import io.kotless.parser.utils.psi.annotation.getAnnotations
+import io.kotless.parser.utils.psi.annotation.getEnumValue
+import io.kotless.parser.utils.psi.annotation.getValue
 import io.kotless.parser.utils.psi.visitAnnotatedWithReferences
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtExpression

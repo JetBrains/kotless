@@ -1,7 +1,9 @@
 package io.kotless.gen
 
 import io.kotless.*
-import io.kotless.gen.factory.apigateway.*
+import io.kotless.gen.factory.apigateway.DeploymentFactory
+import io.kotless.gen.factory.apigateway.DomainFactory
+import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.event.ScheduledEventsFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.infra.TFConfigFactory
@@ -11,7 +13,9 @@ import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.route.static.StaticRoleFactory
 import io.kotless.gen.factory.route.static.StaticRouteFactory
-import io.kotless.gen.factory.route53.*
+import io.kotless.gen.factory.route53.CertificateFactory
+import io.kotless.gen.factory.route53.RecordFactory
+import io.kotless.gen.factory.route53.ZoneFactory
 import io.kotless.terraform.TFFile
 import kotlin.reflect.KClass
 

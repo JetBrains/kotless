@@ -1,8 +1,11 @@
 package io.kotless.parser.processor
 
-import io.kotless.parser.utils.psi.*
 import io.kotless.parser.utils.psi.annotation.getAnnotations
 import io.kotless.parser.utils.psi.annotation.isAnnotatedWith
+import io.kotless.parser.utils.psi.isStatic
+import io.kotless.parser.utils.psi.visitClassOrObject
+import io.kotless.parser.utils.psi.visitNamedFunctions
+import io.kotless.parser.utils.psi.visitVariables
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass

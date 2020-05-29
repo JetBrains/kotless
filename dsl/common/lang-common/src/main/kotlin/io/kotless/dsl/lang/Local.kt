@@ -3,8 +3,9 @@ package io.kotless.dsl.lang
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder
-import io.kotless.*
+import io.kotless.AwsResource
 import io.kotless.Constants.LocalStack
+import io.kotless.InternalAPI
 import java.lang.System.getenv
 
 
@@ -19,7 +20,7 @@ import java.lang.System.getenv
  */
 @Suppress("unused")
 @OptIn(InternalAPI::class)
-fun <E, T: AwsClientBuilder<T, E>> AwsClientBuilder<T, E>.withKotlessLocal(resource: AwsResource): AwsClientBuilder<T, E> {
+fun <E, T : AwsClientBuilder<T, E>> AwsClientBuilder<T, E>.withKotlessLocal(resource: AwsResource): AwsClientBuilder<T, E> {
     if (getenv(LocalStack.enabled)?.toBoolean() == true) {
         setEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(getenv(LocalStack.url(resource)), getenv(LocalStack.region(resource))))
         credentials = AWSStaticCredentialsProvider(BasicAWSCredentials(getenv(LocalStack.accessKey), getenv(LocalStack.secretKey)))

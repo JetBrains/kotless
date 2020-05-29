@@ -3,7 +3,9 @@ package io.kotless.gen.factory.infra
 import io.kotless.KotlessConfig
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.terraform.infra.*
+import io.kotless.terraform.infra.TFConfig
+import io.kotless.terraform.infra.aws_provider
+import io.kotless.terraform.infra.terraform
 
 object TFConfigFactory : GenerationFactory<KotlessConfig.Terraform, Unit> {
     override fun mayRun(entity: KotlessConfig.Terraform, context: GenerationContext) = true

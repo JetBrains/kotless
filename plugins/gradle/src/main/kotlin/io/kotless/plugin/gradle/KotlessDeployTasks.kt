@@ -3,7 +3,7 @@ package io.kotless.plugin.gradle
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.gen.KotlessGenerateTask
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
-import io.kotless.plugin.gradle.utils.*
+import io.kotless.plugin.gradle.utils.Groups
 import io.kotless.plugin.gradle.utils.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -16,7 +16,7 @@ internal object KotlessDeployTasks {
             logger.warn("Deployment tasks will NOT be added to this project")
             return
         }
-        
+
         with(tasks) {
             val generate = myCreate<KotlessGenerateTask>("generate")
 

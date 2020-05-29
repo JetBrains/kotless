@@ -1,7 +1,10 @@
 package io.kotless.plugin.gradle.utils
 
 import org.codehaus.plexus.util.Os
-import org.codehaus.plexus.util.cli.*
+import org.codehaus.plexus.util.cli.CommandLineUtils
+import org.codehaus.plexus.util.cli.Commandline
+import org.codehaus.plexus.util.cli.DefaultConsumer
+import org.codehaus.plexus.util.cli.StreamConsumer
 import java.io.File
 
 internal object CommandLine {

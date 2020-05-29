@@ -7,6 +7,7 @@ import java.io.Serializable
 @KotlessDSLTag
 class KotlessDSL(project: Project) : Serializable {
     internal val config: KotlessConfig = KotlessConfig(project)
+
     /** Declaration of Kotless configuration itself */
     @KotlessDSLTag
     fun config(configure: KotlessConfig.() -> Unit) {
@@ -14,6 +15,7 @@ class KotlessDSL(project: Project) : Serializable {
     }
 
     internal val webapp: Webapp = Webapp(project)
+
     /** Configuration of Kotless Web application */
     @KotlessDSLTag
     fun webapp(configure: Webapp.() -> Unit) {
