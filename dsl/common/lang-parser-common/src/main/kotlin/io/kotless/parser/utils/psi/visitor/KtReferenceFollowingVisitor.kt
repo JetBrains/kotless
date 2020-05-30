@@ -9,6 +9,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.util.*
 import kotlin.reflect.KClass
 
+/**
+ * Implementation of Kotlin Visitor capable of following [KtReferenceExpression].
+ *
+ * [shouldFollowReference] can be used to control which references should be followed
+ * [parentsWithReferences] used to get all parents including parents of all followed references
+ * till that exact expression -- so it is [parents] following references upwards
+ */
 abstract class KtReferenceFollowingVisitor(
     private val binding: BindingContext,
     private val references: Stack<KtElement> = Stack(),

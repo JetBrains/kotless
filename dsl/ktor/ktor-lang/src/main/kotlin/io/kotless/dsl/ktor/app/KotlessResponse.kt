@@ -17,6 +17,9 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+/**
+ * Ktor Response used by Kotless. It will be mapped to APIGateway response.
+ */
 class KotlessResponse(call: ApplicationCall) : BaseApplicationResponse(call), CoroutineScope {
     override val coroutineContext: CoroutineContext = EmptyCoroutineContext
     private val output = ByteChannel(true)

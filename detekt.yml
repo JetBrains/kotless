@@ -40,11 +40,11 @@ comments:
     active: false
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   UndocumentedPublicClass:
-    active: false
-    searchInNestedClass: true
-    searchInInnerClass: true
-    searchInInnerObject: true
-    searchInInnerInterface: true
+    active: true
+    searchInNestedClass: false
+    searchInInnerClass: false
+    searchInInnerObject: false
+    searchInInnerInterface: false
   UndocumentedPublicFunction:
     active: false
   UndocumentedPublicProperty:
@@ -354,10 +354,10 @@ naming:
     active: false
     rootPackage: ''
   MatchingDeclarationName:
-    active: true
+    active: false
     mustBeFirst: true
   MemberNameEqualsClassName:
-    active: true
+    active: false
     ignoreOverridden: true
   ObjectPropertyNaming:
     active: true
@@ -394,7 +394,7 @@ naming:
 performance:
   active: true
   ArrayPrimitive:
-    active: true
+    active: false
   ForEachOnRange:
     active: true
     excludes: '**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt'
@@ -595,7 +595,7 @@ style:
     excludeAnnotatedClasses: ''
     allowVars: false
   UseIfInsteadOfWhen:
-    active: true
+    active: false
   UseRequire:
     active: true
   UselessCallOnNotNull:

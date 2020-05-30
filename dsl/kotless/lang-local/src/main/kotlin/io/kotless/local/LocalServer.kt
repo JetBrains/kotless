@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 
 
-class LocalServer(port: Int) {
+internal class LocalServer(port: Int) {
     private val handler = LambdaHandler()
 
     private val server: Server = Server(port)

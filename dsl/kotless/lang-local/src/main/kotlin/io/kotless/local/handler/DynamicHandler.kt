@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-class DynamicHandler(private val handler: LambdaHandler) : AbstractHandler() {
+internal class DynamicHandler(private val handler: LambdaHandler) : AbstractHandler() {
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
         val apiRequest = HttpRequest(
             resource = request.requestURI,

@@ -10,6 +10,10 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
 
+/**
+ * Abstract implementation of [Processor] that provides utils for
+ * analysis of elements annotated with some specific annotation
+ */
 abstract class AnnotationProcessor<Output : Any> : Processor<Output>() {
     abstract val annotations: Set<KClass<out Annotation>>
 

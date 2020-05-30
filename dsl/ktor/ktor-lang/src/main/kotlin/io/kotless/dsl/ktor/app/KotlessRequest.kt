@@ -11,6 +11,9 @@ import io.ktor.request.RequestCookies
 import io.ktor.server.engine.BaseApplicationRequest
 import io.ktor.utils.io.ByteReadChannel
 
+/**
+ * Ktor Request used by Kotless. It will be created from APIGateway request.
+ */
 class KotlessRequest(val query: HttpRequest, call: ApplicationCall) : BaseApplicationRequest(call) {
     override val pipeline = ApplicationReceivePipeline().apply {
         merge(call.application.receivePipeline)

@@ -13,6 +13,11 @@ import java.io.InputStream
 import java.io.OutputStream
 import kotlin.reflect.KClass
 
+/**
+ * Entrypoint of Kotless application written with Spring Boot DSL.
+ *
+ * Override [bootKlass] field and initialize it with class of your `@SpringBootApplication`
+ */
 abstract class Kotless : RequestStreamHandler {
     abstract val bootKlass: KClass<*>
 

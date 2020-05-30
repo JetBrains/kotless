@@ -11,7 +11,7 @@ import java.io.File
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class StaticHandler : AbstractHandler() {
+internal class StaticHandler : AbstractHandler() {
     private val fields by lazy { ReflectionScanner.fieldsWithAnnotation<StaticGet, File>().mapValues { File(Environment.workingDir, it.value.path) } }
 
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {

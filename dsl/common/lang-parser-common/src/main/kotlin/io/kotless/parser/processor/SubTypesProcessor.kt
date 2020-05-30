@@ -11,6 +11,10 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
 
+/**
+ * Abstract implementation of [Processor] that provides utils for
+ * analysis of classes and objects of some subtypes
+ */
 abstract class SubTypesProcessor<Output : Any> : Processor<Output>() {
     abstract val klasses: Set<KClass<*>>
 

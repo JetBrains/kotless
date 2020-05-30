@@ -7,7 +7,7 @@ import io.kotless.dsl.utils.Json
 import org.quartz.*
 import java.io.ByteArrayOutputStream
 
-class ScheduledJob : Job {
+internal class ScheduledJob : Job {
     companion object {
         const val ID_KEY = "SCHEDULED_ID"
         const val HANDLER_KEY = "LAMBDA_HANDLER"

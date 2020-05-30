@@ -20,6 +20,11 @@ import java.io.InputStream
 import java.io.OutputStream
 
 
+/**
+ * Entrypoint of Kotless application written with Ktor DSL.
+ *
+ * Override [prepare] method and setup your application
+ */
 @Suppress("unused")
 abstract class Kotless : RequestStreamHandler {
     companion object {

@@ -9,7 +9,7 @@ import io.kotless.utils.everyNMinutes
 import org.quartz.*
 import java.io.ByteArrayOutputStream
 
-class AutowarmJob : Job {
+internal class AutowarmJob : Job {
     companion object {
         const val HANDLER_KEY = "LAMBDA_HANDLER"
 

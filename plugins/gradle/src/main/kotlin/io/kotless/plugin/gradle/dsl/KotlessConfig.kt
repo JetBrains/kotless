@@ -50,12 +50,16 @@ class KotlessConfig(project: Project) : Serializable {
         private val defaultType by lazy {
             val types = Dependencies.dsl(project).keys
             require(types.isNotEmpty()) {
-                "Kotless was unable to determine DSL type of application. " +
-                    "Either dependency with one of the DSLs (`lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually."
+                """
+                |Kotless was unable to determine DSL type of application.
+                |Either dependency with one of the DSLs (`lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually.
+                |""".trimMargin()
             }
             require(types.size <= 1) {
-                "Kotless was unable to determine DSL type of application. " +
-                    "There was more than one DSL dependency (of type `lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually."
+                """
+                |Kotless was unable to determine DSL type of application. 
+                |There was more than one DSL dependency (of type `lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually.
+                |""".trimMargin()
             }
 
             types.single()

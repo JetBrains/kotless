@@ -7,6 +7,12 @@ import io.kotless.Webapp
 import io.kotless.utils.TypedStorage
 import java.io.File
 
+/**
+ * Context of code analysis.
+ *
+ * It includes resulting elements of Kotless Schema, set of already ran processors
+ * and part of schema explicitly defined by user
+ */
 class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lambda.Config) {
     class Output(private val outputs: MutableMap<Processor<*>, Any> = HashMap()) {
         fun <T : Any> register(processor: Processor<T>, output: T) {

@@ -1,4 +1,4 @@
-package io.kotless.local.spring
+package io.kotless.local.ktor
 
 import io.kotless.Constants
 import io.kotless.dsl.ktor.Kotless
