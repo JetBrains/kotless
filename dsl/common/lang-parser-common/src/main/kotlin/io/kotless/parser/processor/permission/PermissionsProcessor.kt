@@ -20,7 +20,7 @@ object PermissionsProcessor {
     fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val permissions = HashSet<Permission>()
 
-        func.visitAnnotatedWithReferences(context) {
+        func.visitAnnotatedWithReferences(context, visitOnce = true) {
             permissions.addAll(processAnnotated(it, context))
         }
 

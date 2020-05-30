@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.util.*
+import kotlin.collections.HashSet
 import kotlin.reflect.KClass
 
 /**
@@ -15,12 +16,18 @@ import kotlin.reflect.KClass
  * [shouldFollowReference] can be used to control which references should be followed
  * [parentsWithReferences] used to get all parents including parents of all followed references
  * till that exact expression -- so it is [parents] following references upwards
+ * [visitOnce] can be used to define if visitor should visit target more than once, if there
+ * are different references targeting to one location
  */
 abstract class KtReferenceFollowingVisitor(
     private val binding: BindingContext,
-    private val references: Stack<KtElement> = Stack(),
-    private val targets: Stack<KtElement> = Stack()
+    private val visitOnce: Boolean = false
 ) : KtDefaultVisitor() {
+
+    private val references: Stack<KtElement> = Stack()
+    private val targets: Stack<KtElement> = Stack()
+    private val seen: HashSet<KtElement> = HashSet()
+
     protected open fun shouldFollowReference(reference: KtElement, target: KtElement) = true
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
@@ -39,7 +46,9 @@ abstract class KtReferenceFollowingVisitor(
      * no danger of cycle.
      */
     protected fun visitReferenceTree(reference: KtElement, target: KtElement) {
-        if (target in this.targets || !shouldFollowReference(reference, target)) return
+        if (target in this.targets || (visitOnce && target in seen) || !shouldFollowReference(reference, target)) return
+
+        if (visitOnce) this.seen.add(target)
 
         this.references.push(reference)
         this.targets.push(target)

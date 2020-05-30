@@ -7,8 +7,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiverOrThis
 import org.jetbrains.kotlin.resolve.BindingContext
 
 
-fun KtElement.visitAnnotatedWithReferences(binding: BindingContext, filter: (KtAnnotated) -> Boolean = { true }, body: (KtAnnotated) -> Unit) {
-    accept(object : KtReferenceFollowingVisitor(binding) {
+fun KtElement.visitAnnotatedWithReferences(
+    binding: BindingContext,
+    filter: (KtAnnotated) -> Boolean = { true },
+    visitOnce: Boolean = false,
+    body: (KtAnnotated) -> Unit
+) {
+    accept(object : KtReferenceFollowingVisitor(binding, visitOnce) {
         override fun shouldFollowReference(reference: KtElement, target: KtElement): Boolean {
             return target is KtAnnotated
         }
@@ -40,8 +45,9 @@ fun KtElement.visitBinaryExpressions(filter: (KtBinaryExpression) -> Boolean = {
 }
 
 fun KtElement.visitCallExpressionsWithReferences(binding: BindingContext, filter: (KtCallExpression) -> Boolean = { true },
+                                                 visitOnce: Boolean = false,
                                                  body: KtReferenceFollowingVisitor.(KtCallExpression) -> Unit) {
-    accept(object : KtReferenceFollowingVisitor(binding) {
+    accept(object : KtReferenceFollowingVisitor(binding, visitOnce) {
         override fun shouldFollowReference(reference: KtElement, target: KtElement): Boolean {
             return target is KtFunction
         }
