@@ -68,8 +68,10 @@ repositories {
 
 dependencies {
     implementation("io.kotless", "lang", "0.1.4")
+
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.3.2)
     //implementation("io.kotless", "ktor-lang", "0.1.4")
+
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 2.3.0.RELEASE)
     //implementation("io.kotless", "spring-boot-lang", "0.1.4")
 }
