@@ -9,6 +9,7 @@ include(":ktor:site")
 include(":ktor:shortener")
 
 include(":spring:site")
+include(":spring:shortener")
 
 
 pluginManagement {
