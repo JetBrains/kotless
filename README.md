@@ -13,15 +13,21 @@ Its focus lies in reducing the routine of serverless deployment creation and gen
 from the code of the application itself. 
 
 Kotless consists of two main parts:
-* DSL provides a way of defining serverless applications. There are two DSLs supported:
-    * Ktor DSL &mdash; Ktor engine that is introspected by Kotless. You use standard Ktor syntax 
-      and Kotless generates deployment for it.
-    * Kotless DSL &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
+* DSL provides a way of defining serverless applications. There are three DSLs supported:
+    * **Kotless DSL** &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
+    * **Ktor** &mdash; Ktor engine that is introspected by Kotless. You use standard Ktor syntax 
+      and Kotless generates deployment for it.
+    * **Spring Boot** &mdash; Spring Boot serverless container that is introspected by Kotless. You
+      use standard Spring syntax and Kotless generates deployment for it.
 * Kotless Gradle Plugin provides a way of deploying serverless application. For that, it: 
     * performs the tasks of generating Terraform code from the application code and, 
       subsequently, deploying it to AWS;
     * runs application locally, emulates AWS environment and provides the possibility for in-IDE debugging.
+
+
+One of the key features of Kotless &mdash; is its ability to embed into existing applications. Kotless makes
+super easy deployment of existing Spring and Ktor applications to serverless platforms.
   
 ## Getting started
 
@@ -36,11 +42,17 @@ Firstly, set up Kotless Gradle plugin. You need to apply the plugin:
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
-plugins {
-    //Version of Kotlin should 1.3.50+
-    kotlin("jvm") version "1.3.50" apply true
+//Group may be used by Kotless DSL to reduce number of introspected classes by package
+//So, don't forget to set it
+group = "org.example"
+version = "0.1.0"
 
-    id("io.kotless") version "0.1.3" apply true
+
+plugins {
+    //Version of Kotlin should be 1.3.72+
+    kotlin("jvm") version "1.3.72" apply true
+
+    id("io.kotless") version "0.1.4" apply true
 }
 ```
 
@@ -53,9 +65,11 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.3")
+    implementation("io.kotless", "lang", "0.1.4")
     //or for Ktor
-    //implementation("io.kotless", "ktor-lang", "0.1.3")
+    //implementation("io.kotless", "ktor-lang", "0.1.4")
+    //or for Spring Boot
+    //implementation("io.kotless", "spring-boot-lang", "0.1.4")
 }
 ```
 
@@ -79,16 +93,6 @@ kotless {
     webapp {
         //Optional parameter, by default technical name will be generated
         route53 = Route53("kotless", "example.com")
-
-        //configuration of lambda created
-        lambda {            
-            //needed only for Kotless DSL
-            kotless {
-                //Define packages in which scan for routes should be performed
-                //By default, will be set to gradle module group
-                packages = setOf("io.kotless.examples")
-            }
-        }
     }
 }
 ```
@@ -98,21 +102,15 @@ Here we set up the config of Kotless itself:
 * Terraform configuration with the name of the profile to access AWS.
 
 Then we set up a specific application to deploy: 
-* Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS record);
-* in case of Kotless DSL &mdash; a set of packages that should be scanned for Kotless DSL annotations.
+* Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS record).
 
 And that's the whole setup!
 
 Now you can create you first serverless application with Kotless DSL:
 
 ```kotlin
-
 @Get("/")
-fun gettingStartedPage() = html {
-    body {
-        +"Hello world!"
-    }
-}
+fun gettingStartedPage() = "Hello world!"
 ```
 
 Or with Ktor:
@@ -127,14 +125,26 @@ class Server : Kotless() {
         }
     }
 }
-``` 
+```
 
-*HTML builder provided by `implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")` dependency.*
+Or with Spring Boot:
+
+```kotlin
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
+@RestController
+object Pages {
+    @GetMapping("/")
+    fun main() = "Hello World!"
+}
+```
 
 ## Local start
 
-Kotless-based application can start locally as an HTTP server. This functionality is supported for both Kotless 
-and Ktor DSL. 
+Kotless-based application can start locally as an HTTP server. This functionality is supported for all DSLs. 
 
 Moreover, Kotless local start may spin up an AWS emulation. Just instantiate your AWS service client using override for Kotless local starts:
 ```kotlin
@@ -166,21 +176,14 @@ While Kotless can be used as a framework for a rapid creation of serverless
 applications, it has many more features covering different areas of application.
 
 Including, but not limited to:
-* Lambdas auto-warming &mdash; Kotless creates schedulers to execute warming sequences to never leave your lambdas cold. 
-  It is possible to add various actions to the warming sequence via `@Warming` annotation;
-* Granular permissions &mdash; you can declare which permissions to which AWS resources are required for the code that
-  calls the function via annotations on Kotlin functions. Permissions will be granted automatically.
-* Static resources &mdash; Kotless will deploy files annotated with `@StaticResource` to S3 and create specified HTTP 
-  routes for them.
-* Scheduled events &mdash; Kotless sets up timers to execute `@Scheduled` jobs on schedule;
-* Terraform extensions &mdash; Kotless-generated code can be extended by custom Terraform code;
-* Serialization and deserialization &mdash; Kotless will automatically deserialize parameters from an HTTP request into 
-  function parameters and will serialize the result of the function as well. You can extend the number of supported 
-  types of parameters by creating top-level `object` implementing `ConversionService`. It will be automatically
-  added to the list of supported conversions.
+* **Lambdas auto-warming** &mdash; Kotless creates schedulers to execute warming sequences to never leave your lambdas cold. As a result applications under moderate load are almost not vulnerable to cold-start problem
+* **Granular permissions** &mdash; you can declare which permissions to which AWS resources are required for the code that calls the function via annotations on Kotlin functions, classes or objects. Permissions will be granted automatically.
+* **Static resources** &mdash; Kotless will deploy static resources to S3 and set up CDN for them. It may greatly improve response time of your application and is supported for all DSLs
+* **Scheduled events** &mdash; Kotless  sets up timers to execute `@Scheduled` jobs on schedule;
+* **Terraform extensions** &mdash; Kotless-generated code can be extended by custom Terraform code;
 
 Kotless is in active development, so we are currently working on extending this list with such features as:
-* Support of other clouds &mdash; Kotless is based on a cloud-agnostic schema, so we are working on supporting other clouds.
+* Support of other clouds &mdash; Kotless is based on a cloud-agnostic schema, so we are working on support of other clouds.
 * Support of multiplatform applications &mdash; Kotless will not use any platform-specific libraries to give you a choice of a Lambda runtime (JVM/JS/Native).
 * Versioned deployment &mdash; Kotless will be able to deploy several versions of the application and maintain one of them
   as active.
@@ -191,16 +194,16 @@ Kotless is in active development, so we are currently working on extending this 
 
 Any explanation becomes much better with a proper example.
 
-In the repository's `examples` folder, you can find example projects built with Kotless:
-* `kotless-site` &mdash; a site about Kotless written with Kotless DSL ([site.kotless.io](https://site.kotless.io)). 
+In the repository's `examples` folder, you can find example projects built with Kotless DSL:
+* `kotless/site` &mdash; a site about Kotless written with Kotless DSL ([site.kotless.io](https://site.kotless.io)). 
 This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), as well as Link API.
-* `kotless-shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
+* `kotless/shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access), and Terraform extensions.
 
 Similar examples exist for Ktor DSL: 
-* `ktor-site` &mdash; a site about Kotless written with Ktor DSL ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
+* `ktor/site` &mdash; a site about Kotless written with Ktor DSL ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
 This example demonstrates `static {...}` and `routing {...}`.
-* `ktor-shortener` &mdash; a simple URL shortener written with Ktor DSL (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
+* `ktor/shortener` &mdash; a simple URL shortener written with Ktor DSL (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
 This example demonstrates `routing { ... }` (dynamic routes), Permissions API (for DynamoDB access), and Terraform extensions.
 
 ## Want to know more?
