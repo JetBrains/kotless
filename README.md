@@ -200,11 +200,17 @@ This example demonstrates `@StaticGet` and `@Get` (static and dynamic routes), a
 * `kotless/shortener` &mdash; a simple URL shortener written with Kotless DSL (see the result at [short.kotless.io](https://short.kotless.io)). 
 This example demonstrates `@Get` (dynamic routes), `@Scheduled` (scheduled lambdas), Permissions API (for DynamoDB access), and Terraform extensions.
 
-Similar examples exist for Ktor DSL: 
-* `ktor/site` &mdash; a site about Kotless written with Ktor DSL ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
+Similar examples exist for Ktor: 
+* `ktor/site` &mdash; a site about Kotless written with Ktor ([ktor.site.kotless.io](https://ktor.site.kotless.io)). 
 This example demonstrates `static {...}` and `routing {...}`.
-* `ktor/shortener` &mdash; a simple URL shortener written with Ktor DSL (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
+* `ktor/shortener` &mdash; a simple URL shortener written with Ktor (see the result at [ktor.short.kotless.io](https://ktor.short.kotless.io)). 
 This example demonstrates `routing { ... }` (dynamic routes), Permissions API (for DynamoDB access), and Terraform extensions.
+
+And for spring: 
+* `spring/site` &mdash; a site about Kotless written with Spring Boot ([spring.site.kotless.io](https://spring.site.kotless.io)). 
+This example demonstrates  usage of statics and `@RestController`.
+* `spring/shortener` &mdash; a simple URL shortener written with Spring Boot (see the result at [spring.short.kotless.io](https://spring.short.kotless.io)). 
+This example demonstrates usage of `@RestController` (dynamic routes), Permissions API (for DynamoDB access), and Terraform extensions.
 
 ## Want to know more?
 
