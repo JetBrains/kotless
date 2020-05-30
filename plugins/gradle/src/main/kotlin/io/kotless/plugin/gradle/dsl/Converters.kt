@@ -4,7 +4,7 @@ import io.kotless.KotlessConfig
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
-        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.staticsRoot),
+        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.resolvedStaticsRoot),
             with(terraform) {
                 KotlessConfig.Terraform(
                     version,

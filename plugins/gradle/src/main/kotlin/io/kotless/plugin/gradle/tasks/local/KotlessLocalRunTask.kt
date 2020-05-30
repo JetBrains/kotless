@@ -49,7 +49,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
         val (type, dependency) = dsl.entries.single()
 
         dependencies {
-            myLocal("io.kotless", type.lib, dependency.version.toString())
+            myLocal("io.kotless", "${type.lib}-local", dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
         }
 
         tasks.myGetByName<JavaExec>("run").apply {
@@ -63,7 +63,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             }
 
             if (type == DSLType.Kotless) {
-                environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.staticsRoot.canonicalPath
+                environment[Constants.Local.Kotless.workingDir] = myKotless.config.dsl.resolvedStaticsRoot.canonicalPath
             }
 
             if (myKotless.config.optimization.autowarm.enable) {

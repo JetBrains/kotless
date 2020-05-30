@@ -12,7 +12,7 @@ fun Routing.siteStatics() {
     //There are used almost all possible definitions of static resources
 
     static {
-        staticRootFolder = File("static")
+        staticRootFolder = File("src/main/resources/static")
 
         static("css") {
             files("css")
