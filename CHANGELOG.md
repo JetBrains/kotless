@@ -1,6 +1,22 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 0.1.4 - 2020-31-05
+## Added
+* Spring Boot DSL -- Spring Boot serverless container and parser of it. Support dynamic and static routes,
+  warming of lambda, granular permissions. Does not support Scheduled.
+* Support local run for Spring Boot DSL via tomcat starter
+* Spring Boot examples: shortener and site
+
+## Changed
+* Examples were reworked into one project
+* `workDirectory` is now called `staticsRoot`
+
+## Fixed
+* Improvements in all parsers -- now all of them should work a lot faster
+* Fixes to documentation in code
+
+
 # 0.1.3 - 2020-08-02
 ## Added
 * Output to console URL of deployed application
