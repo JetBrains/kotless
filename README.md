@@ -18,10 +18,10 @@ Kotless consists of two main parts:
 * DSL provides a way of defining serverless applications. There are three DSLs supported:
     * **Kotless DSL** &mdash; Kotless own DSL that provides annotations to declare routing, scheduled events, 
       etc.
-    * **Ktor** &mdash; Ktor engine that is introspected by Kotless. You use standard Ktor syntax 
-      and Kotless generates deployment for it.
-    * **Spring Boot** &mdash; Spring Boot serverless container that is introspected by Kotless. You
-      use standard Spring syntax and Kotless generates deployment for it.
+    * **Ktor** &mdash; Ktor engine that is introspected by Kotless. Use standard Ktor syntax 
+      and Kotless will generate deployment.
+    * **Spring Boot** &mdash; Spring Boot serverless container that is introspected by Kotless. Use standard 
+      Spring syntax and Kotless will generate deployment.
 * Kotless Gradle Plugin provides a way of deploying serverless application. For that, it: 
     * performs the tasks of generating Terraform code from the application code and, 
       subsequently, deploying it to AWS;
