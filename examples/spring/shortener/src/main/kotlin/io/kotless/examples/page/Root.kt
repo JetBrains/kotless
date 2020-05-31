@@ -15,7 +15,7 @@ object Root {
             }
 
             link {
-                href = "/favicon.ico"
+                href = "/favicon.apng"
                 rel = "icon"
             }
 
