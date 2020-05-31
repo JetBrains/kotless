@@ -1,7 +1,6 @@
 # Kotless roadmap
 
 ## 0.1.*
-* Support of Spring Boot
 * GraalVM as a target platform
 * Support of Azure
 
