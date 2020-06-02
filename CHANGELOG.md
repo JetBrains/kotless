@@ -1,6 +1,11 @@
 # Changelog
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 0.1.5 - 2020-02-06
+## Fixed
+* Reflections dependency reverted to older version because of critical bug in it 
+* Fix for HTTPRequest -- sometimes user-agent can miss in APIGateway request
+
 # 0.1.4 - 2020-31-05
 ## Added
 * Spring Boot DSL -- Spring Boot serverless container and parser of it. Support dynamic and static routes,

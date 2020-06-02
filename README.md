@@ -54,7 +54,7 @@ plugins {
     //Version of Kotlin should be 1.3.72+
     kotlin("jvm") version "1.3.72" apply true
 
-    id("io.kotless") version "0.1.4" apply true
+    id("io.kotless") version "0.1.5" apply true
 }
 ```
 
@@ -67,13 +67,13 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.4")
+    implementation("io.kotless", "lang", "0.1.5")
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.3.2)
-    //implementation("io.kotless", "ktor-lang", "0.1.4")
+    //implementation("io.kotless", "ktor-lang", "0.1.5")
 
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 2.3.0.RELEASE)
-    //implementation("io.kotless", "spring-boot-lang", "0.1.4")
+    //implementation("io.kotless", "spring-boot-lang", "0.1.5")
 }
 ```
 
@@ -180,11 +180,11 @@ Kotless is able to deploy existing Spring Boot or Ktor application to AWS server
 need to set up plugin and replace existing dependency with appropriate Kotless DSL.
 
 For **Ktor**, you should replace existing engine (e.g. `implementation("io.ktor", "ktor-server-netty", "1.3.2")`) 
-with `implementation("io.kotless", "ktor-lang", "0.1.4")`. Note, that this dependency bundles Ktor of version
+with `implementation("io.kotless", "ktor-lang", "0.1.5")`. Note, that this dependency bundles Ktor of version
 `1.3.2`, so you may need to upgrade other Ktor libraries (like `ktor-html-builder`) to this version.
 
 For **Spring Boot** you should replace starter you use (e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "2.3.0.RELASE)`)
-with `implementation("io.kotless", "spring-boot-lang", "0.1.4")`. Note, that this dependency bundles Spring Boot
+with `implementation("io.kotless", "spring-boot-lang", "0.1.5")`. Note, that this dependency bundles Spring Boot
 of version `2.3.0.RELEASE`, so you also may need to upgrade other Spring Boot libraries to this version.
 
 Once it is done you may hit `deploy` task and make your application serverless. Note, that you still be able to
