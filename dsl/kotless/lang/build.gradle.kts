@@ -9,7 +9,7 @@ dependencies {
     api(project(":dsl:common:lang-common"))
 
     implementation(kotlin("reflect"))
-    implementation("org.reflections", "reflections", "0.9.12")
+    implementation("org.reflections", "reflections", "0.9.11")
 
     implementation("org.slf4j", "slf4j-log4j12", Versions.slf4j)
     implementation("log4j", "log4j", Versions.log4j)
