@@ -51,7 +51,7 @@ data class HttpRequest(
         val stagePath = path.dropLast(resourcePath.length - 1)
 
         @Serializable
-        data class RequestIdentity(val sourceIp: String, val userAgent: String)
+        data class RequestIdentity(val sourceIp: String, val userAgent: String?)
     }
 }
 
