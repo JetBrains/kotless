@@ -38,7 +38,11 @@ object LambdaMergeOptimizer : SchemaOptimizer {
                     if (group.size > 1) {
                         val (_, fst) = group.first()
                         val permissions = group.flatMap { it.value.permissions }.toSet()
-                        val merged = Lambda("merged-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, permissions)
+
+                        val prefix = commonPrefix(group.map { it.value.name })
+                        val mergedName = if (prefix.isEmpty()) "merged" else prefix
+
+                        val merged = Lambda("${mergedName}-${context.getIndexAndIncrement()}", fst.file, fst.entrypoint, fst.config, permissions)
                         group.map { it.key to merged }
                     } else {
                         listOf(group.single().key to group.single().value)
@@ -46,6 +50,10 @@ object LambdaMergeOptimizer : SchemaOptimizer {
                 }.toMap()
             }
         }
+    }
+
+    private fun commonPrefix(items: List<String>): String {
+        return items.reduce { acc, s -> acc.commonPrefixWith(s) }.trimEnd('-')
     }
 
     override fun optimize(schema: Schema, optimization: Optimization, context: OptimizationContext): Schema {
