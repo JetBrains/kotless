@@ -77,9 +77,10 @@ dependencies {
 }
 ```
 
-*Please note that in case you use Ktor or Spring Boot you will need to replace existing in your
-project dependency with special Kotless `*-lang` dependency. Also, after it you will need to align
-version of dependent libraries (like Spring Security) with version bundled in `*-lang`*
+*Please note that in case you use Ktor or Spring Boot you will need to replace existing in your 
+project dependency with special Kotless `*-lang` dependency. Also, after it you will need to align 
+version of dependent libraries (like Spring Security) with version bundled in `*-lang`
+(see this [paragraph](#integration-with-existing-applications))*
 
 This gives you access to DSL interfaces in your code and sets up Lambda dispatcher inside of your
 application.
