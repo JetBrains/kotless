@@ -2,7 +2,6 @@
 
 ## 0.1.*
 * GraalVM as a target platform
-* Support of Azure
 
 ## 0.2.*
 * IDEA plugin
@@ -12,6 +11,7 @@
       specific lambda
 
 ## To discuss
+* Support of Azure Cloud
 * Extension for Cognito authentication
 * Event handlers - functions as handlers for different AWS events
 * DSL libraries for S3, DynamoDB, SSM at least

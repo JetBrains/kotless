@@ -3,6 +3,7 @@ package io.kotless.terraform.provider.aws.resource.route53
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFFile
 import io.kotless.terraform.TFResource
+import io.kotless.utils.withIndent
 
 /**
  * Terraform aws_route53_record resource.
@@ -15,15 +16,14 @@ class Route53Record(id: String) : TFResource(id, "aws_route53_record") {
     var type by text()
     var records by textArray()
 
-    class Alias : HCLEntity() {
+    class Alias : HCLEntity.Inner("alias") {
         var name by text()
         var zone_id by text()
         var evaluate_target_health by bool()
     }
 
-    var alias by entity<Alias>()
     fun alias(configure: Alias.() -> Unit) {
-        alias = Alias().apply(configure)
+        inner(Alias().apply(configure))
     }
 }
 

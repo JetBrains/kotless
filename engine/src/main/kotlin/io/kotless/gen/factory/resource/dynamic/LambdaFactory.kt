@@ -73,7 +73,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
             memory_size = entity.config.memoryMb
             timeout = entity.config.timeoutSec
 
-            source_code_hash = eval(base64sha256(file(obj::source.ref)))
+            source_code_hash = eval(filesha256(obj::source.ref))
 
             role = iam_role::arn.ref
 

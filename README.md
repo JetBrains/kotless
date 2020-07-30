@@ -221,12 +221,12 @@ Including, but not limited to:
 
 * **Lambdas auto-warming** &mdash; Kotless creates schedulers to execute warming sequences to never
   leave your lambdas cold. As a result applications under moderate load are almost not vulnerable to
-  cold-start problem
+  cold-start problem.
 * **Permissions management** &mdash; you can declare which permissions to which AWS resources are
   required for the application via annotations on Kotlin functions, classes or objects. Permissions
   will be granted automatically.
 * **Static resources** &mdash; Kotless will deploy static resources to S3 and set up CDN for them.
-  It may greatly improve response time of your application and is supported for all DSLs
+  It may greatly improve response time of your application and is supported for all DSLs.
 * **Scheduled events** &mdash; Kotless sets up timers to execute `@Scheduled` jobs on schedule;
 * **Terraform extensions** &mdash; Kotless-generated code can be extended by custom Terraform code;
 

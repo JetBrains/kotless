@@ -3,6 +3,7 @@ package io.kotless.terraform.provider.aws.resource.lambda
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFFile
 import io.kotless.terraform.TFResource
+import io.kotless.utils.withIndent
 
 /**
  * Terraform aws_lambda_function resource.
@@ -28,13 +29,12 @@ class LambdaFunction(id: String) : TFResource(id, "aws_lambda_function") {
     var timeout by int()
     var memory_size by int()
 
-    class Environment : HCLEntity() {
+    class Environment : HCLEntity.Inner("environment") {
         var variables by entity<HCLEntity>()
     }
 
-    var environment by entity<Environment>()
     fun environment(configure: Environment.() -> Unit) {
-        environment = Environment().apply(configure)
+        inner(Environment().apply(configure))
     }
 }
 

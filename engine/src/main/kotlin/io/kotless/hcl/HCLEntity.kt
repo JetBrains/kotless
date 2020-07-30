@@ -1,5 +1,6 @@
 package io.kotless.hcl
 
+import io.kotless.utils.withIndent
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
@@ -10,17 +11,28 @@ import kotlin.reflect.jvm.isAccessible
  *
  * HCLEntity not necessarily is [HCLNamed]
  */
-open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), val inner: LinkedHashSet<HCLEntity> = LinkedHashSet(),
-                     open val owner: HCLNamed? = null) : HCLRender {
+open class HCLEntity(
+    val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(),
+    val inner: LinkedHashSet<HCLEntity> = LinkedHashSet(),
+    open val owner: HCLNamed? = null
+) : HCLRender {
     override val renderable: Boolean = true
-    private val renderableFields: Collection<HCLField<*>>
-        get() = fields.filter { it.renderable }
 
-    override fun render(): String = (renderableFields + inner).joinToString(separator = "\n") {
+    override fun render(): String = (fields.filter { it.renderable } + inner).joinToString(separator = "\n") {
         it.render()
     }
 
-    inner class FieldProvider<T : Any, F : HCLField<T>>(val name: String?, val inner: Boolean, val default: T?,
+    open class Inner(protected val tf_name: String) : HCLEntity() {
+        override fun render(): String {
+            return """
+            |${tf_name} {
+            |${super.render().withIndent()}
+            |}
+            """.trimMargin()
+        }
+    }
+
+    inner class FieldProvider<T : Any, F : HCLField<T>>(val name: String?, val inner: Boolean, private val default: T?,
                                                         val getField: (name: String, renderable: Boolean, entity: HCLEntity, value: T?) -> F) {
         operator fun provideDelegate(entity: HCLEntity, property: KProperty<*>): FieldDelegate<T, F> {
             val field = getField(name ?: property.name, inner, entity, default)
@@ -30,7 +42,7 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
     }
 
 
-    class FieldDelegate<T : Any, F : HCLField<T>>(val field: F) : ReadWriteProperty<HCLEntity, T> {
+    class FieldDelegate<T : Any, F : HCLField<T>>(private val field: F) : ReadWriteProperty<HCLEntity, T> {
         val hcl_ref: String by lazy { field.hcl_ref }
 
         override fun getValue(thisRef: HCLEntity, property: KProperty<*>): T = field.value!!
@@ -46,7 +58,7 @@ open class HCLEntity(val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(), v
         }
     }
 
-    fun <T : HCLEntity> inner(entity: T) {
+    fun <T : Inner> inner(entity: T) {
         inner.add(entity)
     }
 

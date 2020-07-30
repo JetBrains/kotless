@@ -11,26 +11,17 @@ import io.kotless.utils.withIndent
  * @see <a href="https://www.terraform.io/docs/providers/aws/d/iam_policy_document.html">aws_iam_policy_document</a>
  */
 class IAMPolicyDocument(id: String) : TFData(id, "aws_iam_policy_document") {
-    class Statement : HCLEntity() {
-        override fun render(): String {
-            return """
-            |statement {
-            |${super.render().withIndent()}
-            |}
-            """.trimMargin()
-        }
-
+    class Statement : HCLEntity.Inner("statement") {
         var effect by text()
         var sid by text()
 
-        class Principals : HCLEntity() {
+        class Principals : HCLEntity.Inner("principals") {
             var identifiers by textArray()
             var type by text()
         }
 
-        var principals by entity<Principals>()
         fun principals(configure: Principals.() -> Unit) {
-            principals = Principals().apply(configure)
+            inner(Principals().apply(configure))
         }
 
         var resources by textArray()

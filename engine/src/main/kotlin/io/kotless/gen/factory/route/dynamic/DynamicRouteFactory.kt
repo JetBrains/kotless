@@ -8,6 +8,7 @@ import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.route.AbstractRouteFactory
+import io.kotless.terraform.functions.link
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_method
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
@@ -30,7 +31,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, D
         val aws_name = context.names.aws(entity.path.parts, entity.method.name).ifBlank { "root_resource" }
 
         val method = api_gateway_method(tf_name) {
-            depends_on = arrayOf(resourceApi.ref)
+            depends_on = arrayOf(link(resourceApi.ref))
 
             rest_api_id = api.rest_api_id
             resource_id = resourceApi.id
@@ -48,7 +49,7 @@ object DynamicRouteFactory : GenerationFactory<Webapp.ApiGateway.DynamicRoute, D
         }
 
         val integration = api_gateway_integration(tf_name) {
-            depends_on = arrayOf(resourceApi.ref)
+            depends_on = arrayOf(link(resourceApi.ref))
 
             rest_api_id = api.rest_api_id
             resource_id = resourceApi.id

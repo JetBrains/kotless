@@ -17,13 +17,12 @@ open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCL
 
     var depends_on by textArray()
 
-    class Lifecycle : HCLEntity() {
+    class Lifecycle : HCLEntity.Inner("lifecycle") {
         var create_before_destroy by bool(default = true)
     }
 
-    var lifecycle by entity<Lifecycle>()
     fun lifecycle(configure: Lifecycle.() -> Unit) {
-        lifecycle = Lifecycle().apply(configure)
+        inner(Lifecycle().apply(configure))
     }
 
     override fun render(): String {

@@ -5,11 +5,15 @@ group = rootProject.group
 version = rootProject.version
 
 plugins {
-    id("io.kotless") version "0.1.5" apply true
+    id("io.kotless") version "0.1.6" apply true
+}
+
+repositories {
+    mavenLocal()
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.5")
+    implementation("io.kotless", "lang", "0.1.6")
 
     implementation(project(":common:site-shared"))
 

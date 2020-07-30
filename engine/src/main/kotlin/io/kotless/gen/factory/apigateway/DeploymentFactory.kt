@@ -8,6 +8,7 @@ import io.kotless.gen.factory.route.static.StaticRouteFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.ref
 import io.kotless.terraform.functions.eval
+import io.kotless.terraform.functions.link
 import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.infra.TFOutput
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
@@ -25,7 +26,7 @@ object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, Deplo
         val dynamics = context.webapp.api.dynamics.map { context.output.get(it, DynamicRouteFactory).integration }
 
         val deployment = api_gateway_deployment(context.names.tf(entity.name)) {
-            depends_on = (statics + dynamics).toTypedArray()
+            depends_on = (statics + dynamics).map { link(it) }.toTypedArray()
 
             rest_api_id = api.rest_api_id
             stage_name = entity.version

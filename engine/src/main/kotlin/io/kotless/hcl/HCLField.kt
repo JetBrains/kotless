@@ -1,6 +1,8 @@
 package io.kotless.hcl
 
+import io.kotless.terraform.functions.isLink
 import io.kotless.terraform.functions.link
+import io.kotless.terraform.functions.unlink
 import io.kotless.utils.withIndent
 
 /** Field of HCL entity */
@@ -24,15 +26,19 @@ class HCLEntityField<T : HCLEntity>(name: String, inner: Boolean, owner: HCLEnti
 
 /** Field with text owned by HCL entity */
 class HCLTextField(name: String, inner: Boolean, owner: HCLEntity, value: String?) : HCLField<String>(name, inner, owner, value) {
+    companion object {
+        fun toText(value: String) = if (isLink(value)) unlink(value) else "\"$value\""
+    }
+
     override fun render(): String {
-        return "$hcl_name = \"$value\""
+        return "$hcl_name = ${toText(value!!)}"
     }
 }
 
 /** Field with text array owned by HCL entity */
 class HCLTextArrayField(name: String, inner: Boolean, owner: HCLEntity, value: Array<String>?) : HCLField<Array<String>>(name, inner, owner, value) {
     override fun render(): String {
-        return "$hcl_name = ${value!!.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }}"
+        return "$hcl_name = ${value!!.joinToString(prefix = "[", postfix = "]") { HCLTextField.toText(it) } }"
     }
 }
 

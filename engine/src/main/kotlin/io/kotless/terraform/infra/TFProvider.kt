@@ -21,10 +21,10 @@ open class TFProvider(private val tf_provider: String) : HCLEntity(), HCLNamed {
     override val owner: HCLNamed?
         get() = this
 
-    class Endpoints(private val urls: Map<String, String>) : HCLEntity() {
+    class Endpoints(private val urls: Map<String, String>) : HCLEntity.Inner("endpoints") {
         override fun render(): String {
             return """
-            |endpoints {
+            |${tf_name} {
             |${urls.entries.joinToString(separator = "\n") { (key, value) -> "$key = \"$value\"" }.withIndent()}
             |}
             """.trimMargin()

@@ -111,9 +111,9 @@ class KotlessConfig(project: Project) : Serializable {
     class Terraform : Serializable {
         /**
          * Version of Terraform to use.
-         * By default, `0.11.14`
+         * By default, `0.12.29`
          */
-        var version: String = "0.11.14"
+        var version: String = "0.12.29"
 
         /** AWS profile from a local machine to use for Terraform operations authentication */
         lateinit var profile: String
@@ -151,7 +151,7 @@ class KotlessConfig(project: Project) : Serializable {
         @KotlessDSLTag
         class AWSProvider : Serializable {
             /** Version of AWS provider to use */
-            var version = "1.60.0"
+            var version = "2.70.0"
 
             var profile: String? = null
 
