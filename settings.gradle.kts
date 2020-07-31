@@ -7,9 +7,9 @@ include(":engine")
 include(":dsl:common:lang-common")
 include(":dsl:common:lang-parser-common")
 
-include(":dsl:kotless:lang")
-include(":dsl:kotless:lang-local")
-include(":dsl:kotless:lang-parser")
+include(":dsl:kotless:kotless-lang")
+include(":dsl:kotless:kotless-lang-local")
+include(":dsl:kotless:kotless-lang-parser")
 
 include(":dsl:spring:spring-boot-lang")
 include(":dsl:spring:spring-boot-lang-local")

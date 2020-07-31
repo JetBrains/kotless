@@ -11,7 +11,7 @@ dependencies {
     api(project(":schema"))
     api(project(":dsl:common:lang-common"))
 
-    implementation(project(":dsl:kotless:lang"))
+    implementation(project(":dsl:kotless:kotless-lang"))
 }
 
 publishJar {

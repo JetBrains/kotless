@@ -29,7 +29,7 @@ dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
 
-    implementation(project(":dsl:kotless:lang-parser"))
+    implementation(project(":dsl:kotless:kotless-lang-parser"))
     implementation(project(":dsl:ktor:ktor-lang-parser"))
     implementation(project(":dsl:spring:spring-lang-parser"))
     implementation(project(":engine"))
