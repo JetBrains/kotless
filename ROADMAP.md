@@ -1,6 +1,8 @@
 # Kotless roadmap
 
 ## 0.1.*
+* Chat bot examples
+* Support of GCP
 * GraalVM as a target platform
 * Support of Azure
 
