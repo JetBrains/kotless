@@ -3,7 +3,6 @@ package io.kotless.terraform.provider.aws.data.iam
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFData
 import io.kotless.terraform.TFFile
-import io.kotless.utils.withIndent
 
 /**
  * Terraform aws_iam_policy_document data.

@@ -3,7 +3,6 @@ package io.kotless.terraform.provider.aws.resource.route53
 import io.kotless.hcl.HCLEntity
 import io.kotless.terraform.TFFile
 import io.kotless.terraform.TFResource
-import io.kotless.utils.withIndent
 
 /**
  * Terraform aws_route53_record resource.
