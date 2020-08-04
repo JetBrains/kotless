@@ -35,7 +35,7 @@ class ExampleProjectTests(val task: String, val time: IntRange) {
             .withDebug(true)
             .withProjectDir(File("../../examples"))
 
-        runner.withArguments("clean").build()
+        runner.withArguments("build").build()
 
         val total = measureTimeMillis {
             runner.withArguments(task).build()
