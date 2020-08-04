@@ -1,16 +1,16 @@
 package io.kotless.gen.factory.route53
 
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.apigateway.DomainFactory
 import io.kotless.terraform.provider.aws.resource.route53.route53_record
 
-object RecordFactory : GenerationFactory<Webapp.Route53, Unit> {
-    override fun mayRun(entity: Webapp.Route53, context: GenerationContext) = context.output.check(entity, ZoneFactory)
+object RecordFactory : GenerationFactory<Application.Route53, Unit> {
+    override fun mayRun(entity: Application.Route53, context: GenerationContext) = context.output.check(entity, ZoneFactory)
         && context.output.check(context.webapp.api, DomainFactory)
 
-    override fun generate(entity: Webapp.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
+    override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val zone = context.output.get(entity, ZoneFactory)
         val domain = context.output.get(context.webapp.api, DomainFactory)
 

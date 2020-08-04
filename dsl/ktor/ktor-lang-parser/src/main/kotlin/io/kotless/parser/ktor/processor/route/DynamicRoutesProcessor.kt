@@ -1,7 +1,7 @@
 package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
-import io.kotless.Webapp.Events
+import io.kotless.Application.Events
 import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.ktor.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -12,6 +12,7 @@ import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.psi.*
 import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
 import io.kotless.parser.utils.reversed
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -54,7 +55,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
-                    context.routes.register(Webapp.ApiGateway.DynamicRoute(method, path, key))
+                    context.routes.register(Application.ApiGateway.DynamicRoute(method, path, key))
 
                     if (context.config.optimization.autowarm.enable) {
                         context.events.register(

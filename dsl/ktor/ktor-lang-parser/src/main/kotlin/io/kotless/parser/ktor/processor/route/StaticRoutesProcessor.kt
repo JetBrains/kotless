@@ -10,6 +10,7 @@ import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.*
 import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
 import io.kotless.parser.utils.reversed
+import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
 import io.ktor.http.ContentType
 import io.ktor.http.defaultForFile
@@ -132,6 +133,6 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         val resource = StaticResource(URIPath("static", path), file, mime)
 
         context.resources.register(key, resource)
-        context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
+        context.routes.register(Application.ApiGateway.StaticRoute(path, key))
     }
 }

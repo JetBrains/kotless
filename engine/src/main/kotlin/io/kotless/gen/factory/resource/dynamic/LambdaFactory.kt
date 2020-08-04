@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.resource.dynamic
 
-import io.kotless.Lambda
+import io.kotless.resource.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory

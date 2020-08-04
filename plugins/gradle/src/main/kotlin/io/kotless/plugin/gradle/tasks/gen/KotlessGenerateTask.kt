@@ -8,6 +8,7 @@ import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.dsl.toSchema
 import io.kotless.plugin.gradle.utils.*
+import io.kotless.resource.Lambda
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
@@ -93,15 +94,15 @@ internal open class KotlessGenerateTask : DefaultTask() {
             DSLType.SpringBoot -> SpringParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
         }
 
-        val webapp = Webapp(
+        val webapp = Application(
             route53 = myWebapp.route53?.toSchema(),
-            api = Webapp.ApiGateway(
+            api = Application.ApiGateway(
                 name = project.name,
                 deployment = myWebapp.deployment.toSchema(project.path),
                 dynamics = parsed.routes.dynamics,
                 statics = parsed.routes.statics
             ),
-            events = Webapp.Events(parsed.events.scheduled)
+            events = Application.Events(parsed.events.scheduled)
         )
 
         return Schema(

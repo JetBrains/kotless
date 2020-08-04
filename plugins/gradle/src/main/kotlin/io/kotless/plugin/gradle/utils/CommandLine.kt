@@ -14,7 +14,7 @@ internal object CommandLine {
             Os.isFamily(Os.FAMILY_WINDOWS) -> "windows_amd64"
             Os.isFamily(Os.FAMILY_MAC) -> "darwin_amd64"
             Os.isFamily(Os.FAMILY_UNIX) -> "linux_amd64"
-            else -> error("Unknown operating system. Probably your system is not supported.")
+            else -> error("Unknown operating system. Probably your system is not supported by Terraform.")
         }
     }
 

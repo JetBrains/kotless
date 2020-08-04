@@ -1,5 +1,7 @@
 package io.kotless
 
+import io.kotless.resource.Lambda
+import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.Visitable
 
@@ -10,7 +12,7 @@ import io.kotless.utils.Visitable
  *
  * @param route53 alias to ApiGateway, if present
  */
-data class Webapp(val route53: Route53?, val api: ApiGateway, val events: Events) : Visitable {
+data class Application(val route53: Route53?, val api: ApiGateway, val events: Events) : Visitable {
     /**
      * Route53 CNAME alias
      *

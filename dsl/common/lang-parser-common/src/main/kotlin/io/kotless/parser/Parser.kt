@@ -1,9 +1,9 @@
 package io.kotless.parser
 
 import io.kotless.KotlessConfig
-import io.kotless.Lambda
-import io.kotless.StaticResource
-import io.kotless.Webapp
+import io.kotless.resource.Lambda
+import io.kotless.resource.StaticResource
+import io.kotless.Application
 import io.kotless.parser.processor.Processor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.utils.psi.analysis.EnvironmentManager
@@ -21,9 +21,9 @@ import java.io.File
  */
 open class Parser(private val processors: Set<Processor<*>>) {
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
-        data class Routes(val dynamics: Set<Webapp.ApiGateway.DynamicRoute>, val statics: Set<Webapp.ApiGateway.StaticRoute>)
+        data class Routes(val dynamics: Set<Application.ApiGateway.DynamicRoute>, val statics: Set<Application.ApiGateway.StaticRoute>)
         data class Resources(val dynamics: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>)
-        data class Events(val scheduled: Set<Webapp.Events.Scheduled>)
+        data class Events(val scheduled: Set<Application.Events.Scheduled>)
     }
 
     fun parse(sources: Set<File>, resources: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {

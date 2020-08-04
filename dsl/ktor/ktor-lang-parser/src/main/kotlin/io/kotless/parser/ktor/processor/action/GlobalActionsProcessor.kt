@@ -1,6 +1,6 @@
 package io.kotless.parser.ktor.processor.action
 
-import io.kotless.Permission
+import io.kotless.permission.Permission
 import io.kotless.dsl.ktor.Kotless
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor

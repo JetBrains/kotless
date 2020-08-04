@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.resource.static
 
-import io.kotless.StaticResource
+import io.kotless.resource.StaticResource
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.hcl.ref

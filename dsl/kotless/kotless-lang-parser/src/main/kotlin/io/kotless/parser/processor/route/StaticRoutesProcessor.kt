@@ -1,8 +1,8 @@
 package io.kotless.parser.processor.route
 
-import io.kotless.StaticResource
+import io.kotless.resource.StaticResource
 import io.kotless.URIPath
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -48,7 +48,7 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             val resource = StaticResource(URIPath("static", path), file, mime)
 
             context.resources.register(key, resource)
-            context.routes.register(Webapp.ApiGateway.StaticRoute(path, key))
+            context.routes.register(Application.ApiGateway.StaticRoute(path, key))
         }
     }
 }

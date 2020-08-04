@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.InternalAPI
-import io.kotless.Lambda.Config.Runtime
+import io.kotless.resource.Lambda.Config.Runtime
 import io.kotless.dsl.config.KotlessAppConfig
 import org.gradle.api.Project
 import java.io.Serializable

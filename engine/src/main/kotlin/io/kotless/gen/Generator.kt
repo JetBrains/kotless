@@ -16,25 +16,27 @@ import io.kotless.gen.factory.route.static.StaticRouteFactory
 import io.kotless.gen.factory.route53.CertificateFactory
 import io.kotless.gen.factory.route53.RecordFactory
 import io.kotless.gen.factory.route53.ZoneFactory
+import io.kotless.resource.Lambda
+import io.kotless.resource.StaticResource
 import io.kotless.terraform.TFFile
 import kotlin.reflect.KClass
 
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
-        Webapp::class to setOf(InfoFactory, StaticRoleFactory),
+        Application::class to setOf(InfoFactory, StaticRoleFactory),
         KotlessConfig.Terraform::class to setOf(TFConfigFactory, TFProvidersFactory),
 
-        Webapp.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
-        Webapp.ApiGateway.Deployment::class to setOf(DeploymentFactory),
-        Webapp.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
+        Application.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
+        Application.ApiGateway.Deployment::class to setOf(DeploymentFactory),
+        Application.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(LambdaFactory),
 
-        Webapp.Events.Scheduled::class to setOf(ScheduledEventsFactory),
+        Application.Events.Scheduled::class to setOf(ScheduledEventsFactory),
 
-        Webapp.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
-        Webapp.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)
+        Application.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
+        Application.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)
     )
 
     fun generate(schema: Schema): Set<TFFile> {

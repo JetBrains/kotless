@@ -1,6 +1,6 @@
 package io.kotless.parser.processor.action
 
-import io.kotless.Permission
+import io.kotless.permission.Permission
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.lang.http.HttpRequestInterceptor

@@ -29,8 +29,8 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
     }
 }
 
-internal fun Webapp.Route53.toSchema(): io.kotless.Webapp.Route53 = io.kotless.Webapp.Route53(zone, alias, certificate)
-internal fun Webapp.Deployment.toSchema(path: String): io.kotless.Webapp.ApiGateway.Deployment = io.kotless.Webapp.ApiGateway.Deployment(
+internal fun Webapp.Route53.toSchema(): io.kotless.Application.Route53 = io.kotless.Application.Route53(zone, alias, certificate)
+internal fun Webapp.Deployment.toSchema(path: String): io.kotless.Application.ApiGateway.Deployment = io.kotless.Application.ApiGateway.Deployment(
     name ?: path.trim(':').let { if (it.isBlank()) "root" else it.replace(':', '_') },
     version
 )

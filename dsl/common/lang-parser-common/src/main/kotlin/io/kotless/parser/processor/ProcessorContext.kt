@@ -1,9 +1,9 @@
 package io.kotless.parser.processor
 
 import io.kotless.KotlessConfig
-import io.kotless.Lambda
-import io.kotless.StaticResource
-import io.kotless.Webapp
+import io.kotless.resource.Lambda
+import io.kotless.resource.StaticResource
+import io.kotless.Application
 import io.kotless.utils.TypedStorage
 import java.io.File
 
@@ -41,31 +41,31 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
 
     val resources = Resources()
 
-    class Routes(private val myDynamics: MutableSet<Webapp.ApiGateway.DynamicRoute> = HashSet(),
-                 private val myStatics: MutableSet<Webapp.ApiGateway.StaticRoute> = HashSet()) {
-        val dynamics: Set<Webapp.ApiGateway.DynamicRoute>
+    class Routes(private val myDynamics: MutableSet<Application.ApiGateway.DynamicRoute> = HashSet(),
+                 private val myStatics: MutableSet<Application.ApiGateway.StaticRoute> = HashSet()) {
+        val dynamics: Set<Application.ApiGateway.DynamicRoute>
             get() = myDynamics.toSet()
 
-        val statics: Set<Webapp.ApiGateway.StaticRoute>
+        val statics: Set<Application.ApiGateway.StaticRoute>
             get() = myStatics.toSet()
 
 
-        fun register(dynamic: Webapp.ApiGateway.DynamicRoute) {
+        fun register(dynamic: Application.ApiGateway.DynamicRoute) {
             myDynamics.add(dynamic)
         }
 
-        fun register(static: Webapp.ApiGateway.StaticRoute) {
+        fun register(static: Application.ApiGateway.StaticRoute) {
             myStatics.add(static)
         }
     }
 
     val routes = Routes()
 
-    class Events(private val myScheduled: MutableSet<Webapp.Events.Scheduled> = HashSet()) {
-        val scheduled: Set<Webapp.Events.Scheduled>
+    class Events(private val myScheduled: MutableSet<Application.Events.Scheduled> = HashSet()) {
+        val scheduled: Set<Application.Events.Scheduled>
             get() = myScheduled.toSet()
 
-        fun register(scheduled: Webapp.Events.Scheduled) {
+        fun register(scheduled: Application.Events.Scheduled) {
             myScheduled.add(scheduled)
         }
     }

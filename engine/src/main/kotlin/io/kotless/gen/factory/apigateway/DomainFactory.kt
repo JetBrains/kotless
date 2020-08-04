@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.apigateway
 
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.route53.CertificateFactory
@@ -10,16 +10,16 @@ import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_base_pa
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_domain_name
 
 
-object DomainFactory : GenerationFactory<Webapp.ApiGateway, DomainFactory.Output> {
+object DomainFactory : GenerationFactory<Application.ApiGateway, DomainFactory.Output> {
     data class Output(val domain_name: String, val zone_id: String)
 
-    override fun mayRun(entity: Webapp.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
+    override fun mayRun(entity: Application.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
         && context.webapp.route53 != null
         && context.output.check(context.webapp.route53!!, ZoneFactory)
         && context.output.check(context.webapp.route53!!, CertificateFactory)
         && context.output.check(context.webapp.api.deployment, DeploymentFactory)
 
-    override fun generate(entity: Webapp.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+    override fun generate(entity: Application.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val zone = context.output.get(context.webapp.route53!!, ZoneFactory)
         val certificate = context.output.get(context.webapp.route53!!, CertificateFactory)
         val api = context.output.get(context.webapp.api, RestAPIFactory)

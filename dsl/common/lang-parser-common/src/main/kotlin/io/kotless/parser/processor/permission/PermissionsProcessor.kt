@@ -1,7 +1,7 @@
 package io.kotless.parser.processor.permission
 
 import io.kotless.AwsResource
-import io.kotless.Permission
+import io.kotless.permission.Permission
 import io.kotless.PermissionLevel
 import io.kotless.dsl.lang.DynamoDBTable
 import io.kotless.dsl.lang.S3Bucket

@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.route.static
 
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
@@ -9,12 +9,12 @@ import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
 import io.kotless.terraform.provider.aws.resource.iam.iam_role
 import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
 
-object StaticRoleFactory : GenerationFactory<Webapp, StaticRoleFactory.Output> {
+object StaticRoleFactory : GenerationFactory<Application, StaticRoleFactory.Output> {
     data class Output(val role_arn: String, val role_name: String)
 
-    override fun mayRun(entity: Webapp, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
+    override fun mayRun(entity: Application, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
-    override fun generate(entity: Webapp, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+    override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
 

@@ -1,5 +1,7 @@
-package io.kotless
+package io.kotless.resource
 
+import io.kotless.MimeType
+import io.kotless.URIPath
 import io.kotless.utils.Visitable
 import java.io.File
 

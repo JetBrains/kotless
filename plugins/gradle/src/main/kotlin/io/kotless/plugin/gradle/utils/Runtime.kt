@@ -1,6 +1,6 @@
 package io.kotless.plugin.gradle.utils
 
-import io.kotless.Lambda.Config.Runtime
+import io.kotless.resource.Lambda.Config.Runtime
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile

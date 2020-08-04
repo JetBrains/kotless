@@ -1,9 +1,9 @@
 package io.kotless.parser.spring.processor.route
 
-import io.kotless.Lambda
+import io.kotless.resource.Lambda
 import io.kotless.ScheduledEventType
-import io.kotless.Webapp.ApiGateway
-import io.kotless.Webapp.Events
+import io.kotless.Application.ApiGateway
+import io.kotless.Application.Events
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.config.EntrypointProcessor

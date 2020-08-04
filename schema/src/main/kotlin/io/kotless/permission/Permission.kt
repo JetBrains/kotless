@@ -1,4 +1,7 @@
-package io.kotless
+package io.kotless.permission
+
+import io.kotless.AwsResource
+import io.kotless.PermissionLevel
 
 /**
  * Permission to act upon other resource

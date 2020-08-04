@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.apigateway
 
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
@@ -13,14 +13,14 @@ import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.infra.TFOutput
 import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
 
-object DeploymentFactory : GenerationFactory<Webapp.ApiGateway.Deployment, DeploymentFactory.Output> {
+object DeploymentFactory : GenerationFactory<Application.ApiGateway.Deployment, DeploymentFactory.Output> {
     data class Output(val stage_name: String)
 
-    override fun mayRun(entity: Webapp.ApiGateway.Deployment, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
+    override fun mayRun(entity: Application.ApiGateway.Deployment, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
         && context.webapp.api.dynamics.all { context.output.check(it, DynamicRouteFactory) }
         && context.webapp.api.statics.all { context.output.check(it, StaticRouteFactory) }
 
-    override fun generate(entity: Webapp.ApiGateway.Deployment, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+    override fun generate(entity: Application.ApiGateway.Deployment, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val api = context.output.get(context.webapp.api, RestAPIFactory)
         val statics = context.webapp.api.statics.map { context.output.get(it, StaticRouteFactory).integration }
         val dynamics = context.webapp.api.dynamics.map { context.output.get(it, DynamicRouteFactory).integration }

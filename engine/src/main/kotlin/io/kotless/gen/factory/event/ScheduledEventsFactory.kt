@@ -1,6 +1,6 @@
 package io.kotless.gen.factory.event
 
-import io.kotless.Webapp
+import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
@@ -9,12 +9,12 @@ import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_ru
 import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
 
-object ScheduledEventsFactory : GenerationFactory<Webapp.Events.Scheduled, Unit> {
-    override fun mayRun(entity: Webapp.Events.Scheduled, context: GenerationContext): Boolean {
+object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, Unit> {
+    override fun mayRun(entity: Application.Events.Scheduled, context: GenerationContext): Boolean {
         return context.output.check(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
     }
 
-    override fun generate(entity: Webapp.Events.Scheduled, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
+    override fun generate(entity: Application.Events.Scheduled, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {
         val lambda = context.output.get(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
 
         val event_rule = cloudwatch_event_rule(context.names.tf(entity.fqId)) {

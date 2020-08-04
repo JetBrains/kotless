@@ -1,6 +1,6 @@
 package io.kotless.parser
 
-import io.kotless.Lambda
+import io.kotless.resource.Lambda
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.utils.psi.analysis.EnvironmentManager
 import io.kotless.parser.utils.psi.analysis.ParseUtil

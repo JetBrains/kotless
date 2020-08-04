@@ -1,8 +1,8 @@
 package io.kotless.parser.processor.events
 
-import io.kotless.Lambda
+import io.kotless.resource.Lambda
 import io.kotless.ScheduledEventType
-import io.kotless.Webapp.Events
+import io.kotless.Application.Events
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
