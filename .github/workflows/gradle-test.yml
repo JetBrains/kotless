@@ -18,8 +18,8 @@ jobs:
 
       - name: Test with Gradle
         run: |
-        ./gradlew clean build -x test publishToMavenLocal
-        ./gradlew clean build test
+          ./gradlew clean build -x test publishToMavenLocal
+          ./gradlew clean build test
         continue-on-error: true
 
       - name: Upload test reports
