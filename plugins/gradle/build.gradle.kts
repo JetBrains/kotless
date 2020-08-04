@@ -55,11 +55,19 @@ tasks.withType<Test> {
         includeTags = setOf("unit")
         excludeTags = setOf("integration")
     }
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.create("integration", Test::class.java) {
     useJUnitPlatform {
         excludeTags = setOf("unit")
         includeTags = setOf("integration")
+    }
+
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }

@@ -18,8 +18,8 @@ jobs:
 
       - name: Integration Tests
         run: |
-          ./gradlew publishToMavenLocal
-          ./gradlew integration
+          ./gradlew publishToMavenLocal --console=plain
+          ./gradlew integration --console=plain
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v2
