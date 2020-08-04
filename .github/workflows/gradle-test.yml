@@ -16,11 +16,10 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Publish plugin to MavenLocal
-        run: ./gradlew clean build publishToMavenLocal -x test
-
       - name: Test with Gradle
-        run: ./gradlew clean build test
+        run: |
+        ./gradlew clean build -x test publishToMavenLocal
+        ./gradlew clean build test
         continue-on-error: true
 
       - name: Upload test reports

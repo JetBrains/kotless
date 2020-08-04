@@ -17,4 +17,4 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Gradle
-        run: ./gradlew clean build detekt
+        run: ./gradlew clean build detekt -x test
