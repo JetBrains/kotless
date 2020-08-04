@@ -11,7 +11,7 @@ import kotlin.system.measureTimeMillis
 
 class ExampleProjectTests {
     companion object {
-        private val time = IntRange(500, 3000)
+        private val time = IntRange(250, 5000)
 
         @Suppress("unused")
         @JvmStatic
