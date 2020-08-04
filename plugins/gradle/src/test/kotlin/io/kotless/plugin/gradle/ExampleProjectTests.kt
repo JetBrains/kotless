@@ -1,35 +1,34 @@
 package io.kotless.plugin.gradle
 
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-@RunWith(Parameterized::class)
-class ExampleProjectTests(val task: String, val time: IntRange) {
+class ExampleProjectTests {
     companion object {
         private val time = IntRange(500, 3000)
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}: {1}")
         fun data() = listOf(
-            arrayOf("kotless:site:generate", time),
-            arrayOf("kotless:shortener:generate", time),
+            Arguments.of("kotless:site:generate", time),
+            Arguments.of("kotless:shortener:generate", time),
 
-            arrayOf("ktor:site:generate", time),
-            arrayOf("ktor:shortener:generate", time),
+            Arguments.of("ktor:site:generate", time),
+            Arguments.of("ktor:shortener:generate", time),
 
-            arrayOf("spring:site:generate", time),
-            arrayOf("spring:shortener:generate", time)
+            Arguments.of("spring:site:generate", time),
+            Arguments.of("spring:shortener:generate", time)
         )
     }
 
 
-    @Test
-    fun `test generate time site example`() {
+    @MethodSource("data")
+    @ParameterizedTest(name = "task {0} in ms range {1}")
+    fun `test generate time site example`(task: String, time: IntRange) {
         val runner = GradleRunner
             .create()
             .withDebug(true)
@@ -43,7 +42,7 @@ class ExampleProjectTests(val task: String, val time: IntRange) {
 
         println(total)
 
-        Assert.assertTrue(total in time)
+        Assertions.assertTrue(total in time)
     }
 
 }

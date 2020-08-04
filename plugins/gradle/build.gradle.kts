@@ -45,11 +45,13 @@ dependencies {
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
 
     testImplementation(gradleTestKit())
-    testImplementation("junit", "junit", "4.12")
+    testCompile("org.junit.jupiter", "junit-jupiter-api", "5.6.0")
+    testCompile("org.junit.jupiter", "junit-jupiter-params", "5.6.0")
+    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.6.0")
 }
 
 tasks.withType<Test> {
-    useJUnit()
+    useJUnitPlatform()
 
     testLogging {
         events("passed", "skipped", "failed")
