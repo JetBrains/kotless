@@ -28,6 +28,7 @@ publishPlugin {
 dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
+    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.3.72")
 
     implementation(project(":dsl:kotless:kotless-lang-parser"))
     implementation(project(":dsl:ktor:ktor-lang-parser"))

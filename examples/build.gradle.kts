@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless.examples"
-version = "0.1.5"
+version = "0.1.6"
 
 plugins {
     id("tanvd.kosogor") version "1.0.9" apply true
@@ -15,12 +15,13 @@ subprojects {
     }
 
     repositories {
+        mavenLocal()
         jcenter()
     }
 
     tasks.withType<KotlinJvmCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "11"
             languageVersion = "1.3"
             apiVersion = "1.3"
         }

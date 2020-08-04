@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.InternalAPI
+import io.kotless.Lambda.Config.Runtime
 import io.kotless.dsl.config.KotlessAppConfig
 import org.gradle.api.Project
 import java.io.Serializable
@@ -21,6 +22,9 @@ class Webapp(project: Project) : Serializable {
 
         /** Environment that should be additionally passed to lambda */
         val environment: HashMap<String, String> = HashMap()
+
+        /** Runtime used to start Lambdas. By default, would be equal to the lowest compatible version.  */
+        var runtime: Runtime? = null
 
         @OptIn(InternalAPI::class)
         internal val mergedEnvironment: Map<String, String>

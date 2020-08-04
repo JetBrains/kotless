@@ -11,6 +11,7 @@ import io.kotless.plugin.gradle.utils.*
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
+import org.gradle.api.JavaVersion
 import org.gradle.api.tasks.*
 import org.gradle.api.tasks.bundling.AbstractArchiveTask
 import org.gradle.kotlin.dsl.get
@@ -34,6 +35,10 @@ internal open class KotlessGenerateTask : DefaultTask() {
     @get:Input
     val myKotless: KotlessDSL
         get() = project.kotless
+
+    @get:Input
+    val myTargetVersion: JavaVersion?
+        get() = project.getTargetVersion()
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -71,7 +76,16 @@ internal open class KotlessGenerateTask : DefaultTask() {
 
         val jar = (project.tasks[myKotless.config.myArchiveTask] as AbstractArchiveTask).archiveFile.get().asFile
 
-        val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, myWebapp.lambda.mergedEnvironment)
+        val target = myTargetVersion ?: error("Unable to find Kotlin compile-target version.")
+
+        val runtime = myWebapp.lambda.runtime
+            ?: project.getRuntimeVersion(target) ?: error("Kotless was unable to deduce Lambda Runtime for $target. Please, set it directly.")
+
+        require(runtime.isCompatible(target)) {
+            "Stated in Gradle DSL runtime $runtime is not compatible with current compile target $target"
+        }
+
+        val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, runtime, myWebapp.lambda.mergedEnvironment)
 
         val parsed = when (myKotless.config.dsl.typeOrDefault) {
             DSLType.Kotless -> KotlessParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))

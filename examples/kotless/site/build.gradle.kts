@@ -8,10 +8,6 @@ plugins {
     id("io.kotless") version "0.1.6" apply true
 }
 
-repositories {
-    mavenLocal()
-}
-
 dependencies {
     implementation("io.kotless", "lang", "0.1.6")
 

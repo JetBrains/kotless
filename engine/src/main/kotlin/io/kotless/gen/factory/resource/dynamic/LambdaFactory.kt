@@ -68,7 +68,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
             s3_key = obj.key
 
             handler = entity.entrypoint.qualifiedName
-            runtime = "java8"
+            runtime = entity.config.runtime.aws
 
             memory_size = entity.config.memoryMb
             timeout = entity.config.timeoutSec
@@ -91,8 +91,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         }
 
         return GenerationFactory.GenerationResult(
-            Output(lambda::arn.ref, lambda::function_name.ref),
-            obj, lambda, assume, iam_role, policy_document, role_policy
+            Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy
         )
     }
 }
