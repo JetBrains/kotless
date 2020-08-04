@@ -45,15 +45,21 @@ dependencies {
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
 
     testImplementation(gradleTestKit())
-    testCompile("org.junit.jupiter", "junit-jupiter-api", "5.6.0")
-    testCompile("org.junit.jupiter", "junit-jupiter-params", "5.6.0")
-    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.6.0")
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.0")
+    testImplementation("org.junit.jupiter", "junit-jupiter-params", "5.6.0")
+    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.6.0")
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeTags = setOf("unit")
+        excludeTags = setOf("integration")
+    }
+}
 
-    testLogging {
-        events("passed", "skipped", "failed")
+tasks.create("integration", Test::class.java) {
+    useJUnitPlatform {
+        excludeTags = setOf("unit")
+        includeTags = setOf("integration")
     }
 }

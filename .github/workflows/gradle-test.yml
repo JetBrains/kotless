@@ -16,13 +16,13 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Test with Gradle
+      - name: Integration Tests
         run: |
-          ./gradlew clean build -x test publishToMavenLocal
-          ./gradlew clean build test
+          ./gradlew publishToMavenLocal
+          ./gradlew integration
         continue-on-error: true
 
-      - name: Upload test reports
+      - name: Upload Test Report
         uses: actions/upload-artifact@v2
         with:
           name: test-report
