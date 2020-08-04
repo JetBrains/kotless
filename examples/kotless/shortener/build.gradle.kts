@@ -10,7 +10,7 @@ plugins {
 
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.6")
+    implementation("io.kotless", "kotless-lang", "0.1.6")
 
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")

@@ -53,7 +53,7 @@ class KotlessConfig(project: Project) : Serializable {
             require(types.isNotEmpty()) {
                 """
                 |Kotless was unable to determine DSL type of application.
-                |Either dependency with one of the DSLs (`lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually.
+                |Either dependency with one of the DSLs (`kotless-lang`, `ktor-lang`, `spring-boot-lang`) should be added, or DSL should be specified manually.
                 |""".trimMargin()
             }
             require(types.size <= 1) {
