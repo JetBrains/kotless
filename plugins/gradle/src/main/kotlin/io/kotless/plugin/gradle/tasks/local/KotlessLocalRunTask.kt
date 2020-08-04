@@ -49,7 +49,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
         val (type, dependency) = dsl.entries.single()
 
         dependencies {
-            myLocal("io.kotless", "${type.lib}-local", dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
+            myLocal("io.kotless", type.descriptor.localLibrary, dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
         }
 
         tasks.myGetByName<JavaExec>("run").apply {

@@ -14,7 +14,7 @@ internal object Dependencies {
     }
 
     fun hasDependency(project: Project, type: DSLType) = getDependency(project, type) != null
-    fun getDependency(project: Project, type: DSLType) = getDependency(project, type.lib)
+    fun getDependency(project: Project, type: DSLType) = getDependency(project, type.descriptor.apiLibrary)
 
     fun getDependencies(project: Project): Set<File> {
         return getConfiguration(project).files.toSet()

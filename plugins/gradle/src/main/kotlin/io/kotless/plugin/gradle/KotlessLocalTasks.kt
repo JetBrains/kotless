@@ -1,7 +1,6 @@
 package io.kotless.plugin.gradle
 
 import io.kotless.AwsResource
-import io.kotless.DSLType
 import io.kotless.InternalAPI
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.gen.KotlessLocalGenerateTask
@@ -10,6 +9,7 @@ import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
 import io.kotless.plugin.gradle.utils.AWSUtils
 import io.kotless.plugin.gradle.utils.Groups
+import io.kotless.plugin.gradle.utils.descriptor
 import io.kotless.plugin.gradle.utils.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -26,11 +26,7 @@ internal object KotlessLocalTasks {
         with(tasks) {
             val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)
 
-            convention.getPlugin<ApplicationPluginConvention>().mainClassName = when (kotless.config.dsl.typeOrDefault) {
-                DSLType.Kotless -> "io.kotless.local.MainKt"
-                DSLType.Ktor -> "io.kotless.local.ktor.MainKt"
-                DSLType.SpringBoot -> "io.kotless.local.spring.MainKt"
-            }
+            convention.getPlugin<ApplicationPluginConvention>().mainClassName = kotless.config.dsl.typeOrDefault.descriptor.localEntryPoint
 
             if (kotless.extensions.local.useAWSEmulation) {
                 setupLocalWithAWSEmulation(local, download)

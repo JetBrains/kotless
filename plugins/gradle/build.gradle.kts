@@ -28,17 +28,17 @@ publishPlugin {
 dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
-    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.3.72")
+    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", Versions.kotlin)
 
     implementation(project(":dsl:kotless:kotless-lang-parser"))
     implementation(project(":dsl:ktor:ktor-lang-parser"))
     implementation(project(":dsl:spring:spring-lang-parser"))
     implementation(project(":engine"))
 
-    implementation("com.github.jengelman.gradle.plugins", "shadow", "5.2.0")
+    implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
 
     implementation("com.amazonaws", "aws-java-sdk-core", Versions.aws)
-    implementation("org.testcontainers", "localstack", "1.14.2")
+    implementation("org.testcontainers", "localstack", "1.14.3")
 
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
