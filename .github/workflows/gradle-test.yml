@@ -17,7 +17,7 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Publish plugin to MavenLocal
-        run: ./gradlew clean build publishToMavenLocal
+        run: ./gradlew clean build publishToMavenLocal -x test
 
       - name: Test with Gradle
         run: ./gradlew clean build test
