@@ -14,8 +14,6 @@ class ExamplesTerraformTests {
         private fun actualPrefix(project: String) = "build/$project/kotless-gen/deploy"
         private const val expectedPrefix = "/examples"
 
-        private val time = IntRange(250, 5000)
-
         @Suppress("unused")
         @JvmStatic
         fun data() = listOf(
@@ -36,25 +34,19 @@ class ExamplesTerraformTests {
     @ParameterizedTest(name = "task {0} in ms range {1}")
     fun `test generate time site example`(dsl: String, project: String) {
         val task = "$dsl:$project:generate"
+        val absolutePath = File("../../examples")
 
         val runner = GradleRunner
             .create()
             .withDebug(true)
-            .withProjectDir(File("../../examples"))
+            .withProjectDir(absolutePath)
 
         runner.withArguments(task).build()
 
         val actual = File(runner.projectDir, "${actualPrefix(project)}/$project.tf")
-        val expected = "$expectedPrefix/$dsl/$project.tf"
+        val expected = Resources.read("$expectedPrefix/$dsl/$project.tf").replace("{root}", absolutePath.canonicalPath)
 
-        val resources = File("/home/tanvd/work/kotless/plugins/gradle/src/test/resources")
-
-//        val toWrite = File(resources, expected)
-//        toWrite.parentFile.mkdirs()
-//
-//        toWrite.writeText(actual.readText())
-//
-        Assertions.assertEquals(Resources.read(expected), actual.readText())
+        Assertions.assertEquals(expected, actual.readText())
     }
 
 }

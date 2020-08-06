@@ -732,40 +732,40 @@ resource "aws_route53_record" "spring_site_kotless_io" {
 resource "aws_s3_bucket_object" "eu_spring_site_s3_ktls_aws_intellij_net_static_css_highlight_style_css" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "static/css/highlight-style.css"
-  source = "/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/css/highlight-style.css"
-  etag = filemd5("/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/css/highlight-style.css")
+  source = "{root}/spring/site/src/main/resources/static/css/highlight-style.css"
+  etag = filemd5("{root}/spring/site/src/main/resources/static/css/highlight-style.css")
   content_type = "text/css"
 }
 
 resource "aws_s3_bucket_object" "eu_spring_site_s3_ktls_aws_intellij_net_static_css_kotless_site_css" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "static/css/kotless-site.css"
-  source = "/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/css/kotless-site.css"
-  etag = filemd5("/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/css/kotless-site.css")
+  source = "{root}/spring/site/src/main/resources/static/css/kotless-site.css"
+  etag = filemd5("{root}/spring/site/src/main/resources/static/css/kotless-site.css")
   content_type = "text/css"
 }
 
 resource "aws_s3_bucket_object" "eu_spring_site_s3_ktls_aws_intellij_net_static_favicon_apng" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "static/favicon.apng"
-  source = "/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/favicon.apng"
-  etag = filemd5("/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/favicon.apng")
+  source = "{root}/spring/site/src/main/resources/static/favicon.apng"
+  etag = filemd5("{root}/spring/site/src/main/resources/static/favicon.apng")
   content_type = "image/apng"
 }
 
 resource "aws_s3_bucket_object" "eu_spring_site_s3_ktls_aws_intellij_net_static_js_highlight_pack_js" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "static/js/highlight.pack.js"
-  source = "/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/js/highlight.pack.js"
-  etag = filemd5("/home/tanvd/work/kotless/examples/spring/site/src/main/resources/static/js/highlight.pack.js")
+  source = "{root}/spring/site/src/main/resources/static/js/highlight.pack.js"
+  etag = filemd5("{root}/spring/site/src/main/resources/static/js/highlight.pack.js")
   content_type = "application/javascript"
 }
 
 resource "aws_s3_bucket_object" "io_kotless_examples_page_0" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "kotless-lambdas/spring-site-io-kotless-examples-page-0.jar"
-  source = "/home/tanvd/work/kotless/examples/build/site/libs/site-0.1.6-all.jar"
-  etag = filemd5("/home/tanvd/work/kotless/examples/build/site/libs/site-0.1.6-all.jar")
+  source = "{root}/build/site/libs/site-0.1.6-all.jar"
+  etag = filemd5("{root}/build/site/libs/site-0.1.6-all.jar")
 }
 
 data "aws_acm_certificate" "spring_site_kotless_io" {

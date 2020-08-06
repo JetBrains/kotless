@@ -732,40 +732,40 @@ resource "aws_route53_record" "ktor_site_kotless_io" {
 resource "aws_s3_bucket_object" "eu_ktor_site_s3_ktls_aws_intellij_net_static_css_highlight_style_css" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "static/css/highlight-style.css"
-  source = "/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/css/highlight-style.css"
-  etag = filemd5("/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/css/highlight-style.css")
+  source = "{root}/ktor/site/src/main/resources/static/css/highlight-style.css"
+  etag = filemd5("{root}/ktor/site/src/main/resources/static/css/highlight-style.css")
   content_type = "text/css"
 }
 
 resource "aws_s3_bucket_object" "eu_ktor_site_s3_ktls_aws_intellij_net_static_css_kotless_site_css" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "static/css/kotless-site.css"
-  source = "/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/css/kotless-site.css"
-  etag = filemd5("/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/css/kotless-site.css")
+  source = "{root}/ktor/site/src/main/resources/static/css/kotless-site.css"
+  etag = filemd5("{root}/ktor/site/src/main/resources/static/css/kotless-site.css")
   content_type = "text/css"
 }
 
 resource "aws_s3_bucket_object" "eu_ktor_site_s3_ktls_aws_intellij_net_static_favicon_apng" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "static/favicon.apng"
-  source = "/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/favicon.apng"
-  etag = filemd5("/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/favicon.apng")
+  source = "{root}/ktor/site/src/main/resources/static/favicon.apng"
+  etag = filemd5("{root}/ktor/site/src/main/resources/static/favicon.apng")
   content_type = "image/apng"
 }
 
 resource "aws_s3_bucket_object" "eu_ktor_site_s3_ktls_aws_intellij_net_static_js_highlight_pack_js" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "static/js/highlight.pack.js"
-  source = "/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/js/highlight.pack.js"
-  etag = filemd5("/home/tanvd/work/kotless/examples/ktor/site/src/main/resources/static/js/highlight.pack.js")
+  source = "{root}/ktor/site/src/main/resources/static/js/highlight.pack.js"
+  etag = filemd5("{root}/ktor/site/src/main/resources/static/js/highlight.pack.js")
   content_type = "application/javascript"
 }
 
 resource "aws_s3_bucket_object" "merged_0" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "kotless-lambdas/ktor-site-merged-0.jar"
-  source = "/home/tanvd/work/kotless/examples/build/site/libs/site-0.1.6-all.jar"
-  etag = filemd5("/home/tanvd/work/kotless/examples/build/site/libs/site-0.1.6-all.jar")
+  source = "{root}/build/site/libs/site-0.1.6-all.jar"
+  etag = filemd5("{root}/build/site/libs/site-0.1.6-all.jar")
 }
 
 data "aws_acm_certificate" "ktor_site_kotless_io" {
