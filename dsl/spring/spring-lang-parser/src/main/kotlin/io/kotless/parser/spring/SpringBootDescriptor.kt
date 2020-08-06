@@ -4,5 +4,8 @@ import io.kotless.parser.DSLDescriptor
 
 object SpringBootDescriptor: DSLDescriptor {
     override val name: String = "spring-boot"
+
+    override val parser = SpringParser
+
     override val localEntryPoint: String = "io.kotless.local.spring.MainKt"
 }

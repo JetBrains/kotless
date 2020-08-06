@@ -1,18 +1,16 @@
 package io.kotless.plugin.gradle.tasks.gen
 
-import io.kotless.*
-import io.kotless.parser.KotlessParser
-import io.kotless.parser.ktor.KTorParser
-import io.kotless.parser.spring.SpringParser
+import io.kotless.Application
+import io.kotless.KotlessEngine
+import io.kotless.Schema
 import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.plugin.gradle.dsl.descriptor
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.dsl.toSchema
-import io.kotless.plugin.gradle.utils.*
-import io.kotless.plugin.gradle.utils.gradle.Dependencies
-import io.kotless.plugin.gradle.utils.gradle.Groups
-import io.kotless.plugin.gradle.utils.gradle.clearDirectory
-import io.kotless.plugin.gradle.utils.gradle.myKtSourceSet
-import io.kotless.plugin.gradle.utils.gradle.myResourcesSet
+import io.kotless.plugin.gradle.utils.getRuntimeVersion
+import io.kotless.plugin.gradle.utils.getTargetVersion
+import io.kotless.plugin.gradle.utils.gradle.*
+import io.kotless.plugin.gradle.utils.isCompatible
 import io.kotless.resource.Lambda
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
@@ -76,34 +74,28 @@ internal open class KotlessGenerateTask : DefaultTask() {
     }
 
     private fun parseSources(): Schema {
+        val dsl = myKotless.config.dsl.typeOrDefault
         val config = myKotless.toSchema()
-
-        val myWebapp = myKotless.webapp
-
+        val webapp = myKotless.webapp
         val jar = (project.tasks[myKotless.config.myArchiveTask] as AbstractArchiveTask).archiveFile.get().asFile
-
         val target = myTargetVersion ?: error("Unable to find Kotlin compile-target version.")
 
-        val runtime = myWebapp.lambda.runtime
+        val runtime = webapp.lambda.runtime
             ?: project.getRuntimeVersion(target) ?: error("Kotless was unable to deduce Lambda Runtime for $target. Please, set it directly.")
 
         require(runtime.isCompatible(target)) {
             "Stated in Gradle DSL runtime $runtime is not compatible with current compile target $target"
         }
 
-        val lambda = Lambda.Config(myWebapp.lambda.memoryMb, myWebapp.lambda.timeoutSec, runtime, myWebapp.lambda.mergedEnvironment)
+        val lambda = Lambda.Config(webapp.lambda.memoryMb, webapp.lambda.timeoutSec, runtime, webapp.lambda.mergedEnvironment)
 
-        val parsed = when (myKotless.config.dsl.typeOrDefault) {
-            DSLType.Kotless -> KotlessParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.Ktor -> KTorParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
-            DSLType.SpringBoot -> SpringParser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
-        }
+        val parsed = dsl.descriptor.parser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
 
-        val webapp = Application(
-            route53 = myWebapp.route53?.toSchema(),
+        val app = Application(
+            route53 = webapp.route53?.toSchema(),
             api = Application.ApiGateway(
                 name = project.name,
-                deployment = myWebapp.deployment.toSchema(project.path),
+                deployment = webapp.deployment.toSchema(project.path),
                 dynamics = parsed.routes.dynamics,
                 statics = parsed.routes.statics
             ),
@@ -112,7 +104,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
 
         return Schema(
             config = config,
-            webapp = webapp,
+            application = app,
             lambdas = parsed.resources.dynamics,
             statics = parsed.resources.statics
         )

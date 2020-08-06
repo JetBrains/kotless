@@ -3,6 +3,8 @@ package io.kotless.parser
 interface DSLDescriptor  {
     val name: String
 
+    val parser: Parser
+
     val apiLibrary: String
         get() = "$name-lang"
 

@@ -40,7 +40,7 @@ object Generator {
     )
 
     fun generate(schema: Schema): Set<TFFile> {
-        val context = GenerationContext(schema, schema.webapp)
+        val context = GenerationContext(schema, schema.application)
 
         var newExecuted = true
         while (newExecuted) {
