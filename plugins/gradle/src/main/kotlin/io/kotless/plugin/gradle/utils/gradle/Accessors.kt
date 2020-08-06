@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.utils
+package io.kotless.plugin.gradle.utils.gradle
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.Project

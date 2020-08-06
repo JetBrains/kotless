@@ -2,8 +2,8 @@ package io.kotless.plugin.gradle.dsl
 
 import io.kotless.DSLType
 import io.kotless.KotlessConfig.Optimization.MergeLambda
-import io.kotless.plugin.gradle.utils.Dependencies
-import io.kotless.plugin.gradle.utils.myShadowJar
+import io.kotless.plugin.gradle.utils.gradle.Dependencies
+import io.kotless.plugin.gradle.utils.gradle.myShadowJar
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.AbstractArchiveTask
 import java.io.File

@@ -8,6 +8,11 @@ import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.dsl.toSchema
 import io.kotless.plugin.gradle.utils.*
+import io.kotless.plugin.gradle.utils.gradle.Dependencies
+import io.kotless.plugin.gradle.utils.gradle.Groups
+import io.kotless.plugin.gradle.utils.gradle.clearDirectory
+import io.kotless.plugin.gradle.utils.gradle.myKtSourceSet
+import io.kotless.plugin.gradle.utils.gradle.myResourcesSet
 import io.kotless.resource.Lambda
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils

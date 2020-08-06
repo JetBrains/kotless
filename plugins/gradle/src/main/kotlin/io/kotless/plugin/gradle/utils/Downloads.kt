@@ -11,7 +11,7 @@ internal object Downloads {
         FileOutputStream(toFile).channel.transferFrom(Channels.newChannel(url.openStream()), 0, java.lang.Long.MAX_VALUE)
     }
 
-    fun download(url: URL, toFile: File, archiver: Archiver) {
+    fun download(url: URL, toFile: File, archiver: Archive) {
         toFile.parentFile.mkdirs()
 
         val archive = File(toFile.absolutePath + "." + archiver.extension)

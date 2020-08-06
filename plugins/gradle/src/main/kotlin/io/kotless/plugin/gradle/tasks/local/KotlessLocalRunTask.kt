@@ -5,8 +5,13 @@ import io.kotless.DSLType
 import io.kotless.InternalAPI
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.plugin.gradle.dsl.descriptor
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils.*
+import io.kotless.plugin.gradle.utils.gradle.Dependencies
+import io.kotless.plugin.gradle.utils.gradle.Groups
+import io.kotless.plugin.gradle.utils.gradle.myGetByName
+import io.kotless.plugin.gradle.utils.gradle.myKtSourceSet
+import io.kotless.plugin.gradle.utils.gradle.myLocal
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.dependencies

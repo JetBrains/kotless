@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.utils
+package io.kotless.plugin.gradle.utils.gradle
 
 internal object Groups {
     const val kotless = "kotless"

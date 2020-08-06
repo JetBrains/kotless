@@ -2,15 +2,15 @@ package io.kotless.plugin.gradle
 
 import io.kotless.AwsResource
 import io.kotless.InternalAPI
+import io.kotless.plugin.gradle.dsl.descriptor
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.gen.KotlessLocalGenerateTask
 import io.kotless.plugin.gradle.tasks.local.KotlessLocalRunTask
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
 import io.kotless.plugin.gradle.utils.AWSUtils
-import io.kotless.plugin.gradle.utils.Groups
-import io.kotless.plugin.gradle.utils.descriptor
-import io.kotless.plugin.gradle.utils.myCreate
+import io.kotless.plugin.gradle.utils.gradle.Groups
+import io.kotless.plugin.gradle.utils.gradle.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.ApplicationPluginConvention

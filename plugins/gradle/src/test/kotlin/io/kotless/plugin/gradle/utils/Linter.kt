@@ -16,7 +16,7 @@ object Linter {
     fun download(tflint: File) {
         if (tflint.exists()) return
 
-        Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), tflint.parentFile, Archiver.ZIP)
+        Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), tflint.parentFile, Archive.ZIP)
 
         CommandLine.execute("chmod", listOf("+x", tflint.absolutePath), tflint.parentFile, false)
     }

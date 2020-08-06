@@ -5,7 +5,7 @@ import io.kotless.Constants
 import io.kotless.InternalAPI
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Start
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Stop
-import io.kotless.plugin.gradle.utils.Groups
+import io.kotless.plugin.gradle.utils.gradle.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction

@@ -1,11 +1,11 @@
 package io.kotless.plugin.gradle.tasks.terraform
 
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils.Archiver
+import io.kotless.plugin.gradle.utils.Archive
 import io.kotless.plugin.gradle.utils.CommandLine
 import io.kotless.plugin.gradle.utils.CommandLine.os
 import io.kotless.plugin.gradle.utils.Downloads
-import io.kotless.plugin.gradle.utils.Groups
+import io.kotless.plugin.gradle.utils.gradle.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
@@ -45,7 +45,7 @@ internal open class TerraformDownloadTask : DefaultTask() {
     fun act() {
         logger.lifecycle("Downloading terraform version $version for OS $os")
 
-        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), binFile.parentFile, Archiver.ZIP)
+        Downloads.download(URL("https://releases.hashicorp.com/terraform/$version/terraform_${version}_$os.zip"), binFile.parentFile, Archive.ZIP)
 
         CommandLine.execute("chmod", listOf("+x", binFile.absolutePath), binFile.parentFile, redirectStdout = false)
 

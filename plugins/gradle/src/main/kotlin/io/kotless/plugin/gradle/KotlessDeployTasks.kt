@@ -3,8 +3,8 @@ package io.kotless.plugin.gradle
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.gen.KotlessGenerateTask
 import io.kotless.plugin.gradle.tasks.terraform.TerraformOperationTask
-import io.kotless.plugin.gradle.utils.Groups
-import io.kotless.plugin.gradle.utils.myCreate
+import io.kotless.plugin.gradle.utils.gradle.Groups
+import io.kotless.plugin.gradle.utils.gradle.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.kotlin.dsl.get

@@ -1,6 +1,7 @@
-package io.kotless.plugin.gradle.utils
+package io.kotless.plugin.gradle.utils.gradle
 
 import io.kotless.DSLType
+import io.kotless.plugin.gradle.dsl.descriptor
 import io.kotless.plugin.gradle.dsl.kotless
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration

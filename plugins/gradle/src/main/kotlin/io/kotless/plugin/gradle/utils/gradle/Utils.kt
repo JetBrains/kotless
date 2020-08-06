@@ -1,4 +1,4 @@
-package io.kotless.plugin.gradle.utils
+package io.kotless.plugin.gradle.utils.gradle
 
 import org.gradle.api.Project
 import java.io.File
