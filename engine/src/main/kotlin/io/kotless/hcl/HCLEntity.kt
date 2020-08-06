@@ -15,11 +15,17 @@ open class HCLEntity(
     val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(),
     val inner: LinkedHashSet<HCLEntity> = LinkedHashSet(),
     open val owner: HCLNamed? = null
-) : HCLRender {
+) : HCLRender, Comparable<HCLEntity> {
     override val renderable: Boolean = true
 
     override fun render(): String = (fields.filter { it.renderable } + inner).joinToString(separator = "\n") {
         it.render()
+    }
+
+    override fun compareTo(other: HCLEntity): Int {
+        if (this is HCLNamed && other is HCLNamed) return this.hcl_ref.compareTo(other.hcl_ref)
+
+        error("Trying to compare non-named hcl entities ${this::class.java} && ${other::class.java}")
     }
 
     open class Inner(protected val tf_name: String) : HCLEntity() {
@@ -44,6 +50,8 @@ open class HCLEntity(
 
     class FieldDelegate<T : Any, F : HCLField<T>>(private val field: F) : ReadWriteProperty<HCLEntity, T> {
         val hcl_ref: String by lazy { field.hcl_ref }
+        val isSet: Boolean
+            get() = this.field.value != null
 
         override fun getValue(thisRef: HCLEntity, property: KProperty<*>): T = field.value!!
 
@@ -103,4 +111,10 @@ val <T : Any> KProperty0<T>.ref: String
     get() {
         this.isAccessible = true
         return (getDelegate() as HCLEntity.FieldDelegate<*, *>).hcl_ref
+    }
+
+val <T : Any> KProperty0<T>.isSet: Boolean
+    get() {
+        this.isAccessible = true
+        return (getDelegate() as HCLEntity.FieldDelegate<*, *>).isSet
     }

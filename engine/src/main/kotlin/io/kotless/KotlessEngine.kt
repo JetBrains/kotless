@@ -11,5 +11,5 @@ object KotlessEngine {
         return Generator.generate(optimized)
     }
 
-    fun dump(genDirectory: File, files: Set<TFFile>) = files.map { file -> file.writeToDirectory(genDirectory) }
+    fun dump(genDirectory: File, files: Set<TFFile>) = files.sorted().map { file -> file.writeToDirectory(genDirectory) }
 }

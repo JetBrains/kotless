@@ -2,6 +2,7 @@ package io.kotless.terraform.infra
 
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.HCLNamed
+import io.kotless.hcl.isSet
 import io.kotless.terraform.TFFile
 import io.kotless.utils.withIndent
 
@@ -14,7 +15,12 @@ open class TFProvider(private val tf_provider: String) : HCLEntity(), HCLNamed {
     var alias by text()
 
     override val hcl_name: String
-        get() = "$tf_provider.$alias"
+        get() = if (::alias.isSet) {
+            "$tf_provider.$alias"
+        } else {
+            tf_provider
+        }
+
     override val hcl_ref: String
         get() = hcl_name
 

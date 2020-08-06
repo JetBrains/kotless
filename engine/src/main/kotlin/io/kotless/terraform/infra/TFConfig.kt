@@ -1,11 +1,16 @@
 package io.kotless.terraform.infra
 
 import io.kotless.hcl.HCLEntity
+import io.kotless.hcl.HCLNamed
 import io.kotless.terraform.TFFile
 import io.kotless.utils.withIndent
 
 /** Declaration of Terraform configuration */
-class TFConfig : HCLEntity() {
+class TFConfig : HCLEntity(), HCLNamed {
+    override val hcl_name: String = "terraform"
+    override val hcl_ref: String
+        get() = hcl_name
+
     override fun render(): String {
         return """
             |terraform {

@@ -47,7 +47,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         }
 
         val policy_document = iam_policy_document(context.names.tf(entity.name)) {
-            for (permission in entity.permissions) {
+            for (permission in entity.permissions.sortedBy { it.resource }) {
                 statement {
                     effect = "Allow"
                     resources = permission.cloudIds(info.region_name, info.account_id).toTypedArray()

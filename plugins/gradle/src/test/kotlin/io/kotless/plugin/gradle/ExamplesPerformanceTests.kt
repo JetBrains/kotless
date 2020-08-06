@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-class ExampleProjectTests {
+class ExamplesPerformanceTests {
     companion object {
         private val time = IntRange(250, 5000)
 
