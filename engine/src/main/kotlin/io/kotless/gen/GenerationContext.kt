@@ -38,13 +38,13 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
     val entities = Entities()
 
     class Entities {
-        private val all: HashSet<HCLEntity> = HashSet()
+        private val all: HashSet<HCLEntity.Named> = HashSet()
 
-        fun register(entities: Iterable<HCLEntity>) {
+        fun register(entities: Iterable<HCLEntity.Named>) {
             this.all.addAll(entities)
         }
 
-        fun register(vararg entities: HCLEntity) {
+        fun register(vararg entities: HCLEntity.Named) {
             register(entities.toList())
         }
 

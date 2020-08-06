@@ -11,7 +11,7 @@ import io.kotless.utils.withIndent
  *
  *  @see <a href="https://www.terraform.io/docs/providers/index.html">All providers</a>
  */
-open class TFProvider(private val tf_provider: String) : HCLEntity(), HCLNamed {
+open class TFProvider(private val tf_provider: String) : HCLEntity.Named() {
     var alias by text()
 
     override val hcl_name: String

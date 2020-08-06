@@ -15,17 +15,15 @@ open class HCLEntity(
     val fields: LinkedHashSet<HCLField<*>> = LinkedHashSet(),
     val inner: LinkedHashSet<HCLEntity> = LinkedHashSet(),
     open val owner: HCLNamed? = null
-) : HCLRender, Comparable<HCLEntity> {
+) : HCLRender {
     override val renderable: Boolean = true
 
     override fun render(): String = (fields.filter { it.renderable } + inner).joinToString(separator = "\n") {
         it.render()
     }
 
-    override fun compareTo(other: HCLEntity): Int {
-        if (this is HCLNamed && other is HCLNamed) return this.hcl_ref.compareTo(other.hcl_ref)
-
-        error("Trying to compare non-named hcl entities ${this::class.java} && ${other::class.java}")
+    abstract class Named: HCLEntity(), HCLNamed, Comparable<Named> {
+        override fun compareTo(other: Named): Int = this.hcl_ref.compareTo(other.hcl_ref)
     }
 
     open class Inner(protected val tf_name: String) : HCLEntity() {

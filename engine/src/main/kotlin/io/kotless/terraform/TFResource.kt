@@ -5,7 +5,7 @@ import io.kotless.hcl.HCLNamed
 import io.kotless.utils.withIndent
 
 /** Representation of Terraform Resource */
-open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity(), HCLNamed {
+open class TFResource(val tf_id: String, val tf_type: String) : HCLEntity.Named() {
     override val hcl_name: String = "$tf_type.$tf_id"
     override val hcl_ref: String
         get() = hcl_name

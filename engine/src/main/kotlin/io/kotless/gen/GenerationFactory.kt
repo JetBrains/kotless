@@ -8,8 +8,8 @@ import io.kotless.hcl.HCLEntity
  * Factories are called in cycle and provided with updated generation context
  */
 interface GenerationFactory<Input : Any, Output : Any> {
-    data class GenerationResult<Output : Any>(val output: Output, val entities: Set<HCLEntity>) {
-        constructor(output: Output, vararg entities: HCLEntity) : this(output, entities.toSet())
+    data class GenerationResult<Output : Any>(val output: Output, val entities: Set<HCLEntity.Named>) {
+        constructor(output: Output, vararg entities: HCLEntity.Named) : this(output, entities.toSet())
     }
 
     fun hasRan(entity: Input, context: GenerationContext): Boolean = context.output.check(entity, this)
