@@ -1,6 +1,5 @@
 package io.kotless.plugin.gradle
 
-import io.kotless.InternalAPI
 import io.kotless.plugin.gradle.utils.CommandLine
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.Assertions
@@ -10,7 +9,6 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 
-@OptIn(InternalAPI::class)
 class ExamplesValidateTests {
     companion object {
         private fun actualPrefix(project: String) = "build/$project/kotless-gen/deploy"

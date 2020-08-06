@@ -1,6 +1,5 @@
 package io.kotless.plugin.gradle.utils
 
-import io.kotless.InternalAPI
 import org.codehaus.plexus.util.Os
 import org.codehaus.plexus.util.cli.CommandLineUtils
 import org.codehaus.plexus.util.cli.Commandline
@@ -8,8 +7,7 @@ import org.codehaus.plexus.util.cli.DefaultConsumer
 import org.codehaus.plexus.util.cli.StreamConsumer
 import java.io.File
 
-@InternalAPI
-object CommandLine {
+internal object CommandLine {
     /** Full name of current system (assumed it is amd64) */
     val os by lazy {
         when {
