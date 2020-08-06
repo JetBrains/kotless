@@ -43,8 +43,8 @@ internal open class KotlessLocalRunTask : DefaultTask() {
     fun act() = with(project) {
         val dsl = Dependencies.dsl(project)
 
-        require(dsl.isNotEmpty()) { "Cannot find \"lang\", \"ktor-lang\" or \"spring-boot-lang\" dependencies. One of them required for local start." }
-        require(dsl.size <= 1) { "Only one dependency should be used for DSL: either \"lang\", \"ktor-lang\" or \"spring-boot-lang\"." }
+        require(dsl.isNotEmpty()) { "Cannot find \"kotless-lang\", \"ktor-lang\" or \"spring-boot-lang\" dependencies. One of them required for local start." }
+        require(dsl.size <= 1) { "Only one dependency should be used for DSL: either \"kotless-lang\", \"ktor-lang\" or \"spring-boot-lang\"." }
 
         val (type, dependency) = dsl.entries.single()
 

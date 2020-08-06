@@ -56,7 +56,7 @@ object IntroductionPages {
                     jcenter()
                 }
                 dependencies {
-                    implementation("io.kotless", "lang", "0.1.1")
+                    implementation("io.kotless", "kotless-lang", "0.1.1")
                 }""")
 
         p {

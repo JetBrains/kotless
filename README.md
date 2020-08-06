@@ -67,7 +67,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "lang", "0.1.5")
+    implementation("io.kotless", "kotless-lang", "0.1.5")
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.3.2)
     //implementation("io.kotless", "ktor-lang", "0.1.5")
