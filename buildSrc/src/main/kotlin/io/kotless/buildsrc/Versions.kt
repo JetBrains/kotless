@@ -14,7 +14,7 @@ object Versions {
     const val slf4j = "1.7.30"
     const val log4j = "1.2.17"
 
-    const val serverlessContainers = "1.5"
+    const val serverlessContainers = "1.5.1"
 
     const val ktor = "1.3.2"
 
