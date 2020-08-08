@@ -29,7 +29,7 @@ internal val Project.myKtSourceSet: Set<File>
 internal val Project.myResourcesSet: Set<File>
     get() = mySourceSets.asMap["main"]!!.resources.files.toSet()
 
-internal inline fun <reified T : Task> TaskContainer.myCreate(name: String, crossinline configure: T.() -> Unit = {}): Task = create(name, T::class.java) {
+internal inline fun <reified T : Task> TaskContainer.myCreate(name: String, crossinline configure: T.() -> Unit = {}): T = create(name, T::class.java) {
     configure(it)
 }
 

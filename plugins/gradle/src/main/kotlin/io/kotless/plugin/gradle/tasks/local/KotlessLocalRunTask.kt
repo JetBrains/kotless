@@ -7,11 +7,7 @@ import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.descriptor
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils.gradle.Dependencies
-import io.kotless.plugin.gradle.utils.gradle.Groups
-import io.kotless.plugin.gradle.utils.gradle.myGetByName
-import io.kotless.plugin.gradle.utils.gradle.myKtSourceSet
-import io.kotless.plugin.gradle.utils.gradle.myLocal
+import io.kotless.plugin.gradle.utils.gradle.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.dependencies
@@ -40,6 +36,13 @@ internal open class KotlessLocalRunTask : DefaultTask() {
     val myAllSources: Set<File>
         get() = project.myKtSourceSet.toSet()
 
+    private val finalizers = ArrayList<() -> Unit>()
+
+    fun onShutDown(vararg finalizer: () -> Unit): KotlessLocalRunTask {
+        finalizers.addAll(finalizer)
+        return this
+    }
+
     @get:Internal
     lateinit var localstack: LocalStackRunner
 
@@ -57,7 +60,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             myLocal("io.kotless", type.descriptor.localLibrary, dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
         }
 
-        tasks.myGetByName<JavaExec>("run").apply {
+        val run = tasks.myGetByName<JavaExec>("run").apply {
             classpath += files(myLocal().files)
 
             environment[Constants.Local.serverPort] = myKotless.extensions.local.port
@@ -82,6 +85,19 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             if (myKotless.extensions.local.useAWSEmulation) {
                 environment.putAll(localstack.environment)
             }
+
+            isIgnoreExitValue = true
+        }
+
+        try {
+            run.exec()
+        } catch (e: Throwable) {
+            logger.lifecycle("Gracefully shutting down Kotless local")
+            //Remove interrupted flag before execution of finalizers
+            Thread.interrupted()
+            finalizers.forEach { it.invoke() }
+            //Rethrow exception after finalizers executed
+            throw e
         }
     }
 }

@@ -7,9 +7,11 @@ import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Start
 import io.kotless.plugin.gradle.tasks.local.LocalStackRunner.Stop
 import io.kotless.plugin.gradle.utils.gradle.Groups
 import org.gradle.api.DefaultTask
+import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
+import org.testcontainers.utility.ResourceReaper
 
 /**
  * Class composing tasks to work with LocalStack.
@@ -42,13 +44,13 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
 
         @TaskAction
         fun act() {
-            localstack.stop()
+            localstack.stop(logger)
         }
     }
 
     private val services = resources.map { it.toService() }
 
-    private var container: LocalStackContainer? = null
+    private lateinit var container: LocalStackContainer
 
     private val myEnvironment = HashMap<String, String>()
     val environment: Map<String, String>
@@ -64,12 +66,12 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
 
         container = LocalStackContainer().withServices(*services.toTypedArray())
 
-        container!!.start()
+        container.start()
 
         myEnvironment[Constants.LocalStack.enabled] = "true"
 
         for (service in services) {
-            val endpoint = container!!.getEndpointConfiguration(service)
+            val endpoint = container.getEndpointConfiguration(service)
 
             myEnvironment[Constants.LocalStack.url(service.toResource())] = endpoint.serviceEndpoint
             myEnvironment[Constants.LocalStack.region(service.toResource())] = endpoint.signingRegion
@@ -77,14 +79,18 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
             myServiceMap[service.toResource()] = endpoint.serviceEndpoint
         }
 
-        val credentials = container!!.defaultCredentialsProvider.credentials
+        val credentials = container.defaultCredentialsProvider.credentials
 
         myEnvironment[Constants.LocalStack.accessKey] = credentials.awsAccessKeyId
         myEnvironment[Constants.LocalStack.secretKey] = credentials.awsSecretKey
+
+        ResourceReaper.instance().registerContainerForCleanup(container.containerId, container.dockerImageName)
     }
 
-    fun stop() {
-        container?.stop()
+    fun stop(logger: Logger) {
+        logger.lifecycle("Stopping LocalStack...")
+        ResourceReaper.instance().performCleanup()
+        logger.lifecycle("LocalStack stopped...")
     }
 
     private fun AwsResource.toService() = LocalStackContainer.Service.valueOf(prefix.toUpperCase())

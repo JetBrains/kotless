@@ -37,14 +37,13 @@ internal object KotlessLocalTasks {
     }
 
     private fun TaskContainer.setupLocal(local: LocalStackRunner) {
-        val run = getByName("run")
         val classes = getByName("classes")
 
         myCreate<KotlessLocalRunTask>("local") {
             localstack = local
 
             dependsOn(classes)
-        }.finalizedBy(run)
+        }
     }
 
     private fun Project.setupLocalWithAWSEmulation(local: LocalStackRunner, download: Task) {
@@ -91,7 +90,9 @@ internal object KotlessLocalTasks {
                 localstack = local
 
                 dependsOn(classes, configure)
-            }.finalizedBy(run, stopLocalStack)
+            }.onShutDown({
+                stopLocalStack.act()
+            })
         }
     }
 }
