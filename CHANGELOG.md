@@ -8,7 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 * Support for different runtimes: Java 8 and Java 11
 
-# Fixed
+## Changed
+
+* Migrate to Terraform 12 by default
+
+## Fixed
 
 * Problem with LocalStack not stopping after a run 
 
