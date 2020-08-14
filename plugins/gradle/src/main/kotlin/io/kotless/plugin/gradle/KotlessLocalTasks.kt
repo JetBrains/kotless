@@ -48,7 +48,6 @@ internal object KotlessLocalTasks {
 
     private fun Project.setupLocalWithAWSEmulation(local: LocalStackRunner, download: Task) {
         with(tasks) {
-            val run = getByName("run")
             val classes = getByName("classes")
 
             val startLocalStack = myCreate<LocalStackRunner.Start>("localstack_start") {

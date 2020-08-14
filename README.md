@@ -77,8 +77,8 @@ dependencies {
 }
 ```
 
-*Please note that in case you use Ktor or Spring Boot you will need to replace existing in your 
-project dependency with special Kotless `*-lang` dependency. Also, after it you will need to align 
+*Please note that in case you use Ktor or Spring Boot you will need to replace existing in your
+project dependency with special Kotless `*-lang` dependency. Also, after it you will need to align
 version of dependent libraries (like Spring Security) with version bundled in `*-lang`
 (see this [paragraph](#integration-with-existing-applications))*
 
