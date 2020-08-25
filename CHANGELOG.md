@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-# 0.1.6 - ???
+# 0.1.6 - 2020-08-25
 
 ## Added
 
@@ -16,14 +16,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 * Problem with LocalStack not stopping after a run
 
-# 0.1.5 - 2020-02-06
+# 0.1.5 - 2020-06-02
 
 ## Fixed
 
 * Reflections dependency reverted to older version because of critical bug in it
 * Fix for HTTPRequest -- sometimes user-agent can miss in APIGateway request
 
-# 0.1.4 - 2020-31-05
+# 0.1.4 - 2020-05-31
 
 ## Added
 
@@ -42,7 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * Improvements in all parsers -- now all of them should work a lot faster
 * Fixes to documentation in code
 
-# 0.1.3 - 2020-08-02
+# 0.1.3 - 2020-02-08
 
 ## Added
 
