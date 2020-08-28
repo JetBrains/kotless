@@ -37,7 +37,8 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
     data class Config(val memoryMb: Int, val timeoutSec: Int, val runtime: Runtime, val environment: Map<String, String>) {
         enum class Runtime(val aws: String) {
             Java8("java8"),
-            Java11("java11")
+            Java11("java11"),
+            Provided("provided")
         }
     }
 }
