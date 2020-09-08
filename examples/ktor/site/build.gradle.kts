@@ -1,4 +1,4 @@
-import com.kotlin.aws.runtime.runtime
+import com.kotlin.aws.runtime.dsl.runtime
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.resource.Lambda.Config.Runtime
@@ -44,5 +44,4 @@ kotless {
 
 runtime {
     handler = "io.kotless.examples.Server::handleRequest"
-    generationPath = project.file("src/main/kotlin")
 }
