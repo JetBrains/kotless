@@ -14,6 +14,7 @@ include(":spring:shortener")
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
     }
 }

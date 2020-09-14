@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.utils
 
 import io.kotless.plugin.gradle.utils.CommandLine.os
+import org.codehaus.plexus.util.Os
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URL
@@ -18,7 +19,10 @@ object Linter {
 
         Downloads.download(URL("https://github.com/wata727/tflint/releases/download/v$version/tflint_$os.zip"), tflint.parentFile, Archive.ZIP)
 
-        CommandLine.execute("chmod", listOf("+x", tflint.absolutePath), tflint.parentFile, false)
+
+        if (Os.isFamily(Os.FAMILY_MAC) || Os.isFamily(Os.FAMILY_UNIX)) {
+            CommandLine.execute("chmod", listOf("+x", tflint.absolutePath), tflint.parentFile, false)
+        }
     }
 
     fun lint(tflint: File, workingDir: File): Int {
