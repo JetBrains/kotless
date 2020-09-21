@@ -30,7 +30,9 @@ kotless {
             region = "eu-west-1"
         }
 
-        setArchiveTask(tasks["buildGraalRuntime"] as AbstractArchiveTask)
+        afterEvaluate {
+            setArchiveTask(tasks["buildGraalRuntime"] as AbstractArchiveTask)
+        }
     }
 
     webapp {
