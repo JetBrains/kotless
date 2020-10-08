@@ -30,19 +30,27 @@ dependencies {
     implementation(gradleKotlinDsl())
     implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", Versions.kotlin)
 
+    //Parsing
     implementation(project(":dsl:kotless:kotless-lang-parser"))
     implementation(project(":dsl:ktor:ktor-lang-parser"))
     implementation(project(":dsl:spring:spring-lang-parser"))
     implementation(project(":engine"))
 
+    //Bundled plugins
     implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
+    implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.0")
 
-    implementation("com.amazonaws", "aws-java-sdk-core", Versions.aws)
-    implementation("org.testcontainers", "localstack", "1.15.0-rc1")
+    //local start
+    implementation("org.testcontainers", "localstack", "1.15.0-rc2")
 
+    //utils
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
+
+    //jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.10.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.3")
 
     testImplementation(gradleTestKit())
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.0")

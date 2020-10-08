@@ -38,6 +38,7 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
         enum class Runtime(val aws: String) {
             Java8("java8"),
             Java11("java11"),
+            GraalVM("provided"),
             Provided("provided")
         }
     }

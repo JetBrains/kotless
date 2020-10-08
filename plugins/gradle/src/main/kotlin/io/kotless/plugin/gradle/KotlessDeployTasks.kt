@@ -26,7 +26,7 @@ internal object KotlessDeployTasks {
             val init = myCreate<TerraformOperationTask>("initialize") {
                 group = Groups.`kotless setup`
 
-                dependsOn(download, generate, project.tasks[kotless.config.myArchiveTask])
+                dependsOn(download, generate, kotless.config.myArchiveTask)
 
                 root = kotless.config.deployGenDirectory
 

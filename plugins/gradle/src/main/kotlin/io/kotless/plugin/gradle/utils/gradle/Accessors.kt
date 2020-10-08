@@ -44,3 +44,7 @@ internal fun Project.myLocal() = this.configurations.getByName(myLocalConfigurat
 internal fun DependencyHandlerScope.myLocal(group: String, name: String, version: String) {
     addExternalModuleDependencyTo(this, myLocalConfigurationName, group, name, version, null, null, null, null)
 }
+
+internal fun DependencyHandlerScope.myImplementation(group: String, name: String, version: String) {
+    addExternalModuleDependencyTo(this, "implementation", group, name, version, null, null, null, null)
+}

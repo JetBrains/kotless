@@ -18,6 +18,7 @@ internal fun Project.getTargetVersion(): JavaVersion? {
 internal fun Runtime.isCompatible(target: JavaVersion) = when (this) {
     Runtime.Java8 -> JavaVersion.VERSION_1_8.isCompatibleWith(target)
     Runtime.Java11 -> JavaVersion.VERSION_11.isCompatibleWith(target)
+    Runtime.GraalVM -> JavaVersion.VERSION_11.isCompatibleWith(target)
     Runtime.Provided -> true
 }
 

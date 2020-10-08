@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.defaults.configureIdea
 
 group = "io.kotless"
-version = "0.1.7"
+version = "0.1.7-beta-1"
 
 plugins {
     id("tanvd.kosogor") version "1.0.9" apply true
