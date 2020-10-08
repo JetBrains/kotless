@@ -12,9 +12,7 @@ dependencies {
     api("io.ktor", "ktor-server-core", Versions.ktor)
     api("io.ktor", "ktor-server-host-common", Versions.ktor)
 
-    implementation("org.slf4j", "slf4j-log4j12", Versions.slf4j)
-    implementation("log4j", "log4j", Versions.log4j)
-    implementation("com.amazonaws", "aws-lambda-java-log4j", Versions.lambdaJavaLog4J)
+    implementation("ch.qos.logback", "logback-classic", Versions.logback)
 }
 
 publishJar {

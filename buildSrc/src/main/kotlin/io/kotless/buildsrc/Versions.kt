@@ -8,11 +8,9 @@ object Versions {
 
     const val aws = "1.11.788"
     const val lambdaJavaCore = "1.2.0"
-    const val lambdaJavaLog4J = "1.0.0"
-
 
     const val slf4j = "1.7.30"
-    const val log4j = "1.2.17"
+    const val logback = "1.2.3"
 
     const val serverlessContainers = "1.5.1"
 

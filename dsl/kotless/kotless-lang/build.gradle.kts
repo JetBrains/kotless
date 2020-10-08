@@ -11,9 +11,7 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
 
-    implementation("org.slf4j", "slf4j-log4j12", Versions.slf4j)
-    implementation("log4j", "log4j", Versions.log4j)
-    implementation("com.amazonaws", "aws-lambda-java-log4j", Versions.lambdaJavaLog4J)
+    implementation("ch.qos.logback", "logback-classic", Versions.logback)
 }
 
 publishJar {
