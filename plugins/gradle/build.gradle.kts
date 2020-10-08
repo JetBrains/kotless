@@ -38,7 +38,7 @@ dependencies {
     implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
 
     implementation("com.amazonaws", "aws-java-sdk-core", Versions.aws)
-    implementation("org.testcontainers", "localstack", "1.14.3")
+    implementation("org.testcontainers", "localstack", "1.15.0-rc2")
 
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
