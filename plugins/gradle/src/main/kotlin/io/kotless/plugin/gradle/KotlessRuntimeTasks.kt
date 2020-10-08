@@ -6,6 +6,7 @@ import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.gradle.*
 import org.gradle.api.Project
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 import org.gradle.kotlin.dsl.dependencies
 
 object KotlessRuntimeTasks {
@@ -16,7 +17,7 @@ object KotlessRuntimeTasks {
         }
 
         dependencies {
-            myImplementation("com.kotlin.aws.runtime", "runtime", "0.1.0")
+            myImplementation("com.kotlin.aws.runtime", "runtime", "0.1.1")
         }
 
         applyPluginSafely("io.kcdk")
@@ -25,6 +26,10 @@ object KotlessRuntimeTasks {
             handler = LocalParser.parse(project.myKtSourceSet.toSet(), Dependencies.getDependencies(project)).entrypoint.qualifiedName
         }
 
-        kotless.config.myArchiveTask = "buildGraalRuntime"
+        afterEvaluate {
+            val graalShadowJar = tasks.getByName("buildGraalRuntime") as AbstractArchiveTask
+            kotless.config.setArchiveTask(graalShadowJar)
+            tasks.getByName("initialize").dependsOn(graalShadowJar)
+        }
     }
 }

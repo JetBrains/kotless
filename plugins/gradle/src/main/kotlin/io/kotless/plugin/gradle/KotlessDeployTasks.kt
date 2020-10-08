@@ -7,7 +7,6 @@ import io.kotless.plugin.gradle.utils.gradle.Groups
 import io.kotless.plugin.gradle.utils.gradle.myCreate
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.kotlin.dsl.get
 
 /**
  * Utils to setup deploy tasks for all DSLs

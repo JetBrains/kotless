@@ -38,7 +38,7 @@ dependencies {
 
     //Bundled plugins
     implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
-    implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.0")
+    implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.1")
 
     //local start
     implementation("org.testcontainers", "localstack", "1.15.0-rc2")

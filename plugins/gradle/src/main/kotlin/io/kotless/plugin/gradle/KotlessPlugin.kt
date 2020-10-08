@@ -1,18 +1,15 @@
 package io.kotless.plugin.gradle
 
-import com.kotlin.aws.runtime.dsl.runtime
-import io.kotless.DSLType
-import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.KotlessDeployTasks.setupDeployTasks
 import io.kotless.plugin.gradle.KotlessLocalTasks.setupLocalTasks
 import io.kotless.plugin.gradle.KotlessRuntimeTasks.setupGraal
-import io.kotless.plugin.gradle.dsl.*
+import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.tasks.terraform.TerraformDownloadTask
 import io.kotless.plugin.gradle.utils.gradle.*
 import io.kotless.resource.Lambda
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
 
 /**
  * Implementation of Kotless plugin
@@ -40,11 +37,12 @@ internal class KotlessPlugin : Plugin<Project> {
                 val download = myCreate<TerraformDownloadTask>("download_terraform")
 
                 afterEvaluate {
-                    setupDeployTasks(download)
-                    setupLocalTasks(download)
                     if (kotless.webapp.lambda.runtime == Lambda.Config.Runtime.GraalVM) {
                         setupGraal()
                     }
+
+                    setupDeployTasks(download)
+                    setupLocalTasks(download)
                 }
             }
         }

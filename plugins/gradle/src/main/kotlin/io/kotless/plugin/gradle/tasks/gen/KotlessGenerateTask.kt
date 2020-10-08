@@ -1,16 +1,9 @@
 package io.kotless.plugin.gradle.tasks.gen
 
-import io.kotless.Application
-import io.kotless.KotlessEngine
-import io.kotless.Schema
-import io.kotless.plugin.gradle.dsl.KotlessDSL
-import io.kotless.plugin.gradle.dsl.descriptor
-import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.dsl.toSchema
-import io.kotless.plugin.gradle.utils.getRuntimeVersion
-import io.kotless.plugin.gradle.utils.getTargetVersion
+import io.kotless.*
+import io.kotless.plugin.gradle.dsl.*
+import io.kotless.plugin.gradle.utils.*
 import io.kotless.plugin.gradle.utils.gradle.*
-import io.kotless.plugin.gradle.utils.isCompatible
 import io.kotless.resource.Lambda
 import io.kotless.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils

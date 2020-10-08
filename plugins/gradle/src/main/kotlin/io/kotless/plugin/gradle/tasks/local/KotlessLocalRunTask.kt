@@ -1,12 +1,8 @@
 package io.kotless.plugin.gradle.tasks.local
 
-import io.kotless.Constants
-import io.kotless.DSLType
-import io.kotless.InternalAPI
+import io.kotless.*
 import io.kotless.parser.LocalParser
-import io.kotless.plugin.gradle.dsl.KotlessDSL
-import io.kotless.plugin.gradle.dsl.descriptor
-import io.kotless.plugin.gradle.dsl.kotless
+import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.gradle.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*

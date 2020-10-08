@@ -1,16 +1,12 @@
 package io.kotless.plugin.gradle.tasks.terraform
 
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.plugin.gradle.utils.Archive
-import io.kotless.plugin.gradle.utils.CommandLine
+import io.kotless.plugin.gradle.utils.*
 import io.kotless.plugin.gradle.utils.CommandLine.os
-import io.kotless.plugin.gradle.utils.Downloads
 import io.kotless.plugin.gradle.utils.gradle.Groups
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 import java.io.File
 import java.net.URL
 
