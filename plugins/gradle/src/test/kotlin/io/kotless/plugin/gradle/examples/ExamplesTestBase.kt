@@ -17,6 +17,17 @@ abstract class ExamplesTestBase {
             Arguments.of("spring", "site"),
             Arguments.of("spring", "shortener")
         )
+
+
+        fun dataWithoutGraal() = listOf(
+            Arguments.of("kotless", "site"),
+            Arguments.of("kotless", "shortener"),
+
+            Arguments.of("ktor", "shortener"),
+
+            Arguments.of("spring", "site"),
+            Arguments.of("spring", "shortener")
+        )
     }
 
     private val projectDir = File("../../examples")

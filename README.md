@@ -11,7 +11,7 @@ Kotless stands for Kotlin serverless framework.
 Its focus lies in reducing the routine of serverless deployment creation by generating it straight
 from the code of the application itself.
 
-So, simply speaking Kotless gives you one magic button to deploy your Web application as a
+So, simply speaking, Kotless gives you one magic button to deploy your Web application as a
 serverless application on AWS!
 
 Kotless consists of two main parts:
@@ -26,7 +26,7 @@ Kotless consists of two main parts:
 * Kotless Gradle Plugin provides a way of deploying serverless application. For that, it:
     * performs the tasks of generating Terraform code from the application code and, subsequently,
       deploying it to AWS;
-    * runs application locally, emulates AWS environment and provides the possibility for in-IDE
+    * runs application locally, emulates the AWS environment and provides the possibility for in-IDE
       debugging.
 
 One of the key features of Kotless is its ability to embed into existing applications. Kotless makes
@@ -38,7 +38,7 @@ Kotless uses Gradle to wrap around the existing build process and insert the dep
 
 Basically, if you already use Gradle, you only need to do two things.
 
-Firstly, set up Kotless Gradle plugin. You need to apply the plugin:
+Firstly, set up the Kotless Gradle plugin. You need to apply the plugin:
 
 ```kotlin
 //Imports necessary for this example
@@ -77,16 +77,16 @@ dependencies {
 }
 ```
 
-*Please note that in case you use Ktor or Spring Boot you will need to replace existing in your
-project dependency with special Kotless `*-lang` dependency. Also, after it you will need to align
+*Please note that if you use Ktor or Spring Boot you will need to replace existing in your project
+dependency with a special Kotless `*-lang` dependency. Also, after that you will need to align
 version of dependent libraries (like Spring Security) with version bundled in `*-lang`
 (see this [paragraph](#integration-with-existing-applications))*
 
-This gives you access to DSL interfaces in your code and sets up Lambda dispatcher inside of your
+This gives you access to DSL interfaces in your code and sets up a Lambda dispatcher inside your
 application.
 
 If you don't have an AWS account &mdash; stop here. Now you can use `local` task to run the
-application locally and debug it. If you want to continue &mdash; create AWS account following
+application locally and debug it. If you want to continue &mdash; create AWS accounts following
 simple [instruction](https://hadihariri.com/2020/05/12/from-zero-to-lamda-with-kotless/) by Hadi
 Hariri.
 
@@ -123,7 +123,7 @@ Then we set up a specific application to deploy:
 
 And that's the whole setup!
 
-Now you can create you first serverless application with Kotless DSL:
+Now you can create your first serverless application with Kotless DSL:
 
 ```kotlin
 @Get("/")
@@ -161,7 +161,7 @@ object Pages {
 
 ## Local start
 
-Kotless-based application can start locally as an HTTP server. This functionality is supported for
+Kotless-based applications can start locally as an HTTP server. This functionality is supported by
 all DSLs.
 
 Moreover, Kotless local start may spin up an AWS emulation (docker required). Just instantiate your
@@ -195,38 +195,38 @@ application locally from your IDE.
 ## Integration with existing applications
 
 Kotless is able to deploy existing Spring Boot or Ktor application to AWS serverless platform. To do
-it, you'll need to set up plugin and replace existing dependency with appropriate Kotless DSL.
+it, you'll need to set up a plugin and replace existing dependency with the appropriate Kotless DSL.
 
 For **Ktor**, you should replace existing engine (
 e.g. `implementation("io.ktor", "ktor-server-netty", "1.3.2")`)
-with `implementation("io.kotless", "ktor-lang", "0.1.6")`. Note, that this dependency bundles Ktor
-of version
+with `implementation("io.kotless", "ktor-lang", "0.1.6")`. Note that this dependency bundles Ktor of
+version
 `1.3.2`, so you may need to upgrade other Ktor libraries (like `ktor-html-builder`) to this version.
 
-For **Spring Boot** you should replace starter you use (
+For **Spring Boot** you should replace the starter you use (
 e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "2.3.0.RELASE)`)
-with `implementation("io.kotless", "spring-boot-lang", "0.1.6")`. Note, that this dependency bundles
+with `implementation("io.kotless", "spring-boot-lang", "0.1.6")`. Note that this dependency bundles
 Spring Boot of version `2.3.0.RELEASE`, so you also may need to upgrade other Spring Boot libraries
 to this version.
 
-Once it is done you may hit `deploy` task and make your application serverless. Note, that you still
-be able to run application locally via `local` Gradle task.
+Once it is done, you may hit `deploy` task and make your application serverless. Note, that you will
+still be able to run application locally via `local` Gradle task.
 
 ## Advanced features
 
-While Kotless can be used as a framework for a rapid creation of serverless applications, it has
+While Kotless can be used as a framework for the rapid creation of serverless applications, it has
 many more features covering different areas of application.
 
 Including, but not limited to:
 
 * **Lambdas auto-warming** &mdash; Kotless creates schedulers to execute warming sequences to never
-  leave your lambdas cold. As a result applications under moderate load are almost not vulnerable to
-  cold-start problem.
+  leave your lambdas cold. As a result, applications under moderate load are almost not vulnerable
+  to cold-start problem.
 * **Permissions management** &mdash; you can declare which permissions to which AWS resources are
   required for the application via annotations on Kotlin functions, classes or objects. Permissions
   will be granted automatically.
 * **Static resources** &mdash; Kotless will deploy static resources to S3 and set up CDN for them.
-  It may greatly improve response time of your application and is supported for all DSLs.
+  It may greatly improve the response time of your application and is supported by all DSLs.
 * **Scheduled events** &mdash; Kotless sets up timers to execute `@Scheduled` jobs on schedule;
 * **Terraform extensions** &mdash; Kotless-generated code can be extended by custom Terraform code;
 
@@ -284,10 +284,10 @@ And for Spring Boot:
 You may take a look at [Wiki](https://github.com/JetBrains/kotless/wiki) where the client
 documentation on Kotless is located.
 
-Apart from that, Kotless code itself is widely documented, and you can take a look into its
+Apart from that, the Kotless code itself is widely documented, and you can take a look into its
 interfaces to get to know Kotless better.
 
-You may ask questions and participate in discussions in `#kotless` channel
+You may ask questions and participate in discussions on `#kotless` channel
 in [KotlinLang slack](http://slack.kotlinlang.org).
 
 ## Acknowledgements
@@ -295,5 +295,5 @@ in [KotlinLang slack](http://slack.kotlinlang.org).
 Special thanks to:
 
 * Alexandra Pavlova (aka sunalex) for our beautiful logo;
-* Yaroslav Golubev for the help with documentation;
+* Yaroslav Golubev for help with documentation;
 * [Gregor Billing](https://github.com/suushiemaniac) for the help with Gradle plugin and more.

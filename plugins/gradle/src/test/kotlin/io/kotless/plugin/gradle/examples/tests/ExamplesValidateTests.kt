@@ -10,12 +10,12 @@ import org.junit.jupiter.params.provider.MethodSource
 class ExamplesValidateTests: ExamplesTestBase() {
     companion object {
         @JvmStatic
-        fun data() = ExamplesTestBase.data()
+        fun dataWithoutGraal() = ExamplesTestBase.dataWithoutGraal()
     }
 
 
     @Tag("integration")
-    @MethodSource("data")
+    @MethodSource("dataWithoutGraal")
     @ParameterizedTest(name = "task {0} in ms range {1}")
     fun `test generate time site example`(dsl: String, project: String) {
         execute("download_terraform")

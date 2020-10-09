@@ -604,7 +604,7 @@ resource "aws_lambda_function" "merged_0" {
   s3_key = "kotless-lambdas/ktor-site-merged-0.jar"
   source_code_hash = filesha256(aws_s3_bucket_object.merged_0.source)
   handler = "io.kotless.examples.Server::handleRequest"
-  runtime = "java11"
+  runtime = "provided"
   timeout = 300
   memory_size = 1024
   environment {
@@ -764,8 +764,8 @@ resource "aws_s3_bucket_object" "eu_ktor_site_s3_ktls_aws_intellij_net_static_js
 resource "aws_s3_bucket_object" "merged_0" {
   bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
   key = "kotless-lambdas/ktor-site-merged-0.jar"
-  source = "{root}/build/site/libs/site-0.1.6-all.jar"
-  etag = filemd5("{root}/build/site/libs/site-0.1.6-all.jar")
+  source = "{root}/build/site/distributions/site-0.1.6.zip"
+  etag = filemd5("{root}/build/site/distributions/site-0.1.6.zip")
 }
 
 data "aws_acm_certificate" "ktor_site_kotless_io" {

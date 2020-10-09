@@ -30,10 +30,6 @@ kotless {
 
     webapp {
         route53 = Route53("ktor.short", "kotless.io")
-
-        lambda {
-            runtime = Runtime.GraalVM
-        }
     }
 
     extensions {

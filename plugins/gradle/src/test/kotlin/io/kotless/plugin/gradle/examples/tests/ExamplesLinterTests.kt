@@ -27,7 +27,6 @@ class ExamplesLinterTests: ExamplesTestBase() {
     @ParameterizedTest(name = "task {0} in ms range {1}")
     fun `test generate time site example`(dsl: String, project: String) {
         execute(dsl, project, "generate")
-        execute(dsl, project, "shadowJar")
 
         val status = Linter.lint(bin, actual(project).parentFile)
 

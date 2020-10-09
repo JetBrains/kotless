@@ -23,7 +23,6 @@ subprojects {
     }
 
     repositories {
-        mavenLocal()
         jcenter()
         gradlePluginPortal()
     }
