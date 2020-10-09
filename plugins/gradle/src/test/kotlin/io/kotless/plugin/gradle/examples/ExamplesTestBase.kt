@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.examples
 
 import io.kotless.plugin.gradle.utils.Resources
+import io.kotless.terraform.functions.path
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.params.provider.Arguments
 import java.io.File
@@ -56,7 +57,16 @@ abstract class ExamplesTestBase {
     }
 
     /** Get expected content of Terraform file */
+    private val containsPathStartingWithWindowsDrive = "^.*[A-Z]:\\\\.*/.*\$".toRegex()
     fun expected(dsl: String, project: String): String {
-        return Resources.read("/examples/$dsl/$project/$project.tf").replace("{root}", projectDir.canonicalPath)
+        return Resources.read("/examples/$dsl/$project/$project.tf")
+            .replace("{root}", path(projectDir))
+            .lines().joinToString("\n") { line ->
+                if (line.matches(containsPathStartingWithWindowsDrive)) {
+                    line.replace("/", "\\\\")
+                } else {
+                    line
+                }
+            }
     }
 }
