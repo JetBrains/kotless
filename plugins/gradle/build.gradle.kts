@@ -61,7 +61,7 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform {
         includeTags = setOf("unit")
-        excludeTags = setOf("integration")
+        excludeTags = setOf("integration-ci", "integration-local")
     }
 
     testLogging {
@@ -69,10 +69,25 @@ tasks.withType<Test> {
     }
 }
 
-tasks.create("integration", Test::class.java) {
+tasks.create("integration-ci", Test::class.java) {
+    group = "verification"
+
     useJUnitPlatform {
-        excludeTags = setOf("unit")
-        includeTags = setOf("integration")
+        excludeTags = setOf("unit", "integration-local")
+        includeTags = setOf("integration-ci")
+    }
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
+tasks.create("integration-local", Test::class.java) {
+    group = "verification"
+
+    useJUnitPlatform {
+        excludeTags = setOf("unit", "integration-ci")
+        includeTags = setOf("integration-local")
     }
 
     testLogging {

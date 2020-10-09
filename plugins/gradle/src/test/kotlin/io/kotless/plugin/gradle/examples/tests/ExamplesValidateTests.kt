@@ -14,7 +14,7 @@ class ExamplesValidateTests: ExamplesTestBase() {
     }
 
 
-    @Tag("integration")
+    @Tag("integration-local")
     @MethodSource("dataWithoutGraal")
     @ParameterizedTest(name = "task {0} in ms range {1}")
     fun `test generate time site example`(dsl: String, project: String) {

@@ -16,7 +16,7 @@ class ExamplesPerformanceTests: ExamplesTestBase() {
     }
 
 
-    @Tag("integration")
+    @Tag("integration-ci")
     @MethodSource("data")
     @ParameterizedTest(name = "task {0} in ms range {1}")
     fun `test generate time site example`(dsl: String, project: String) {
