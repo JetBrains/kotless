@@ -14,7 +14,10 @@ dependencies {
 
     api("org.slf4j", "slf4j-api", Versions.slf4j)
 
-    api("com.amazonaws", "aws-java-sdk-core", Versions.aws)
+    api("com.amazonaws", "aws-java-sdk-core", Versions.aws) {
+        exclude("com.fasterxml.jackson.core")
+        exclude("com.fasterxml.jackson.dataformat")
+    }
     //override old jackson version
     api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
     api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")
