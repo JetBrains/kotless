@@ -18,6 +18,11 @@ enum class AwsResource(val prefix: String, val glob: (region: String, account: S
         read = setOf("BatchGetItem", "GetItem", "TransactGetItems", "Query", "Scan", "Describe*", "List*"),
         write = setOf("BatchWriteItem", "PutItem", "TransactWriteItems", "Create*", "Delete*", "Restore*", "Update*", "TagResource", "UntagResource")
     ),
+    DynamoDBIndex("dynamodb",
+        glob = { region, account -> "arn:aws:dynamodb:$region:$account" },
+        read = setOf("Query", "Scan"),
+        write = setOf()
+    ),
     CloudWatchLogs("logs",
         glob = { region, account -> "arn:aws:logs:$region:$account" },
         read = setOf("GetLogEvents", "GetLogRecord", "GetLogGroupFields", "GetQueryResults", "DescribeLogGroups", "DescribeLogStreams", "DescribeMetricFilters"),

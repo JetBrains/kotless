@@ -47,6 +47,7 @@ object PermissionsProcessor {
                         val id = annotation.getValue(context, DynamoDBTable::table)!!
                         val level = annotation.getEnumValue(context, DynamoDBTable::level)!!
                         permissions.add(Permission(AwsResource.DynamoDB, level, setOf("table/$id")))
+                        permissions.add(Permission(AwsResource.DynamoDBIndex, level, setOf("table/$id/index/*")))
                     }
                 }
             }
