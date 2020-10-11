@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless.examples"
-version = "0.1.7-beta-1"
+version = "0.1.7-beta-2"
 
 plugins {
     id("tanvd.kosogor") version "1.0.9" apply true
@@ -15,7 +15,6 @@ subprojects {
     }
 
     repositories {
-        mavenLocal()
         jcenter()
     }
 

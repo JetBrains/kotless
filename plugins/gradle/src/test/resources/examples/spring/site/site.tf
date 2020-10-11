@@ -764,8 +764,8 @@ resource "aws_s3_bucket_object" "eu_spring_site_s3_ktls_aws_intellij_net_static_
 resource "aws_s3_bucket_object" "io_kotless_examples_page_0" {
   bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
   key = "kotless-lambdas/spring-site-io-kotless-examples-page-0.jar"
-  source = "{root}/build/site/libs/site-0.1.7-beta-1-all.jar"
-  etag = filemd5("{root}/build/site/libs/site-0.1.7-beta-1-all.jar")
+  source = "{root}/build/site/libs/site-0.1.7-beta-2-all.jar"
+  etag = filemd5("{root}/build/site/libs/site-0.1.7-beta-2-all.jar")
 }
 
 data "aws_acm_certificate" "spring_site_kotless_io" {

@@ -388,8 +388,8 @@ resource "aws_s3_bucket_object" "eu_ktor_short_s3_ktls_aws_intellij_net_static_j
 resource "aws_s3_bucket_object" "merged_0" {
   bucket = "eu.ktor-short.s3.ktls.aws.intellij.net"
   key = "kotless-lambdas/ktor-short-merged-0.jar"
-  source = "{root}/build/shortener/libs/shortener-0.1.7-beta-1-all.jar"
-  etag = filemd5("{root}/build/shortener/libs/shortener-0.1.7-beta-1-all.jar")
+  source = "{root}/build/shortener/libs/shortener-0.1.7-beta-2-all.jar"
+  etag = filemd5("{root}/build/shortener/libs/shortener-0.1.7-beta-2-all.jar")
 }
 
 data "aws_acm_certificate" "ktor_short_kotless_io" {
