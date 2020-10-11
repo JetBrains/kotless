@@ -247,7 +247,7 @@ features as:
 
 Kotless beta releases include cutting-edge features that are under testing right now.
 
-In Kotless `0.1.7-beta-3` release we are introducing support for GraalVM. With one configuration
+In Kotless `0.1.7-beta-4` release we are introducing support for GraalVM. With one configuration
 variable you can convert your existing JVM applications into ultra-fast native applications.
 
 Just specify the GraalVM runtime and let Kotless do everything for you.

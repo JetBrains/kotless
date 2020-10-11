@@ -48,6 +48,9 @@ dependencies {
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
 
+    api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
+    api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")
+
     testImplementation(gradleTestKit())
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.0")
     testImplementation("org.junit.jupiter", "junit-jupiter-params", "5.6.0")
