@@ -2,6 +2,8 @@ package io.kotless.plugin.gradle.dsl
 
 import io.kotless.KotlessConfig
 
+const val KOTLESS_ENVIRONMENT = "kotless_environment"
+
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
         KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.resolvedStaticsRoot),
@@ -18,7 +20,8 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
                         provider.version,
                         provider.profile ?: profile,
                         provider.region ?: region
-                    )
+                    ),
+                    this@toSchema.extensions.terraform.locals + (KOTLESS_ENVIRONMENT to "remote")
                 )
             },
             KotlessConfig.Optimization(

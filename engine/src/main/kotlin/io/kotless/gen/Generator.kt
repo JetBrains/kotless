@@ -8,6 +8,7 @@ import io.kotless.gen.factory.event.ScheduledEventsFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.infra.TFConfigFactory
 import io.kotless.gen.factory.infra.TFProvidersFactory
+import io.kotless.gen.factory.infra.TFLocalsFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
@@ -24,7 +25,7 @@ import kotlin.reflect.KClass
 object Generator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, StaticRoleFactory),
-        KotlessConfig.Terraform::class to setOf(TFConfigFactory, TFProvidersFactory),
+        KotlessConfig.Terraform::class to setOf(TFConfigFactory, TFProvidersFactory, TFLocalsFactory),
 
         Application.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
         Application.ApiGateway.Deployment::class to setOf(DeploymentFactory),
