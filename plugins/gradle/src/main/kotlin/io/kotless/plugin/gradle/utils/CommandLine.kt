@@ -32,8 +32,19 @@ internal object CommandLine {
         )
     }
 
-    fun executeOrFail(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean = false, redirectErr: Boolean = true){
-        val returnCode = execute(exec, args, workingDir, redirectStdout, redirectErr)
+    fun executeOrFail(exec: String, args: List<String>, workingDir: File, redirectStdout: Boolean = false, redirectErr: Boolean = true) {
+        return executeOrFail(exec, args, emptyMap(), workingDir, redirectStdout, redirectErr)
+    }
+
+    fun executeOrFail(
+        exec: String,
+        args: List<String>,
+        envs: Map<String, String>,
+        workingDir: File,
+        redirectStdout: Boolean = false,
+        redirectErr: Boolean = true
+    ) {
+        val returnCode = execute(exec, args, envs, workingDir, redirectStdout, redirectErr)
         if (returnCode != 0) {
             error("Command failed: '$exec ${args.joinToString { " " }}'")
         }

@@ -39,7 +39,7 @@ internal open class TerraformOperationTask : DefaultTask() {
 
     @TaskAction
     fun act() {
-        CommandLine.execute(
+        CommandLine.executeOrFail(
             exec = TerraformDownloadTask.tfBin(project).absolutePath,
             args = operation.op,
             envs = environment,
