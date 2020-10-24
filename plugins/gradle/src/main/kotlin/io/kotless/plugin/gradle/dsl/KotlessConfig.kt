@@ -156,6 +156,8 @@ class KotlessConfig(project: Project) : Serializable {
             var profile: String? = null
 
             var region: String? = null
+
+            var logRetentionInDays: Int? = null
         }
 
         internal val provider = AWSProvider()
