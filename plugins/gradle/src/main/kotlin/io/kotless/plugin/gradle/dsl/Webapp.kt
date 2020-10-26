@@ -21,7 +21,7 @@ class Webapp(project: Project) : Serializable {
         var timeoutSec: Int = 300
 
         /** Environment that should be additionally passed to lambda */
-        val environment: HashMap<String, String> = HashMap()
+        var environment: Map<String, String> = HashMap()
 
         /** Runtime used to start Lambdas. By default, would be equal to the lowest compatible version.  */
         var runtime: Runtime? = null
