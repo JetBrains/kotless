@@ -410,6 +410,11 @@ data "aws_iam_policy_document" "io_kotless_examples_page_0" {
   }
   statement {
     effect = "Allow"
+    resources = ["arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/spring-short-url-table/index/*"]
+    actions = ["dynamodb:Query", "dynamodb:Scan"]
+  }
+  statement {
+    effect = "Allow"
     resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"]
     actions = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:DeleteLogGroup", "logs:DeleteLogStream", "logs:DeleteMetricFilter", "logs:DescribeLogGroups", "logs:DescribeLogStreams", "logs:DescribeMetricFilters", "logs:GetLogEvents", "logs:GetLogGroupFields", "logs:GetLogRecord", "logs:GetQueryResults", "logs:PutLogEvents", "logs:PutMetricFilter"]
   }
