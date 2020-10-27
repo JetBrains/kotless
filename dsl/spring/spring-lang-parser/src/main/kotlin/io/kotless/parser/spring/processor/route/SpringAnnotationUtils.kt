@@ -45,6 +45,8 @@ object SpringAnnotationUtils {
             val currentPath = annotation.getURIPaths(binding, "value")
                 ?: error(func, "`value` parameter is required for @GetMapping/@PostMapping/... style annotations")
 
+            require(func, currentPath.size == 1) { "`value` parameter of @GetMapping/@PostMapping/... style annotations should have only one path" }
+
             URIPath(existingPath, currentPath.single())
         }, onAnyMethodAnnotation = { annotation ->
             val existingPath = getRoutePath(func, binding)
