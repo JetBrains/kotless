@@ -17,7 +17,8 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
                     KotlessConfig.Terraform.AWSProvider(
                         provider.version,
                         provider.profile ?: profile,
-                        provider.region ?: region
+                        provider.region ?: region,
+                        provider.logRetentionInDays
                     )
                 )
             },

@@ -51,7 +51,7 @@ data class KotlessConfig(
          * @param profile AWS profile from a local machine to use for Terraform operations authentication
          * @param region AWS region in context of which all Terraform operations should be performed
          */
-        data class AWSProvider(val version: String, val profile: String, val region: String) : Visitable
+        data class AWSProvider(val version: String, val profile: String, val region: String, val logRetentionInDays: Int?) : Visitable
 
         override fun visit(visitor: (Any) -> Unit) {
             aws.visit(visitor)

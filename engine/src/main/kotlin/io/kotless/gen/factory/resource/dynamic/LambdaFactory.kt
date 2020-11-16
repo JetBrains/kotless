@@ -1,14 +1,15 @@
 package io.kotless.gen.factory.resource.dynamic
 
-import io.kotless.resource.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.hcl.HCLEntity
 import io.kotless.hcl.HCLTextField
 import io.kotless.hcl.ref
+import io.kotless.resource.Lambda
 import io.kotless.terraform.functions.*
 import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
+import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_log_group
 import io.kotless.terraform.provider.aws.resource.iam.iam_role
 import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
 import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
@@ -61,6 +62,11 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
             policy = policy_document::json.ref
         }
 
+        val cloudwatch_log_group = cloudwatch_log_group(context.names.tf(entity.name)) {
+            name = "/aws/lambda/${context.names.aws(entity.name)}"
+            retention_in_days = context.schema.config.terraform.aws.logRetentionInDays ?: 0
+        }
+
         val lambda = lambda_function(context.names.tf(entity.name)) {
             function_name = context.names.aws(entity.name)
 
@@ -88,10 +94,12 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
                     }
                 }
             }
+
+            depends_on = arrayOf(link(cloudwatch_log_group.hcl_ref))
         }
 
         return GenerationFactory.GenerationResult(
-            Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy
+            Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy, cloudwatch_log_group
         )
     }
 }
