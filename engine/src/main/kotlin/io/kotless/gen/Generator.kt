@@ -18,7 +18,7 @@ import io.kotless.gen.factory.route53.RecordFactory
 import io.kotless.gen.factory.route53.ZoneFactory
 import io.kotless.resource.Lambda
 import io.kotless.resource.StaticResource
-import io.kotless.terraform.TFFile
+import io.terraformkt.terraform.TFFile
 import kotlin.reflect.KClass
 
 object Generator {

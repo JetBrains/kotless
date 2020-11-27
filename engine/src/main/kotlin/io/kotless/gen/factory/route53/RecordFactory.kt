@@ -4,7 +4,7 @@ import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.apigateway.DomainFactory
-import io.kotless.terraform.provider.aws.resource.route53.route53_record
+import io.terraformkt.aws.resource.route53.route53_record
 
 object RecordFactory : GenerationFactory<Application.Route53, Unit> {
     override fun mayRun(entity: Application.Route53, context: GenerationContext) = context.output.check(entity, ZoneFactory)

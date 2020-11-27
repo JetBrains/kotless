@@ -2,10 +2,10 @@ package io.kotless.gen
 
 import io.kotless.Schema
 import io.kotless.Application
-import io.kotless.hcl.HCLEntity
 import io.kotless.utils.Storage
 import io.kotless.utils.Text
 import io.kotless.utils.plusIterable
+import io.terraformkt.hcl.HCLEntity
 
 /**
  * Context of current Terraform generation

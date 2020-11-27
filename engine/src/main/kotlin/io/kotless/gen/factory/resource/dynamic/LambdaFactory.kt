@@ -4,15 +4,13 @@ import io.kotless.resource.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
-import io.kotless.hcl.HCLEntity
-import io.kotless.hcl.HCLTextField
-import io.kotless.hcl.ref
+import io.terraformkt.hcl.ref
 import io.kotless.terraform.functions.*
-import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
-import io.kotless.terraform.provider.aws.resource.iam.iam_role
-import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
-import io.kotless.terraform.provider.aws.resource.lambda.lambda_function
-import io.kotless.terraform.provider.aws.resource.s3.s3_object
+import io.terraformkt.aws.data.iam.iam_policy_document
+import io.terraformkt.aws.resource.iam.iam_role
+import io.terraformkt.aws.resource.iam.iam_role_policy
+import io.terraformkt.aws.resource.lambda.lambda_function
+import io.terraformkt.aws.resource.s3.s3_bucket_object
 
 
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
@@ -23,7 +21,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
-        val obj = s3_object(context.names.tf(entity.name)) {
+        val obj = s3_bucket_object(context.names.tf(entity.name)) {
             bucket = context.schema.config.bucket
             key = "kotless-lambdas/${context.names.aws(entity.name)}.jar"
             source = path(entity.file)
@@ -79,13 +77,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
 
             if (entity.config.environment.isNotEmpty()) {
                 environment {
-                    variables = object : HCLEntity() {
-                        init {
-                            for ((key, value) in entity.config.environment) {
-                                fields.add(HCLTextField(key, false, this, value))
-                            }
-                        }
-                    }
+                    variables(entity.config.environment)
                 }
             }
         }

@@ -5,13 +5,12 @@ import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.route.static.StaticRouteFactory
-import io.kotless.hcl.HCLEntity
-import io.kotless.hcl.ref
 import io.kotless.terraform.functions.eval
-import io.kotless.terraform.functions.link
 import io.kotless.terraform.functions.timestamp
 import io.kotless.terraform.infra.TFOutput
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_deployment
+import io.terraformkt.aws.resource.apigateway.api_gateway_deployment
+import io.terraformkt.hcl.ref
+import io.terraformkt.utils.link
 
 object DeploymentFactory : GenerationFactory<Application.ApiGateway.Deployment, DeploymentFactory.Output> {
     data class Output(val stage_name: String)
@@ -31,9 +30,7 @@ object DeploymentFactory : GenerationFactory<Application.ApiGateway.Deployment, 
             rest_api_id = api.rest_api_id
             stage_name = entity.version
 
-            variables = object : HCLEntity() {
-                val deployed_at by text(default = eval(timestamp()))
-            }
+            variables(mapOf("deployed_at" to eval(timestamp())))
 
             lifecycle {
                 create_before_destroy = true

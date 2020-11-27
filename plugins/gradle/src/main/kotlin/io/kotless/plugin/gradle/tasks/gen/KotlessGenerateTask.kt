@@ -5,7 +5,7 @@ import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.*
 import io.kotless.plugin.gradle.utils.gradle.*
 import io.kotless.resource.Lambda
-import io.kotless.terraform.TFFile
+import io.terraformkt.terraform.TFFile
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.JavaVersion

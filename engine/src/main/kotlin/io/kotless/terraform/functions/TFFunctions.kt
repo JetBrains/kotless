@@ -1,6 +1,6 @@
 package io.kotless.terraform.functions
 
-import io.kotless.hcl.HCLTextField
+import io.terraformkt.hcl.HCLTextField
 import java.io.File
 
 //Escaping required for Windows

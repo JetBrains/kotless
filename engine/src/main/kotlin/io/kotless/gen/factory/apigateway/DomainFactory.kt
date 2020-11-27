@@ -5,9 +5,9 @@ import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.route53.CertificateFactory
 import io.kotless.gen.factory.route53.ZoneFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_base_path_mapping
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_domain_name
+import io.terraformkt.aws.resource.apigateway.api_gateway_base_path_mapping
+import io.terraformkt.aws.resource.apigateway.api_gateway_domain_name
+import io.terraformkt.hcl.ref
 
 
 object DomainFactory : GenerationFactory<Application.ApiGateway, DomainFactory.Output> {

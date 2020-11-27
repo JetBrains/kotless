@@ -4,10 +4,11 @@ import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.info.InfoFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.data.iam.iam_policy_document
-import io.kotless.terraform.provider.aws.resource.iam.iam_role
-import io.kotless.terraform.provider.aws.resource.iam.iam_role_policy
+import io.terraformkt.hcl.ref
+import io.terraformkt.aws.data.iam.iam_policy_document
+import io.terraformkt.aws.resource.iam.iam_role
+import io.terraformkt.aws.resource.iam.iam_role_policy
+
 
 object StaticRoleFactory : GenerationFactory<Application, StaticRoleFactory.Output> {
     data class Output(val role_arn: String, val role_name: String)

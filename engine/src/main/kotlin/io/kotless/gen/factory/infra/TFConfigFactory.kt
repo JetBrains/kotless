@@ -3,9 +3,9 @@ package io.kotless.gen.factory.infra
 import io.kotless.KotlessConfig
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.terraform.infra.TFConfig
-import io.kotless.terraform.infra.aws_provider
-import io.kotless.terraform.infra.terraform
+import io.terraformkt.aws.provider.provider
+import io.terraformkt.terraform.TFConfig
+import io.terraformkt.terraform.terraform
 
 object TFConfigFactory : GenerationFactory<KotlessConfig.Terraform, Unit> {
     override fun mayRun(entity: KotlessConfig.Terraform, context: GenerationContext) = true
@@ -21,7 +21,7 @@ object TFConfigFactory : GenerationFactory<KotlessConfig.Terraform, Unit> {
             }
         }
 
-        val aws_provider = aws_provider {
+        val aws_provider = provider {
             profile = entity.aws.profile
             region = entity.aws.region
             version = entity.aws.version

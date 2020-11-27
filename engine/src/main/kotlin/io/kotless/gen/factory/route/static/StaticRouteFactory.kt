@@ -8,13 +8,13 @@ import io.kotless.gen.factory.apigateway.RestAPIFactory
 import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.route.AbstractRouteFactory
-import io.kotless.hcl.HCLEntity
-import io.kotless.hcl.ref
+import io.terraformkt.hcl.HCLEntity
 import io.kotless.terraform.functions.link
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_method
-import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gateway_integration_response
-import io.kotless.terraform.provider.aws.resource.apigateway.response.api_gateway_method_response
+import io.terraformkt.aws.resource.apigateway.api_gateway_integration
+import io.terraformkt.aws.resource.apigateway.api_gateway_integration_response
+import io.terraformkt.aws.resource.apigateway.api_gateway_method
+import io.terraformkt.aws.resource.apigateway.api_gateway_method_response
+import io.terraformkt.hcl.ref
 
 object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute, StaticRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)
@@ -48,11 +48,9 @@ object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute
             rest_api_id = api.rest_api_id
             resource_id = resourceApi.id
             http_method = method::http_method.ref
-            status_code = 200
-            response_parameters = object : HCLEntity() {
-                val contentType by bool(name = "\"method.response.header.Content-Type\"", default = true)
-                val contentLength by bool(name = "\"method.response.header.Content-Length\"", default = true)
-            }
+            status_code = "200"
+            responseParameters(mapOf("method.response.header.Content-Type" to true, "method.response.header.Content-Length"
+            to true))
         }
 
         val integration = api_gateway_integration(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
@@ -76,11 +74,9 @@ object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute
             rest_api_id = api.rest_api_id
             resource_id = resourceApi.id
             http_method = method::http_method.ref
-            status_code = 200
-            response_parameters = object : HCLEntity() {
-                val contentType by text(name = "\"method.response.header.Content-Type\"", default = "integration.response.header.Content-Type")
-                val contentLength by text(name = "\"method.response.header.Content-Length\"", default = "integration.response.header.Content-Length")
-            }
+            status_code = "200"
+            responseParameters(mapOf("method.response.header.Content-Type" to "integration.response.header.Content-Type",
+                "method.response.header.Content-Length" to "integration.response.header.Content-Length"))
         }
 
 
