@@ -195,9 +195,9 @@ class KotlessConfig(project: Project) : Serializable {
          * Lambdas cannot be autowarmed with interval more than hour, since it has no practical sense
          */
         @KotlessDSLTag
-        data class Autowarm(val enable: Boolean, val minutes: Int) : Serializable
+        data class Autowarm(val enable: Boolean, val minutes: Int = 5) : Serializable
 
-        var autowarm: Autowarm = Autowarm(true, 5)
+        var autowarm: Autowarm = Autowarm(enable = true)
     }
 
     internal val optimization: Optimization = Optimization()
