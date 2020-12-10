@@ -11,6 +11,9 @@ class Extensions : Serializable {
         /** Allow usage of Destroy task */
         var allowDestroy = false
 
+        /** Additional locals that can be used to customize Terraform configuration */
+        val locals: HashMap<String, String> = HashMap()
+
         @KotlessDSLTag
         class Files : Serializable {
             internal val additional = HashSet<File>()

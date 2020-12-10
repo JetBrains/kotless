@@ -1,12 +1,16 @@
 package io.kotless.plugin.gradle.tasks.gen
 
 import io.kotless.AwsResource
+import io.kotless.hcl.HCLEntity
+import io.kotless.hcl.HCLTextField
+import io.kotless.plugin.gradle.dsl.KOTLESS_ENVIRONMENT
 import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.gradle.Groups
 import io.kotless.plugin.gradle.utils.gradle.clearDirectory
 import io.kotless.terraform.TFFile
 import io.kotless.terraform.infra.aws_provider
+import io.kotless.terraform.infra.locals
 import io.kotless.terraform.infra.terraform
 import io.kotless.terraform.tf
 import org.codehaus.plexus.util.FileUtils
@@ -54,6 +58,18 @@ internal open class KotlessLocalGenerateTask : DefaultTask() {
                 skip_requesting_account_id = true
 
                 endpoints(services.mapKeys { it.key.prefix })
+            }
+
+            val localVariables = myKotless.extensions.terraform.locals + (KOTLESS_ENVIRONMENT to "local")
+
+            locals {
+                variables = object : HCLEntity() {
+                    init {
+                        for ((key, value) in localVariables) {
+                            fields.add(HCLTextField(key, false, this, value))
+                        }
+                    }
+                }
             }
         }
 

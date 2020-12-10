@@ -32,7 +32,7 @@ data class KotlessConfig(
      *
      * @param version version of Terraform used
      */
-    data class Terraform(val version: String, val backend: Backend, val aws: AWSProvider) : Visitable {
+    data class Terraform(val version: String, val backend: Backend, val aws: AWSProvider, val locals: Map<String, String>) : Visitable {
 
         /**
          * Configuration of Terraform backend
