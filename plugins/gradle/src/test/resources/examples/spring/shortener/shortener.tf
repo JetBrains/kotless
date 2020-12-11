@@ -364,32 +364,32 @@ resource "aws_route53_record" "spring_short_kotless_io" {
 resource "aws_s3_bucket_object" "eu_spring_short_s3_ktls_aws_intellij_net_static_css_shortener_css" {
   bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
   content_type = "text/css"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/css/shortener.css")
+  etag = filemd5("{root}/spring/shortener/src/main/resources/static/css/shortener.css")
   key = "static/css/shortener.css"
-  source = "/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/css/shortener.css"
+  source = "{root}/spring/shortener/src/main/resources/static/css/shortener.css"
 }
 
 resource "aws_s3_bucket_object" "eu_spring_short_s3_ktls_aws_intellij_net_static_favicon_apng" {
   bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
   content_type = "image/apng"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/favicon.apng")
+  etag = filemd5("{root}/spring/shortener/src/main/resources/static/favicon.apng")
   key = "static/favicon.apng"
-  source = "/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/favicon.apng"
+  source = "{root}/spring/shortener/src/main/resources/static/favicon.apng"
 }
 
 resource "aws_s3_bucket_object" "eu_spring_short_s3_ktls_aws_intellij_net_static_js_shortener_js" {
   bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
   content_type = "application/javascript"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/js/shortener.js")
+  etag = filemd5("{root}/spring/shortener/src/main/resources/static/js/shortener.js")
   key = "static/js/shortener.js"
-  source = "/home/anstkras/cool_projects/kotless/examples/spring/shortener/src/main/resources/static/js/shortener.js"
+  source = "{root}/spring/shortener/src/main/resources/static/js/shortener.js"
 }
 
 resource "aws_s3_bucket_object" "io_kotless_examples_page_0" {
   bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/build/shortener/libs/shortener-0.1.7-beta-4-all.jar")
+  etag = filemd5("{root}/build/shortener/libs/shortener-0.1.7-beta-4-all.jar")
   key = "kotless-lambdas/spring-short-io-kotless-examples-page-0.jar"
-  source = "/home/anstkras/cool_projects/kotless/examples/build/shortener/libs/shortener-0.1.7-beta-4-all.jar"
+  source = "{root}/build/shortener/libs/shortener-0.1.7-beta-4-all.jar"
 }
 
 data "aws_acm_certificate" "spring_short_kotless_io" {

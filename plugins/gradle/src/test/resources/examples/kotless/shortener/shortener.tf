@@ -382,32 +382,32 @@ resource "aws_route53_record" "short_kotless_io" {
 resource "aws_s3_bucket_object" "eu_short_s3_ktls_aws_intellij_net_static_css_shortener_css" {
   bucket = "eu.short.s3.ktls.aws.intellij.net"
   content_type = "text/css"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/css/shortener.css")
+  etag = filemd5("{root}/kotless/shortener/src/main/resources/css/shortener.css")
   key = "static/css/shortener.css"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/css/shortener.css"
+  source = "{root}/kotless/shortener/src/main/resources/css/shortener.css"
 }
 
 resource "aws_s3_bucket_object" "eu_short_s3_ktls_aws_intellij_net_static_favicon_apng" {
   bucket = "eu.short.s3.ktls.aws.intellij.net"
   content_type = "image/apng"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/favicon.apng")
+  etag = filemd5("{root}/kotless/shortener/src/main/resources/favicon.apng")
   key = "static/favicon.apng"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/favicon.apng"
+  source = "{root}/kotless/shortener/src/main/resources/favicon.apng"
 }
 
 resource "aws_s3_bucket_object" "eu_short_s3_ktls_aws_intellij_net_static_js_shortener_js" {
   bucket = "eu.short.s3.ktls.aws.intellij.net"
   content_type = "application/javascript"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/js/shortener.js")
+  etag = filemd5("{root}/kotless/shortener/src/main/resources/js/shortener.js")
   key = "static/js/shortener.js"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/shortener/src/main/resources/js/shortener.js"
+  source = "{root}/kotless/shortener/src/main/resources/js/shortener.js"
 }
 
 resource "aws_s3_bucket_object" "merged_0" {
   bucket = "eu.short.s3.ktls.aws.intellij.net"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/build/shortener/libs/shortener-0.1.7-beta-4-all.jar")
+  etag = filemd5("{root}/build/shortener/libs/shortener-0.1.7-beta-4-all.jar")
   key = "kotless-lambdas/short-merged-0.jar"
-  source = "/home/anstkras/cool_projects/kotless/examples/build/shortener/libs/shortener-0.1.7-beta-4-all.jar"
+  source = "{root}/build/shortener/libs/shortener-0.1.7-beta-4-all.jar"
 }
 
 data "aws_acm_certificate" "short_kotless_io" {

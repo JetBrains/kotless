@@ -56,7 +56,6 @@ internal open class KotlessLocalGenerateTask : DefaultTask() {
                 skip_metadata_api_check = true
                 skip_requesting_account_id = true
 
-                // TODO make it better
                 endpoints {
                     val resultedMap = services.mapKeys { it.key.prefix }
                     resultedMap.forEach { (k, v) ->

@@ -732,40 +732,40 @@ resource "aws_route53_record" "site_kotless_io" {
 resource "aws_s3_bucket_object" "eu_site_s3_ktls_aws_intellij_net_static_css_highlight_style_css" {
   bucket = "eu.site.s3.ktls.aws.intellij.net"
   content_type = "text/css"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/css/highlight-style.css")
+  etag = filemd5("{root}/kotless/site/src/main/resources/css/highlight-style.css")
   key = "static/css/highlight-style.css"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/css/highlight-style.css"
+  source = "{root}/kotless/site/src/main/resources/css/highlight-style.css"
 }
 
 resource "aws_s3_bucket_object" "eu_site_s3_ktls_aws_intellij_net_static_css_kotless_site_css" {
   bucket = "eu.site.s3.ktls.aws.intellij.net"
   content_type = "text/css"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/css/kotless-site.css")
+  etag = filemd5("{root}/kotless/site/src/main/resources/css/kotless-site.css")
   key = "static/css/kotless-site.css"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/css/kotless-site.css"
+  source = "{root}/kotless/site/src/main/resources/css/kotless-site.css"
 }
 
 resource "aws_s3_bucket_object" "eu_site_s3_ktls_aws_intellij_net_static_favicon_apng" {
   bucket = "eu.site.s3.ktls.aws.intellij.net"
   content_type = "image/apng"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/favicon.apng")
+  etag = filemd5("{root}/kotless/site/src/main/resources/favicon.apng")
   key = "static/favicon.apng"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/favicon.apng"
+  source = "{root}/kotless/site/src/main/resources/favicon.apng"
 }
 
 resource "aws_s3_bucket_object" "eu_site_s3_ktls_aws_intellij_net_static_js_highlight_pack_js" {
   bucket = "eu.site.s3.ktls.aws.intellij.net"
   content_type = "application/javascript"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/js/highlight.pack.js")
+  etag = filemd5("{root}/kotless/site/src/main/resources/js/highlight.pack.js")
   key = "static/js/highlight.pack.js"
-  source = "/home/anstkras/cool_projects/kotless/examples/kotless/site/src/main/resources/js/highlight.pack.js"
+  source = "{root}/kotless/site/src/main/resources/js/highlight.pack.js"
 }
 
 resource "aws_s3_bucket_object" "page_0" {
   bucket = "eu.site.s3.ktls.aws.intellij.net"
-  etag = filemd5("/home/anstkras/cool_projects/kotless/examples/build/site/libs/site-0.1.7-beta-4-all.jar")
+  etag = filemd5("{root}/build/site/libs/site-0.1.7-beta-4-all.jar")
   key = "kotless-lambdas/site-page-0.jar"
-  source = "/home/anstkras/cool_projects/kotless/examples/build/site/libs/site-0.1.7-beta-4-all.jar"
+  source = "{root}/build/site/libs/site-0.1.7-beta-4-all.jar"
 }
 
 data "aws_acm_certificate" "site_kotless_io" {
