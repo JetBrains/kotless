@@ -9,9 +9,9 @@ import io.kotless.gen.factory.info.InfoFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.route.AbstractRouteFactory
 import io.kotless.terraform.functions.link
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_integration
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_method
-import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
+import io.terraformkt.aws.resource.apigateway.api_gateway_integration
+import io.terraformkt.aws.resource.apigateway.api_gateway_method
+import io.terraformkt.aws.resource.lambda.lambda_permission
 
 object DynamicRouteFactory : GenerationFactory<Application.ApiGateway.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)

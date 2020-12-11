@@ -1,6 +1,6 @@
 package io.kotless.terraform.functions
 
-import io.kotless.hcl.HCLTextField
+import io.terraformkt.utils.toText
 import java.io.File
 
 //Escaping required for Windows
@@ -13,12 +13,12 @@ fun md5(field: String) = "md5($field)"
 fun base64sha256(field: String) = "base64sha256($field)"
 
 fun filemd5(file: File) = filemd5(path(file))
-fun filemd5(file: String) = "filemd5(${HCLTextField.toText(file)})"
+fun filemd5(file: String) = "filemd5(${toText(file)})"
 
-fun filesha256(file: String) = "filesha256(${HCLTextField.toText(file)})"
+fun filesha256(file: String) = "filesha256(${toText(file)})"
 
 fun file(file: File) = file(path(file))
-fun file(file: String) = "file(${HCLTextField.toText(file)})"
+fun file(file: String) = "file(${toText(file)})"
 
 
 fun timestamp() = "timestamp()"

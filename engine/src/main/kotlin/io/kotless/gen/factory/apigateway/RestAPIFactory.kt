@@ -4,8 +4,8 @@ import io.kotless.MimeType
 import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.resource.apigateway.api_gateway_rest_api
+import io.terraformkt.aws.resource.apigateway.api_gateway_rest_api
+import io.terraformkt.hcl.ref
 
 object RestAPIFactory : GenerationFactory<Application.ApiGateway, RestAPIFactory.Output> {
     data class Output(val rest_api_id: String, val root_resource_id: String, val ref: String)

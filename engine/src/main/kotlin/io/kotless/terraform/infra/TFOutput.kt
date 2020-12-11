@@ -1,7 +1,7 @@
 package io.kotless.terraform.infra
 
-import io.kotless.hcl.HCLEntity
 import io.kotless.utils.withIndent
+import io.terraformkt.hcl.HCLEntity
 
 /** Declaration of Terraform output */
 class TFOutput(override val hcl_name: String, val value: String) : HCLEntity.Named() {

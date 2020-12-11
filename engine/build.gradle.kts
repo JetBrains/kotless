@@ -7,6 +7,8 @@ version = rootProject.version
 dependencies {
     implementation(project(":schema"))
     implementation(kotlin("reflect"))
+    implementation ("io.terraformkt:entities:0.1.4")
+    implementation ("io.terraformkt.providers:aws:3.14.1-0.1.4")
 }
 
 publishJar {

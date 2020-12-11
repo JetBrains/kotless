@@ -3,7 +3,7 @@ package io.kotless.gen.factory.infra
 import io.kotless.KotlessConfig
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.terraform.infra.aws_provider
+import io.terraformkt.aws.provider.provider
 
 object TFProvidersFactory : GenerationFactory<KotlessConfig.Terraform, TFProvidersFactory.Output> {
     class Output(val us_east_provider: String?)
@@ -15,7 +15,7 @@ object TFProvidersFactory : GenerationFactory<KotlessConfig.Terraform, TFProvide
             return GenerationFactory.GenerationResult(Output(null))
         }
 
-        val aws_provider = aws_provider {
+        val aws_provider = provider {
             alias = "us_east_1"
             profile = entity.aws.profile
             region = "us-east-1"

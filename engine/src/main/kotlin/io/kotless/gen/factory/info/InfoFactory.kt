@@ -3,10 +3,10 @@ package io.kotless.gen.factory.info
 import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.data.info.caller_identity
-import io.kotless.terraform.provider.aws.data.info.region
-import io.kotless.terraform.provider.aws.data.s3.s3_bucket
+import io.terraformkt.hcl.ref
+import io.terraformkt.aws.data.caller.caller_identity
+import io.terraformkt.aws.data.region.region
+import io.terraformkt.aws.data.s3.s3_bucket
 
 object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
     data class Output(val account_id: String, val region_name: String, val kotless_bucket_arn: String)

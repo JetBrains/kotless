@@ -5,14 +5,17 @@ import io.kotless.plugin.gradle.dsl.KotlessDSL
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.gradle.Groups
 import io.kotless.plugin.gradle.utils.gradle.clearDirectory
-import io.kotless.terraform.TFFile
-import io.kotless.terraform.infra.aws_provider
-import io.kotless.terraform.infra.terraform
-import io.kotless.terraform.tf
+import io.terraformkt.aws.provider.Provider
+import io.terraformkt.aws.provider.provider
+import io.terraformkt.terraform.TFFile
+import io.terraformkt.terraform.terraform
+import io.terraformkt.terraform.tf
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
 import java.io.File
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
 
 @CacheableTask
 internal open class KotlessLocalGenerateTask : DefaultTask() {
@@ -45,7 +48,7 @@ internal open class KotlessLocalGenerateTask : DefaultTask() {
                 required_version = myKotless.config.terraform.version
             }
 
-            aws_provider {
+            provider {
                 region = "us-east-1"
                 version = myKotless.config.terraform.provider.version
 
@@ -53,7 +56,14 @@ internal open class KotlessLocalGenerateTask : DefaultTask() {
                 skip_metadata_api_check = true
                 skip_requesting_account_id = true
 
-                endpoints(services.mapKeys { it.key.prefix })
+                endpoints {
+                    val resultedMap = services.mapKeys { it.key.prefix }
+                    resultedMap.forEach { (k, v) ->
+                        Provider.Endpoints::class.memberProperties.filter {
+                            it.name == k
+                        }.forEach { (it as KMutableProperty<*>).setter.call(this, v) }
+                    }
+                }
             }
         }
 

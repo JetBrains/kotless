@@ -4,10 +4,10 @@ import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.resource.dynamic.LambdaFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_rule
-import io.kotless.terraform.provider.aws.resource.cloudwatch.cloudwatch_event_target
-import io.kotless.terraform.provider.aws.resource.lambda.lambda_permission
+import io.terraformkt.aws.resource.cloudwatch.cloudwatch_event_rule
+import io.terraformkt.aws.resource.cloudwatch.cloudwatch_event_target
+import io.terraformkt.aws.resource.lambda.lambda_permission
+import io.terraformkt.hcl.ref
 
 object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, Unit> {
     override fun mayRun(entity: Application.Events.Scheduled, context: GenerationContext): Boolean {

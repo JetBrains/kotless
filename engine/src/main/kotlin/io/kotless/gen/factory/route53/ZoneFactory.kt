@@ -3,8 +3,8 @@ package io.kotless.gen.factory.route53
 import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.hcl.ref
-import io.kotless.terraform.provider.aws.data.route53.route53_zone
+import io.terraformkt.hcl.ref
+import io.terraformkt.aws.data.route53.route53_zone
 
 object ZoneFactory : GenerationFactory<Application.Route53, ZoneFactory.Output> {
     data class Output(val zone_id: String, val fqdn: String)

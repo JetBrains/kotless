@@ -1,6 +1,6 @@
 package io.kotless.gen
 
-import io.kotless.hcl.HCLEntity
+import io.terraformkt.hcl.HCLEntity
 
 /**
  * Interface of factory generating Terraform from schema

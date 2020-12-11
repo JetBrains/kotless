@@ -48,6 +48,10 @@ dependencies {
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
 
+    //terraform DSL
+    implementation ("io.terraformkt.providers:aws:3.14.1-0.1.4")
+    implementation ("io.terraformkt:entities:0.1.4")
+    
     api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
     api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")
 
