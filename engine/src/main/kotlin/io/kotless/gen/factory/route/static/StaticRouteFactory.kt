@@ -67,7 +67,6 @@ object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute
             credentials = static_role.role_arn
         }
 
-
         val response = api_gateway_integration_response(context.names.tf(entity.path.parts).ifBlank { "root_resource" }) {
             depends_on = arrayOf(link(method_response.hcl_ref), link(integration.hcl_ref))
 
@@ -77,8 +76,9 @@ object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute
             status_code = "200"
             responseParameters(mapOf("method.response.header.Content-Type" to "integration.response.header.Content-Type",
                 "method.response.header.Content-Length" to "integration.response.header.Content-Length"))
+            if(context.schema.statics[entity.resource]!!.mime.isBinary)
+                content_handling = "CONVERT_TO_BINARY"
         }
-
 
         return GenerationFactory.GenerationResult(Output(integration.hcl_ref), method, response, method_response, integration)
     }
