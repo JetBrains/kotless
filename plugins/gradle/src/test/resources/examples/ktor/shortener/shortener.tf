@@ -111,6 +111,7 @@ resource "aws_api_gateway_integration_response" "css_shortener_css" {
 
 resource "aws_api_gateway_integration_response" "favicon_apng" {
   depends_on = [aws_api_gateway_integration.favicon_apng, aws_api_gateway_method_response.favicon_apng]
+  content_handling = "CONVERT_TO_BINARY"
   http_method = aws_api_gateway_method.favicon_apng.http_method
   resource_id = aws_api_gateway_resource.favicon_apng.id
   rest_api_id = aws_api_gateway_rest_api.shortener.id
