@@ -5,7 +5,6 @@ import io.kotless.dsl.LambdaHandler
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.Json
-import kotlinx.serialization.toUtf8Bytes
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import java.io.ByteArrayOutputStream
@@ -62,7 +61,7 @@ internal class DynamicHandler(private val handler: LambdaHandler) : AbstractHand
                 if (apiResponse.isBase64Encoded) {
                     outputStream.write(Base64.getDecoder().decode(apiResponseBody))
                 } else {
-                    outputStream.write(apiResponseBody.toUtf8Bytes())
+                    outputStream.write(apiResponseBody.toByteArray(Charsets.UTF_8))
                 }
             }
         }

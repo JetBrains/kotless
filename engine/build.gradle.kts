@@ -1,4 +1,4 @@
-import io.kotless.buildsrc.optInInternalAPI
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -7,8 +7,8 @@ version = rootProject.version
 dependencies {
     implementation(project(":schema"))
     implementation(kotlin("reflect"))
-    implementation ("io.terraformkt:entities:0.1.4")
-    implementation ("io.terraformkt.providers:aws:3.14.1-0.1.4")
+    implementation("io.terraformkt:entities:0.1.4")
+    implementation("io.terraformkt.providers:aws:3.14.1-0.1.4")
 }
 
 publishJar {
@@ -25,4 +25,8 @@ publishJar {
 }
 
 
-optInInternalAPI()
+tasks.withType<KotlinJvmCompile> {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
+    }
+}

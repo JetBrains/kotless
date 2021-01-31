@@ -1,4 +1,4 @@
-import io.kotless.buildsrc.optInInternalAPI
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
@@ -27,4 +27,8 @@ publishJar {
     }
 }
 
-optInInternalAPI()
+tasks.withType<KotlinJvmCompile> {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
+    }
+}

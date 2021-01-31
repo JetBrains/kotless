@@ -4,7 +4,6 @@ import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.dsl.reflection.ReflectionScanner
 import io.kotless.local.Environment
 import io.kotless.toURIPath
-import kotlinx.serialization.toUtf8Bytes
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import java.io.File
@@ -26,7 +25,7 @@ internal class StaticHandler : AbstractHandler() {
                 if (ann.mime.isBinary) {
                     outputStream.write(file.readBytes())
                 } else {
-                    outputStream.write(file.readText().toUtf8Bytes())
+                    outputStream.write(file.readText().toByteArray(Charsets.UTF_8))
                 }
             }
 

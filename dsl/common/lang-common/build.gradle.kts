@@ -6,7 +6,7 @@ version = rootProject.version
 
 
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.72" apply true
+    kotlin("plugin.serialization") version "1.4.21" apply true
 }
 
 dependencies {
@@ -22,7 +22,7 @@ dependencies {
     api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
     api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")
 
-    api("org.jetbrains.kotlinx", "kotlinx-serialization-runtime", Versions.serialization)
+    api("org.jetbrains.kotlinx", "kotlinx-serialization-json", Versions.serialization)
 
     api("com.amazonaws", "aws-lambda-java-core", Versions.lambdaJavaCore)
 }

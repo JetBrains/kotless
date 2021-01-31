@@ -24,6 +24,10 @@ object KotlessRuntimeTasks {
 
         runtime {
             handler = LocalParser.parse(project.myKtSourceSet.toSet(), Dependencies.getDependencies(project)).entrypoint.qualifiedName
+
+            config {
+                image = "ghcr.io/graalvm/graalvm-ce:java11-21.0.0"
+            }
         }
 
         afterEvaluate {
