@@ -247,8 +247,12 @@ features as:
 
 Kotless beta releases include cutting-edge features that are under testing right now.
 
-In Kotless `0.1.7-beta-4` release we are introducing support for GraalVM. With one configuration
+Since Kotless `0.1.7-beta-4` release we are introducing support for GraalVM. With one configuration
 variable you can convert your existing JVM applications into ultra-fast native applications.
+
+Since Kotless `0.1.7-beta-5` release Kotless is migrating to Kotlin 1.4. Unfortunately, due to 
+restrictions of current Kotless architecture it means that now Gradle 6.8.1+ is required to
+use Kotless.
 
 Just specify the GraalVM runtime and let Kotless do everything for you.
 ```kotlin
