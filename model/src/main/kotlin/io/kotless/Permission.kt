@@ -23,6 +23,11 @@ enum class AwsResource(val prefix: String, val glob: (region: String, account: S
         read = setOf("Query", "Scan"),
         write = setOf()
     ),
+    SQSQueue("sqs",
+        glob = { region, account -> "arn:aws:sqs:$region:$account" },
+        read = setOf("Get*", "List*", "ReceiveMessage"),
+        write = setOf("DeleteMessage", "PurgeQueue", "SendMessage")
+    ),
     CloudWatchLogs("logs",
         glob = { region, account -> "arn:aws:logs:$region:$account" },
         read = setOf("GetLogEvents", "GetLogRecord", "GetLogGroupFields", "GetQueryResults", "DescribeLogGroups", "DescribeLogStreams", "DescribeMetricFilters"),

@@ -3,9 +3,7 @@ package io.kotless.parser.processor.permission
 import io.kotless.AwsResource
 import io.kotless.permission.Permission
 import io.kotless.PermissionLevel
-import io.kotless.dsl.lang.DynamoDBTable
-import io.kotless.dsl.lang.S3Bucket
-import io.kotless.dsl.lang.SSMParameters
+import io.kotless.dsl.lang.*
 import io.kotless.parser.utils.psi.annotation.getAnnotations
 import io.kotless.parser.utils.psi.annotation.getEnumValue
 import io.kotless.parser.utils.psi.annotation.getValue
@@ -15,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 
 object PermissionsProcessor {
-    private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class)
+    private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class, SQSQueue::class)
 
     fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val permissions = HashSet<Permission>()
@@ -48,6 +46,11 @@ object PermissionsProcessor {
                         val level = annotation.getEnumValue(context, DynamoDBTable::level)!!
                         permissions.add(Permission(AwsResource.DynamoDB, level, setOf("table/$id")))
                         permissions.add(Permission(AwsResource.DynamoDBIndex, level, setOf("table/$id/index/*")))
+                    }
+                    SQSQueue::class -> {
+                        val id = annotation.getValue(context, SQSQueue::queueName)!!
+                        val level = annotation.getEnumValue(context, SQSQueue::level)!!
+                        permissions.add(Permission(AwsResource.SQSQueue, level, setOf(id)))
                     }
                 }
             }
