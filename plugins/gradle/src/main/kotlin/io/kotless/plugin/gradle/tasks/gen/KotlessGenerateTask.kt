@@ -74,7 +74,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
         val target = myTargetVersion ?: error("Unable to find Kotlin compile-target version.")
 
         val runtime = webapp.lambda.runtime
-            ?: project.getRuntimeVersion(target) ?: error("Kotless was unable to deduce Lambda Runtime for $target. Please, set it directly.")
+            ?: project.getRuntimeVersion(target, config) ?: error("Kotless was unable to deduce Lambda Runtime for $target. Please, set it directly.")
 
         require(runtime.isCompatible(target)) {
             "Stated in Gradle DSL runtime $runtime is not compatible with current compile target $target"

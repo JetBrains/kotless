@@ -58,9 +58,13 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
         fun tf(name: Iterable<String>) = name.flatMap { Text.deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
 
         fun aws(vararg name: String) = aws(name.toList())
+        fun azure(vararg name: String) = azure(name.toList())
         fun aws(part: String, parts: Iterable<String>) = aws(part.plusIterable(parts))
         fun aws(parts: Iterable<String>, part: String) = aws(parts.plus(part))
         fun aws(name: Iterable<String>): String {
+            return (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+        }
+        fun azure(name: Iterable<String>): String {
             return (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
         }
     }

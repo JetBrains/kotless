@@ -3,6 +3,7 @@ package io.kotless.parser.processor.config
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.DSLType
 import io.kotless.resource.Lambda
+import io.kotless.dsl.FunctionHandler
 import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
@@ -20,7 +21,10 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         if (context.config.dsl.type == DSLType.Kotless) {
-            return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}"))
+            return when (context.config.cloud) {
+                "azure" -> Output(Lambda.Entrypoint("${FunctionHandler::class.qualifiedName}.run"))
+                else -> Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}"))
+            }
         }
 
         return Output(find(files, binding))

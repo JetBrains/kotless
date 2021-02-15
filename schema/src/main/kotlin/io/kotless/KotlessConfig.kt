@@ -11,13 +11,17 @@ import java.io.File
  * @param dsl configuration of DSL that will be used for Kotless application
  * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
+ * @param cloud type of the cloud
  */
 data class KotlessConfig(
     val bucket: String,
     val prefix: String,
     val dsl: DSL,
     val terraform: Terraform,
-    val optimization: Optimization = Optimization()
+    val optimization: Optimization = Optimization(),
+    val cloud: String = "aws",
+    val resourceGroup: String?,
+    val storageAccountName: String?
 ) : Visitable {
 
     /**

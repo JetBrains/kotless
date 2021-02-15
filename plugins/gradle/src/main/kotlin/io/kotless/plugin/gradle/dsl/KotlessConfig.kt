@@ -30,6 +30,9 @@ class KotlessConfig(project: Project) : Serializable {
      */
     var genDirectory = File(project.buildDir, "kotless-gen")
 
+    var storageAccountName: String = ""
+    var resourceGroup: String = ""
+
     internal val deployGenDirectory: File
         get() = File(genDirectory, "deploy")
 

@@ -7,6 +7,7 @@ version = rootProject.version
 
 dependencies {
     api(project(":dsl:common:lang-common"))
+    implementation("com.microsoft.azure.functions", "azure-functions-java-library", "1.2.2")
 
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
