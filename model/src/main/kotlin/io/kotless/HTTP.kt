@@ -24,7 +24,7 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: 
     PNG("image/png", true, "png"),
     APNG("image/apng", true, "apng"),
     GIF("image/gif", true, "gif"),
-    SVG("image/svg", true, "svg"),
+    SVG("image/svg+xml", false, "svg"),
     JPEG("image/jpeg", true, "jpeg"),
     BMP("image/bmp", true, "bmp"),
     WEBP("image/webp", true, "webp"),
@@ -35,7 +35,7 @@ enum class MimeType(val mimeText: String, val isBinary: Boolean, val extension: 
     JSON("application/json", false, "json"),
     XML("application/xml", false, "xml"),
     ZIP("application/zip", true, "zip"),
-    GZIP("application/gzip", true, "gzip");
+    GZIP("application/gzip", true, "gz");
 
     companion object {
         fun binary() = values().filter { it.isBinary }.toTypedArray()

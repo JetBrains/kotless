@@ -564,7 +564,7 @@ resource "aws_api_gateway_resource" "pages_plugin_tasks" {
 }
 
 resource "aws_api_gateway_rest_api" "site" {
-  binary_media_types = ["application/gzip", "application/zip", "font/ttf", "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg", "image/webp"]
+  binary_media_types = ["application/gzip", "application/zip", "font/ttf", "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/webp"]
   name = "site-site"
 }
 
