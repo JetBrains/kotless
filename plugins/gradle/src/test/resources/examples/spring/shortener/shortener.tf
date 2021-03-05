@@ -268,7 +268,7 @@ resource "aws_api_gateway_resource" "shorten" {
 }
 
 resource "aws_api_gateway_rest_api" "shortener" {
-  binary_media_types = ["application/gzip", "application/zip", "font/ttf", "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/webp"]
+  binary_media_types = ["application/epub+zip", "application/gzip", "application/java-archive", "application/msword", "application/pdf", "application/vnd.ms-excel", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/zip", "audio/aac", "audio/mp4", "audio/mpeg", "audio/webm", "font/ttf", "font/woff", "font/woff2", "image/apng", "image/bmp", "image/gif", "image/heic", "image/jpeg", "image/png", "image/vnd.microsoft.icon", "image/webp", "video/mp4", "video/webm"]
   name = "spring-short-shortener"
 }
 
