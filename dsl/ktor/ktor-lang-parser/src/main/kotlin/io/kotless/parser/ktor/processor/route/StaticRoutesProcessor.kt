@@ -1,6 +1,7 @@
 package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
+import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.ktor.utils.toMime
 import io.kotless.parser.processor.ProcessorContext
@@ -29,7 +30,7 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         "io.ktor.http.content.default"
     )
 
-    override val klasses = setOf(KotlessAzure::class)
+    override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
 
     override fun mayRun(context: ProcessorContext) = true
 

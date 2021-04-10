@@ -12,7 +12,6 @@ dependencies {
 
     api("io.ktor", "ktor-server-core", Versions.ktor)
     api("io.ktor", "ktor-server-host-common", Versions.ktor)
-    implementation("com.microsoft.azure.functions", "azure-functions-java-library", "1.2.2")
     implementation("ch.qos.logback", "logback-classic", Versions.logback)
 }
 

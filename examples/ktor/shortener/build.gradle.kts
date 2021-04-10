@@ -1,6 +1,5 @@
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.resource.Lambda.Config.*
 
 group = rootProject.group
 version = rootProject.version
@@ -13,6 +12,7 @@ dependencies {
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
+    implementation("io.kotless", "ktor-lang-aws", "0.1.7-beta-5")
     implementation("io.kotless", "ktor-lang", "0.1.7-beta-5")
     implementation("io.ktor", "ktor-html-builder", "1.5.0")
 }

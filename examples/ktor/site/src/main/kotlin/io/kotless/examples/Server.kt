@@ -1,6 +1,6 @@
 package io.kotless.examples
 
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.kotless.dsl.ktor.lang.event.events
 import io.kotless.examples.bootstrap.siteStatics
@@ -13,7 +13,7 @@ import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 
-class Server : Kotless() {
+class Server : KotlessAWS() {
     override fun prepare(app: Application) {
         app.routing {
             siteStatics()

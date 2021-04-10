@@ -10,6 +10,7 @@ plugins {
 
 
 dependencies {
+    implementation("io.kotless", "kotless-lang-aws", "0.1.7-beta-5")
     implementation("io.kotless", "kotless-lang", "0.1.7-beta-5")
 
     implementation("commons-validator", "commons-validator", "1.6")

@@ -1,5 +1,6 @@
 package io.kotless.parser.ktor.processor.action
 
+import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.permission.Permission
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.processor.ProcessorContext
@@ -15,7 +16,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcessor.Output>() {
     data class Output(val permissions: Set<Permission>)
 
-    override val klasses = setOf(KotlessAzure::class)
+    override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
 
     override fun mayRun(context: ProcessorContext) = context.output.check(EntrypointProcessor)
 
