@@ -22,7 +22,7 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
     override fun generate(entity: Lambda, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val resourceGroup = context.output.get(context.webapp, InfoFactory).resourceGroup
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount
-        val storageContainer = context.output.get(context.webapp, InfoFactory).storageContainer
+        val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
         val storageBlob = context.output.get(context.webapp, StorageFactory).storageBlob
         val storageAccountSas = context.output.get(context.webapp, StorageFactory).storageAccountSas
 

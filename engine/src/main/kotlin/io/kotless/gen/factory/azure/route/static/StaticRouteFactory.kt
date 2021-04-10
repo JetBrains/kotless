@@ -19,7 +19,7 @@ object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute
         context: GenerationContext
     ): GenerationFactory.GenerationResult<Output> {
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount
-        val storageContainer = context.output.get(context.webapp, InfoFactory).storageContainer
+        val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
         val blobName = context.output.get(context.schema.statics[entity.resource]!!, StaticResourceFactory).blobName
 
         val lambdaDescriptionFileBody = LambdaDescription.staticRoute(entity, storageAccount, storageContainer, blobName)

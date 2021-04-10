@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.azure.route53
 
 import io.kotless.Application
+import io.kotless.KotlessConfig
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
@@ -15,7 +16,7 @@ object ZoneFactory : GenerationFactory<Application.Route53, ZoneFactory.Output> 
     override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val dnsZone = dns_zone(context.names.tf(entity.zone)) {
             name = entity.zone
-            resource_group_name = context.schema.config.resourceGroup!!
+            resource_group_name = (context.schema.config.cloudConfig as KotlessConfig.AzureCloudConfig).resourceGroup
         }
 
         return GenerationFactory.GenerationResult(Output(dnsZone::name.ref, "${entity.alias}.${entity.zone}"), dnsZone)

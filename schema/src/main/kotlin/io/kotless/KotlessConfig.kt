@@ -19,10 +19,19 @@ data class KotlessConfig(
     val dsl: DSL,
     val terraform: Terraform,
     val optimization: Optimization = Optimization(),
-    val cloud: String = "aws",
-    val resourceGroup: String?,
-    val storageAccountName: String?
+    val cloud: Cloud = Cloud.AWS,
+    val cloudConfig: CloudConfig
 ) : Visitable {
+
+    enum class Cloud {
+        AWS, Azure
+    }
+
+    interface CloudConfig: Visitable {}
+
+    data class AzureCloudConfig(val resourceGroup: String, val storageAccountName: String): CloudConfig
+    class AWSCloudConfig(): CloudConfig
+
 
     /**
      * Configuration of DSL used for this application

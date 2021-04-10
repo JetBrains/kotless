@@ -21,7 +21,7 @@ object RecordFactory : GenerationFactory<Application.Route53, RecordFactory.Outp
     override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val lambda = context.output.get(context.schema.lambdas.all.first(), FunctionFactory)
         val dnsZone = context.output.get(entity, ZoneFactory)
-//        val certificate = context.output.get(entity, CertificateFactory).certificate
+        val certificate = context.output.get(entity, CertificateFactory).certificate
         val resourceGroup = context.output.get(context.webapp, InfoFactory).resourceGroup
         val cnameRecord = dns_cname_record(context.names.tf(entity.zone)) {
             name = entity.alias
@@ -56,8 +56,8 @@ object RecordFactory : GenerationFactory<Application.Route53, RecordFactory.Outp
             app_service_name = lambda.function::name.ref
             resource_group_name = resourceGroup::name.ref
             depends_on = arrayOf(txtRecordAsuid.hcl_ref)
-//            ssl_state = "SniEnabled"
-//            thumbprint = certificate.hcl_ref
+            ssl_state = "SniEnabled"
+            thumbprint = certificate.hcl_ref
         }
 
         return GenerationFactory.GenerationResult(Output(""), cnameRecord, hostnameBinding, txtRecordAsuid, txtRecordAwverify)

@@ -19,7 +19,7 @@ object StorageFactory : GenerationFactory<Application, StorageFactory.Output> {
 
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<StorageFactory.Output> {
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount
-        val storageContainer = context.output.get(context.webapp, InfoFactory).storageContainer
+        val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
         val zipArchiveRef = context.output.get(context.webapp, ZipArchiveFactory).artifactCompleteRef
 
         val storageAccountSas = storage_account_sas("storage_account") {

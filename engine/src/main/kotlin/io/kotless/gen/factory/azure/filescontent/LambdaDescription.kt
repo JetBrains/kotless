@@ -3,6 +3,7 @@ package io.kotless.gen.factory.azure.filescontent
 import io.kotless.Application
 import io.kotless.resource.Lambda
 import io.terraformkt.azurerm.data.storage.*
+import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.hcl.ref
 
 object LambdaDescription {

@@ -16,7 +16,7 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
     override fun generate(entity: StaticResource, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val resourceName = "copy_${entity.file.path.replace(".", "_").replace("/", "_")}"
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount
-        val storageContainer = context.output.get(context.webapp, InfoFactory).storageContainer
+        val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
         val storageBlob = storage_blob(context.names.tf(context.schema.config.bucket, entity.path.parts)) {
             name = resourceName
             storage_account_name = storageAccount::name.ref

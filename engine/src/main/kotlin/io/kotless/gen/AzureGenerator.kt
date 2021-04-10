@@ -24,7 +24,7 @@ object AzureGenerator {
         Application::class to setOf(InfoFactory, ZipArchiveFactory, StorageFactory),
         KotlessConfig.Terraform::class to setOf(ProvidersFactory),
 
-        Application.Route53::class to setOf(/*CertificateFactory,*/ RecordFactory, ZoneFactory),
+        Application.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(FunctionFactory),
@@ -38,10 +38,8 @@ object AzureGenerator {
 
         var newExecuted = true
         while (newExecuted) {
-            println("---------------------------------")
             newExecuted = false
             schema.visit { entity ->
-                println(entity::class.simpleName)
                 factories[entity::class].orEmpty().forEach { factory ->
                     @Suppress("UNCHECKED_CAST")
                     factory as GenerationFactory<Any, Any>
