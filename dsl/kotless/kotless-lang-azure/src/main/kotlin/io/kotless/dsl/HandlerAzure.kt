@@ -12,14 +12,13 @@ import io.kotless.InternalAPI
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
 import io.kotless.dsl.model.HttpRequest
-import io.kotless.dsl.utils.Json
 import org.slf4j.LoggerFactory
 import java.util.*
 
 @InternalAPI
-class FunctionHandler {
+class HandlerAzure {
     companion object {
-        private val logger = LoggerFactory.getLogger(FunctionHandler::class.java)
+        private val logger = LoggerFactory.getLogger(HandlerAzure::class.java)
     }
 
     @FunctionName("HttpTrigger")
@@ -39,7 +38,6 @@ class FunctionHandler {
 
             Application.init()
             val origPath = request.headers["x-original-path"] ?: ""
-            val path = request.uri.path
 
             logger.info(origPath)
             val requestContext = HttpRequest.RequestContext(

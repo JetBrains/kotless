@@ -8,7 +8,7 @@ import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 
 @InternalAPI
-internal object Application {
+object Application {
     private val logger = LoggerFactory.getLogger(Application::class.java)
 
     private var isInitialized = false

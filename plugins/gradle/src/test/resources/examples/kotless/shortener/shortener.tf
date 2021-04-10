@@ -314,7 +314,7 @@ resource "aws_iam_role_policy" "merged_0" {
 
 resource "aws_lambda_function" "merged_0" {
   function_name = "short-merged-0"
-  handler = "io.kotless.dsl.LambdaHandler::handleRequest"
+  handler = "io.kotless.dsl.HandlerAWS::handleRequest"
   memory_size = 1024
   role = aws_iam_role.merged_0.arn
   runtime = "java11"

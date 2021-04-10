@@ -1,7 +1,7 @@
 package io.kotless.parser.ktor.processor.action
 
 import io.kotless.permission.Permission
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcessor.Output>() {
     data class Output(val permissions: Set<Permission>)
 
-    override val klasses = setOf(Kotless::class)
+    override val klasses = setOf(KotlessAzure::class)
 
     override fun mayRun(context: ProcessorContext) = context.output.check(EntrypointProcessor)
 
@@ -23,7 +23,7 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
         val permissions = HashSet<Permission>()
 
         processClasses(files, binding) { klass, _ ->
-            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
+            klass.visitNamedFunctions(filter = { func -> func.name == KotlessAzure::prepare.name }) { func ->
                 func.visitCallExpressionsWithReferences(
                     filter = { it.getFqName(binding) == "io.ktor.application.ApplicationEvents.subscribe" }, binding = binding, visitOnce = true
                 ) { element ->

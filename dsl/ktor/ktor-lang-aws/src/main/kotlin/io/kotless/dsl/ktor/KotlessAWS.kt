@@ -26,9 +26,9 @@ import java.io.OutputStream
  * Override [prepare] method and setup your application
  */
 @Suppress("unused")
-abstract class Kotless : RequestStreamHandler {
+abstract class KotlessAWS : RequestStreamHandler {
     companion object {
-        private val logger = LoggerFactory.getLogger(Kotless::class.java)
+        private val logger = LoggerFactory.getLogger(KotlessAWS::class.java)
 
         private var prepared = false
 

@@ -12,6 +12,8 @@ dependencies {
     api(project(":dsl:common:lang-common"))
 
     implementation(project(":dsl:kotless:kotless-lang"))
+    implementation(project(":dsl:kotless:kotless-lang-aws"))
+    implementation(project(":dsl:kotless:kotless-lang-azure"))
 }
 
 publishJar {

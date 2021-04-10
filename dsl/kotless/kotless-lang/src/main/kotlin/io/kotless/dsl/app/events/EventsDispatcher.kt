@@ -8,7 +8,7 @@ import io.kotless.dsl.reflection.FunctionCaller
 import org.slf4j.LoggerFactory
 
 @InternalAPI
-internal object EventsDispatcher {
+object EventsDispatcher {
     private val logger = LoggerFactory.getLogger(EventsDispatcher::class.java)
 
     fun process(event: CloudWatch) {

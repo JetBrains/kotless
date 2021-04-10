@@ -18,6 +18,7 @@ dependencies {
         exclude("com.fasterxml.jackson.core")
         exclude("com.fasterxml.jackson.dataformat")
     }
+    api("com.microsoft.azure.functions", "azure-functions-java-library", "1.2.2")
     //override old jackson version
     api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
     api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")

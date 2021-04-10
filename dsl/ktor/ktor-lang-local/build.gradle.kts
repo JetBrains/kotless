@@ -8,6 +8,8 @@ version = rootProject.version
 
 dependencies {
     api(project(":dsl:ktor:ktor-lang"))
+    api(project(":dsl:ktor:ktor-lang-aws"))
+    api(project(":dsl:ktor:ktor-lang-azure"))
 
     api("io.ktor", "ktor-server-netty", Versions.ktor)
 }

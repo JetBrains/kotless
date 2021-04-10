@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 
 @InternalAPI
-internal object RoutesDispatcher {
+object RoutesDispatcher {
     private val logger = LoggerFactory.getLogger(RoutesDispatcher::class.java)
 
     private val pipeline by lazy { preparePipeline(ReflectionScanner.objectsWithSubtype<HttpRequestInterceptor>().sortedBy { it.priority }) }

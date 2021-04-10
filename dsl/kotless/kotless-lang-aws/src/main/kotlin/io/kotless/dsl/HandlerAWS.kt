@@ -26,9 +26,9 @@ import java.io.OutputStream
  * * CloudWatch events (used for warming and scheduling)
  */
 @InternalAPI
-class LambdaHandler : RequestStreamHandler {
+class HandlerAWS : RequestStreamHandler {
     companion object {
-        private val logger = LoggerFactory.getLogger(LambdaHandler::class.java)
+        private val logger = LoggerFactory.getLogger(HandlerAWS::class.java)
     }
 
     override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context?) {

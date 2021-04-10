@@ -1,6 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
 import io.kotless.DSLType
+import io.kotless.KotlessConfig
 import io.kotless.KotlessConfig.Optimization.MergeLambda
 import io.kotless.plugin.gradle.utils.gradle.Dependencies
 import io.kotless.plugin.gradle.utils.gradle.myShadowJar
@@ -32,6 +33,8 @@ class KotlessConfig(project: Project) : Serializable {
 
     var storageAccountName: String = ""
     var resourceGroup: String = ""
+
+    var cloud: KotlessConfig.Cloud = KotlessConfig.Cloud.AWS
 
     internal val deployGenDirectory: File
         get() = File(genDirectory, "deploy")

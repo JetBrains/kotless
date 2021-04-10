@@ -1,7 +1,7 @@
 package io.kotless.local.scheduled
 
 import io.kotless.ScheduledEventType
-import io.kotless.dsl.LambdaHandler
+import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.model.CloudWatch
 import io.kotless.dsl.utils.Json
 import io.kotless.local.Environment
@@ -13,7 +13,7 @@ internal class AutowarmJob : Job {
     companion object {
         const val HANDLER_KEY = "LAMBDA_HANDLER"
 
-        fun getJob(handler: LambdaHandler): Pair<Trigger, JobDetail>? {
+        fun getJob(handler: HandlerAWS): Pair<Trigger, JobDetail>? {
             val minutes = Environment.autowarmMinutes ?: return null
 
             val id = ScheduledEventType.Autowarm.prefix
@@ -40,7 +40,7 @@ internal class AutowarmJob : Job {
     }
 
     override fun execute(context: JobExecutionContext) {
-        val handler = context.mergedJobDataMap[HANDLER_KEY] as LambdaHandler
+        val handler = context.mergedJobDataMap[HANDLER_KEY] as HandlerAWS
 
         val apiRequest = CloudWatch(
             `detail-type` = "Scheduled Event",

@@ -2,7 +2,7 @@ package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
 import io.kotless.Application.Events
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.ktor.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
@@ -31,7 +31,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         "io.ktor.routing.options" to HttpMethod.OPTIONS
     )
 
-    override val klasses = setOf(Kotless::class)
+    override val klasses = setOf(KotlessAzure::class)
 
     override fun mayRun(context: ProcessorContext) = context.output.check(GlobalActionsProcessor) && context.output.check(EntrypointProcessor)
 
@@ -40,7 +40,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
         processClasses(files, binding) { klass, _ ->
-            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
+            klass.visitNamedFunctions(filter = { func -> func.name == KotlessAzure::prepare.name }) { func ->
                 func.visitCallExpressionsWithReferences(binding = binding, filter = { it.getFqName(binding) in functions.keys }) { element ->
                     val outer = getDynamicPath(element, binding)
 

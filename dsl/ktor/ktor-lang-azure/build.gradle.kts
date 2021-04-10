@@ -8,6 +8,7 @@ version = rootProject.version
 
 dependencies {
     api(project(":dsl:common:lang-common"))
+    api(project(":dsl:ktor:ktor-lang"))
 
     api("io.ktor", "ktor-server-core", Versions.ktor)
     api("io.ktor", "ktor-server-host-common", Versions.ktor)

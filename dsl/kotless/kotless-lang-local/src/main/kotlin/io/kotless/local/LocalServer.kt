@@ -1,6 +1,6 @@
 package io.kotless.local
 
-import io.kotless.dsl.LambdaHandler
+import io.kotless.dsl.HandlerAWS
 import io.kotless.local.handler.DynamicHandler
 import io.kotless.local.handler.StaticHandler
 import io.kotless.local.scheduled.Scheduler
@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.handler.HandlerList
 
 
 internal class LocalServer(port: Int) {
-    private val handler = LambdaHandler()
+    private val handler = HandlerAWS()
 
     private val server: Server = Server(port)
     private val scheduler: Scheduler = Scheduler(handler)

@@ -1,6 +1,6 @@
 package io.kotless.local.scheduled
 
-import io.kotless.dsl.LambdaHandler
+import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.app.events.EventsReflectionScanner
 import io.kotless.dsl.model.CloudWatch
 import io.kotless.dsl.utils.Json
@@ -12,7 +12,7 @@ internal class ScheduledJob : Job {
         const val ID_KEY = "SCHEDULED_ID"
         const val HANDLER_KEY = "LAMBDA_HANDLER"
 
-        fun collectJobs(handler: LambdaHandler): Map<Trigger, JobDetail> {
+        fun collectJobs(handler: HandlerAWS): Map<Trigger, JobDetail> {
             val jobs = HashMap<Trigger, JobDetail>()
 
             for ((ids, _, annotation) in EventsReflectionScanner.getEvents()) {
@@ -43,7 +43,7 @@ internal class ScheduledJob : Job {
     }
 
     override fun execute(context: JobExecutionContext) {
-        val handler = context.mergedJobDataMap[HANDLER_KEY] as LambdaHandler
+        val handler = context.mergedJobDataMap[HANDLER_KEY] as HandlerAWS
         val id = context.mergedJobDataMap[ID_KEY] as String
 
         val apiRequest = CloudWatch(
