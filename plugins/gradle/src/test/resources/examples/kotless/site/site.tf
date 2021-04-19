@@ -600,7 +600,7 @@ resource "aws_iam_role_policy" "page_0" {
 
 resource "aws_lambda_function" "page_0" {
   function_name = "site-page-0"
-  handler = "io.kotless.dsl.LambdaHandler::handleRequest"
+  handler = "io.kotless.dsl.HandlerAWS::handleRequest"
   memory_size = 1024
   role = aws_iam_role.page_0.arn
   runtime = "java11"

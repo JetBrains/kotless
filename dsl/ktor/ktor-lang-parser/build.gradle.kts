@@ -8,6 +8,8 @@ dependencies {
     api(project(":schema"))
     api(project(":dsl:ktor:ktor-lang"))
     api(project(":dsl:common:lang-parser-common"))
+    api(project(":dsl:ktor:ktor-lang-azure"))
+    api(project(":dsl:ktor:ktor-lang-aws"))
 }
 
 publishJar {

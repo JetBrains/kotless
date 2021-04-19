@@ -1,6 +1,6 @@
 package io.kotless.examples
 
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.examples.page.Main.main
 import io.kotless.examples.page.siteStatics
 import io.kotless.examples.storage.URLStorage
@@ -14,7 +14,7 @@ import io.ktor.routing.routing
 import org.apache.commons.validator.routines.UrlValidator
 import org.slf4j.LoggerFactory
 
-class Server : Kotless() {
+class Server : KotlessAWS() {
     private val logger = LoggerFactory.getLogger(Server::class.java)
 
     override fun prepare(app: Application) {

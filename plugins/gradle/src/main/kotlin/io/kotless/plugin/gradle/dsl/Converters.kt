@@ -4,7 +4,8 @@ import io.kotless.KotlessConfig
 
 internal fun KotlessDSL.toSchema(): KotlessConfig {
     return with(config) {
-        KotlessConfig(bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.resolvedStaticsRoot),
+        KotlessConfig(
+            bucket, prefix, KotlessConfig.DSL(dsl.typeOrDefault, dsl.resolvedStaticsRoot),
             with(terraform) {
                 KotlessConfig.Terraform(
                     version,
@@ -24,7 +25,12 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
             KotlessConfig.Optimization(
                 optimization.mergeLambda,
                 KotlessConfig.Optimization.Autowarm(optimization.autowarm.enable, optimization.autowarm.minutes)
-            )
+            ),
+            cloud,
+            when (cloud) {
+                KotlessConfig.Cloud.AWS -> KotlessConfig.AWSCloudConfig()
+                KotlessConfig.Cloud.Azure -> KotlessConfig.AzureCloudConfig(resourceGroup, storageAccountName)
+            }
         )
     }
 }

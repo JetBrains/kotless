@@ -8,6 +8,7 @@ version = rootProject.version
 
 dependencies {
     api(project(":dsl:kotless:kotless-lang"))
+    api(project(":dsl:kotless:kotless-lang-aws"))
 
     implementation("org.quartz-scheduler", "quartz", Versions.quartz)
     implementation("org.eclipse.jetty", "jetty-server", "9.4.29.v20200521")

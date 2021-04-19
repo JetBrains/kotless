@@ -6,8 +6,8 @@ version = rootProject.version
 
 
 dependencies {
+    api(project(":model"))
     api(project(":dsl:common:lang-common"))
-
     implementation(kotlin("reflect"))
     implementation("org.reflections", "reflections", "0.9.11")
 

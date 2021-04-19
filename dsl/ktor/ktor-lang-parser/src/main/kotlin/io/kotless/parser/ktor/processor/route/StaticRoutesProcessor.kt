@@ -1,7 +1,8 @@
 package io.kotless.parser.ktor.processor.route
 
 import io.kotless.*
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAWS
+import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.ktor.utils.toMime
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
@@ -29,13 +30,13 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         "io.ktor.http.content.default"
     )
 
-    override val klasses = setOf(Kotless::class)
+    override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
 
     override fun mayRun(context: ProcessorContext) = true
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext) {
         processClassesOrObjects(files, binding) { klass, _ ->
-            klass.visitNamedFunctions(filter = { func -> func.name == Kotless::prepare.name }) { func ->
+            klass.visitNamedFunctions(filter = { func -> func.name == KotlessAzure::prepare.name }) { func ->
                 func.visitCallExpressionsWithReferences(filter = { it.getFqName(binding) in functions }, binding = binding) { element ->
                     val outer = getStaticPath(element, binding)
                     val base = getStaticRootFolder(element, binding, context)

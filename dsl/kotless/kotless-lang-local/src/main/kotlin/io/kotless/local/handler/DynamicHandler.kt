@@ -1,7 +1,7 @@
 package io.kotless.local.handler
 
 import io.kotless.HttpMethod
-import io.kotless.dsl.LambdaHandler
+import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.Json
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-internal class DynamicHandler(private val handler: LambdaHandler) : AbstractHandler() {
+internal class DynamicHandler(private val handler: HandlerAWS) : AbstractHandler() {
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
         val apiRequest = HttpRequest(
             resource = request.requestURI,

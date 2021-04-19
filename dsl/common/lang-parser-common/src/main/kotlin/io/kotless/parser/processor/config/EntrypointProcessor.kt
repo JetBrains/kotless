@@ -2,11 +2,13 @@ package io.kotless.parser.processor.config
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.DSLType
+import io.kotless.KotlessConfig
+import io.kotless.dsl.*
 import io.kotless.resource.Lambda
-import io.kotless.dsl.LambdaHandler
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.utils.errors.require
+import io.kotless.parser.utils.psi.isSubtypeOf
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -14,13 +16,16 @@ import org.jetbrains.kotlin.resolve.BindingContext
 object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     data class Output(val entrypoint: Lambda.Entrypoint)
 
-    override val klasses = setOf(RequestStreamHandler::class)
+    override val klasses = setOf(RequestStreamHandler::class, AzureRequestHandler::class)
 
     override fun mayRun(context: ProcessorContext) = true
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         if (context.config.dsl.type == DSLType.Kotless) {
-            return Output(Lambda.Entrypoint("${LambdaHandler::class.qualifiedName}::${LambdaHandler::handleRequest.name}"))
+            return when (context.config.cloud) {
+                KotlessConfig.Cloud.Azure -> Output(Lambda.Entrypoint("${HandlerAzure::class.qualifiedName}.run"))
+                else -> Output(Lambda.Entrypoint("${HandlerAWS::class.qualifiedName}::${HandlerAWS::handleRequest.name}"))
+            }
         }
 
         return Output(find(files, binding))
@@ -29,18 +34,23 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     fun find(files: Set<KtFile>, binding: BindingContext): Lambda.Entrypoint {
         val entrypoint = ArrayList<Lambda.Entrypoint>()
         processClassesOrObjects(files, binding) { klass, _ ->
-            entrypoint.add(klass.makeLambdaEntrypoint())
+            entrypoint.add(klass.makeLambdaEntrypoint(binding))
         }
 
-        require(entrypoint.size != 0) { "There should be a class or object inherited from ${RequestStreamHandler::class} or Kotless in your app" }
-        require(entrypoint.size == 1) { "There should be only one class or object inherited from ${RequestStreamHandler::class} or Kotless in your app" }
+        require(entrypoint.size != 0) { "There should be a class or object inherited from ${RequestStreamHandler::class} or KotlessAWS in your app" }
+        require(entrypoint.size == 1) { "There should be only one class or object inherited from ${RequestStreamHandler::class} or KotlessAWS in your app" }
 
-        return entrypoint.single()
+        return entrypoint.first()
     }
 
-    private fun KtClassOrObject.makeLambdaEntrypoint(): Lambda.Entrypoint {
+    private fun KtClassOrObject.makeLambdaEntrypoint(binding: BindingContext): Lambda.Entrypoint {
         require(this, fqName != null) { "Anonymous class cannot be inherited from RequestStreamHandler or Kotless class" }
-
-        return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}")
+        if (this.isSubtypeOf(RequestStreamHandler::class, binding)) {
+            return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}")
+        }
+        if (this.isSubtypeOf(AzureRequestHandler::class, binding)) {
+            return Lambda.Entrypoint("${fqName!!.asString()}.${AzureRequestHandler::handleRequest.name}")
+        }
+        error("Entry point should be inherited from ${RequestStreamHandler::class} or ${AzureRequestHandler::class}")
     }
 }

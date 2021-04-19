@@ -1,7 +1,7 @@
 package io.kotless.local.ktor
 
 import io.kotless.Constants
-import io.kotless.dsl.ktor.Kotless
+import io.kotless.dsl.ktor.KotlessAWS
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import kotlin.reflect.full.primaryConstructor
@@ -11,9 +11,9 @@ fun main() {
     val classToStart = System.getenv(Constants.Local.KtorOrSpring.classToStart)
 
     val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
-    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
+    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? KotlessAWS
 
-    val kotless = instance ?: error("The entry point $classToStart does not inherit from ${Kotless::class.qualifiedName}!")
+    val kotless = instance ?: error("The entry point $classToStart does not inherit from ${KotlessAWS::class.qualifiedName}!")
 
     embeddedServer(Netty, port) {
         kotless.prepare(this)
