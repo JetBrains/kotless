@@ -5,14 +5,11 @@ import io.kotless.utils.Visitable
 import java.io.File
 
 /**
- * Config of Kotless itself
+ * Configuration of Kotless itself -- its deployment and analysis
  *
- * @param storage name of bucket Kotless will use to store all files
- * @param prefix name with which will be prepended all Kotless created entities
+ * @param cloud is a configuration defining deployment configuration and providing access to the cloud platform
  * @param dsl configuration of DSL that will be used for Kotless application
- * @param terraform terraform configuration used by Kotless
  * @param optimization optimizations considered during generation of code
- * @param cloud type of the cloud
  */
 data class KotlessConfig(
     val cloud: Cloud<*, *>,
@@ -28,14 +25,36 @@ data class KotlessConfig(
     val azure: Cloud.Azure
         get() = cloud as Cloud.Azure
 
-    sealed class Cloud<T : Cloud.Terraform<*, *>, S: Cloud.Storage>(val prefix: String, val storage: S, val terraform: T, val platform: CloudPlatform) : Visitable {
+    /**
+     * Definition of the cloud platform and access to it
+     *
+     * @param prefix is a prefix with which all the created resources will be prepended
+     * @param storage is a storage that should be used to store all Kotless-related data
+     * @param terraform is a configuration of Terraform that should be used during the deployment
+     * @param platform is a type of cloud platform to which the deployment will be performed
+     */
+    sealed class Cloud<T : Cloud.Terraform<*, *>, S : Cloud.Storage>(
+        val prefix: String, val storage: S, val terraform: T, val platform: CloudPlatform
+    ) : Visitable {
+
+        /**
+         * Definition of a cloud platform powered storage
+         *
+         * Storage may be used to store Terraform backend data or Kotless-related data
+         */
         sealed class Storage : Visitable {
+            /** S3-based cloud platform storage */
             class S3(val bucket: String, val region: String) : Storage()
 
+            /** Azure Blob-based cloud platform storage */
             class AzureBlob(val container: String, val storageAccount: String) : Storage()
         }
 
-        class Azure(prefix: String, blob: Storage.AzureBlob, terraform: Terraform.Azure) : Cloud<Terraform.Azure, Storage.AzureBlob>(prefix, blob, terraform, CloudPlatform.Azure)
+        /** Microsoft Azure cloud platform Kotless configuration */
+        class Azure(prefix: String, blob: Storage.AzureBlob, terraform: Terraform.Azure) :
+            Cloud<Terraform.Azure, Storage.AzureBlob>(prefix, blob, terraform, CloudPlatform.Azure)
+
+        /** AWS cloud platform Kotless configuration */
         class AWS(prefix: String, s3: Storage.S3, terraform: Terraform.AWS) : Cloud<Terraform.AWS, Storage.S3>(prefix, s3, terraform, CloudPlatform.AWS)
 
 
@@ -43,11 +62,16 @@ data class KotlessConfig(
          * Terraform configuration used by Kotless
          *
          * @param version version of Terraform used
+         * @param backend is a backend configuration used by Terraform
+         * @param provider is a provider used by Terraform
          */
         sealed class Terraform<B : Terraform.Backend, P : Terraform.Provider>(val version: String, val backend: B, val provider: P) : Visitable {
-
+            /** AWS-related Terraform configuration used by Kotless */
             class AWS(version: String, backend: Backend.AWS, provider: Provider.AWS) : Terraform<Backend.AWS, Provider.AWS>(version, backend, provider)
-            class Azure(version: String, backend: Backend.Azure, provider: Provider.Azure) : Terraform<Backend.Azure, Provider.Azure>(version, backend, provider)
+
+            /** Azure-related Terraform configuration used by Kotless */
+            class Azure(version: String, backend: Backend.Azure, provider: Provider.Azure) :
+                Terraform<Backend.Azure, Provider.Azure>(version, backend, provider)
 
 
             /**
@@ -57,10 +81,9 @@ data class KotlessConfig(
                 /**
                  * Configuration of AWS Terraform backend
                  *
-                 * @param bucket name of bucket, that will be used as Terraform backend storage
+                 * @param storage is a storage used to store Terraform backend
                  * @param key path in a bucket to store Terraform state
                  * @param profile AWS profile from a local machine to use for Terraform state storing
-                 * @param region AWS region where state bucket is located
                  */
                 class AWS(val storage: Storage.S3, val key: String, val profile: String) : Backend()
 
@@ -68,6 +91,9 @@ data class KotlessConfig(
                 /**
                  * Configuration of Azure Terraform backend
                  *
+                 * @param storage is a storage used to store Terraform backend
+                 * @param key path in a bucket to store Terraform state
+                 * @param resourceGroup is a resource group to which the whole deployment should be performed
                  */
                 class Azure(val storage: Storage.AzureBlob, val key: String, val resourceGroup: String) : Backend()
             }
