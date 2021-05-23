@@ -27,7 +27,7 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
         val storageAccountSas = context.output.get(context.webapp, StorageFactory).storageAccountSas
 
         val appServicePlan = app_service_plan(context.names.tf("app", "service", "plan")) {
-            name = context.names.azure(context.schema.config.prefix.replace("-", ""), "functions", "consumption", "asp")
+            name = context.names.azure(context.schema.config.cloud.prefix.replace("-", ""), "functions", "consumption", "asp")
             location = resourceGroup::location.ref
             resource_group_name = resourceGroup::name.ref
             sku {

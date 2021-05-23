@@ -22,8 +22,8 @@ object TFConfigFactory : GenerationFactory<Terraform<Terraform.Backend.Azure, Te
             required_version = entity.version
             backend = TFConfig.Backend.AzureRM().apply {
                 resource_group_name = entity.backend.resourceGroup
-                storage_account_name = entity.backend.storageAccountName
-                container_name = entity.backend.containerName
+                storage_account_name = entity.backend.storage.storageAccount
+                container_name = entity.backend.storage.container
                 key = entity.backend.key
             }
         }

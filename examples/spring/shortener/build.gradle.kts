@@ -17,10 +17,14 @@ dependencies {
 
 kotless {
     config {
-        bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
-        prefix = "spring-short"
 
         aws {
+            prefix = "spring-short"
+
+            storage {
+                bucket = "eu.spring-short.s3.ktls.aws.intellij.net"
+            }
+
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }

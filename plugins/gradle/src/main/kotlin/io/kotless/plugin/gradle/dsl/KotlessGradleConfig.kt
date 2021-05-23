@@ -13,12 +13,6 @@ import java.io.Serializable
 /** Configuration of Kotless itself */
 @KotlessDSLTag
 class KotlessGradleConfig(project: Project) : Serializable {
-    /** Name of bucket Kotless will use to store all files */
-    var bucket: String = ""
-
-    /** Prefix with which all created resources will be prepended */
-    var prefix: String = ""
-
     /**
      * A local directory Kotless will use to store needed binaries (like terraform)
      * By default it is `${buildDir}/kotless-bin`
@@ -49,7 +43,7 @@ class KotlessGradleConfig(project: Project) : Serializable {
     }
 
     @KotlessDSLTag
-    inner class DSLGradle(project: Project) : Serializable {
+    class DSLGradle(project: Project) : Serializable {
         private val defaultType by lazy {
             val types = Dependencies.dsl(project).keys
             require(types.isNotEmpty()) {
@@ -109,34 +103,64 @@ class KotlessGradleConfig(project: Project) : Serializable {
         dsl.configure()
     }
 
-    sealed class CloudGradle<B : CloudGradle.TerraformGradle.BackendGradle, P : CloudGradle.TerraformGradle.ProviderGradle>(val type: CloudPlatform) :
-        Serializable {
-        class Azure : CloudGradle<TerraformGradle.BackendGradle.Azure, TerraformGradle.ProviderGradle.Azure>(CloudPlatform.Azure)
+    sealed class CloudGradle<S : CloudGradle.StorageGradle, T : CloudGradle.TerraformGradle<*, *>>(val type: CloudPlatform) : Serializable {
 
-        class AWS : CloudGradle<TerraformGradle.BackendGradle.AWS, TerraformGradle.ProviderGradle.AWS>(CloudPlatform.AWS) {
+        /** Prefix with which all created resources will be prepended */
+        var prefix: String = ""
+
+        class Azure : CloudGradle<StorageGradle.AzureBlob, TerraformGradle.Azure>(CloudPlatform.Azure)
+
+        class AWS : CloudGradle<StorageGradle.S3, TerraformGradle.AWS>(CloudPlatform.AWS) {
             lateinit var profile: String
             lateinit var region: String
         }
 
         @KotlessDSLTag
-        class TerraformGradle<B : TerraformGradle.BackendGradle, P : TerraformGradle.ProviderGradle>(
+        sealed class StorageGradle: Serializable {
+            class S3 : StorageGradle() {
+                lateinit var bucket: String
+                var region: String? = null
+            }
+
+            class AzureBlob : StorageGradle() {
+                lateinit var container: String
+                lateinit var storageAccount: String
+            }
+        }
+
+        internal val storage: S = when (type) {
+            CloudPlatform.AWS -> StorageGradle.S3()
+            CloudPlatform.Azure -> StorageGradle.AzureBlob()
+        } as S
+
+        fun storage(configure: S.() -> Unit) {
+            storage.configure()
+        }
+
+
+        @KotlessDSLTag
+        sealed class TerraformGradle<B : TerraformGradle.BackendGradle<*>, P : TerraformGradle.ProviderGradle>(
             internal val backend: B, internal val provider: P
         ) : Serializable {
+
+            class AWS(backend: BackendGradle.AWS, provider: ProviderGradle.AWS) : TerraformGradle<BackendGradle.AWS, ProviderGradle.AWS>(backend, provider)
+            class Azure(backend: BackendGradle.Azure, provider: ProviderGradle.Azure) :
+                TerraformGradle<BackendGradle.Azure, ProviderGradle.Azure>(backend, provider)
+
             /**
              * Version of Terraform to use.
              * By default, `0.12.29`
              */
             var version: String = "0.12.29"
 
-            sealed class BackendGradle : Serializable {
+            sealed class BackendGradle<S : StorageGradle> : Serializable {
                 @KotlessDSLTag
-                class AWS : BackendGradle() {
+                class AWS : BackendGradle<StorageGradle.S3>() {
+                    internal var s3: StorageGradle.S3? = null
 
-                    /**
-                     * Name of bucket, that will be used as Terraform backend storage
-                     * By default kotless bucket is used.
-                     */
-                    var bucket: String? = null
+                    fun s3(configure: StorageGradle.S3.() -> Unit) {
+                        s3 = StorageGradle.S3().also(configure)
+                    }
 
                     /**
                      * Path in a bucket to store Terraform state
@@ -145,13 +169,15 @@ class KotlessGradleConfig(project: Project) : Serializable {
                     var key: String = "kotless-state/state.tfstate"
 
                     var profile: String? = null
-
-                    var region: String? = null
                 }
 
                 @KotlessDSLTag
-                class Azure : BackendGradle() {
-                    lateinit var containerName: String
+                class Azure : BackendGradle<StorageGradle.AzureBlob>() {
+                    internal var blob: StorageGradle.AzureBlob? = null
+
+                    fun blob(configure: StorageGradle.AzureBlob.() -> Unit) {
+                        blob = StorageGradle.AzureBlob().also(configure)
+                    }
 
                     /**
                      * Path in a bucket to store Terraform state
@@ -160,8 +186,6 @@ class KotlessGradleConfig(project: Project) : Serializable {
                     var key: String = "kotless-state/state.tfstate"
 
                     lateinit var resourceGroup: String
-
-                    lateinit var storageAccountName: String
                 }
             }
 
@@ -196,12 +220,12 @@ class KotlessGradleConfig(project: Project) : Serializable {
         }
 
         internal val terraform = when (type) {
-            CloudPlatform.AWS -> TerraformGradle(TerraformGradle.BackendGradle.AWS(), TerraformGradle.ProviderGradle.AWS())
-            CloudPlatform.Azure -> TerraformGradle(TerraformGradle.BackendGradle.Azure(), TerraformGradle.ProviderGradle.Azure())
-        } as TerraformGradle<B, P>
+            CloudPlatform.AWS -> TerraformGradle.AWS(TerraformGradle.BackendGradle.AWS(), TerraformGradle.ProviderGradle.AWS())
+            CloudPlatform.Azure -> TerraformGradle.Azure(TerraformGradle.BackendGradle.Azure(), TerraformGradle.ProviderGradle.Azure())
+        } as T
 
         @KotlessDSLTag
-        fun terraform(configure: TerraformGradle<B, P>.() -> Unit) {
+        fun terraform(configure: T.() -> Unit) {
             terraform.configure()
         }
     }
@@ -215,7 +239,7 @@ class KotlessGradleConfig(project: Project) : Serializable {
     }
 
     @KotlessDSLTag
-    fun azure(configure: CloudGradle<CloudGradle.TerraformGradle.BackendGradle.Azure, CloudGradle.TerraformGradle.ProviderGradle.Azure>.() -> Unit) {
+    fun azure(configure: CloudGradle.Azure.() -> Unit) {
         cloud = CloudGradle.Azure().also(configure)
     }
 

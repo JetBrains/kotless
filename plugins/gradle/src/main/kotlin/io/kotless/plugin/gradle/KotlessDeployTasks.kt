@@ -13,11 +13,11 @@ import org.gradle.api.Task
  */
 internal object KotlessDeployTasks {
     fun Project.setupDeployTasks(download: Task) {
-        if (kotless.config.bucket.isEmpty()) {
-            logger.warn("Configuration succeeded, but Kotless requires `kotless { config { bucket = \"...\" } }` for actual deployment")
-            logger.warn("Deployment tasks will NOT be added to this project")
-            return
-        }
+//        if (kotless.config.bucket.isEmpty()) {
+//            logger.warn("Configuration succeeded, but Kotless requires `kotless { config { bucket = \"...\" } }` for actual deployment")
+//            logger.warn("Deployment tasks will NOT be added to this project")
+//            return
+//        }
 
         with(tasks) {
             val generate = myCreate<KotlessGenerateTask>("generate")

@@ -17,10 +17,10 @@ object TFConfigFactory : GenerationFactory<Terraform<Terraform.Backend.AWS, Terr
         val terraform = terraform {
             required_version = entity.version
             backend = TFConfig.Backend.S3().apply {
-                bucket = entity.backend.bucket
+                bucket = entity.backend.storage.bucket
                 key = entity.backend.key
                 profile = entity.backend.profile
-                region = entity.backend.region
+                region = entity.backend.storage.region
             }
         }
 

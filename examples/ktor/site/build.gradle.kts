@@ -18,10 +18,14 @@ dependencies {
 
 kotless {
     config {
-        bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
-        prefix = "ktor-site"
 
         aws {
+            prefix = "ktor-site"
+
+            storage {
+                bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
+            }
+
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }

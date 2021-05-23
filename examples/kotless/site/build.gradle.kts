@@ -1,4 +1,3 @@
-import io.kotless.plugin.gradle.dsl.Webapp
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = rootProject.group
@@ -19,10 +18,13 @@ dependencies {
 
 kotless {
     config {
-        bucket = "eu.site.s3.ktls.aws.intellij.net"
-        prefix = "site"
-
         aws {
+            prefix = "site"
+
+            storage {
+                bucket = "eu.site.s3.ktls.aws.intellij.net"
+            }
+
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }

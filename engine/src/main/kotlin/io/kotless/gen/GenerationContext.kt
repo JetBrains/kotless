@@ -60,11 +60,11 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
         fun aws(part: String, parts: Iterable<String>) = aws(part.plusIterable(parts))
         fun aws(parts: Iterable<String>, part: String) = aws(parts.plus(part))
         fun aws(name: Iterable<String>): String {
-            return (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+            return (schema.config.cloud.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
         }
 
         fun azure(name: Iterable<String>): String {
-            return (schema.config.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+            return (schema.config.cloud.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
         }
     }
 

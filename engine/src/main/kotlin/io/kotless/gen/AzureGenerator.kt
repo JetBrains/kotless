@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
 object AzureGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, ZipArchiveFactory, StorageFactory),
-        KotlessConfig.Cloud.Terraform::class to setOf(TFConfigFactory),
+        KotlessConfig.Cloud.Terraform.Azure::class to setOf(TFConfigFactory),
 
         Application.DNS::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 

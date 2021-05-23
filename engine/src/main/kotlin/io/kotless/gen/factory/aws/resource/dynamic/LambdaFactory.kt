@@ -22,7 +22,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
         val obj = s3_bucket_object(context.names.tf(entity.name)) {
-            bucket = context.schema.config.storage
+            bucket = context.schema.config.aws.storage.bucket
             key = "kotless-lambdas/${context.names.aws(entity.name)}.jar"
             source = path(entity.file)
             etag = eval(filemd5(entity.file))

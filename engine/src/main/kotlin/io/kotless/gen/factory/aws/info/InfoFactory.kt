@@ -17,7 +17,7 @@ object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
         val caller_identity = caller_identity("current") {}
         val region = region("current") {}
         val kotless_bucket = s3_bucket(context.names.tf("kotless", "bucket")) {
-            bucket = context.schema.config.storage
+            bucket = context.schema.config.aws.storage.bucket
         }
 
         return GenerationFactory.GenerationResult(

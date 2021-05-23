@@ -1,5 +1,6 @@
 package io.kotless
 
+import io.kotless.utils.Storage
 import io.kotless.utils.Visitable
 import java.io.File
 
@@ -14,18 +15,28 @@ import java.io.File
  * @param cloud type of the cloud
  */
 data class KotlessConfig(
-    val storage: String,
-    val prefix: String,
-    val cloud: Cloud<*>,
+    val cloud: Cloud<*, *>,
     val dsl: DSL,
     val optimization: Optimization = Optimization(),
 ) : Visitable {
 
+    @InternalAPI
+    val aws: Cloud.AWS
+        get() = cloud as Cloud.AWS
 
-    sealed class Cloud<T : Cloud.Terraform<*, *>>(val terraform: T, val platform: CloudPlatform) : Visitable {
+    @InternalAPI
+    val azure: Cloud.Azure
+        get() = cloud as Cloud.Azure
 
-        class Azure(terraform: Terraform.Azure) : Cloud<Terraform.Azure>(terraform, CloudPlatform.Azure)
-        class AWS(terraform: Terraform.AWS) : Cloud<Terraform.AWS>(terraform, CloudPlatform.AWS)
+    sealed class Cloud<T : Cloud.Terraform<*, *>, S: Cloud.Storage>(val prefix: String, val storage: S, val terraform: T, val platform: CloudPlatform) : Visitable {
+        sealed class Storage : Visitable {
+            class S3(val bucket: String, val region: String) : Storage()
+
+            class AzureBlob(val container: String, val storageAccount: String) : Storage()
+        }
+
+        class Azure(prefix: String, blob: Storage.AzureBlob, terraform: Terraform.Azure) : Cloud<Terraform.Azure, Storage.AzureBlob>(prefix, blob, terraform, CloudPlatform.Azure)
+        class AWS(prefix: String, s3: Storage.S3, terraform: Terraform.AWS) : Cloud<Terraform.AWS, Storage.S3>(prefix, s3, terraform, CloudPlatform.AWS)
 
 
         /**
@@ -36,8 +47,7 @@ data class KotlessConfig(
         sealed class Terraform<B : Terraform.Backend, P : Terraform.Provider>(val version: String, val backend: B, val provider: P) : Visitable {
 
             class AWS(version: String, backend: Backend.AWS, provider: Provider.AWS) : Terraform<Backend.AWS, Provider.AWS>(version, backend, provider)
-            class Azure(version: String, backend: Backend.Azure, provider: Provider.Azure) :
-                Terraform<Backend.Azure, Provider.Azure>(version, backend, provider)
+            class Azure(version: String, backend: Backend.Azure, provider: Provider.Azure) : Terraform<Backend.Azure, Provider.Azure>(version, backend, provider)
 
 
             /**
@@ -52,14 +62,14 @@ data class KotlessConfig(
                  * @param profile AWS profile from a local machine to use for Terraform state storing
                  * @param region AWS region where state bucket is located
                  */
-                class AWS(val bucket: String, val key: String, val profile: String, val region: String) : Backend()
+                class AWS(val storage: Storage.S3, val key: String, val profile: String) : Backend()
 
 
                 /**
                  * Configuration of Azure Terraform backend
                  *
                  */
-                class Azure(val containerName: String, val key: String, val resourceGroup: String, val storageAccountName: String) : Backend()
+                class Azure(val storage: Storage.AzureBlob, val key: String, val resourceGroup: String) : Backend()
             }
 
 
@@ -90,6 +100,7 @@ data class KotlessConfig(
 
         override fun visit(visitor: (Any) -> Unit) {
             terraform.visit(visitor)
+            storage.visit(visitor)
             visitor(this)
         }
     }
