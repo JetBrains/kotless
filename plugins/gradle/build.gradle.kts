@@ -1,5 +1,6 @@
 import io.kotless.buildsrc.Versions
 import tanvd.kosogor.proxy.publishJar
+import tanvd.kosogor.proxy.publishPlugin
 
 group = rootProject.group
 version = rootProject.version
@@ -10,6 +11,20 @@ publishJar {
     }
 }
 
+
+publishPlugin {
+    id = "io.kotless"
+    displayName = "kotless"
+    implementationClass = "io.kotless.plugin.gradle.KotlessPlugin"
+    version = project.version.toString()
+
+    info {
+        website = "https://github.com/JetBrains/kotless"
+        vcsUrl = "https://github.com/JetBrains/kotless"
+        description = "Kotlin Serverless Framework"
+        tags.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
+    }
+}
 
 dependencies {
     implementation(gradleApi())

@@ -21,14 +21,14 @@ object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
     override fun mayRun(entity: Application, context: GenerationContext) = true
 
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val azureConfig = context.schema.config.cloud as KotlessConfig.Cloud.Azure
+        val azure = context.schema.config.cloud as KotlessConfig.Cloud.Azure
         val prefix = context.schema.config.prefix
         val resourceGroup = resource_group(context.names.tf(context.schema.config.prefix, "resource_group")) {
-            name = azureConfig.resourceGroup
+            name = azure.terraform.backend.resourceGroup
         }
 
         val storageAccount = storage_account(context.names.tf(context.schema.config.storage, "storage_account")) {
-            name = azureConfig.storageAccountName
+            name = azure.terraform.backend.storageAccountName
             resource_group_name = resourceGroup.name
         }
 

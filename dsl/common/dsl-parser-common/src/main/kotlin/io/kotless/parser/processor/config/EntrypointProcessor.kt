@@ -1,8 +1,7 @@
 package io.kotless.parser.processor.config
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
-import io.kotless.DSLType
-import io.kotless.KotlessConfig
+import io.kotless.*
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.HandlerAzure
 import io.kotless.dsl.cloud.azure.AzureRequestHandler
@@ -24,9 +23,9 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
 
     override fun process(files: Set<KtFile>, binding: BindingContext, context: ProcessorContext): Output {
         if (context.config.dsl.type == DSLType.Kotless) {
-            return when (context.config.cloud.type) {
-                KotlessConfig.Cloud.Type.Azure -> Output(Lambda.Entrypoint("${HandlerAzure::class.qualifiedName}.run"))
-                KotlessConfig.Cloud.Type.AWS -> Output(Lambda.Entrypoint("${HandlerAWS::class.qualifiedName}::${HandlerAWS::handleRequest.name}"))
+            return when (context.config.cloud.platform) {
+                CloudPlatform.Azure -> Output(Lambda.Entrypoint("${HandlerAzure::class.qualifiedName}.run"))
+                CloudPlatform.AWS -> Output(Lambda.Entrypoint("${HandlerAWS::class.qualifiedName}::${HandlerAWS::handleRequest.name}"))
             }
         }
 

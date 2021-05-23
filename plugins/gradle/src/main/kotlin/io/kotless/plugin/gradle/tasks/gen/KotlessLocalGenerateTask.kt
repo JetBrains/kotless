@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle.tasks.gen
 
-import io.kotless.AwsResource
-import io.kotless.plugin.gradle.dsl.KotlessDSL
+import io.kotless.*
+import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.dsl.kotless
 import io.kotless.plugin.gradle.utils.gradle.Groups
 import io.kotless.plugin.gradle.utils.gradle.clearDirectory
@@ -39,16 +39,18 @@ internal open class KotlessLocalGenerateTask : DefaultTask() {
 
     @TaskAction
     fun act() {
+        require(myKotless.config.cloud!!.type == CloudPlatform.AWS) { "Currently only local starts for AWS are supported" }
+
         myGenDirectory.clearDirectory()
 
         val infra = tf("infra") {
             terraform {
-                required_version = myKotless.config.terraform.version
+                required_version = myKotless.config.cloud!!.terraform.version
             }
 
             provider {
                 region = "us-east-1"
-                version = myKotless.config.terraform.provider.version
+                version = (myKotless.config.cloud as KotlessGradleConfig.CloudGradle.AWS).terraform.provider.version
 
                 skip_credentials_validation = true
                 skip_metadata_api_check = true

@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
 object AWSGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, StaticRoleFactory),
-        KotlessConfig.Terraform::class to setOf(TFConfigFactory, ProvidersFactory),
+        KotlessConfig.Cloud.Terraform::class to setOf(TFConfigFactory, ProvidersFactory),
 
         Application.API::class to setOf(DomainFactory, RestAPIFactory),
         Application.API.Deployment::class to setOf(DeploymentFactory),

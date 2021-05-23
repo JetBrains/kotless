@@ -1,25 +1,28 @@
 package io.kotless.gen.factory.aws.infra
 
-import io.kotless.KotlessConfig
+import io.kotless.KotlessConfig.Cloud.Terraform
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.terraformkt.aws.provider.provider
 
-object ProvidersFactory : GenerationFactory<KotlessConfig.Terraform, ProvidersFactory.Output> {
+object ProvidersFactory : GenerationFactory<Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, ProvidersFactory.Output> {
     class Output(val us_east_provider: String?)
 
-    override fun mayRun(entity: KotlessConfig.Terraform, context: GenerationContext) = true
+    override fun mayRun(entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, context: GenerationContext) = true
 
-    override fun generate(entity: KotlessConfig.Terraform, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        if (entity.aws.region == "us-east-1") {
+    override fun generate(
+        entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>,
+        context: GenerationContext
+    ): GenerationFactory.GenerationResult<Output> {
+        if (entity.provider.region == "us-east-1") {
             return GenerationFactory.GenerationResult(Output(null))
         }
 
         val aws_provider = provider {
             alias = "us_east_1"
-            profile = entity.aws.profile
+            profile = entity.provider.profile
             region = "us-east-1"
-            version = entity.aws.version
+            version = entity.provider.version
         }
 
         return GenerationFactory.GenerationResult(Output(aws_provider.hcl_ref), aws_provider)

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.defaults.configureIdea
+import tanvd.kosogor.proxy.publishJar
 
 group = "io.kotless"
 version = "0.2.0"
@@ -22,8 +23,12 @@ subprojects {
         plugin("io.gitlab.arturbosch.detekt")
     }
 
+    if (name != "gradle") {
+        publishJar {  }
+    }
+
     repositories {
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
 

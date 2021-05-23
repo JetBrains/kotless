@@ -3,7 +3,7 @@ package io.kotless.gen
 import io.kotless.*
 import io.kotless.gen.factory.azure.ZipArchiveFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
-import io.kotless.gen.factory.azure.infra.ProvidersFactory
+import io.kotless.gen.factory.azure.infra.TFConfigFactory
 import io.kotless.gen.factory.azure.resource.dynamic.FunctionFactory
 import io.kotless.gen.factory.azure.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.azure.route.dynamic.DynamicRouteFactory
@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
 object AzureGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, ZipArchiveFactory, StorageFactory),
-        KotlessConfig.Terraform::class to setOf(ProvidersFactory),
+        KotlessConfig.Cloud.Terraform::class to setOf(TFConfigFactory),
 
         Application.DNS::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 

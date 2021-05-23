@@ -11,7 +11,7 @@ import java.io.File
 internal object Dependencies {
     fun dsl(project: Project): Map<DSLType, Dependency> {
         val hasDSL = DSLType.values().filter { hasDependency(project, it) }
-        return hasDSL.map { it to getDependency(project, it)!! }.toMap()
+        return hasDSL.associateWith { getDependency(project, it)!! }
     }
 
     fun hasDependency(project: Project, type: DSLType) = getDependency(project, type) != null

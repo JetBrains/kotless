@@ -7,8 +7,8 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest
 import com.amazonaws.services.dynamodbv2.model.ScanRequest
 import io.kotless.AwsResource
 import io.kotless.PermissionLevel
-import io.kotless.dsl.lang.DynamoDBTable
-import io.kotless.dsl.lang.withKotlessLocal
+import io.kotless.dsl.cloud.aws.DynamoDBTable
+import io.kotless.dsl.cloud.aws.withKotlessLocal
 import io.kotless.examples.utils.RandomCode
 
 private const val tableName: String = "ktor-short-url-table"

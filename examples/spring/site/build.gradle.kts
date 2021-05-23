@@ -1,4 +1,3 @@
-import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = rootProject.group
@@ -20,14 +19,14 @@ kotless {
         bucket = "eu.spring-site.s3.ktls.aws.intellij.net"
         prefix = "spring-site"
 
-        terraform {
+        aws {
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }
     }
 
     webapp {
-        route53 = Route53("spring.site", "kotless.io")
+        dns("spring.site", "kotless.io")
     }
 }
 

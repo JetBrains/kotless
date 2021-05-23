@@ -53,8 +53,8 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             context.resources.register(key, function)
             context.routes.register(API.DynamicRoute(method, path, key))
 
-            if (context.config.optimization.autowarm.enable) {
-                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key))
+            if (context.config.optimization.autoWarm.enable) {
+                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key))
             }
         }
     }

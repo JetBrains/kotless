@@ -1,7 +1,7 @@
 package io.kotless.plugin.gradle.dsl
 
+import io.kotless.CloudPlatform
 import io.kotless.DSLType
-import io.kotless.KotlessConfig
 import io.kotless.KotlessConfig.Optimization.MergeLambda
 import io.kotless.plugin.gradle.utils.gradle.Dependencies
 import io.kotless.plugin.gradle.utils.gradle.myShadowJar
@@ -12,7 +12,7 @@ import java.io.Serializable
 
 /** Configuration of Kotless itself */
 @KotlessDSLTag
-class KotlessConfig(project: Project) : Serializable {
+class KotlessGradleConfig(project: Project) : Serializable {
     /** Name of bucket Kotless will use to store all files */
     var bucket: String = ""
 
@@ -31,10 +31,6 @@ class KotlessConfig(project: Project) : Serializable {
      */
     var genDirectory = File(project.buildDir, "kotless-gen")
 
-    var storageAccountName: String = ""
-    var resourceGroup: String = ""
-
-    var cloud: KotlessConfig.Cloud = KotlessConfig.Cloud.AWS()
 
     internal val deployGenDirectory: File
         get() = File(genDirectory, "deploy")
@@ -53,7 +49,7 @@ class KotlessConfig(project: Project) : Serializable {
     }
 
     @KotlessDSLTag
-    inner class DSLConfig(project: Project) : Serializable {
+    inner class DSLGradle(project: Project) : Serializable {
         private val defaultType by lazy {
             val types = Dependencies.dsl(project).keys
             require(types.isNotEmpty()) {
@@ -105,81 +101,124 @@ class KotlessConfig(project: Project) : Serializable {
             }
     }
 
-    internal val dsl: DSLConfig = DSLConfig(project)
+    internal val dsl: DSLGradle = DSLGradle(project)
 
     /** Configuration of DSL used by Kotless */
     @KotlessDSLTag
-    fun dsl(configure: DSLConfig.() -> Unit) {
+    fun dsl(configure: DSLGradle.() -> Unit) {
         dsl.configure()
     }
 
-    @KotlessDSLTag
-    class Terraform : Serializable {
-        /**
-         * Version of Terraform to use.
-         * By default, `0.12.29`
-         */
-        var version: String = "0.12.29"
+    sealed class CloudGradle<B : CloudGradle.TerraformGradle.BackendGradle, P : CloudGradle.TerraformGradle.ProviderGradle>(val type: CloudPlatform) :
+        Serializable {
+        class Azure : CloudGradle<TerraformGradle.BackendGradle.Azure, TerraformGradle.ProviderGradle.Azure>(CloudPlatform.Azure)
 
-        /** AWS profile from a local machine to use for Terraform operations authentication */
-        lateinit var profile: String
-
-        /** AWS region in context of which all Terraform operations should be performed */
-        lateinit var region: String
+        class AWS : CloudGradle<TerraformGradle.BackendGradle.AWS, TerraformGradle.ProviderGradle.AWS>(CloudPlatform.AWS) {
+            lateinit var profile: String
+            lateinit var region: String
+        }
 
         @KotlessDSLTag
-        class Backend : Serializable {
+        class TerraformGradle<B : TerraformGradle.BackendGradle, P : TerraformGradle.ProviderGradle>(
+            internal val backend: B, internal val provider: P
+        ) : Serializable {
             /**
-             * Name of bucket, that will be used as Terraform backend storage
-             * By default kotless bucket is used.
+             * Version of Terraform to use.
+             * By default, `0.12.29`
              */
-            var bucket: String? = null
+            var version: String = "0.12.29"
 
-            /**
-             * Path in a bucket to store Terraform state
-             * By default it is `kotless-state/state.tfstate`
-             */
-            var key: String = "kotless-state/state.tfstate"
+            sealed class BackendGradle : Serializable {
+                @KotlessDSLTag
+                class AWS : BackendGradle() {
 
-            var profile: String? = null
+                    /**
+                     * Name of bucket, that will be used as Terraform backend storage
+                     * By default kotless bucket is used.
+                     */
+                    var bucket: String? = null
 
-            var region: String? = null
+                    /**
+                     * Path in a bucket to store Terraform state
+                     * By default it is `kotless-state/state.tfstate`
+                     */
+                    var key: String = "kotless-state/state.tfstate"
+
+                    var profile: String? = null
+
+                    var region: String? = null
+                }
+
+                @KotlessDSLTag
+                class Azure : BackendGradle() {
+                    lateinit var containerName: String
+
+                    /**
+                     * Path in a bucket to store Terraform state
+                     * By default it is `kotless-state/state.tfstate`
+                     */
+                    var key: String = "kotless-state/state.tfstate"
+
+                    lateinit var resourceGroup: String
+
+                    lateinit var storageAccountName: String
+                }
+            }
+
+            /** Configuration of Terraform backend */
+            @KotlessDSLTag
+            fun backend(configure: B.() -> Unit) {
+                backend.configure()
+            }
+
+            sealed class ProviderGradle : Serializable {
+                @KotlessDSLTag
+                class AWS : ProviderGradle() {
+                    /** Version of AWS provider to use */
+                    var version = "2.70.0"
+
+                    var profile: String? = null
+
+                    var region: String? = null
+                }
+
+                @KotlessDSLTag
+                class Azure : ProviderGradle() {
+                    var version = "2.35.0"
+                }
+            }
+
+            /** Configuration of Terraform AWS provider */
+            @KotlessDSLTag
+            fun provider(configure: P.() -> Unit) {
+                provider.configure()
+            }
         }
 
-        internal val backend = Backend()
-
-        /** Configuration of Terraform backend */
-        @KotlessDSLTag
-        fun backend(configure: Backend.() -> Unit) {
-            backend.configure()
-        }
+        internal val terraform = when (type) {
+            CloudPlatform.AWS -> TerraformGradle(TerraformGradle.BackendGradle.AWS(), TerraformGradle.ProviderGradle.AWS())
+            CloudPlatform.Azure -> TerraformGradle(TerraformGradle.BackendGradle.Azure(), TerraformGradle.ProviderGradle.Azure())
+        } as TerraformGradle<B, P>
 
         @KotlessDSLTag
-        class AWSProvider : Serializable {
-            /** Version of AWS provider to use */
-            var version = "2.70.0"
-
-            var profile: String? = null
-
-            var region: String? = null
-        }
-
-        internal val provider = AWSProvider()
-
-        /** Configuration of Terraform AWS provider */
-        @KotlessDSLTag
-        fun provider(configure: AWSProvider.() -> Unit) {
-            provider.configure()
+        fun terraform(configure: TerraformGradle<B, P>.() -> Unit) {
+            terraform.configure()
         }
     }
 
-    internal val terraform: Terraform = Terraform()
 
-    /** Configuration of Terraform */
+    var cloud: CloudGradle<*, *>? = null
+
     @KotlessDSLTag
-    fun terraform(configure: Terraform.() -> Unit) {
-        terraform.configure()
+    fun aws(configure: CloudGradle.AWS.() -> Unit) {
+        cloud = CloudGradle.AWS().also(configure)
     }
+
+    @KotlessDSLTag
+    fun azure(configure: CloudGradle<CloudGradle.TerraformGradle.BackendGradle.Azure, CloudGradle.TerraformGradle.ProviderGradle.Azure>.() -> Unit) {
+        cloud = CloudGradle.Azure().also(configure)
+    }
+
 
     @KotlessDSLTag
     class Optimization : Serializable {

@@ -16,7 +16,7 @@ object ZoneFactory : GenerationFactory<Application.DNS, ZoneFactory.Output> {
     override fun generate(entity: Application.DNS, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val dnsZone = dns_zone(context.names.tf(entity.zone)) {
             name = entity.zone
-            resource_group_name = (context.schema.config.cloud as KotlessConfig.Cloud.Azure).resourceGroup
+            resource_group_name = (context.schema.config.cloud as KotlessConfig.Cloud.Azure).terraform.backend.resourceGroup
         }
 
         return GenerationFactory.GenerationResult(Output(dnsZone::name.ref, "${entity.alias}.${entity.zone}"), dnsZone)

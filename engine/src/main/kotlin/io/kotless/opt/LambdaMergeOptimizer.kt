@@ -54,10 +54,10 @@ object LambdaMergeOptimizer : SchemaOptimizer {
 
     override fun optimize(schema: Schema, optimization: Optimization, context: OptimizationContext): Schema {
         val mergedMap = merge(schema.lambdas, optimization.mergeLambda, context)
-        val scheduled = if (optimization.autowarm.enable) {
+        val scheduled = if (optimization.autoWarm.enable) {
             (schema.application.events.scheduled.filter { it.type != ScheduledEventType.Autowarm } +
                 mergedMap.entries.distinctBy { it.value }.map { (key, lambda) ->
-                    Application.Events.Scheduled(lambda.name, everyNMinutes(optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                    Application.Events.Scheduled(lambda.name, everyNMinutes(optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
                 }).toSet()
         } else schema.application.events.scheduled
 
