@@ -1,8 +1,7 @@
 package io.kotless.parser.processor.events
 
-import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
 import io.kotless.Application.Events
+import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -12,6 +11,7 @@ import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.getValue
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext

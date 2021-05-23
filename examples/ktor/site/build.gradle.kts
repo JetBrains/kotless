@@ -1,18 +1,17 @@
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.resource.Lambda.Config.Runtime
 
 group = rootProject.group
 version = rootProject.version
 
 
 plugins {
-    id("io.kotless") version "0.1.7-beta-5" apply true
+    id("io.kotless") version "0.2.0" apply true
 }
 
 dependencies {
-    implementation("io.kotless", "ktor-lang-aws", "0.1.7-beta-5")
-    implementation("io.kotless", "ktor-lang", "0.1.7-beta-5")
+    implementation("io.kotless", "ktor-lang-aws", "0.2.0")
+    implementation("io.kotless", "ktor-lang", "0.2.0")
 
     implementation(project(":common:site-shared"))
 }

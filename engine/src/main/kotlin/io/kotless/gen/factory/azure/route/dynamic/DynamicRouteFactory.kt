@@ -8,14 +8,14 @@ import io.kotless.gen.factory.azure.filescontent.LambdaDescription
 import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
 
-object DynamicRouteFactory : GenerationFactory<Application.ApiGateway.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
+object DynamicRouteFactory : GenerationFactory<Application.API.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val fileCreationRef: String, val proxyPart: String)
 
-    override fun mayRun(entity: Application.ApiGateway.DynamicRoute, context: GenerationContext) =
+    override fun mayRun(entity: Application.API.DynamicRoute, context: GenerationContext) =
         context.output.check(context.webapp, InfoFactory)
 
     override fun generate(
-        entity: Application.ApiGateway.DynamicRoute,
+        entity: Application.API.DynamicRoute,
         context: GenerationContext
     ): GenerationFactory.GenerationResult<Output> {
         val lambda = context.schema.lambdas[entity.lambda]!!

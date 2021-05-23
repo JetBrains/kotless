@@ -1,13 +1,13 @@
 package io.kotless.parser.ktor.processor.action
 
 import io.kotless.dsl.ktor.KotlessAWS
-import io.kotless.permission.Permission
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.*
+import io.kotless.permission.Permission
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe

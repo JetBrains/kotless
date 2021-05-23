@@ -3,10 +3,10 @@ package io.kotless.gen.factory.aws.route
 import io.kotless.URIPath
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.factory.aws.apigateway.RestAPIFactory
-import io.terraformkt.hcl.ref
 import io.kotless.terraform.functions.link
 import io.kotless.utils.Storage
 import io.terraformkt.aws.resource.apigateway.api_gateway_resource
+import io.terraformkt.hcl.ref
 
 /**
  * Generic implementation of ApiGateway resources creation

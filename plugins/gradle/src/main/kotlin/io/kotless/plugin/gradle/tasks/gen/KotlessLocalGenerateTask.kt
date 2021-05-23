@@ -7,9 +7,7 @@ import io.kotless.plugin.gradle.utils.gradle.Groups
 import io.kotless.plugin.gradle.utils.gradle.clearDirectory
 import io.terraformkt.aws.provider.Provider
 import io.terraformkt.aws.provider.provider
-import io.terraformkt.terraform.TFFile
-import io.terraformkt.terraform.terraform
-import io.terraformkt.terraform.tf
+import io.terraformkt.terraform.*
 import org.codehaus.plexus.util.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*

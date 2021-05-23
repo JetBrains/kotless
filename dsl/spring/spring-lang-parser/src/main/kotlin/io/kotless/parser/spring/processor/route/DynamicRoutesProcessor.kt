@@ -1,14 +1,14 @@
 package io.kotless.parser.spring.processor.route
 
-import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
-import io.kotless.Application.ApiGateway
+import io.kotless.Application.API
 import io.kotless.Application.Events
+import io.kotless.ScheduledEventType
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.visitNamedFunctions
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.KtFile
@@ -34,7 +34,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
                     val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
-                    context.routes.register(ApiGateway.DynamicRoute(method, path, key))
+                    context.routes.register(API.DynamicRoute(method, path, key))
 
                     if (context.config.optimization.autowarm.enable) {
                         context.events.register(

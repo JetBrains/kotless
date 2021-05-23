@@ -34,7 +34,7 @@ class KotlessConfig(project: Project) : Serializable {
     var storageAccountName: String = ""
     var resourceGroup: String = ""
 
-    var cloud: KotlessConfig.Cloud = KotlessConfig.Cloud.AWS
+    var cloud: KotlessConfig.Cloud = KotlessConfig.Cloud.AWS()
 
     internal val deployGenDirectory: File
         get() = File(genDirectory, "deploy")

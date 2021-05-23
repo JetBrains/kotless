@@ -26,17 +26,13 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
                 optimization.mergeLambda,
                 KotlessConfig.Optimization.Autowarm(optimization.autowarm.enable, optimization.autowarm.minutes)
             ),
-            cloud,
-            when (cloud) {
-                KotlessConfig.Cloud.AWS -> KotlessConfig.AWSCloudConfig()
-                KotlessConfig.Cloud.Azure -> KotlessConfig.AzureCloudConfig(resourceGroup, storageAccountName)
-            }
+            cloud
         )
     }
 }
 
-internal fun Webapp.Route53.toSchema(): io.kotless.Application.Route53 = io.kotless.Application.Route53(zone, alias, certificate)
-internal fun Webapp.Deployment.toSchema(path: String): io.kotless.Application.ApiGateway.Deployment = io.kotless.Application.ApiGateway.Deployment(
+internal fun Webapp.Route53.toSchema(): io.kotless.Application.DNS = io.kotless.Application.DNS(zone, alias, certificate)
+internal fun Webapp.Deployment.toSchema(path: String): io.kotless.Application.API.Deployment = io.kotless.Application.API.Deployment(
     name ?: path.trim(':').let { if (it.isBlank()) "root" else it.replace(':', '_') },
     version
 )

@@ -2,7 +2,7 @@ package io.kotless.gen.factory.azure.filescontent
 
 import io.kotless.Application
 import io.kotless.resource.Lambda
-import io.terraformkt.azurerm.data.storage.*
+import io.terraformkt.azurerm.data.storage.StorageAccount
 import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.hcl.ref
 
@@ -27,7 +27,7 @@ object LambdaDescription {
         """.trimIndent().replace("\"", "\\\"").replace("\n", "")
     }
 
-    fun proxy(lambdaPath: String, dynamicRoute: Application.ApiGateway.DynamicRoute, functionAppName: String): String {
+    fun proxy(lambdaPath: String, dynamicRoute: Application.API.DynamicRoute, functionAppName: String): String {
         return """
             "${dynamicRoute.path}_route": {
                 "matchCondition": {
@@ -66,7 +66,7 @@ object LambdaDescription {
             }
         """.trimIndent().replace("\"", "\\\"").replace("\n", "")
 
-    fun staticRoute(staticRoute: Application.ApiGateway.StaticRoute, storageAccount: StorageAccount, storageContainer: StorageContainer, blobName: String) = """
+    fun staticRoute(staticRoute: Application.API.StaticRoute, storageAccount: StorageAccount, storageContainer: StorageContainer, blobName: String) = """
             "${staticRoute.path}": {
                 "matchCondition": {
                     "route": "${staticRoute.path}"

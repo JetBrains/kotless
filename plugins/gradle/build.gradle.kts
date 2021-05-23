@@ -1,6 +1,5 @@
 import io.kotless.buildsrc.Versions
 import tanvd.kosogor.proxy.publishJar
-import tanvd.kosogor.proxy.publishPlugin
 
 group = rootProject.group
 version = rootProject.version
@@ -11,19 +10,6 @@ publishJar {
     }
 }
 
-publishPlugin {
-    id = "io.kotless"
-    displayName = "kotless"
-    implementationClass = "io.kotless.plugin.gradle.KotlessPlugin"
-    version = project.version.toString()
-
-    info {
-        website = "https://github.com/JetBrains/kotless"
-        vcsUrl = "https://github.com/JetBrains/kotless"
-        description = "Kotlin Serverless Framework"
-        tags.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
-    }
-}
 
 dependencies {
     implementation(gradleApi())
@@ -49,9 +35,9 @@ dependencies {
     implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
 
     //terraform DSL
-    implementation ("io.terraformkt.providers:aws:3.14.1-0.1.4")
-    implementation ("io.terraformkt:entities:0.1.4")
-    
+    implementation("io.terraformkt.providers:aws:3.14.1-0.1.4")
+    implementation("io.terraformkt:entities:0.1.4")
+
     api("com.fasterxml.jackson.core", "jackson-databind", "2.10.3")
     api("com.fasterxml.jackson.dataformat", "jackson-dataformat-cbor", "2.10.3")
 

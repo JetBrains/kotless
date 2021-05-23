@@ -10,9 +10,9 @@ import io.kotless.utils.Visitable
  *
  * It includes ApiGateway REST API definition and Route53 alias with SSL certificate, if present.
  *
- * @param route53 alias to ApiGateway, if present
+ * @param dns alias to ApiGateway, if present
  */
-data class Application(val route53: Route53?, val api: ApiGateway, val events: Events) : Visitable {
+data class Application(val dns: DNS?, val api: API, val events: Events) : Visitable {
     /**
      * Route53 CNAME alias
      *
@@ -20,7 +20,7 @@ data class Application(val route53: Route53?, val api: ApiGateway, val events: E
      * @param alias name of alias
      * @param certificate a fully qualified name of certificate, for SSL connection
      */
-    data class Route53(val zone: String, val alias: String, val certificate: String) : Visitable {
+    data class DNS(val zone: String, val alias: String, val certificate: String) : Visitable {
         /** fully qualified name of route53 record */
         val fqdn = "$alias.$zone"
     }
@@ -59,7 +59,7 @@ data class Application(val route53: Route53?, val api: ApiGateway, val events: E
      * @param dynamics Dynamic routes of this ApiGateway served by lambdas
      * @param statics  Static routes of ApiGateway served by static resources
      */
-    data class ApiGateway(val name: String, val deployment: Deployment, val dynamics: Set<DynamicRoute>, val statics: Set<StaticRoute>) : Visitable {
+    data class API(val name: String, val deployment: Deployment, val dynamics: Set<DynamicRoute>, val statics: Set<StaticRoute>) : Visitable {
 
         /**
          * Deployment definition of ApiGateway. Recreated each redeploy
@@ -91,7 +91,7 @@ data class Application(val route53: Route53?, val api: ApiGateway, val events: E
     }
 
     override fun visit(visitor: (Any) -> Unit) {
-        route53?.visit(visitor)
+        dns?.visit(visitor)
         api.visit(visitor)
         events.visit(visitor)
         visitor(this)

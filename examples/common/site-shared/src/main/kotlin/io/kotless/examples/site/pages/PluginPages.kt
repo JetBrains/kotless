@@ -65,7 +65,8 @@ object PluginPages {
         p {
             +"Here is the simple snippet of the whole configuration:"
         }
-        kotlin("""
+        kotlin(
+            """
                 config {
                     //see details in a Kotless Configuration docs
                     bucket = "kotless.s3.example.com"
@@ -92,7 +93,8 @@ object PluginPages {
                         }
                     }
                 }
-        """)
+        """
+        )
     }
 
     fun configuration() = doc {
@@ -127,7 +129,8 @@ object PluginPages {
             +"Here is a simple snippet of the whole configuration:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 config {
                     bucket = "kotless.s3.example.com"
                     prefix = "dev"
@@ -143,7 +146,8 @@ object PluginPages {
                         mergeLambda = MergeLambda.All
                     }
                 }
-        """)
+        """
+        )
 
         p {
             +"We will take a look at parts of this configuration one by one."
@@ -172,14 +176,16 @@ object PluginPages {
             +"Here is the simplest possible snippet with a setup of terraform configuration:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 terraform {
                     //Will use for terraform state buckets used by kotless service configuration
                     //version of terraform and aws provider will be default
                     profile = "example-profile"
                     region = "us-east-1"
                 }
-        """)
+        """
+        )
 
         p {
             +"Note, that needed version of terraform will be downloaded automatically."
@@ -214,14 +220,16 @@ object PluginPages {
             +"Here is a simple snippet with a setup of service configuration:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 config {
                     bucket = "kotless.s3.example.com"
                     prefix = "dev"
 
                     workDirectory = file("src/main/static")
                 }
-        """)
+        """
+        )
 
         p {
             +"""Note, that `bucket` value will be used for terraform state, if it is not set explicitly
@@ -273,11 +281,13 @@ object PluginPages {
             +"Here is a simple snipped of optimization configuration:"
         }
 
-        kotlin("""
+        kotlin(
+            """
             optimization {
                 mergeLambda = MergeLambda.All
             }
-        """)
+        """
+        )
 
         h4 {
             +"Lambda AutoWarming Optimization"
@@ -293,12 +303,14 @@ object PluginPages {
                 and is described in a Lifecycle API section."""
         }
 
-        kotlin("""
+        kotlin(
+            """
             optimization {
                 //default config
                 autowarm = Autowarm(enable = true, minutes = 5)
             }
-        """)
+        """
+        )
 
         p {
             +"""Kotless lambdas can be autowarmed. It means, that some scheduler will
@@ -337,7 +349,8 @@ object PluginPages {
             +"Here is the simple snippet of the webapp configuration:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 webapp {
                     packages = setOf("org.example.kotless")
                     route53 = Route53("kotless", "example.com")
@@ -346,7 +359,8 @@ object PluginPages {
                         memoryMb = 512
                     }
                 }
-        """)
+        """
+        )
 
     }
 
@@ -423,7 +437,8 @@ object PluginPages {
             +"Also, via Extensions API you can enable `destroy` task in Gradle. It is hidden by default for safety reasons"
         }
 
-        kotlin("""
+        kotlin(
+            """
             extensions {
                 terraform {
                     //Enable back Destroy task
@@ -435,7 +450,8 @@ object PluginPages {
                     }
                 }
             }
-        """)
+        """
+        )
 
     }
 }

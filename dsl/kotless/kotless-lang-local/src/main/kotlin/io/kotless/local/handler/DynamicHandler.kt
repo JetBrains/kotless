@@ -2,9 +2,9 @@ package io.kotless.local.handler
 
 import io.kotless.HttpMethod
 import io.kotless.dsl.HandlerAWS
-import io.kotless.dsl.model.HttpRequest
+import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
 import io.kotless.dsl.model.HttpResponse
-import io.kotless.dsl.utils.Json
+import io.kotless.dsl.utils.JSON
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import java.io.ByteArrayOutputStream
@@ -15,20 +15,20 @@ import javax.servlet.http.HttpServletResponse
 
 internal class DynamicHandler(private val handler: HandlerAWS) : AbstractHandler() {
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
-        val apiRequest = HttpRequest(
+        val apiRequest = AwsHttpRequest(
             resource = request.requestURI,
             path = request.requestURI,
             method = HttpMethod.valueOf(request.method),
             myHeaders = request.headerNames.asSequence().map { it to request.getHeader(it) }.toMap(),
             myQueryStringParameters = request.parameterNames.asSequence().map { it to request.getParameter(it) }.toMap(),
             pathParameters = emptyMap(),
-            requestContext = HttpRequest.RequestContext(
+            requestContext = AwsHttpRequest.RequestContext(
                 resourcePath = request.requestURI,
                 path = request.requestURI,
                 accountId = "-1",
                 resourceId = "-1",
                 stage = "/",
-                identity = HttpRequest.RequestContext.RequestIdentity(
+                identity = AwsHttpRequest.RequestContext.RequestIdentity(
                     sourceIp = request.remoteAddr,
                     userAgent = request.getHeader("User-Agent")
                 ),
@@ -42,12 +42,12 @@ internal class DynamicHandler(private val handler: HandlerAWS) : AbstractHandler
 
         val output = ByteArrayOutputStream()
         handler.handleRequest(
-            input = Json.string(HttpRequest.serializer(), apiRequest).byteInputStream(),
+            input = JSON.string(AwsHttpRequest.serializer(), apiRequest).byteInputStream(),
             output = output,
             any = null
         )
 
-        val apiResponse = Json.parse(HttpResponse.serializer(), output.toString(Charsets.UTF_8.name()))
+        val apiResponse = JSON.parse(HttpResponse.serializer(), output.toString(Charsets.UTF_8.name()))
 
         response.apply {
             status = apiResponse.statusCode

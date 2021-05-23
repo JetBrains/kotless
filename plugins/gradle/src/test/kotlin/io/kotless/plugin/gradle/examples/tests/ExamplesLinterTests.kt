@@ -8,7 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.File
 
-class ExamplesLinterTests: ExamplesTestBase() {
+class ExamplesLinterTests : ExamplesTestBase() {
     private val bin = File(runner.projectDir, "build/bin/tflint")
 
     init {

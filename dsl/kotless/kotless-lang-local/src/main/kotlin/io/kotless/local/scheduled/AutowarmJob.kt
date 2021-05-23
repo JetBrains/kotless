@@ -2,8 +2,8 @@ package io.kotless.local.scheduled
 
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.HandlerAWS
-import io.kotless.dsl.model.CloudWatch
-import io.kotless.dsl.utils.Json
+import io.kotless.dsl.cloud.aws.CloudWatch
+import io.kotless.dsl.utils.JSON
 import io.kotless.local.Environment
 import io.kotless.utils.everyNMinutes
 import org.quartz.*
@@ -49,7 +49,7 @@ internal class AutowarmJob : Job {
         )
 
         handler.handleRequest(
-            input = Json.string(CloudWatch.serializer(), apiRequest).byteInputStream(),
+            input = JSON.string(CloudWatch.serializer(), apiRequest).byteInputStream(),
             output = ByteArrayOutputStream(),
             any = null
         )

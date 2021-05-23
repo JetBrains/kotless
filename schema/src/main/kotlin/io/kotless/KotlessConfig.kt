@@ -6,7 +6,7 @@ import java.io.File
 /**
  * Config of Kotless itself
  *
- * @param bucket name of bucket Kotless will use to store all files
+ * @param storage name of bucket Kotless will use to store all files
  * @param prefix name with which will be prepended all Kotless created entities
  * @param dsl configuration of DSL that will be used for Kotless application
  * @param terraform terraform configuration used by Kotless
@@ -14,23 +14,24 @@ import java.io.File
  * @param cloud type of the cloud
  */
 data class KotlessConfig(
-    val bucket: String,
+    val storage: String,
     val prefix: String,
     val dsl: DSL,
     val terraform: Terraform,
     val optimization: Optimization = Optimization(),
-    val cloud: Cloud = Cloud.AWS,
-    val cloudConfig: CloudConfig
+    val cloud: Cloud,
 ) : Visitable {
 
-    enum class Cloud {
-        AWS, Azure
+    sealed class Cloud(val type: Cloud.Type) : Visitable {
+        enum class Type {
+            AWS,
+            Azure
+        }
+
+        class Azure(val resourceGroup: String, val storageAccountName: String) : Cloud(Type.Azure)
+
+        class AWS : Cloud(Type.AWS)
     }
-
-    interface CloudConfig: Visitable {}
-
-    data class AzureCloudConfig(val resourceGroup: String, val storageAccountName: String): CloudConfig
-    class AWSCloudConfig(): CloudConfig
 
 
     /**

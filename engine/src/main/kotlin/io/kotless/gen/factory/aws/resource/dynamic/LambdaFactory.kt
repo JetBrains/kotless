@@ -1,16 +1,16 @@
 package io.kotless.gen.factory.aws.resource.dynamic
 
-import io.kotless.resource.Lambda
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
-import io.terraformkt.hcl.ref
+import io.kotless.resource.Lambda
 import io.kotless.terraform.functions.*
 import io.terraformkt.aws.data.iam.iam_policy_document
 import io.terraformkt.aws.resource.iam.iam_role
 import io.terraformkt.aws.resource.iam.iam_role_policy
 import io.terraformkt.aws.resource.lambda.lambda_function
 import io.terraformkt.aws.resource.s3.s3_bucket_object
+import io.terraformkt.hcl.ref
 
 
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
@@ -22,7 +22,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         val info = context.output.get(context.webapp, InfoFactory)
 
         val obj = s3_bucket_object(context.names.tf(entity.name)) {
-            bucket = context.schema.config.bucket
+            bucket = context.schema.config.storage
             key = "kotless-lambdas/${context.names.aws(entity.name)}.jar"
             source = path(entity.file)
             etag = eval(filemd5(entity.file))

@@ -1,6 +1,6 @@
 package io.kotless.parser
 
-object KotlessDescriptor: DSLDescriptor {
+object KotlessDescriptor : DSLDescriptor {
     override val name: String = "kotless"
 
     override val parser: Parser = KotlessParser

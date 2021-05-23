@@ -14,13 +14,13 @@ object ProvidersFactory : GenerationFactory<KotlessConfig.Terraform, ProvidersFa
     override fun mayRun(entity: KotlessConfig.Terraform, context: GenerationContext) = true
 
     override fun generate(entity: KotlessConfig.Terraform, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val azureConfig = context.schema.config.cloudConfig as KotlessConfig.AzureCloudConfig
+        val azureConfig = context.schema.config.cloud as KotlessConfig.Cloud.Azure
         val terraform = terraform {
             required_version = entity.version
             backend = TFConfig.Backend.AzureRM().apply {
                 resource_group_name = azureConfig.resourceGroup
                 storage_account_name = azureConfig.storageAccountName
-                container_name = context.schema.config.bucket
+                container_name = context.schema.config.storage
                 key = entity.backend.key
             }
         }

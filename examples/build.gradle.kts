@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless.examples"
-version = "0.1.7-beta-5"
+version = "0.2.0"
 
 plugins {
     id("tanvd.kosogor") version "1.0.10" apply true

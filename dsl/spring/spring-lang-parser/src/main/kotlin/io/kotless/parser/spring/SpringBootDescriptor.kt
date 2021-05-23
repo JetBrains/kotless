@@ -2,7 +2,7 @@ package io.kotless.parser.spring
 
 import io.kotless.parser.DSLDescriptor
 
-object SpringBootDescriptor: DSLDescriptor {
+object SpringBootDescriptor : DSLDescriptor {
     override val name: String = "spring-boot"
 
     override val parser = SpringParser

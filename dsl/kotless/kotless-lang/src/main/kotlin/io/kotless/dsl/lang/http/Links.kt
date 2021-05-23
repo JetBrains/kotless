@@ -2,14 +2,11 @@ package io.kotless.dsl.lang.http
 
 import io.kotless.URIPath
 import io.kotless.dsl.conversion.ConversionService
-import io.kotless.dsl.lang.KotlessContext
 import io.kotless.toURIPath
 import java.io.File
 import java.net.URI
 import java.net.URLEncoder
-import kotlin.reflect.KFunction
-import kotlin.reflect.KParameter
-import kotlin.reflect.KProperty0
+import kotlin.reflect.*
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.jvm.javaField
 
@@ -30,7 +27,8 @@ val KFunction<*>.href
 fun Function0<*>.href() = (this as KFunction<*>).href
 
 private fun String.toAbsoluteHref(): String {
-    val stagePath = KotlessContext.HTTP.request.requestContext.stagePath.toURIPath()
+//    val stagePath = KotlessContext.HTTP.request.requestContext.stagePath.toURIPath()
+    val stagePath = URIPath()
     val hrefPath = this.toURIPath()
     return URIPath(stagePath, hrefPath).toAbsoluteString()
 }

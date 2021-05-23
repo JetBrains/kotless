@@ -1,7 +1,6 @@
 package io.kotless.dsl.ktor.lang.event
 
-import io.ktor.application.Application
-import io.ktor.application.ApplicationEvents
+import io.ktor.application.*
 
 /**
  * DSL Marker for DSL to define events in Ktor

@@ -6,31 +6,34 @@ import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.terraformkt.azurerm.data.resource.ResourceGroup
 import io.terraformkt.azurerm.data.resource.resource_group
-import io.terraformkt.azurerm.data.storage.*
-import io.terraformkt.azurerm.resource.storage.storage_container
+import io.terraformkt.azurerm.data.storage.StorageAccount
+import io.terraformkt.azurerm.data.storage.storage_account
 import io.terraformkt.azurerm.resource.storage.StorageContainer
+import io.terraformkt.azurerm.resource.storage.storage_container
 
 object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
-    data class Output(val resourceGroup: ResourceGroup, val storageAccount: StorageAccount,
-                      val staticStorageContainer: StorageContainer,
-                      val storageBlobName: String)
+    data class Output(
+        val resourceGroup: ResourceGroup, val storageAccount: StorageAccount,
+        val staticStorageContainer: StorageContainer,
+        val storageBlobName: String
+    )
 
     override fun mayRun(entity: Application, context: GenerationContext) = true
 
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val azureConfig = context.schema.config.cloudConfig as KotlessConfig.AzureCloudConfig
+        val azureConfig = context.schema.config.cloud as KotlessConfig.Cloud.Azure
         val prefix = context.schema.config.prefix
         val resourceGroup = resource_group(context.names.tf(context.schema.config.prefix, "resource_group")) {
             name = azureConfig.resourceGroup
         }
 
-        val storageAccount = storage_account(context.names.tf(context.schema.config.bucket, "storage_account")) {
+        val storageAccount = storage_account(context.names.tf(context.schema.config.storage, "storage_account")) {
             name = azureConfig.storageAccountName
             resource_group_name = resourceGroup.name
         }
 
         val storageContainer = io.terraformkt.azurerm.data.storage.storage_container("storage_container") {
-            name = context.schema.config.bucket
+            name = context.schema.config.storage
             storage_account_name = storageAccount.name
         }
 

@@ -4,10 +4,10 @@ import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
-import io.terraformkt.hcl.ref
 import io.terraformkt.aws.data.iam.iam_policy_document
 import io.terraformkt.aws.resource.iam.iam_role
 import io.terraformkt.aws.resource.iam.iam_role_policy
+import io.terraformkt.hcl.ref
 
 
 object StaticRoleFactory : GenerationFactory<Application, StaticRoleFactory.Output> {

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.system.measureTimeMillis
 
-class ExamplesPerformanceTests: ExamplesTestBase() {
+class ExamplesPerformanceTests : ExamplesTestBase() {
     companion object {
         private val time = IntRange(250, 5000)
 

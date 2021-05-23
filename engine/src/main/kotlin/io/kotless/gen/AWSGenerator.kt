@@ -1,21 +1,17 @@
 package io.kotless.gen
 
 import io.kotless.*
-import io.kotless.gen.factory.aws.apigateway.DeploymentFactory
-import io.kotless.gen.factory.aws.apigateway.DomainFactory
-import io.kotless.gen.factory.aws.apigateway.RestAPIFactory
+import io.kotless.gen.factory.aws.apigateway.*
 import io.kotless.gen.factory.aws.event.ScheduledEventsFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
-import io.kotless.gen.factory.aws.infra.TFConfigFactory
 import io.kotless.gen.factory.aws.infra.ProvidersFactory
+import io.kotless.gen.factory.aws.infra.TFConfigFactory
 import io.kotless.gen.factory.aws.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.aws.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.aws.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.aws.route.static.StaticRoleFactory
 import io.kotless.gen.factory.aws.route.static.StaticRouteFactory
-import io.kotless.gen.factory.aws.route53.CertificateFactory
-import io.kotless.gen.factory.aws.route53.RecordFactory
-import io.kotless.gen.factory.aws.route53.ZoneFactory
+import io.kotless.gen.factory.aws.route53.*
 import io.kotless.resource.Lambda
 import io.kotless.resource.StaticResource
 import io.terraformkt.terraform.TFFile
@@ -26,17 +22,17 @@ object AWSGenerator {
         Application::class to setOf(InfoFactory, StaticRoleFactory),
         KotlessConfig.Terraform::class to setOf(TFConfigFactory, ProvidersFactory),
 
-        Application.ApiGateway::class to setOf(DomainFactory, RestAPIFactory),
-        Application.ApiGateway.Deployment::class to setOf(DeploymentFactory),
-        Application.Route53::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
+        Application.API::class to setOf(DomainFactory, RestAPIFactory),
+        Application.API.Deployment::class to setOf(DeploymentFactory),
+        Application.DNS::class to setOf(CertificateFactory, RecordFactory, ZoneFactory),
 
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(LambdaFactory),
 
         Application.Events.Scheduled::class to setOf(ScheduledEventsFactory),
 
-        Application.ApiGateway.StaticRoute::class to setOf(StaticRouteFactory),
-        Application.ApiGateway.DynamicRoute::class to setOf(DynamicRouteFactory)
+        Application.API.StaticRoute::class to setOf(StaticRouteFactory),
+        Application.API.DynamicRoute::class to setOf(DynamicRouteFactory)
     )
 
     fun generate(schema: Schema): Set<TFFile> {

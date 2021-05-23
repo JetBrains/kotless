@@ -51,19 +51,22 @@ object IntroductionPages {
                         add needed dependency:"""
         }
 
-        kotlin("""
+        kotlin(
+            """
                 repositories {
                     jcenter()
                 }
                 dependencies {
                     implementation("io.kotless", "kotless-lang", "0.1.1")
-                }""")
+                }"""
+        )
 
         p {
             +"Now you will need to set up Kotless. Here is a simple configuration with comments:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 kotless {
                     config {
                         //bucket that kotless will use to store its artifacts
@@ -110,7 +113,8 @@ object IntroductionPages {
                 create route at HTTP path "/" which will print "Hello world!""""
         }
 
-        kotlin("""
+        kotlin(
+            """
                 @Get("/")
                 fun root(): String {
                     return "Hello world!"
@@ -140,7 +144,8 @@ object IntroductionPages {
             +"This code snippet will create route at HTTP path `/file.css` with file `example.css`"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 @StaticGet("/file.css", MimeType.CSS)
                 val exampleCss = File("example.css")"""
         )

@@ -10,15 +10,15 @@ import io.terraformkt.azurerm.resource.dns.dns_cname_record
 import io.terraformkt.azurerm.resource.dns.dns_txt_record
 import io.terraformkt.hcl.ref
 
-object RecordFactory : GenerationFactory<Application.Route53, RecordFactory.Output> {
+object RecordFactory : GenerationFactory<Application.DNS, RecordFactory.Output> {
     data class Output(val hostnameBinding: String)
 
-    override fun mayRun(entity: Application.Route53, context: GenerationContext) =
+    override fun mayRun(entity: Application.DNS, context: GenerationContext) =
         context.output.check(entity, ZoneFactory)
             && context.schema.lambdas.all.all { context.output.check(it, FunctionFactory) }
             && context.output.check(context.webapp, InfoFactory)
 
-    override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+    override fun generate(entity: Application.DNS, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val lambda = context.output.get(context.schema.lambdas.all.first(), FunctionFactory)
         val dnsZone = context.output.get(entity, ZoneFactory)
         val certificate = context.output.get(entity, CertificateFactory).certificate
