@@ -16,18 +16,16 @@ import java.io.File
 data class KotlessConfig(
     val storage: String,
     val prefix: String,
-    val cloud: Cloud<*, *>,
+    val cloud: Cloud<*>,
     val dsl: DSL,
     val optimization: Optimization = Optimization(),
 ) : Visitable {
 
 
-    sealed class Cloud<B : Cloud.Terraform.Backend, P : Cloud.Terraform.Provider>(val terraform: Terraform<B, P>, val platform: CloudPlatform) : Visitable {
-        class Azure(terraform: Terraform<Terraform.Backend.Azure, Terraform.Provider.Azure>) :
-            Cloud<Terraform.Backend.Azure, Terraform.Provider.Azure>(terraform, CloudPlatform.Azure)
+    sealed class Cloud<T : Cloud.Terraform<*, *>>(val terraform: T, val platform: CloudPlatform) : Visitable {
 
-        class AWS(terraform: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>) :
-            Cloud<Terraform.Backend.AWS, Terraform.Provider.AWS>(terraform, CloudPlatform.AWS)
+        class Azure(terraform: Terraform.Azure) : Cloud<Terraform.Azure>(terraform, CloudPlatform.Azure)
+        class AWS(terraform: Terraform.AWS) : Cloud<Terraform.AWS>(terraform, CloudPlatform.AWS)
 
 
         /**
@@ -35,7 +33,12 @@ data class KotlessConfig(
          *
          * @param version version of Terraform used
          */
-        data class Terraform<B : Terraform.Backend, P : Terraform.Provider>(val version: String, val backend: B, val provider: P) : Visitable {
+        sealed class Terraform<B : Terraform.Backend, P : Terraform.Provider>(val version: String, val backend: B, val provider: P) : Visitable {
+
+            class AWS(version: String, backend: Backend.AWS, provider: Provider.AWS) : Terraform<Backend.AWS, Provider.AWS>(version, backend, provider)
+            class Azure(version: String, backend: Backend.Azure, provider: Provider.Azure) :
+                Terraform<Backend.Azure, Provider.Azure>(version, backend, provider)
+
 
             /**
              * Configuration of Terraform backend

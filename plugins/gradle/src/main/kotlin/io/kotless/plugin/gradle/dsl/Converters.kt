@@ -17,16 +17,16 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
     }
 }
 
-internal fun KotlessGradleConfig.CloudGradle<*, *>.toSchema(bucket: String): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle<*, *>.toSchema(bucket: String): KotlessConfig.Cloud<*> {
     return when (type) {
         CloudPlatform.AWS -> (this as KotlessGradleConfig.CloudGradle.AWS).toSchema(bucket)
         CloudPlatform.Azure -> (this as KotlessGradleConfig.CloudGradle.Azure).toSchema(bucket)
     }
 }
 
-internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(bucket: String): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(bucket: String): KotlessConfig.Cloud<*> {
     return KotlessConfig.Cloud.AWS(
-        KotlessConfig.Cloud.Terraform(
+        KotlessConfig.Cloud.Terraform.AWS(
             terraform.version,
             KotlessConfig.Cloud.Terraform.Backend.AWS(
                 terraform.backend.bucket ?: bucket,
@@ -44,9 +44,9 @@ internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(bucket: String): Kotle
     )
 }
 
-internal fun KotlessGradleConfig.CloudGradle.Azure.toSchema(bucket: String): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle.Azure.toSchema(bucket: String): KotlessConfig.Cloud<*> {
     return KotlessConfig.Cloud.Azure(
-        KotlessConfig.Cloud.Terraform(
+        KotlessConfig.Cloud.Terraform.Azure(
             terraform.version,
             KotlessConfig.Cloud.Terraform.Backend.Azure(
                 terraform.backend.containerName,
