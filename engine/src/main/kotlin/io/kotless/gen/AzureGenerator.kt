@@ -1,6 +1,9 @@
 package io.kotless.gen
 
 import io.kotless.*
+import io.kotless.Application
+import io.kotless.KotlessConfig
+import io.kotless.Schema
 import io.kotless.gen.factory.azure.ZipArchiveFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.infra.TFConfigFactory

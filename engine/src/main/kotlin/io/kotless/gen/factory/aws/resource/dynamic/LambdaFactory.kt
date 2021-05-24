@@ -3,6 +3,7 @@ package io.kotless.gen.factory.aws.resource.dynamic
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
+import io.kotless.permission.AWSPermission
 import io.kotless.resource.Lambda
 import io.kotless.terraform.functions.*
 import io.terraformkt.aws.data.iam.iam_policy_document
@@ -45,7 +46,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         }
 
         val policy_document = iam_policy_document(context.names.tf(entity.name)) {
-            for (permission in entity.permissions.sortedBy { it.resource }) {
+            for (permission in entity.permissions.map{it as AWSPermission}.sortedBy { it.resource }) {
                 statement {
                     effect = "Allow"
                     resources = permission.cloudIds(info.region_name, info.account_id).toTypedArray()

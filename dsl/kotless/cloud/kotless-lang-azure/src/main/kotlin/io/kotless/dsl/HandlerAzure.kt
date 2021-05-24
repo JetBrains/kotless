@@ -6,18 +6,18 @@ import io.kotless.HttpMethod
 import io.kotless.InternalAPI
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
+import io.kotless.dsl.cloud.azure.AzureRequestHandler
 import io.kotless.dsl.cloud.azure.model.toRequest
 import org.slf4j.LoggerFactory
 import java.util.*
 
 @InternalAPI
-class HandlerAzure {
+class HandlerAzure: AzureRequestHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(HandlerAzure::class.java)
     }
 
-    @FunctionName("HttpTrigger")
-    fun run(
+    override fun run(
         @HttpTrigger(
             name = "req",
             methods = [com.microsoft.azure.functions.HttpMethod.GET, com.microsoft.azure.functions.HttpMethod.POST],

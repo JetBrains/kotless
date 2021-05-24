@@ -3,10 +3,12 @@ package io.kotless.gen.factory.azure
 import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
+import io.kotless.gen.factory.aws.event.ScheduledEventsFactory
 import io.kotless.gen.factory.azure.filescontent.LambdaDescription
 import io.kotless.gen.factory.azure.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.azure.route.static.StaticRouteFactory
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
+import io.kotless.terraform.functions.path
 
 object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Output> {
     data class Output(val artifactCompleteRef: String)
@@ -26,11 +28,11 @@ object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Outp
 
         val localSettingsJson = LambdaDescription.localSettings()
 
-        val createLocalSettingsFile = FilesCreationTf.localFile("local_settings_file", localSettingsJson, "${directory}/local.settings.json")
-        val createHostFile = FilesCreationTf.localFile("host_file", hostJson, "${directory}/host.json")
+        val createLocalSettingsFile = FilesCreationTf.localFile("local_settings_file", localSettingsJson, path(directory.resolve("local.settings.json")))
+        val createHostFile = FilesCreationTf.localFile("host_file", hostJson, path(directory.resolve("host.json")))
 
         val proxyBody = (staticCreateFile + proxyParts).joinToString(",", prefix = "{  \\\"proxies\\\": {", postfix = "}}")
-        val result = FilesCreationTf.localFile("proxies_file_creation", proxyBody, "${directory}/proxies.json")
+        val result = FilesCreationTf.localFile("proxies_file_creation", proxyBody, path(directory.resolve("proxies.json")))
 
         val zipFile = FilesCreationTf.zipFile(
             "zip_file",

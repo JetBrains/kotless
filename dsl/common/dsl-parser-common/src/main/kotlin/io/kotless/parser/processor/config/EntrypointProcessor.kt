@@ -50,7 +50,7 @@ object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
             return Lambda.Entrypoint("${fqName!!.asString()}::${RequestStreamHandler::handleRequest.name}")
         }
         if (this.isSubtypeOf(AzureRequestHandler::class, binding)) {
-            return Lambda.Entrypoint("${fqName!!.asString()}.${AzureRequestHandler::handleRequest.name}")
+            return Lambda.Entrypoint("${fqName!!.asString()}.run")
         }
         error("Entry point should be inherited from ${RequestStreamHandler::class} or ${AzureRequestHandler::class}")
     }

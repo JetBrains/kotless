@@ -39,15 +39,13 @@ abstract class KotlessAzure : AzureRequestHandler {
 
     @InternalAPI
     @EngineAPI
-    @FunctionName("HttpTrigger")
-    override fun handleRequest(
+    override fun run(
         @HttpTrigger(
             name = "req",
             methods = [HttpMethod.GET, HttpMethod.POST],
             authLevel = AuthorizationLevel.FUNCTION
         ) request: HttpRequestMessage<Optional<String>>, context: ExecutionContext
     ): HttpResponseMessage {
-        logger.info("new message")
         if (!prepared) {
             prepare(engine.application)
             prepared = true

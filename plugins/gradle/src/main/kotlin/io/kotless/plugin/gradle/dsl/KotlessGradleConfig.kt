@@ -208,7 +208,7 @@ class KotlessGradleConfig(project: Project) : Serializable {
 
                 @KotlessDSLTag
                 class Azure : ProviderGradle() {
-                    var version = "2.35.0"
+                    var version = "2.56.0"
                 }
             }
 
