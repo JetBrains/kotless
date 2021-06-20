@@ -44,6 +44,7 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
             name = context.names.azure(context.schema.config.cloud.prefix.replace("-", ""), "functions", "consumption", "asp")
             location = resourceGroup::location.ref
             resource_group_name = resourceGroup::name.ref
+            kind = "functionapp"
             sku {
                 tier = "Dynamic"
                 size = "Y1"
