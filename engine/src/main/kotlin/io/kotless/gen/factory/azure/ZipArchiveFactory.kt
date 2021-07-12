@@ -3,7 +3,7 @@ package io.kotless.gen.factory.azure
 import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
-import io.kotless.gen.factory.aws.event.ScheduledEventsFactory
+import io.kotless.gen.factory.azure.event.ScheduledEventsFactory
 import io.kotless.gen.factory.azure.filescontent.LambdaDescription
 import io.kotless.gen.factory.azure.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.azure.route.static.StaticRouteFactory
@@ -16,12 +16,14 @@ object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Outp
     override fun mayRun(entity: Application, context: GenerationContext) =
         context.webapp.api.dynamics.all { context.output.check(it, DynamicRouteFactory) }
             && context.webapp.api.statics.all { context.output.check(it, StaticRouteFactory) }
+            && entity.events.scheduled.all { context.output.check(it, ScheduledEventsFactory) }
 
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<ZipArchiveFactory.Output> {
         val lambdas = context.schema.lambdas.all
         val directory = lambdas.first().file.parentFile
         val dynamicCreateFile = entity.api.dynamics.map { context.output.get(it, DynamicRouteFactory).fileCreationRef }
         val staticCreateFile = entity.api.statics.map { context.output.get(it, StaticRouteFactory).proxyPart }
+        val scheduledCreateFile = entity.events.scheduled.map { context.output.get(it, ScheduledEventsFactory).fileCreationRef }
         val proxyParts = entity.api.dynamics.map { context.output.get(it, DynamicRouteFactory).proxyPart }
 
         val hostJson = LambdaDescription.host()
@@ -38,7 +40,7 @@ object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Outp
             "zip_file",
             directory.path,
             "${directory.parent}/result.zip",
-            dynamicCreateFile + listOf(createHostFile.hcl_ref, createLocalSettingsFile.hcl_ref, result.hcl_ref)
+            scheduledCreateFile + dynamicCreateFile + listOf(createHostFile.hcl_ref, createLocalSettingsFile.hcl_ref, result.hcl_ref)
         )
 
         return GenerationFactory.GenerationResult(Output(zipFile.hcl_ref), zipFile, createLocalSettingsFile, createHostFile, result)

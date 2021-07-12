@@ -21,7 +21,7 @@ object DynamicRouteFactory : GenerationFactory<Application.API.DynamicRoute, Dyn
     ): GenerationFactory.GenerationResult<Output> {
         val lambda = context.schema.lambdas[entity.lambda]!!
         val functionAppName = context.names.azure(lambda.name)
-        val lambdaDescriptionFileBody = LambdaDescription.body(lambda)
+        val lambdaDescriptionFileBody = LambdaDescription.body(lambda, listOf(entity.method.name))
 
         val resourceName = "route_${entity.path.toString().replace(".", "_").replace("/", "_")}"
         val path = "route_" + entity.path.toString().replace("/", "_")

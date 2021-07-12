@@ -1,6 +1,5 @@
 package io.kotless.gen.factory.azure.resource.dynamic
 
-import io.kotless.AwsResource
 import io.kotless.AzureResource
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
@@ -9,20 +8,15 @@ import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.storage.StorageFactory
 import io.kotless.permission.AzurePermission
 import io.kotless.resource.Lambda
-import io.terraformkt.azurerm.data.role.RoleDefinition
 import io.terraformkt.azurerm.data.role.role_definition
-import io.terraformkt.azurerm.data.storage.storage_account
-import io.terraformkt.azurerm.data.storage.storage_container
 import io.terraformkt.azurerm.resource.app.app_service_plan
 import io.terraformkt.azurerm.resource.application.application_insights
 import io.terraformkt.azurerm.resource.function.FunctionApp
 import io.terraformkt.azurerm.resource.function.function_app
-import io.terraformkt.azurerm.resource.role.RoleAssignment
 import io.terraformkt.azurerm.resource.role.role_assignment
 import io.terraformkt.hcl.ref
 import io.terraformkt.terraform.TFData
 import io.terraformkt.terraform.TFResource
-import java.security.InvalidParameterException
 import java.util.*
 
 object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
@@ -89,7 +83,7 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
         }
         val roleResources: MutableList<TFResource> = mutableListOf()
         val roleData: MutableList<TFData> = mutableListOf()
-        for (permission in (entity.permissions.map{it as AzurePermission})) {
+        for (permission in (entity.permissions.map { it as AzurePermission })) {
             val role = permission.actions.single()
             val roleDefinition = role_definition("${entity.name}_${permission.resource}") {
                 name = role

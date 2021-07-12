@@ -79,4 +79,9 @@ abstract class KotlessAzure : AzureRequestHandler {
         logger.info("Ended handling request")
         return outputResponse.build()
     }
+
+    override fun timer(timerInfo: String, context: ExecutionContext) {
+        logger.info("hi")
+//        Application.warmup()
+    }
 }
