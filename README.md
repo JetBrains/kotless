@@ -13,6 +13,8 @@ from the code of the application itself.
 So, simply speaking, Kotless gives you one magic button to deploy your Web application as a
 serverless application on AWS!
 
+**Version of Kotless 0.2.0 will also support Microsoft Azure, you can try it out already by compiling branch 0.2.0. In the near future we will publish SNAPSHOT versons.**
+
 Kotless consists of two main parts:
 
 * DSL provides a way of defining serverless applications. There are three DSLs supported:
