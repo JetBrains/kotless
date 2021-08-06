@@ -39,17 +39,7 @@ object RecordFactory : GenerationFactory<Application.DNS, RecordFactory.Output> 
             record {
                 value = "\${${lambda.function.hcl_ref}.custom_domain_verification_id}"
             }
-        }
-
-        val txtRecordAwverify = dns_txt_record("awverify") {
-            name = "awverify"
-            zone_name = dnsZone.zone_name
-            resource_group_name = resourceGroup::name.ref
-            ttl = 300
-            record {
-                value = "\${${lambda.function.hcl_ref}.custom_domain_verification_id}"
-            }
-        }
+        } 
 
         val hostnameBinding = app_service_custom_hostname_binding(context.names.tf("hostname-binding")) {
             hostname = "\${trim(\"${cnameRecord::fqdn.ref}\", \".\")}"
@@ -58,6 +48,6 @@ object RecordFactory : GenerationFactory<Application.DNS, RecordFactory.Output> 
             depends_on = arrayOf(txtRecordAsuid.hcl_ref)
         }
 
-        return GenerationFactory.GenerationResult(Output(hostnameBinding), cnameRecord, hostnameBinding, txtRecordAsuid, txtRecordAwverify)
+        return GenerationFactory.GenerationResult(Output(hostnameBinding), cnameRecord, hostnameBinding, txtRecordAsuid)
     }
 }

@@ -6,7 +6,6 @@ import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.filescontent.LambdaDescription.timeBinding
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
 import io.kotless.terraform.functions.path
-import java.util.*
 
 
 object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, ScheduledEventsFactory.Output> {
