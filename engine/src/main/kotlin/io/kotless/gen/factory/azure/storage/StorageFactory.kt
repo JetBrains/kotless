@@ -63,7 +63,7 @@ object StorageFactory : GenerationFactory<Application, StorageFactory.Output> {
             storage_container_name = storageContainer::name.ref
             type = "Block"
             access_tier = "Hot"
-            content_md5 = "\${filemd5(\"${directory.parent}/result.zip\")}"
+            content_md5 = "\${$zipArchiveRef.output_md5}"
             source = "${directory.parent}/result.zip"
             depends_on = arrayOf(zipArchiveRef)
         }

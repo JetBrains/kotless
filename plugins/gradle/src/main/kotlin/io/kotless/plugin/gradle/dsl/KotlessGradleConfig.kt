@@ -149,9 +149,9 @@ class KotlessGradleConfig(project: Project) : Serializable {
 
             /**
              * Version of Terraform to use.
-             * By default, `0.12.29`
+             * By default, `0.14.4`
              */
-            var version: String = "0.12.29"
+            var version: String = "0.14.4"
 
             sealed class BackendGradle<S : StorageGradle> : Serializable {
                 @KotlessDSLTag
@@ -208,7 +208,7 @@ class KotlessGradleConfig(project: Project) : Serializable {
 
                 @KotlessDSLTag
                 class Azure : ProviderGradle() {
-                    var version = "2.56.0"
+                    var version = "2.77.0"
                 }
             }
 

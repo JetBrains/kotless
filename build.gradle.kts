@@ -30,6 +30,9 @@ subprojects {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            url = uri("https://packages.jetbrains.team/maven/p/ktls/maven")
+        }
     }
 
     tasks.withType<KotlinJvmCompile> {
