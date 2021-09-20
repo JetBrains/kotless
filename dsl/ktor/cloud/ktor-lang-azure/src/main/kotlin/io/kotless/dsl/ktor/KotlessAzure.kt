@@ -3,10 +3,12 @@ package io.kotless.dsl.ktor
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import io.kotless.InternalAPI
+import io.kotless.ScheduledEventType
 import io.kotless.dsl.cloud.azure.AzureRequestHandler
 import io.kotless.dsl.cloud.azure.model.toRequest
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
+import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.ktor.application.*
 import io.ktor.server.engine.*
 import io.ktor.util.pipeline.*
@@ -21,6 +23,7 @@ import java.util.*
  * Override [prepare] method and setup your application
  */
 @Suppress("unused")
+@InternalAPI
 abstract class KotlessAzure : AzureRequestHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(KotlessAzure::class.java)
@@ -80,8 +83,11 @@ abstract class KotlessAzure : AzureRequestHandler {
         return outputResponse.build()
     }
 
-    override fun timer(timerInfo: String, context: ExecutionContext) {
-        logger.info("hi")
-//        Application.warmup()
+    @OptIn(InternalAPI::class, EngineAPI::class)
+    override fun timer(@TimerTrigger(name = "timer", schedule = "* * * * * *") timer: String, context: ExecutionContext) {
+        logger.trace("Executing warmup sequence")
+        engine.environment.monitor.raise(LambdaWarming, engine.application)
+        logger.trace("Warmup sequence executed")
+
     }
 }

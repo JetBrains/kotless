@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 
 object PermissionsProcessor {
-    private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class, SQSQueue::class)
+    private val PERMISSION_ANNOTATIONS_CLASSES = listOf(S3Bucket::class, SSMParameters::class, DynamoDBTable::class, SQSQueue::class, Resource::class)
 
     fun process(func: KtExpression, context: BindingContext): Set<Permission> {
         val permissions = HashSet<Permission>()
