@@ -64,14 +64,14 @@ enum class AzureResource(
     Resource(
         "resource",
         read = setOf("Reader"),
-        write = setOf("Storage Account Owner"),
-        readWrite = setOf("Storage Account Owner")
+        write = setOf("Contributor"),
+        readWrite = setOf("Contributor")
     ),
     StorageAccount(
         "storage-account",
         read = setOf("Reader"),
-        write = setOf("Storage Account Owner"),
-        readWrite = setOf("Storage Account Owner")
+        write = setOf("Contributor"),
+        readWrite = setOf("Contributor")
     );
 }
 

@@ -90,8 +90,7 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
             }
             roleData += roleDefinition
 
-
-            val definitionId = "assignment-${subscription::id.ref}${roleDefinition::id.ref}"
+            val definitionId = roleDefinition::id.ref
             val roleAssignment = when (permission.resource) {
                 AzureResource.Resource -> role_assignment("some_permission") {
                     name = UUID.randomUUID().toString()
