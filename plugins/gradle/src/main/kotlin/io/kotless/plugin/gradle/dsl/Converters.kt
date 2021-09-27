@@ -49,7 +49,7 @@ internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(): KotlessConfig.Cloud
     )
 }
 
-internal fun KotlessGradleConfig.CloudGradle.Azure.toSchema(bucket: String): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle.Azure.toSchema(): KotlessConfig.Cloud<*, *> {
     return KotlessConfig.Cloud.Azure(
         prefix,
         KotlessConfig.Cloud.Storage.AzureBlob(

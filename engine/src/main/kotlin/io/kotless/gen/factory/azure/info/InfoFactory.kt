@@ -4,18 +4,21 @@ import io.kotless.Application
 import io.kotless.KotlessConfig
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
+import io.terraformkt.azurerm.data.client.ClientConfig
+import io.terraformkt.azurerm.data.client.client_config
 import io.terraformkt.azurerm.data.resource.ResourceGroup
 import io.terraformkt.azurerm.data.resource.resource_group
 import io.terraformkt.azurerm.data.storage.StorageAccount
 import io.terraformkt.azurerm.data.storage.storage_account
+import io.terraformkt.azurerm.data.subscription.Subscription
+import io.terraformkt.azurerm.data.subscription.subscription
 import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.azurerm.resource.storage.storage_container
 
 object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
-    data class Output(
-        val resourceGroup: ResourceGroup, val storageAccount: StorageAccount,
-        val staticStorageContainer: StorageContainer,
-        val storageBlobName: String
+    data class Output(val resourceGroup: ResourceGroup, val storageAccount: StorageAccount,
+                      val staticStorageContainer: StorageContainer,
+                      val storageBlobName: String, val azureSubscription: Subscription
     )
 
     override fun mayRun(entity: Application, context: GenerationContext) = true
@@ -32,6 +35,9 @@ object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
             resource_group_name = resourceGroup.name
         }
 
+        val azureSubscription = subscription("current") {
+        }
+
         val storageContainer = io.terraformkt.azurerm.data.storage.storage_container("storage_container") {
             name = context.schema.config.azure.storage.container
             storage_account_name = storageAccount.name
@@ -43,13 +49,13 @@ object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
             container_access_type = "blob"
         }
 
-
         return GenerationFactory.GenerationResult(
-            Output(resourceGroup, storageAccount, staticStorageContainer, "azure-test-zip"),
+            Output(resourceGroup, storageAccount, staticStorageContainer, "azure-test-zip", azureSubscription),
             resourceGroup,
             storageAccount,
             storageContainer,
-            staticStorageContainer
+            staticStorageContainer,
+            azureSubscription,
         )
     }
 }

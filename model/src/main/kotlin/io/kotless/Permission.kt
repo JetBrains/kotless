@@ -57,6 +57,24 @@ enum class AwsResource(
     }
 }
 
+/** Types of supported Azure resources */
+enum class AzureResource(
+    val prefix: String, val read: Set<String>, val write: Set<String>, val readWrite: Set<String>
+) {
+    Resource(
+        "resource",
+        read = setOf("Reader"),
+        write = setOf("Contributor"),
+        readWrite = setOf("Contributor")
+    ),
+    StorageAccount(
+        "storage-account",
+        read = setOf("Reader"),
+        write = setOf("Contributor"),
+        readWrite = setOf("Contributor")
+    );
+}
+
 /** Level of access -- Read/Write/ReadWrite */
 enum class PermissionLevel {
     Read,

@@ -1,6 +1,5 @@
 package io.kotless.gen.factory.azure.infra
 
-import io.kotless.KotlessConfig
 import io.kotless.KotlessConfig.Cloud.Terraform
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory

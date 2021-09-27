@@ -2,22 +2,24 @@ package io.kotless.dsl
 
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
+import io.kotless.*
 import io.kotless.HttpMethod
-import io.kotless.InternalAPI
+import io.kotless.dsl.app.events.EventsStorage
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
+import io.kotless.dsl.cloud.azure.AzureRequestHandler
 import io.kotless.dsl.cloud.azure.model.toRequest
+import io.kotless.dsl.reflection.FunctionCaller
 import org.slf4j.LoggerFactory
 import java.util.*
 
 @InternalAPI
-class HandlerAzure {
+class HandlerAzure : AzureRequestHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(HandlerAzure::class.java)
     }
 
-    @FunctionName("HttpTrigger")
-    fun run(
+    override fun run(
         @HttpTrigger(
             name = "req",
             methods = [com.microsoft.azure.functions.HttpMethod.GET, com.microsoft.azure.functions.HttpMethod.POST],
@@ -51,5 +53,23 @@ class HandlerAzure {
             outputResponse.header(it.key, it.value)
         }
         return outputResponse.build()
+    }
+
+    override fun timer(@TimerTrigger(name = "timer", schedule = "* * * * * *") timer: String, context: ExecutionContext) {
+        val resource = context.functionName
+        when {
+            resource.contains(ScheduledEventType.Autowarm.prefix) -> {
+                logger.trace("Executing warmup sequence")
+                Application.warmup()
+                logger.trace("Warmup sequence executed")
+            }
+            resource.contains(ScheduledEventType.General.prefix) -> {
+                val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
+
+                logger.trace("Executing scheduled lambda with key $key")
+                EventsStorage[key]?.let { FunctionCaller.call(it, emptyMap()) }
+                logger.trace("Scheduled lambda with key $key was executed")
+            }
+        }
     }
 }

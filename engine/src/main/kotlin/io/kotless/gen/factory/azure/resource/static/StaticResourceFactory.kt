@@ -22,6 +22,7 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
             storage_account_name = storageAccount::name.ref
             storage_container_name = storageContainer::name.ref
             type = "Block"
+            access_tier = "Hot"
             content_type = entity.mime.mimeText
             source = path(entity.file)
         }

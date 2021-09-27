@@ -7,7 +7,7 @@ import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.hcl.ref
 
 object LambdaDescription {
-    fun body(lambda: Lambda): String {
+    fun body(lambda: Lambda, methods: List<String> = listOf("GET", "POST")): String {
         return """
             {
               "scriptFile" : "../${lambda.file.name}",
@@ -16,12 +16,27 @@ object LambdaDescription {
                 "type" : "httpTrigger",
                 "direction" : "in",
                 "name" : "req",
-                "methods" : [ "GET", "POST" ],
+                "methods" : [ ${methods.joinToString(", ") { "\"$it\"" }} ],
                 "authLevel" : "ANONYMOUS"
               }, {
                 "type" : "http",
                 "direction" : "out",
                 "name" : "${'$'}return"
+              } ]
+            }
+        """.trimIndent().replace("\"", "\\\"").replace("\n", "")
+    }
+
+    fun timeBinding(lambda: Lambda, schedule: String): String {
+        return """
+            {
+              "scriptFile" : "../${lambda.file.name}",
+              "entryPoint" : "${lambda.entrypoint.qualifiedName.removeSuffix(".run")}.timer",
+              "bindings" : [ {
+                "schedule": "$schedule",
+                "name": "timer",
+                "type": "timerTrigger",
+                "direction": "in"
               } ]
             }
         """.trimIndent().replace("\"", "\\\"").replace("\n", "")

@@ -1,16 +1,23 @@
 package io.kotless.gen.factory.azure.resource.dynamic
 
+import io.kotless.AzureResource
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.ZipArchiveFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.storage.StorageFactory
+import io.kotless.permission.AzurePermission
 import io.kotless.resource.Lambda
+import io.terraformkt.azurerm.data.role.role_definition
 import io.terraformkt.azurerm.resource.app.app_service_plan
 import io.terraformkt.azurerm.resource.application.application_insights
 import io.terraformkt.azurerm.resource.function.FunctionApp
 import io.terraformkt.azurerm.resource.function.function_app
+import io.terraformkt.azurerm.resource.role.role_assignment
 import io.terraformkt.hcl.ref
+import io.terraformkt.terraform.TFData
+import io.terraformkt.terraform.TFResource
+import java.util.*
 
 object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
     data class Output(val function: FunctionApp)
@@ -25,17 +32,18 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
         val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
         val storageBlob = context.output.get(context.webapp, StorageFactory).storageBlob
         val storageAccountSas = context.output.get(context.webapp, StorageFactory).storageAccountSas
+        val subscription = context.output.get(context.webapp, InfoFactory).azureSubscription
 
         val appServicePlan = app_service_plan(context.names.tf("app", "service", "plan")) {
             name = context.names.azure(context.schema.config.cloud.prefix.replace("-", ""), "functions", "consumption", "asp")
             location = resourceGroup::location.ref
             resource_group_name = resourceGroup::name.ref
+            kind = "functionapp"
             sku {
                 tier = "Dynamic"
                 size = "Y1"
             }
         }
-
 
         val appInsight = application_insights("funcdeploy") {
             name = context.names.azure(entity.name, "app", "insight")
@@ -58,7 +66,9 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
             storage_account_access_key = storageAccount::primary_access_key.ref
             https_only = true
             version = "~3"
-
+            identity {
+                type = "SystemAssigned"
+            }
             appSettings(
                 mapOf(
                     "FUNCTIONS_WORKER_RUNTIME" to "java",
@@ -71,9 +81,30 @@ object FunctionFactory : GenerationFactory<Lambda, FunctionFactory.Output> {
                 ) + entity.config.environment
             )
         }
+        val roleResources: MutableList<TFResource> = mutableListOf()
+        val roleData: MutableList<TFData> = mutableListOf()
+        for (permission in (entity.permissions.map { it as AzurePermission })) {
+            val role = permission.actions.single()
+            val roleDefinition = role_definition("${entity.name}_${permission.resource}") {
+                name = role
+            }
+            roleData += roleDefinition
 
+            val definitionId = roleDefinition::id.ref
+            val roleAssignment = when (permission.resource) {
+                AzureResource.Resource -> role_assignment("some_permission") {
+                    name = UUID.randomUUID().toString()
+                    scope = permission.parameters["id"]!!
+                    role_definition_id = definitionId
+                    principal_id = "\${azurerm_function_app.functionapp.identity.0.principal_id}"
+                }
+                else -> error("doesn't support yet")
+            }
+            roleResources += roleAssignment
+        }
         return GenerationFactory.GenerationResult(
-            Output(functionApp), appServicePlan, storageAccount, storageContainer, appInsight, functionApp
+            Output(functionApp), appServicePlan, storageAccount, storageContainer, appInsight, functionApp, *roleResources.toTypedArray(),
+            *roleData.toTypedArray()
         )
 
     }

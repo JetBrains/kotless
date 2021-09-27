@@ -30,7 +30,6 @@ object FilesCreationTf {
         """.trimIndent()
     )
 
-
     class ResourceFromString(
         id: String,
         val type: String,

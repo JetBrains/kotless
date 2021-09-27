@@ -1,6 +1,9 @@
 package io.kotless.gen
 
-import io.kotless.*
+import io.kotless.Application
+import io.kotless.KotlessConfig
+import io.kotless.Schema
+import io.kotless.gen.factory.azure.event.ScheduledEventsFactory
 import io.kotless.gen.factory.azure.ZipArchiveFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.infra.TFConfigFactory
@@ -24,6 +27,8 @@ object AzureGenerator {
 
         StaticResource::class to setOf(StaticResourceFactory),
         Lambda::class to setOf(FunctionFactory),
+
+        Application.Events.Scheduled::class to setOf(ScheduledEventsFactory),
 
         Application.API.StaticRoute::class to setOf(StaticRouteFactory),
         Application.API.DynamicRoute::class to setOf(DynamicRouteFactory)
