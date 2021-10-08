@@ -11,13 +11,12 @@ plugins {
 }
 
 dependencies {
-    compileClasspath(kotlin("stdlib"))
     compileClasspath("io.kotless", "kotless-lang", "0.2.0")
-    compileClasspath("io.kotless", "kotless-lang-aws", "0.2.0")
+    api("io.kotless", "kotless-lang-aws", "0.2.0")
 
-    compileClasspath(project(":common:site-shared"))
+    api(project(":common:site-shared"))
 
-    compileClasspath("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
+    api("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
 kotless {

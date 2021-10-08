@@ -7,7 +7,7 @@ version = "0.2.0"
 plugins {
     id("tanvd.kosogor") version "1.0.12" apply true
     id("io.gitlab.arturbosch.detekt") version ("1.15.0") apply true
-    kotlin("jvm") version "1.5.31" apply false
+    kotlin("jvm") version "1.5.30" apply false
 }
 
 configureIdea {
