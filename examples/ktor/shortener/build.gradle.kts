@@ -5,15 +5,15 @@ group = rootProject.group
 version = rootProject.version
 
 plugins {
-    id("io.kotless") version "0.1.7-beta-5" apply true
+    id("io.kotless") version "0.2.0" apply true
 }
 
 dependencies {
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
-    implementation("io.kotless", "ktor-lang-aws", "0.1.7-beta-5")
-    implementation("io.kotless", "ktor-lang", "0.1.7-beta-5")
+    implementation("io.kotless", "ktor-lang-aws", "0.2.0")
+    implementation("io.kotless", "ktor-lang", "0.2.0")
     implementation("io.ktor", "ktor-html-builder", "1.5.0")
 }
 

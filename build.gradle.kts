@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import tanvd.kosogor.defaults.configureIdea
 
 group = "io.kotless"
-version = "0.1.7-beta-5"
+version = "0.2.0"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.10" apply true
+    id("tanvd.kosogor") version "1.0.12" apply true
     id("io.gitlab.arturbosch.detekt") version ("1.15.0") apply true
-    kotlin("jvm") version "1.4.21" apply false
+    kotlin("jvm") version "1.5.31" apply false
 }
 
 configureIdea {
@@ -30,8 +30,8 @@ subprojects {
     tasks.withType<KotlinJvmCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            languageVersion = "1.4"
-            apiVersion = "1.4"
+            languageVersion = "1.5"
+            apiVersion = "1.5"
 
             freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=kotlin.Experimental")
         }
