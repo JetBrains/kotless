@@ -13,7 +13,7 @@ from the code of the application itself.
 So, simply speaking, Kotless gives you one magic button to deploy your Web application as a
 serverless application on AWS!
 
-**Version of Kotless 0.2.0 will also support Microsoft Azure, you can try it out already by compiling branch 0.2.0. In the near future we will publish SNAPSHOT versons.**
+** The version of Kotless 0.2.0 will also support Microsoft Azure, you can try it out already by compiling branch 0.2.0. In the near future we will publish SNAPSHOT version.**
 
 Kotless consists of two main parts:
 
@@ -36,17 +36,18 @@ super easy deployment of existing Spring and Ktor applications to AWS serverless
 ## Getting started
 
 Kotless uses Gradle to wrap around the existing build process and insert the deployment into it.
+Consider using one of the latest versions of Gradle: starting from the 7.0.2.
 
 Basically, if you already use Gradle, you only need to do two things.
 
 Firstly, set up the Kotless Gradle plugin. You need to apply the plugin:
 
 ```kotlin
-//Imports necessary for this example
+//Imports are necessary, for this example
 import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
-//Group may be used by Kotless DSL to reduce number of introspected classes by package
+//Group may be used by Kotless DSL to reduce the number of introspected classes by package
 //So, don't forget to set it
 group = "org.example"
 version = "0.1.0"
@@ -106,7 +107,7 @@ kotless {
     }
 
     webapp {
-        //Optional parameter, by default technical name will be generated
+        //Optional parameters, by default technical name will be generated
         route53 = Route53("kotless", "example.com")
     }
 }
@@ -119,7 +120,7 @@ Here we set up the config of Kotless itself:
 
 Then we set up a specific application to deploy:
 
-* Route53 alias for the resulting application (you need to pre-create ACM certificate for the DNS
+* Route53 alias for the resulting application (you need to pre-create an ACM certificate for the DNS
   record).
 
 And that's the whole setup!
@@ -190,7 +191,7 @@ During local run, LocalStack will be started and all clients will be pointed to 
 automatically.
 
 Local start functionality does not require any access to cloud provider, so you may check how your
-application behaves without AWS account. Also, it gives you the possibility to debug your
+application behaves without an AWS account. Also, it gives you the possibility to debug your
 application locally from your IDE.
 
 ## Integration with existing applications
@@ -221,7 +222,7 @@ many more features covering different areas of application.
 Including, but not limited to:
 
 * **Lambdas auto-warming** &mdash; Kotless creates schedulers to execute warming sequences to never
-  leave your lambdas cold. As a result, applications under moderate load are almost not vulnerable
+  leave your lambdas cold. As a result, applications under moderate load are not vulnerable
   to cold-start problem.
 * **Permissions management** &mdash; you can declare which permissions to which AWS resources are
   required for the application via annotations on Kotlin functions, classes or objects. Permissions
@@ -244,28 +245,6 @@ features as:
   function calls.
 * Events handlers support &mdash; Kotless will generate events subscriptions for properly annotated
   events handlers.
-
-## Beta release
-
-Kotless beta releases include cutting-edge features that are under testing right now.
-
-Since Kotless `0.1.7-beta-4` release we are introducing support for GraalVM. With one configuration
-variable you can convert your existing JVM applications into ultra-fast native applications.
-
-Since Kotless `0.1.7-beta-5` release Kotless is migrating to Kotlin 1.4. Unfortunately, due to 
-restrictions of current Kotless architecture it means that now Gradle 6.8.1+ is required to
-use Kotless.
-
-Just specify the GraalVM runtime and let Kotless do everything for you.
-```kotlin
-kotless {
-    webapp {
-        lambda {
-            runtime = Runtime.GraalVM
-        }
-    }
-}
-```
 
 ## Examples
 
