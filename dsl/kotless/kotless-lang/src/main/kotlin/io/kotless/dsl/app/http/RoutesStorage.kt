@@ -12,7 +12,7 @@ import kotlin.reflect.full.findAnnotation
 
 @InternalAPI
 internal object RoutesStorage {
-    data class Descriptor(val func: KFunction<*>, val mime: MimeType)
+    data class Descriptor(val func: () -> String, val mime: MimeType)
 
     private val logger = LoggerFactory.getLogger(RoutesStorage::class.java)
 
@@ -25,6 +25,10 @@ internal object RoutesStorage {
 
         //TODO-tanvd add annotation from function
         val functions = Reflekt.functions().withAnnotations<() -> String>(Get::class).toList()
+        for (function in functions) {
+            val path = function().takeWhile { it != '|' }
+            cache[RouteKey(HttpMethod.GET, path)] = Descriptor({ function().dropWhile { it != '|' }.drop(1) }, MimeType.HTML)
+        }
 
 //        scanFor<Get>()
 //        scanFor<Post>()

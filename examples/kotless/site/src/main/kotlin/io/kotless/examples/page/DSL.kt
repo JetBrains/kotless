@@ -5,19 +5,19 @@ import io.kotless.examples.site.pages.DSLPages
 
 object DSL {
     @Get("/pages/dsl/overview")
-    fun overview() = DSLPages.overview()
+    fun overview() = "/pages/dsl/overview|" + DSLPages.overview()
 
     @Get("/pages/dsl/lifecycle")
-    fun lifecycle() = DSLPages.lifecycle()
+    fun lifecycle() = "/pages/dsl/lifecycle|" +DSLPages.lifecycle()
 
     @Get("/pages/dsl/permissions")
-    fun permissions() = DSLPages.permissions()
+    fun permissions() = "/pages/dsl/permissions|" +DSLPages.permissions()
 
     @Get("/pages/dsl/http")
-    fun http() = DSLPages.http()
+    fun http() = "/pages/dsl/http|" +DSLPages.http()
 
     @Get("/pages/dsl/events")
-    fun events() = DSLPages.events()
+    fun events() = "/pages/dsl/events|" +DSLPages.events()
 }
 
 

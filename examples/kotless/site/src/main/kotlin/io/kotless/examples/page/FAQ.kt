@@ -5,5 +5,5 @@ import io.kotless.examples.site.pages.FAQPages
 
 object FAQ {
     @Get("/pages/faq")
-    fun faq() = FAQPages.faq()
+    fun faq() = "/pages/faq|" +FAQPages.faq()
 }

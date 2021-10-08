@@ -6,5 +6,5 @@ import io.kotless.examples.site.pages.IntroductionPages
 object Introduction {
 
     @Get("/pages/introduction")
-    fun introduction() = IntroductionPages.introduction()
+    fun introduction() = "/pages/introduction|" + IntroductionPages.introduction()
 }

@@ -3,7 +3,6 @@ package io.kotless.dsl.app.events
 import io.kotless.InternalAPI
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.Application
-import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.model.CloudWatch
 import io.kotless.dsl.reflection.FunctionCaller
 import org.slf4j.LoggerFactory

@@ -2,14 +2,10 @@ package io.kotless.dsl.app.http
 
 import io.kotless.InternalAPI
 import io.kotless.dsl.lang.KotlessContext
-import io.kotless.dsl.lang.http.HttpRequestInterceptor
-import io.kotless.dsl.lang.http.notFound
-import io.kotless.dsl.lang.http.okResponse
-import io.kotless.dsl.lang.http.serverError
+import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
-import io.kotless.dsl.reflection.FunctionCaller
-import io.kotless.dsl.reflection.ReflectionScanner
+import io.reflekt.Reflekt
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 
@@ -17,7 +13,7 @@ import java.lang.reflect.InvocationTargetException
 object RoutesDispatcher {
     private val logger = LoggerFactory.getLogger(RoutesDispatcher::class.java)
 
-    private val pipeline by lazy { preparePipeline(ReflectionScanner.objectsWithSubtype<HttpRequestInterceptor>().sortedBy { it.priority }) }
+    private val pipeline by lazy { preparePipeline(Reflekt.objects().withSupertype<HttpRequestInterceptor>().toList().sortedBy { it.priority }) }
 
     fun dispatch(request: HttpRequest, resourceKey: RouteKey): HttpResponse {
         return try {
@@ -46,16 +42,14 @@ object RoutesDispatcher {
         logger.debug("Found $func for key $resourceKey")
 
         val result = try {
-            FunctionCaller.call(func, request.params.orEmpty())
+            func()
+//            FunctionCaller.call(func, request.params.orEmpty())
         } catch (e: Exception) {
-            logger.error("Failed on call of function ${func.name}", if (e is InvocationTargetException) e.targetException else e)
+            logger.error("Failed on call of function", if (e is InvocationTargetException) e.targetException else e)
             return serverError(e.message)
         }
 
         logger.debug("Route returned result")
-        return when (result) {
-            is HttpResponse -> result
-            else -> okResponse(result?.toString(), mime)
-        }
+        return okResponse(result.toString(), mime)
     }
 }

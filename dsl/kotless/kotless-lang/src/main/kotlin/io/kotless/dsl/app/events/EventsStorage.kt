@@ -18,13 +18,13 @@ internal object EventsStorage {
     private fun scan() {
         if (scanned) return
 
-        for ((ids, method, _) in EventsReflectionScanner.getEvents()) {
-            val kFunc = method.kotlinFunction!!
-            for (id in ids) {
-                cache[id] = kFunc
-                logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
-            }
-        }
+//        for ((ids, method, _) in EventsReflectionScanner.getEvents()) {
+//            val kFunc = method.kotlinFunction!!
+//            for (id in ids) {
+//                cache[id] = kFunc
+//                logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
+//            }
+//        }
 
         scanned = true
     }

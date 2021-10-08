@@ -6,6 +6,6 @@ import io.kotless.examples.site.pages.MainPages
 
 object Main {
     @Get("/")
-    fun root() = MainPages.root()
+    fun root() = "/|" + MainPages.root()
 }
 

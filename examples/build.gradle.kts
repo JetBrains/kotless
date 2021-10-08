@@ -5,7 +5,7 @@ version = "0.2.0"
 
 plugins {
     id("tanvd.kosogor") version "1.0.10" apply true
-    kotlin("jvm") version "1.5.31" apply false
+    kotlin("jvm") version "1.5.30" apply false
 }
 
 subprojects {
@@ -17,6 +17,7 @@ subprojects {
     repositories {
         mavenLocal()
         jcenter()
+        maven(url = uri("https://packages.jetbrains.team/maven/p/reflekt/reflekt"))
     }
 
     tasks.withType<KotlinJvmCompile> {
