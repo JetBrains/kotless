@@ -5,6 +5,7 @@ import io.kotless.InternalAPI
 import io.kotless.MimeType
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.reflection.ReflectionScanner
+import io.reflekt.Reflekt
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotation
@@ -22,32 +23,35 @@ internal object RoutesStorage {
     fun scan() {
         if (scanned) return
 
-        scanFor<Get>()
-        scanFor<Post>()
-        scanFor<Put>()
-        scanFor<Patch>()
-        scanFor<Delete>()
-        scanFor<Head>()
-        scanFor<Options>()
+        //TODO-tanvd add annotation from function
+        val functions = Reflekt.functions().withAnnotations<() -> String>(Get::class).toList()
+
+//        scanFor<Get>()
+//        scanFor<Post>()
+//        scanFor<Put>()
+//        scanFor<Patch>()
+//        scanFor<Delete>()
+//        scanFor<Head>()
+//        scanFor<Options>()
 
         scanned = true
     }
 
-    private inline fun <reified T : Annotation> scanFor() {
-        ReflectionScanner.funcsWithAnnotation<T>().forEach { route ->
-            logger.debug("Found function ${route.name} for annotation ${T::class.simpleName}")
-            val annotation = route.findAnnotation<T>()
-            if (annotation != null) {
-                val key = annotation.toRouteKey()
-                if (cache.containsKey(key)) {
-                    logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).func.name}, new ${route.name}")
-                }
-
-                cache[key] = Descriptor(route, annotation.refMime)
-                logger.debug("Saved with key $key function ${route.name} for annotation ${T::class.simpleName}")
-            }
-        }
-    }
+//    private inline fun <reified T : Annotation> scanFor() {
+//        ReflectionScanner.funcsWithAnnotation<T>().forEach { route ->
+//            logger.debug("Found function ${route.name} for annotation ${T::class.simpleName}")
+//            val annotation = route.findAnnotation<T>()
+//            if (annotation != null) {
+//                val key = annotation.toRouteKey()
+//                if (cache.containsKey(key)) {
+//                    logger.error("Found overriding route for $key. Previous route is ${cache.getValue(key).func.name}, new ${route.name}")
+//                }
+//
+//                cache[key] = Descriptor(route, annotation.refMime)
+//                logger.debug("Saved with key $key function ${route.name} for annotation ${T::class.simpleName}")
+//            }
+//        }
+//    }
 
     operator fun get(key: RouteKey): Descriptor? {
         scan()

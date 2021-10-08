@@ -3,7 +3,7 @@ package io.kotless.dsl.app.events
 import io.kotless.InternalAPI
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
-import io.kotless.dsl.reflection.ReflectionScanner
+import io.reflekt.Reflekt
 import java.lang.reflect.Method
 import kotlin.math.absoluteValue
 import kotlin.reflect.KFunction
@@ -12,13 +12,16 @@ import kotlin.reflect.jvm.kotlinFunction
 
 @InternalAPI
 object EventsReflectionScanner {
-    data class Data(val ids: Set<String>, val method: Method, val annotation: Scheduled)
+    data class Data(val ids: Set<String>, val method: () -> Unit, val annotation: Scheduled)
 
     fun getEvents(): Set<Data> {
         val events = HashSet<Data>()
 
-        for (method in ReflectionScanner.methodsWithAnnotation<Scheduled>()) {
-            events.add(Data(method.toIDs(), method, method.toAnnotation()!!))
+        val methods = Reflekt.functions().withAnnotations<() -> Unit>(Scheduled::class).toList()
+
+        for (method in methods) {
+            //TODO-tanvd add from annotation data
+            events.add(Data(setOf("id-from-annotation"), method, null!!))
         }
 
         return events

@@ -5,10 +5,15 @@ group = rootProject.group
 version = rootProject.version
 
 
+repositories {
+    maven(url = uri("https://packages.jetbrains.team/maven/p/reflekt/reflekt"))
+}
+
 dependencies {
     api(project(":model"))
     api(project(":dsl:common:lang-common"))
     implementation(kotlin("reflect"))
+    implementation("io.reflekt", "reflekt-dsl", "1.5.30")
     implementation("org.reflections", "reflections", "0.9.11")
 
     implementation("ch.qos.logback", "logback-classic", Versions.logback)

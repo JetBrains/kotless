@@ -37,8 +37,10 @@ object ReflectionScanner {
         )
     }
 
+    //Not used in AWS
     inline fun <reified T : Annotation, reified E : Any> fieldsWithAnnotation() = fieldsWithAnnotation<T, E>(T::class)
 
+    //Not used in AWS
     fun <T : Annotation, E : Any> fieldsWithAnnotation(annotation: KClass<T>): Map<T, E> {
         val fields = reflections.getFieldsAnnotatedWith(annotation.java)
         return fields.mapNotNull {
@@ -48,31 +50,4 @@ object ReflectionScanner {
         }.toMap()
     }
 
-    inline fun <reified T : Annotation> funcsWithAnnotation() = funcsWithAnnotation(T::class)
-
-    fun <T : Annotation> funcsWithAnnotation(annotation: KClass<T>): Set<KFunction<*>> {
-        val methods = reflections.getMethodsAnnotatedWith(annotation.java)
-        return methods.mapNotNull { it.kotlinFunction }.toSet()
-    }
-
-    inline fun <reified T : Annotation> methodsWithAnnotation() = methodsWithAnnotation(T::class)
-
-    fun <T : Annotation> methodsWithAnnotation(annotation: KClass<T>): Set<Method> {
-        val methods = reflections.getMethodsAnnotatedWith(annotation.java)
-        return methods.mapNotNull { it }.toSet()
-    }
-
-    inline fun <reified T : Any> withSubtype() = withSubtype(T::class)
-
-    fun <T : Any> withSubtype(klass: KClass<T>): Set<KClass<out T>> {
-        val klasses = reflections.getSubTypesOf(klass.java)
-        return klasses.mapNotNull { it.kotlin }.toSet()
-    }
-
-    inline fun <reified T : Any> objectsWithSubtype() = objectsWithSubtype(T::class)
-
-    fun <T : Any> objectsWithSubtype(klass: KClass<T>): Set<T> {
-        val klasses = withSubtype(klass)
-        return klasses.mapNotNull { it.objectInstance }.toSet()
-    }
 }

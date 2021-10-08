@@ -5,6 +5,7 @@ import io.kotless.dsl.app.http.RoutesStorage
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.reflection.ReflectionScanner
+import io.reflekt.Reflekt
 import org.slf4j.LoggerFactory
 
 @InternalAPI
@@ -19,7 +20,9 @@ object Application {
 
         RoutesStorage.scan()
 
-        executeForObjects<LambdaInit> { it.init() }
+        Reflekt.objects().withSupertype<LambdaInit>().toList().forEach {
+            it.init()
+        }
 
         warmup()
 
@@ -27,14 +30,12 @@ object Application {
         isInitialized = true
     }
 
-    fun warmup() = executeForObjects<LambdaWarming> { it.warmup() }
-
-    private inline fun <reified T : Any> executeForObjects(body: (T) -> Unit) {
-        ReflectionScanner.objectsWithSubtype<T>().forEach {
+    fun warmup() {
+        Reflekt.objects().withSupertype<LambdaWarming>().toList().forEach {
             try {
-                body(it)
+                it.warmup()
             } catch (e: Throwable) {
-                logger.error("Exception occurred during call of ${T::class} sequence for object ${it::class.qualifiedName}", e)
+                logger.error("Exception occurred during call of ${LambdaWarming::class} sequence for object ${it::class.qualifiedName}", e)
             }
         }
     }
