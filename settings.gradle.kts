@@ -24,3 +24,11 @@ include(":dsl:ktor:ktor-lang-aws")
 include(":dsl:ktor:ktor-lang-azure")
 
 include(":plugins:gradle")
+
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
