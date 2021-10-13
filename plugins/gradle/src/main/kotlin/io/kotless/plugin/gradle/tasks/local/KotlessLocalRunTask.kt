@@ -52,9 +52,9 @@ internal open class KotlessLocalRunTask : DefaultTask() {
 
         val (type, dependency) = dsl.entries.single()
 
-        dependencies {
-            myLocal("io.kotless", type.descriptor.localLibrary, dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
-        }
+//        dependencies {
+//            myLocal("io.kotless", type.descriptor.localLibrary, dependency.version ?: error("Explicit version is required for Kotless DSL dependency."))
+//        }
 
         val run = tasks.myGetByName<JavaExec>("run").apply {
             classpath += files(myLocal().files)

@@ -18,6 +18,7 @@ object Application {
         if (isInitialized) return
         logger.debug("Started initialization of Lambda")
 
+        println("SCANNING")
         RoutesStorage.scan()
 
         Reflekt.objects().withSupertype<LambdaInit>().toList().forEach {

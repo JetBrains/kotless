@@ -24,7 +24,9 @@ internal object RoutesStorage {
         if (scanned) return
 
         //TODO-tanvd add annotation from function
+        println("RUNNING FUNCTIONS SEARCH")
         val functions = Reflekt.functions().withAnnotations<() -> String>(Get::class).toList()
+        println("FOUND ${functions.size} functions")
         for (function in functions) {
             val path = function().takeWhile { it != '|' }
             cache[RouteKey(HttpMethod.GET, path)] = Descriptor({ function().dropWhile { it != '|' }.drop(1) }, MimeType.HTML)

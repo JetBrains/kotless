@@ -1,5 +1,6 @@
 package io.kotless.local
 
+import io.kotless.dsl.Application
 import io.kotless.dsl.HandlerAWS
 import io.kotless.local.handler.DynamicHandler
 import io.kotless.local.handler.StaticHandler
@@ -15,6 +16,7 @@ internal class LocalServer(port: Int) {
     private val scheduler: Scheduler = Scheduler(handler)
 
     init {
+        Application.init()
         server.handler = HandlerList(StaticHandler(), DynamicHandler(handler))
         server.stopAtShutdown = true
     }

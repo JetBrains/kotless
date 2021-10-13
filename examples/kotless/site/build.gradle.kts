@@ -11,7 +11,8 @@ plugins {
 }
 
 dependencies {
-    compileClasspath("io.kotless", "kotless-lang", "0.2.0")
+    compileClasspath("io.kotless",  "kotless-lang", "0.2.0")
+    api("io.kotless",  "kotless-lang-local", "0.2.0")
     api("io.kotless", "kotless-lang-aws", "0.2.0")
 
     api(project(":common:site-shared"))
