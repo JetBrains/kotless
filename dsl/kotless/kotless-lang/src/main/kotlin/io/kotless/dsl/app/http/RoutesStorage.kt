@@ -25,7 +25,8 @@ internal object RoutesStorage {
 
         //TODO-tanvd add annotation from function
         println("RUNNING FUNCTIONS SEARCH")
-        val functions = Reflekt.functions().withAnnotations<() -> String>(Get::class).toList()
+        val functionsRequest = Reflekt.functions().withAnnotations<() -> String>(Get::class)
+        val functions = functionsRequest.toList()
         println("FOUND ${functions.size} functions")
         for (function in functions) {
             val path = function().takeWhile { it != '|' }

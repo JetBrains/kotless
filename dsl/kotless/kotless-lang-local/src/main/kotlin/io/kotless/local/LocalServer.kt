@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 
 
-internal class LocalServer(port: Int) {
+class LocalServer(port: Int) {
     private val handler = HandlerAWS()
 
     private val server: Server = Server(port)

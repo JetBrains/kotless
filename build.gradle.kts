@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import tanvd.kosogor.accessors.jar
 import tanvd.kosogor.defaults.configureIdea
 
 group = "io.kotless"
