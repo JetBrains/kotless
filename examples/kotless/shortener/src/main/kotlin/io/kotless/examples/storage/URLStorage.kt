@@ -4,9 +4,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.model.*
 import io.kotless.AwsResource
 import io.kotless.PermissionLevel
-import io.kotless.dsl.lang.DynamoDBTable
+import io.kotless.dsl.cloud.aws.DynamoDBTable
+import io.kotless.dsl.cloud.aws.withKotlessLocal
 import io.kotless.dsl.lang.event.Scheduled
-import io.kotless.dsl.lang.withKotlessLocal
 import io.kotless.examples.utils.RandomCode
 import org.slf4j.LoggerFactory
 

@@ -13,13 +13,9 @@ import io.kotless.parser.utils.psi.visitor.KtReferenceFollowingVisitor
 import io.kotless.parser.utils.reversed
 import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
-import io.ktor.http.ContentType
-import io.ktor.http.defaultForFile
+import io.ktor.http.*
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
@@ -134,6 +130,6 @@ internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
         val resource = StaticResource(URIPath("static", path), file, mime)
 
         context.resources.register(key, resource)
-        context.routes.register(Application.ApiGateway.StaticRoute(path, key))
+        context.routes.register(Application.API.StaticRoute(path, key))
     }
 }

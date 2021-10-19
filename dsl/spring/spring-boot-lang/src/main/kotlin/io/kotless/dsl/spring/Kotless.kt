@@ -6,8 +6,8 @@ import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.InternalAPI
-import io.kotless.dsl.model.CloudWatch
-import io.kotless.dsl.utils.Json
+import io.kotless.dsl.cloud.aws.CloudWatch
+import io.kotless.dsl.utils.JSON
 import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.io.OutputStream
@@ -42,7 +42,7 @@ abstract class Kotless : RequestStreamHandler {
         logger.trace("Request is {}", json)
 
         if (json.contains("Scheduled Event")) {
-            val event = Json.parse(CloudWatch.serializer(), json)
+            val event = JSON.parse(CloudWatch.serializer(), json)
             if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
                 logger.debug("Request is Scheduled Event")
                 logger.debug("Nothing to do during warming")

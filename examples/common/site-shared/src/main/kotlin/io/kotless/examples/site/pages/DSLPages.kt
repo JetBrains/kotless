@@ -72,7 +72,8 @@ object DSLPages {
             +"Here is a simple snippet of HTTP connection warming:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 object DbKeepAlive: LambdaWarming {
                     override fun warmup() {
                         Database.sendHeartBeat()
@@ -134,7 +135,8 @@ object DSLPages {
                 table with resource annotations permitting such access on AWS side:"""
         }
 
-        kotlin("""
+        kotlin(
+            """
                 //Storage have read and write access, so we grant both
                 @DynamoDBTable("example-table", PermissionLevel.ReadWrite)
                 object Storage {
@@ -243,7 +245,8 @@ object DSLPages {
             +"Here is the simple snippet of dynamic `Get` route:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 @Get("/")
                 fun root(): String {
                     return "Hello world!"
@@ -291,7 +294,8 @@ object DSLPages {
                 header auth token is valid:"""
         }
 
-        kotlin("""
+        kotlin(
+            """
                 object AuthInterceptor: HttpRequestInterceptor {
                     override val priority = 0
 
@@ -327,7 +331,8 @@ object DSLPages {
             +"Here is the simple snippet, which deserialize entities by ID from a database:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 object EntityConversionService: ConversionService {
                     override fun convertFrom(value: String, type: Type): Any {
                         if (type !is Class<*>) throw ConversionException("Type is not supported")
@@ -365,7 +370,8 @@ object DSLPages {
                 function `root(str: String)` in object `API`)"""
         }
 
-        kotlin("""
+        kotlin(
+            """
                 val baseLink = API::root.href
                 val preparedLink = API::root.href("parameter")"""
         )
@@ -397,7 +403,8 @@ object DSLPages {
             +"Here is the simple snippet of static route creation:"
         }
 
-        kotlin("""
+        kotlin(
+            """
                 @StaticGet("/file.css", MimeType.CSS)
                 val exampleCss = File("example.css")"""
         )
@@ -458,14 +465,16 @@ object DSLPages {
             +"Here is an example of Scheduled job:"
         }
 
-        kotlin("""
+        kotlin(
+            """
             @Scheduled(Scheduled.everyHour)
             fun storageCleanup() {
                 logger.info("Starting storage cleanup")
                 Storage.cleanup()
                 logger.info("Ended storage cleanup")
             }  
-        """.trimIndent())
+        """.trimIndent()
+        )
     }
 }
 

@@ -14,6 +14,7 @@ subprojects {
 
     repositories {
         mavenLocal()
+        maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
         mavenCentral()
         jcenter()
     }

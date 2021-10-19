@@ -16,8 +16,10 @@ internal object Downloads {
 
         val archive = File(toFile.absolutePath + "." + archiver.extension)
 
+        if (archive.exists()) archive.delete()
         download(url, archive)
 
+        if (toFile.exists()) toFile.deleteRecursively()
         archiver.unarchive(archive, toFile)
 
         archive.delete()

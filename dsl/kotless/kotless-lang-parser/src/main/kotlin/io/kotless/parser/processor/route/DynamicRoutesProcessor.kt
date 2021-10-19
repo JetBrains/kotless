@@ -1,10 +1,9 @@
 package io.kotless.parser.processor.route
 
-import io.kotless.HttpMethod
-import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
-import io.kotless.Application.ApiGateway
+import io.kotless.Application.API
 import io.kotless.Application.Events
+import io.kotless.HttpMethod
+import io.kotless.ScheduledEventType
 import io.kotless.dsl.config.KotlessAppConfig
 import io.kotless.dsl.lang.http.*
 import io.kotless.parser.processor.AnnotationProcessor
@@ -14,6 +13,7 @@ import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.psi.annotation.getURIPath
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.KtFile
@@ -40,7 +40,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
         val entrypoint = context.output.get(EntrypointProcessor).entrypoint
 
         processStaticFunctions(files, binding) { func, entry, klass ->
-            val permissions = PermissionsProcessor.process(func, binding) + globalPermissions
+            val permissions = PermissionsProcessor.process(func, binding, context) + globalPermissions
 
             val name = prepareFunctionName(func, KotlessAppConfig.packages(context.lambda.environment.getValue(KotlessAppConfig.PACKAGE_ENV_NAME)))
 
@@ -51,10 +51,10 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             val method = methodAnnotations[klass] ?: error(func, "Unknown Kotless HTTP annotation")
 
             context.resources.register(key, function)
-            context.routes.register(ApiGateway.DynamicRoute(method, path, key))
+            context.routes.register(API.DynamicRoute(method, path, key))
 
-            if (context.config.optimization.autowarm.enable) {
-                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key))
+            if (context.config.optimization.autoWarm.enable) {
+                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key))
             }
         }
     }

@@ -78,16 +78,22 @@ class Webapp(project: Project) : Serializable {
         deployment.configure()
     }
 
+
+    @KotlessDSLTag
+    data class DNS(val alias: String, val zone: String, val certificate: String ) : Serializable
+
     /** Alias to RestAPI, if present */
-    var route53: Route53? = null
+    internal var dns: DNS? = null
 
     /**
-     * Route53 CNAME alias
+     * DNS CNAME alias
      *
      * @param alias name of alias
      * @param zone a qualified name of zone, alias is created in
      * @param certificate a fully qualified name of certificate, for SSL connection
      */
     @KotlessDSLTag
-    data class Route53(val alias: String, val zone: String, val certificate: String = "$alias.$zone") : Serializable
+    fun dns(alias: String, zone: String, certificate: String = "$alias.$zone") {
+        dns = DNS(alias, zone, certificate)
+    }
 }

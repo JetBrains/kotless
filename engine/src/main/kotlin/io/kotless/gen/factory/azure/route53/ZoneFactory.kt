@@ -8,15 +8,15 @@ import io.kotless.gen.factory.azure.info.InfoFactory
 import io.terraformkt.azurerm.data.dns.dns_zone
 import io.terraformkt.hcl.ref
 
-object ZoneFactory : GenerationFactory<Application.Route53, ZoneFactory.Output> {
+object ZoneFactory : GenerationFactory<Application.DNS, ZoneFactory.Output> {
     data class Output(val zone_name: String, val fqdn: String)
 
-    override fun mayRun(entity: Application.Route53, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
+    override fun mayRun(entity: Application.DNS, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
-    override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+    override fun generate(entity: Application.DNS, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val dnsZone = dns_zone(context.names.tf(entity.zone)) {
             name = entity.zone
-            resource_group_name = (context.schema.config.cloudConfig as KotlessConfig.AzureCloudConfig).resourceGroup
+            resource_group_name = (context.schema.config.cloud as KotlessConfig.Cloud.Azure).terraform.backend.resourceGroup
         }
 
         return GenerationFactory.GenerationResult(Output(dnsZone::name.ref, "${entity.alias}.${entity.zone}"), dnsZone)

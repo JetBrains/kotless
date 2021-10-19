@@ -1,5 +1,6 @@
 package io.kotless.plugin.gradle.utils
 
+import io.kotless.CloudPlatform
 import io.kotless.KotlessConfig
 import io.kotless.resource.Lambda.Config.Runtime
 import org.gradle.api.JavaVersion
@@ -24,7 +25,7 @@ internal fun Runtime.isCompatible(target: JavaVersion) = when (this) {
 }
 
 internal fun Project.getRuntimeVersion(target: JavaVersion, config: KotlessConfig): Runtime? {
-    if (config.cloud == KotlessConfig.Cloud.Azure) return Runtime.Java8
+    if (config.cloud.platform == CloudPlatform.Azure) return Runtime.Java8
     if (Runtime.Java8.isCompatible(target)) return Runtime.Java8
     if (Runtime.Java11.isCompatible(target)) return Runtime.Java11
 

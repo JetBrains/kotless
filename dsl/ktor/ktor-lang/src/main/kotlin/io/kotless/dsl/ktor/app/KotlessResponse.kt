@@ -2,17 +2,14 @@ package io.kotless.dsl.ktor.app
 
 import io.kotless.MimeType
 import io.kotless.dsl.model.HttpResponse
-import io.ktor.application.ApplicationCall
-import io.ktor.http.ContentType
-import io.ktor.http.HeadersBuilder
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.OutgoingContent
-import io.ktor.response.ResponseHeaders
-import io.ktor.server.engine.BaseApplicationResponse
-import io.ktor.utils.io.ByteChannel
-import io.ktor.utils.io.close
-import io.ktor.utils.io.core.readBytes
-import io.ktor.utils.io.readRemaining
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.response.*
+import io.ktor.server.engine.*
+import io.ktor.utils.io.*
+import io.ktor.utils.io.CancellationException
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext

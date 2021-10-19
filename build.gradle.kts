@@ -19,6 +19,7 @@ subprojects {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
     }
 
     val sourceSets = this.extensions.getByName("sourceSets") as SourceSetContainer

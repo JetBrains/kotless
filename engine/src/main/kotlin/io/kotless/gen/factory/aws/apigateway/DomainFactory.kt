@@ -10,18 +10,18 @@ import io.terraformkt.aws.resource.apigateway.api_gateway_domain_name
 import io.terraformkt.hcl.ref
 
 
-object DomainFactory : GenerationFactory<Application.ApiGateway, DomainFactory.Output> {
+object DomainFactory : GenerationFactory<Application.API, DomainFactory.Output> {
     data class Output(val domain_name: String, val zone_id: String)
 
-    override fun mayRun(entity: Application.ApiGateway, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
-        && context.webapp.route53 != null
-        && context.output.check(context.webapp.route53!!, ZoneFactory)
-        && context.output.check(context.webapp.route53!!, CertificateFactory)
+    override fun mayRun(entity: Application.API, context: GenerationContext) = context.output.check(entity, RestAPIFactory)
+        && context.webapp.dns != null
+        && context.output.check(context.webapp.dns!!, ZoneFactory)
+        && context.output.check(context.webapp.dns!!, CertificateFactory)
         && context.output.check(context.webapp.api.deployment, DeploymentFactory)
 
-    override fun generate(entity: Application.ApiGateway, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val zone = context.output.get(context.webapp.route53!!, ZoneFactory)
-        val certificate = context.output.get(context.webapp.route53!!, CertificateFactory)
+    override fun generate(entity: Application.API, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+        val zone = context.output.get(context.webapp.dns!!, ZoneFactory)
+        val certificate = context.output.get(context.webapp.dns!!, CertificateFactory)
         val api = context.output.get(context.webapp.api, RestAPIFactory)
         val deployment = context.output.get(context.webapp.api.deployment, DeploymentFactory)
 

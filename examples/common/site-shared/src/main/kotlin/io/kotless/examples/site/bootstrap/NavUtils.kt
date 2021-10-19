@@ -61,20 +61,24 @@ fun BODY.siteNavbar() {
                     }
                 }
 
-                dropdown("DSL", listOf(
-                    "Overview" to "/pages/dsl/overview",
-                    "Lifecycle" to "/pages/dsl/lifecycle",
-                    "HTTP" to "/pages/dsl/http",
-                    "Events" to "/pages/dsl/events",
-                    "Permissions" to "/pages/dsl/permissions"
-                ))
+                dropdown(
+                    "DSL", listOf(
+                        "Overview" to "/pages/dsl/overview",
+                        "Lifecycle" to "/pages/dsl/lifecycle",
+                        "HTTP" to "/pages/dsl/http",
+                        "Events" to "/pages/dsl/events",
+                        "Permissions" to "/pages/dsl/permissions"
+                    )
+                )
 
-                dropdown("Plugin", listOf(
-                    "Overview" to "/pages/plugin/overview",
-                    "Configuration" to "/pages/plugin/configuration",
-                    "Tasks" to "/pages/plugin/tasks",
-                    "Extensions" to "/pages/plugin/extensions"
-                ))
+                dropdown(
+                    "Plugin", listOf(
+                        "Overview" to "/pages/plugin/overview",
+                        "Configuration" to "/pages/plugin/configuration",
+                        "Tasks" to "/pages/plugin/tasks",
+                        "Extensions" to "/pages/plugin/extensions"
+                    )
+                )
 
                 li("nav-item") {
                     a(href = "/pages/faq", classes = "nav-link") {

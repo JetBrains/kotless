@@ -4,23 +4,29 @@ import io.kotless.Application
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
-import io.terraformkt.azurerm.data.app.AppServiceCertificate
-import io.terraformkt.azurerm.data.app.app_service_certificate
+import io.terraformkt.azurerm.resource.app.app_service_certificate_binding
+import io.terraformkt.azurerm.resource.app.app_service_managed_certificate
 import io.terraformkt.hcl.ref
 
-object CertificateFactory : GenerationFactory<Application.Route53, CertificateFactory.Output> {
+object CertificateFactory : GenerationFactory<Application.DNS, CertificateFactory.Output> {
 
-    data class Output(val certificate: AppServiceCertificate)
+    class Output()
 
-    override fun mayRun(entity: Application.Route53, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
+    override fun mayRun(entity: Application.DNS, context: GenerationContext) = context.output.check(context.webapp, InfoFactory) &&
+        context.output.check(entity, RecordFactory)
 
-    override fun generate(entity: Application.Route53, context: GenerationContext): GenerationFactory.GenerationResult<CertificateFactory.Output> {
-        val resourceGroup = context.output.get(context.webapp, InfoFactory).resourceGroup
-        val cert = app_service_certificate(context.names.tf(entity.certificate)) {
-            name = entity.certificate
-            resource_group_name = resourceGroup::name.ref
+    override fun generate(entity: Application.DNS, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
+        val hostnameBinding = context.output.get(entity, RecordFactory).hostnameBinding
+        val cert = app_service_managed_certificate(context.names.tf(entity.certificate)) {
+            custom_hostname_binding_id = hostnameBinding::id.ref
         }
 
-        return GenerationFactory.GenerationResult(Output(cert), cert)
+        val binding = app_service_certificate_binding(context.names.tf(entity.certificate)) {
+            hostname_binding_id = hostnameBinding::id.ref
+            certificate_id = cert::id.ref
+            ssl_state = "SniEnabled"
+        }
+
+        return GenerationFactory.GenerationResult(Output(), cert, binding)
     }
 }

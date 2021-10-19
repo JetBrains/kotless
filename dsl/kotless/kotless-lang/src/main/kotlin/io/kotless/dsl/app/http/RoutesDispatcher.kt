@@ -2,10 +2,7 @@ package io.kotless.dsl.app.http
 
 import io.kotless.InternalAPI
 import io.kotless.dsl.lang.KotlessContext
-import io.kotless.dsl.lang.http.HttpRequestInterceptor
-import io.kotless.dsl.lang.http.notFound
-import io.kotless.dsl.lang.http.okResponse
-import io.kotless.dsl.lang.http.serverError
+import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.model.HttpRequest
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.reflection.FunctionCaller
@@ -46,7 +43,7 @@ object RoutesDispatcher {
         logger.debug("Found $func for key $resourceKey")
 
         val result = try {
-            FunctionCaller.call(func, request.params.orEmpty())
+            FunctionCaller.call(func, request.params)
         } catch (e: Exception) {
             logger.error("Failed on call of function ${func.name}", if (e is InvocationTargetException) e.targetException else e)
             return serverError(e.message)

@@ -1,6 +1,5 @@
 package io.kotless.parser.processor.action
 
-import io.kotless.permission.Permission
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
 import io.kotless.dsl.lang.http.HttpRequestInterceptor
@@ -8,6 +7,8 @@ import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.visitNamedFunctions
+import io.kotless.permission.AWSPermission
+import io.kotless.permission.Permission
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.reflect.KClass
@@ -31,7 +32,7 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
 
         processObjects(files, binding) { obj, klass ->
             obj.visitNamedFunctions(filter = { it.name == functions.getValue(klass) }) {
-                permissions += PermissionsProcessor.process(it, binding)
+                permissions += PermissionsProcessor.process(it, binding, context)
             }
         }
 

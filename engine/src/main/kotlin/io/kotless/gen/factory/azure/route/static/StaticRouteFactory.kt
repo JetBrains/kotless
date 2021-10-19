@@ -8,14 +8,14 @@ import io.kotless.gen.factory.azure.filescontent.LambdaDescription
 import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.resource.static.StaticResourceFactory
 
-object StaticRouteFactory : GenerationFactory<Application.ApiGateway.StaticRoute, StaticRouteFactory.Output>, AbstractRouteFactory() {
+object StaticRouteFactory : GenerationFactory<Application.API.StaticRoute, StaticRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val proxyPart: String)
 
-    override fun mayRun(entity: Application.ApiGateway.StaticRoute, context: GenerationContext) =
+    override fun mayRun(entity: Application.API.StaticRoute, context: GenerationContext) =
         context.output.check(context.webapp, InfoFactory)
 
     override fun generate(
-        entity: Application.ApiGateway.StaticRoute,
+        entity: Application.API.StaticRoute,
         context: GenerationContext
     ): GenerationFactory.GenerationResult<Output> {
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount

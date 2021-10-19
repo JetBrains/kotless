@@ -1,8 +1,7 @@
 package io.kotless.parser.processor.route
 
-import io.kotless.resource.StaticResource
-import io.kotless.URIPath
 import io.kotless.Application
+import io.kotless.URIPath
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -11,6 +10,7 @@ import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.getEnumValue
 import io.kotless.parser.utils.psi.annotation.getURIPath
 import io.kotless.parser.utils.psi.getTypeFqName
+import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -48,7 +48,7 @@ internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
             val resource = StaticResource(URIPath("static", path), file, mime)
 
             context.resources.register(key, resource)
-            context.routes.register(Application.ApiGateway.StaticRoute(path, key))
+            context.routes.register(Application.API.StaticRoute(path, key))
         }
     }
 }

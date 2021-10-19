@@ -23,7 +23,7 @@ internal object CommandLine {
         return CommandLineUtils.executeCommandLine(
             Commandline().apply {
                 workingDirectory = workingDir
-                executable = exec
+                executable = exec.trim()
                 for ((key, value) in envs) {
                     addEnvironment(key, value)
                 }

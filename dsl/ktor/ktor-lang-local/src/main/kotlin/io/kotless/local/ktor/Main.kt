@@ -2,8 +2,8 @@ package io.kotless.local.ktor
 
 import io.kotless.Constants
 import io.kotless.dsl.ktor.KotlessAWS
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import kotlin.reflect.full.primaryConstructor
 
 fun main() {

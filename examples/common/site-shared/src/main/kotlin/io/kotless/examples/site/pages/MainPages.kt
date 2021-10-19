@@ -20,7 +20,8 @@ object MainPages {
         }
         br()
 
-        kotlin("""
+        kotlin(
+            """
                 //This page code and deployment at once
                 @Get("/")
                 fun root() = html {
@@ -30,7 +31,8 @@ object MainPages {
                         text()
                         cards()
                     }
-                }""".trimIndent())
+                }""".trimIndent()
+        )
 
         row {
             smCol(4) {

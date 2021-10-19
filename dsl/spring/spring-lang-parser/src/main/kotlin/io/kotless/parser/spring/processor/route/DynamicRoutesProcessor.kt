@@ -1,14 +1,14 @@
 package io.kotless.parser.spring.processor.route
 
-import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
-import io.kotless.Application.ApiGateway
+import io.kotless.Application.API
 import io.kotless.Application.Events
+import io.kotless.ScheduledEventType
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.psi.visitNamedFunctions
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.KtFile
@@ -27,18 +27,18 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
 
                 for (method in SpringAnnotationUtils.getMethods(binding, el)) {
                     val path = SpringAnnotationUtils.getRoutePath(binding, el)
-                    val permissions = PermissionsProcessor.process(el, binding)
+                    val permissions = PermissionsProcessor.process(el, binding, context)
                     val name = el.fqName!!.asString() + "_" + method.name
 
                     val key = TypedStorage.Key<Lambda>()
                     val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
-                    context.routes.register(ApiGateway.DynamicRoute(method, path, key))
+                    context.routes.register(API.DynamicRoute(method, path, key))
 
-                    if (context.config.optimization.autowarm.enable) {
+                    if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
-                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
                         )
                     }
                 }

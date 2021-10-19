@@ -7,10 +7,7 @@ import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.*
 import io.kotless.parser.utils.psi.parents
 import io.kotless.parser.utils.reversed
-import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.springframework.web.bind.annotation.*
 
@@ -68,9 +65,11 @@ object SpringAnnotationUtils {
     }
 
 
-    private fun <T> executeOnAnnotation(binding: BindingContext, func: KtNamedFunction,
-                                        onMethodAnnotation: (KtAnnotationEntry) -> T,
-                                        onAnyMethodAnnotation: (KtAnnotationEntry) -> T): T {
+    private fun <T> executeOnAnnotation(
+        binding: BindingContext, func: KtNamedFunction,
+        onMethodAnnotation: (KtAnnotationEntry) -> T,
+        onAnyMethodAnnotation: (KtAnnotationEntry) -> T
+    ): T {
         val myMethodAnnotations = func.getAnnotations(binding, methodAnnotations.keys)
         val myAnyMethodAnnotations = func.getAnnotations(binding, anyMethodAnnotation)
 

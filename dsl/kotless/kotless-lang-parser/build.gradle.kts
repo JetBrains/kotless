@@ -6,8 +6,9 @@ version = rootProject.version
 dependencies {
     api(project(":schema"))
     api(project(":dsl:kotless:kotless-lang"))
-    api(project(":dsl:common:lang-parser-common"))
+    api(project(":dsl:common:dsl-parser-common"))
 }
+
 
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {

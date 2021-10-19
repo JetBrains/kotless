@@ -1,13 +1,9 @@
 package io.kotless.opt
 
+import io.kotless.*
 import io.kotless.KotlessConfig.Optimization
 import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
-import io.kotless.Schema
-import io.kotless.Application
-import io.kotless.utils.Storage
-import io.kotless.utils.TypedStorage
-import io.kotless.utils.everyNMinutes
+import io.kotless.utils.*
 
 object LambdaMergeOptimizer : SchemaOptimizer {
     private val key = Storage.Key<Int>()
@@ -58,10 +54,10 @@ object LambdaMergeOptimizer : SchemaOptimizer {
 
     override fun optimize(schema: Schema, optimization: Optimization, context: OptimizationContext): Schema {
         val mergedMap = merge(schema.lambdas, optimization.mergeLambda, context)
-        val scheduled = if (optimization.autowarm.enable) {
+        val scheduled = if (optimization.autoWarm.enable) {
             (schema.application.events.scheduled.filter { it.type != ScheduledEventType.Autowarm } +
                 mergedMap.entries.distinctBy { it.value }.map { (key, lambda) ->
-                    Application.Events.Scheduled(lambda.name, everyNMinutes(optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                    Application.Events.Scheduled(lambda.name, everyNMinutes(optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
                 }).toSet()
         } else schema.application.events.scheduled
 

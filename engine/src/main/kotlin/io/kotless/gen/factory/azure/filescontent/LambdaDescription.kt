@@ -2,12 +2,12 @@ package io.kotless.gen.factory.azure.filescontent
 
 import io.kotless.Application
 import io.kotless.resource.Lambda
-import io.terraformkt.azurerm.data.storage.*
+import io.terraformkt.azurerm.data.storage.StorageAccount
 import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.hcl.ref
 
 object LambdaDescription {
-    fun body(lambda: Lambda): String {
+    fun body(lambda: Lambda, methods: List<String> = listOf("GET", "POST")): String {
         return """
             {
               "scriptFile" : "../${lambda.file.name}",
@@ -16,7 +16,7 @@ object LambdaDescription {
                 "type" : "httpTrigger",
                 "direction" : "in",
                 "name" : "req",
-                "methods" : [ "GET", "POST" ],
+                "methods" : [ ${methods.joinToString(", ") { "\"$it\"" }} ],
                 "authLevel" : "ANONYMOUS"
               }, {
                 "type" : "http",
@@ -27,7 +27,22 @@ object LambdaDescription {
         """.trimIndent().replace("\"", "\\\"").replace("\n", "")
     }
 
-    fun proxy(lambdaPath: String, dynamicRoute: Application.ApiGateway.DynamicRoute, functionAppName: String): String {
+    fun timeBinding(lambda: Lambda, schedule: String): String {
+        return """
+            {
+              "scriptFile" : "../${lambda.file.name}",
+              "entryPoint" : "${lambda.entrypoint.qualifiedName.removeSuffix(".run")}.timer",
+              "bindings" : [ {
+                "schedule": "$schedule",
+                "name": "timer",
+                "type": "timerTrigger",
+                "direction": "in"
+              } ]
+            }
+        """.trimIndent().replace("\"", "\\\"").replace("\n", "")
+    }
+
+    fun proxy(lambdaPath: String, dynamicRoute: Application.API.DynamicRoute, functionAppName: String): String {
         return """
             "${dynamicRoute.path}_route": {
                 "matchCondition": {
@@ -66,7 +81,7 @@ object LambdaDescription {
             }
         """.trimIndent().replace("\"", "\\\"").replace("\n", "")
 
-    fun staticRoute(staticRoute: Application.ApiGateway.StaticRoute, storageAccount: StorageAccount, storageContainer: StorageContainer, blobName: String) = """
+    fun staticRoute(staticRoute: Application.API.StaticRoute, storageAccount: StorageAccount, storageContainer: StorageContainer, blobName: String) = """
             "${staticRoute.path}": {
                 "matchCondition": {
                     "route": "${staticRoute.path}"

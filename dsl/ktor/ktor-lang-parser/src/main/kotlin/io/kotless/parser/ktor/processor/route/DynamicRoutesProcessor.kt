@@ -16,9 +16,7 @@ import io.kotless.parser.utils.reversed
 import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
@@ -50,7 +48,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     val method = functions[element.getFqName(binding)] ?: error(element, "Unknown Ktor HTTP handler definition")
 
-                    val permissions = PermissionsProcessor.process(element, binding) + globalPermissions
+                    val permissions = PermissionsProcessor.process(element, binding, context) + globalPermissions
 
                     val path = URIPath(outer, element.getArgument("path", binding).asPath(binding))
                     val name = "${path.parts.joinToString(separator = "_")}_${method.name}"
@@ -59,11 +57,11 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
-                    context.routes.register(Application.ApiGateway.DynamicRoute(method, path, key))
+                    context.routes.register(Application.API.DynamicRoute(method, path, key))
 
-                    if (context.config.optimization.autowarm.enable) {
+                    if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
-                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autowarm.minutes), ScheduledEventType.Autowarm, key)
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
                         )
                     }
                 }

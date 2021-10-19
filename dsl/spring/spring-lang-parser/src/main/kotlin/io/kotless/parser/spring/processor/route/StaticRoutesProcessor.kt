@@ -1,10 +1,8 @@
 package io.kotless.parser.spring.processor.route
 
-import io.kotless.MimeType
-import io.kotless.resource.StaticResource
-import io.kotless.URIPath
-import io.kotless.Application
+import io.kotless.*
 import io.kotless.parser.processor.ProcessorContext
+import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
 import java.io.File
 
@@ -30,6 +28,6 @@ object StaticRoutesProcessor {
         val resource = StaticResource(URIPath("static", path), file, mime)
 
         context.resources.register(key, resource)
-        context.routes.register(Application.ApiGateway.StaticRoute(path, key))
+        context.routes.register(Application.API.StaticRoute(path, key))
     }
 }

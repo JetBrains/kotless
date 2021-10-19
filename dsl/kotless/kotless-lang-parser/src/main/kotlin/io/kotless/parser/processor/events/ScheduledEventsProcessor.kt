@@ -1,8 +1,7 @@
 package io.kotless.parser.processor.events
 
-import io.kotless.resource.Lambda
-import io.kotless.ScheduledEventType
 import io.kotless.Application.Events
+import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -12,6 +11,7 @@ import io.kotless.parser.processor.permission.PermissionsProcessor
 import io.kotless.parser.utils.errors.error
 import io.kotless.parser.utils.errors.require
 import io.kotless.parser.utils.psi.annotation.getValue
+import io.kotless.resource.Lambda
 import io.kotless.utils.TypedStorage
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -30,7 +30,7 @@ internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
             require(func, func.fqName != null) { "@Scheduled cannot be applied to anonymous function" }
             require(func, func.valueParameters.isEmpty()) { "@Scheduled cannot be applied to ${func.fqName!!.asString()} since it has parameters" }
 
-            val routePermissions = PermissionsProcessor.process(func, binding) + permissions
+            val routePermissions = PermissionsProcessor.process(func, binding, context) + permissions
 
             val id = (entry.getValue(binding, Scheduled::id) ?: "").ifBlank { func.fqName!!.asString().hashCode().absoluteValue.toString() }
 

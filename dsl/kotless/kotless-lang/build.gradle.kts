@@ -6,9 +6,11 @@ version = rootProject.version
 
 dependencies {
     api(project(":model"))
-    api(project(":dsl:common:lang-common"))
-    implementation(kotlin("reflect"))
-    implementation("org.reflections", "reflections", "0.9.11")
+    api(project(":dsl:common:dsl-common"))
+
+    api(kotlin("reflect"))
+    api("org.reflections", "reflections", "0.9.11")
 
     implementation("ch.qos.logback", "logback-classic", Versions.logback)
 }
+

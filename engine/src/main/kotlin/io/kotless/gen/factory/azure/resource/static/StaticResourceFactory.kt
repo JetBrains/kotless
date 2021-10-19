@@ -17,11 +17,12 @@ object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceF
         val resourceName = "copy_${entity.file.path.replace(".", "_").replace("/", "_")}"
         val storageAccount = context.output.get(context.webapp, InfoFactory).storageAccount
         val storageContainer = context.output.get(context.webapp, InfoFactory).staticStorageContainer
-        val storageBlob = storage_blob(context.names.tf(context.schema.config.bucket, entity.path.parts)) {
+        val storageBlob = storage_blob(context.names.tf(context.schema.config.azure.storage.container, entity.path.parts)) {
             name = resourceName
             storage_account_name = storageAccount::name.ref
             storage_container_name = storageContainer::name.ref
             type = "Block"
+            access_tier = "Hot"
             content_type = entity.mime.mimeText
             source = path(entity.file)
         }

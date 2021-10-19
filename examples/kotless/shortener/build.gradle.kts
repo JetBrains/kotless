@@ -1,4 +1,3 @@
-import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 group = rootProject.group
@@ -19,19 +18,25 @@ dependencies {
     implementation("io.ktor", "ktor-html-builder", "1.5.0")
 }
 
+
 kotless {
     config {
-        bucket = "eu.short.s3.ktls.aws.intellij.net"
-        prefix = "short"
 
-        terraform {
+
+        aws {
+            prefix = "short"
+
+            storage {
+                bucket = "eu.short.s3.ktls.aws.intellij.net"
+            }
+
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }
     }
 
     webapp {
-        route53 = Route53("short", "kotless.io")
+        dns("short", "kotless.io")
     }
 
     extensions {
@@ -46,4 +51,3 @@ kotless {
         }
     }
 }
-

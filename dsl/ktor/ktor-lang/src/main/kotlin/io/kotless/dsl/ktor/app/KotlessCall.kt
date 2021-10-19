@@ -1,10 +1,9 @@
 package io.kotless.dsl.ktor.app
 
 import io.kotless.dsl.model.HttpRequest
-import io.ktor.application.Application
-import io.ktor.http.Parameters
-import io.ktor.server.engine.BaseApplicationCall
-import io.ktor.server.engine.EngineAPI
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.server.engine.*
 
 /**
  * Ktor Call used by Kotless. It is mapped from APIGateway request and to APIGateway response.

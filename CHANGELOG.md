@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * Initial GraalVM support
     * Works only with Ktor right now
     * Ktor Site examples migrated to GraalVM
-    
+
 ## Fixed
 
 * Now Kotless should be working on Windows, thanks to zaenk (chmod will not be used on Windows)

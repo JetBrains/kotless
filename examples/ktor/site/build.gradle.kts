@@ -1,6 +1,5 @@
-import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
-import io.kotless.resource.Lambda.Config.Runtime
+import io.kotless.resource.Lambda.Config.Runtime.GraalVM
 
 group = rootProject.group
 version = rootProject.version
@@ -20,17 +19,23 @@ dependencies {
 kotless {
     config {
 
-        bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
-        prefix = "ktor-site"
+        aws {
+            prefix = "ktor-site"
 
-        terraform {
+            storage {
+                bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
+            }
+
             profile = "kotless-jetbrains"
             region = "eu-west-1"
         }
     }
 
     webapp {
-        route53 = Route53("ktor.site", "kotless.io")
+        dns("ktor.site", "kotless.io")
 
+//        lambda {
+//            runtime = GraalVM
+//        }
     }
 }

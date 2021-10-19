@@ -6,11 +6,11 @@ import java.io.Serializable
 /** Kotless DSL root */
 @KotlessDSLTag
 class KotlessDSL(project: Project) : Serializable {
-    internal val config: KotlessConfig = KotlessConfig(project)
+    internal val config: KotlessGradleConfig = KotlessGradleConfig(project)
 
     /** Declaration of Kotless configuration itself */
     @KotlessDSLTag
-    fun config(configure: KotlessConfig.() -> Unit) {
+    fun config(configure: KotlessGradleConfig.() -> Unit) {
         config.configure()
     }
 

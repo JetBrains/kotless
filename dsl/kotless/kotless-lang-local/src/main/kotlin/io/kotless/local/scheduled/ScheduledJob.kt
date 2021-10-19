@@ -2,8 +2,8 @@ package io.kotless.local.scheduled
 
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.app.events.EventsReflectionScanner
-import io.kotless.dsl.model.CloudWatch
-import io.kotless.dsl.utils.Json
+import io.kotless.dsl.cloud.aws.CloudWatch
+import io.kotless.dsl.utils.JSON
 import org.quartz.*
 import java.io.ByteArrayOutputStream
 
@@ -53,7 +53,7 @@ internal class ScheduledJob : Job {
         )
 
         handler.handleRequest(
-            input = Json.string(CloudWatch.serializer(), apiRequest).byteInputStream(),
+            input = JSON.string(CloudWatch.serializer(), apiRequest).byteInputStream(),
             output = ByteArrayOutputStream(),
             any = null
         )

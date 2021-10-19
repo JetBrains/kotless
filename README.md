@@ -74,7 +74,7 @@ dependencies {
 //    implementation("io.kotless", "ktor-lang-azure", "0.2.0")
 
 
-    //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.3.2)
+    //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.5.0)
     //implementation("io.kotless", "ktor-lang", "0.2.0")
     //implementation("io.kotless", "ktor-lang-aws", "0.2.0")
     //implementation("io.kotless", "ktor-lang-azuer", "0.2.0")
@@ -110,19 +110,22 @@ If you have an AWS account and want to perform the real deployment &mdash; let's
 for it! It's rather simple:
 
 ```kotlin
+
 kotless {
     config {
-        bucket = "kotless.s3.example.com"
 
-        terraform {
+        aws {
+            storage {
+                bucket = "kotless.s3.example.com"
+            }
+
             profile = "example"
-            region = "us-east-1"
+            region = "eu-west-1"
         }
     }
 
     webapp {
-        //Optional parameters, by default technical name will be generated
-        route53 = Route53("kotless", "example.com")
+        dns("kotless", "example.com")
     }
 }
 ```
@@ -139,6 +142,47 @@ Then we set up a specific application to deploy:
 
 And that's the whole setup!
 
+#### Deploying to Azure
+
+Deployment to Microsoft Azure is also pretty straightforward and simple:
+
+```kotlin
+kotless {
+    config {
+        azure {
+            storage {
+                storageAccount = "your-storage-account"
+                container = "container-which-kotless-would-use"
+            }
+
+            terraform {
+                backend {
+                    resourceGroup = "your-resource-group"
+                }
+            }
+        }
+    }
+
+    webapp {
+        dns("kotless", "example.com")
+    }
+}
+
+```
+
+Here we set up the config of Kotless itself:
+
+* the storage, which will be used to store lambdas and configs;
+* Terraform configuration with the name of the profile to access Azure.
+
+Then we set up a specific application to deploy:
+
+* Azure DNS alias for the resulting application (you need to pre-create  certificate for the DNS
+  record).
+
+And that's the whole setup!
+
+### Creating application
 
 Now you can create your first serverless application with Kotless DSL:
 
@@ -195,7 +239,7 @@ kotless {
     //<...>
     extensions {
         local {
-            //enable AWS emulation (disabled by default)
+            //enables AWS emulation (disabled by default)
             useAWSEmulation = true
         }
     }
@@ -215,15 +259,15 @@ Kotless is able to deploy existing Spring Boot or Ktor application to AWS server
 it, you'll need to set up a plugin and replace existing dependency with the appropriate Kotless DSL.
 
 For **Ktor**, you should replace existing engine (
-e.g. `implementation("io.ktor", "ktor-server-netty", "1.3.2")`)
+e.g. `implementation("io.ktor", "ktor-server-netty", "1.5.0")`)
 with `implementation("io.kotless", "ktor-lang", "0.1.6")`. Note that this dependency bundles Ktor of
 version
-`1.3.2`, so you may need to upgrade other Ktor libraries (like `ktor-html-builder`) to this version.
+`1.5.0`, so you may need to upgrade other Ktor libraries (like `ktor-html-builder`) to this version.
 
 For **Spring Boot** you should replace the starter you use (
 e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "2.3.0.RELASE)`)
 with `implementation("io.kotless", "spring-boot-lang", "0.1.6")`. Note that this dependency bundles
-Spring Boot of version `2.3.0.RELEASE`, so you also may need to upgrade other Spring Boot libraries
+Spring Boot of version `2.4.2`, so you also may need to upgrade other Spring Boot libraries
 to this version.
 
 Once it is done, you may hit `deploy` task and make your application serverless. Note, that you will

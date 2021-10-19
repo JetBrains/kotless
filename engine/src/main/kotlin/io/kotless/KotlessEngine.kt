@@ -9,10 +9,9 @@ import java.io.File
 object KotlessEngine {
     fun generate(schema: Schema): Set<TFFile> {
         val optimized = Optimizer.optimize(schema)
-        return when (schema.config.cloud) {
-            KotlessConfig.Cloud.AWS -> AWSGenerator.generate(optimized)
-            KotlessConfig.Cloud.Azure -> AzureGenerator.generate(optimized)
-            else -> AWSGenerator.generate(optimized)
+        return when (schema.config.cloud.platform) {
+            CloudPlatform.AWS -> AWSGenerator.generate(optimized)
+            CloudPlatform.Azure -> AzureGenerator.generate(optimized)
         }
     }
 

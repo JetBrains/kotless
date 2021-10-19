@@ -85,8 +85,8 @@ internal open class KotlessGenerateTask : DefaultTask() {
         val parsed = dsl.descriptor.parser.parse(myAllSources, myAllResources, jar, config, lambda, Dependencies.getDependencies(project))
 
         val app = Application(
-            route53 = webapp.route53?.toSchema(),
-            api = Application.ApiGateway(
+            dns = webapp.dns?.toSchema(),
+            api = Application.API(
                 name = project.name,
                 deployment = webapp.deployment.toSchema(project.path),
                 dynamics = parsed.routes.dynamics,

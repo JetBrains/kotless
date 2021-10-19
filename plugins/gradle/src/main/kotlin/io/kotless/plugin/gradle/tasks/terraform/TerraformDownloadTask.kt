@@ -31,8 +31,8 @@ internal open class TerraformDownloadTask : DefaultTask() {
     }
 
     @get:Input
-    val version: String
-        get() = project.kotless.config.terraform.version
+    val version: String?
+        get() = project.kotless.config.cloud?.terraform?.version
 
     @get:OutputFile
     val binFile: File

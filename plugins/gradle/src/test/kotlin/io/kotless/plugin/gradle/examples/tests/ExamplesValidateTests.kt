@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class ExamplesValidateTests: ExamplesTestBase() {
+class ExamplesValidateTests : ExamplesTestBase() {
     companion object {
         @JvmStatic
         fun dataWithoutGraal() = ExamplesTestBase.dataWithoutGraal()
@@ -26,7 +26,7 @@ class ExamplesValidateTests: ExamplesTestBase() {
 
         CommandLine.execute(
             exec = terraform(project).canonicalPath,
-            args = listOf("init","-backend=false"),
+            args = listOf("init", "-backend=false"),
             workingDir = actual,
             redirectStdout = true,
             redirectErr = true
