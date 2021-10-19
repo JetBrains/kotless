@@ -77,7 +77,7 @@ dependencies {
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.5.0)
     //implementation("io.kotless", "ktor-lang", "0.2.0")
     //implementation("io.kotless", "ktor-lang-aws", "0.2.0")
-    //implementation("io.kotless", "ktor-lang-azuer", "0.2.0")
+    //implementation("io.kotless", "ktor-lang-azure", "0.2.0")
 
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 2.3.0.RELEASE)
     //implementation("io.kotless", "spring-boot-lang", "0.2.0")
@@ -357,4 +357,4 @@ Special thanks to:
 
 * Alexandra Pavlova (aka sunalex) for our beautiful logo;
 * Yaroslav Golubev for help with documentation;
-* [Gregor Billing](https://github.com/suushiemaniac) for the help with Gradle plugin and more.
+* [Gregor Billing](https://github.com/suushiemaniac) for help with the Gradle plugin and more.
