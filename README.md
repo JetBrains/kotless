@@ -39,7 +39,28 @@ Consider using one of the latest versions of Gradle, starting with the **7.2** v
 
 Basically, if you already use Gradle, you only need to do two things.
 
-Firstly, set up the Kotless Gradle plugin. You need to apply the plugin:
+Firstly, set up the Kotless Gradle plugin. 
+
+You will have to tell Gradle where to find the plugin by editing `settings.gradle.kts`:
+```kotlin
+pluginManagement {
+    resolutionStrategy {
+        this.eachPlugin {
+            if (requested.id.id == "io.kotless") {
+                useModule("io.kotless:gradle:${this.requested.version}")
+            }
+        }
+    }
+    
+    repositories {
+        maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+```
+
+And apply the plugin:
 
 ```kotlin
 //Imports are necessary, for this example
@@ -65,6 +86,8 @@ Secondly, add Kotless DSL (or Ktor, or Spring Boot) as a library to your applica
 ```kotlin
 repositories {
     mavenCentral()
+    //Kotless repository
+    maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
 }
 
 dependencies {
