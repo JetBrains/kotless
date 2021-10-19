@@ -14,6 +14,7 @@ dependencies {
 
     implementation("io.kotless", "ktor-lang-aws", "0.2.0")
     implementation("io.kotless", "ktor-lang", "0.2.0")
+
     implementation("io.ktor", "ktor-html-builder", "1.5.0")
 }
 

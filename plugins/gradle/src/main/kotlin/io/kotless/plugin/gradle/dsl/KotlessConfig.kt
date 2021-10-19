@@ -130,8 +130,8 @@ class KotlessConfig(project: Project) : Serializable {
         @KotlessDSLTag
         class Backend : Serializable {
             /**
-             * Name of bucket, that will be used as Terraform backend storage
-             * By default kotless bucket is used.
+             * Name of bucket that will be used as Terraform backend storage.
+             * By default, kotless bucket is used.
              */
             var bucket: String? = null
 

@@ -53,7 +53,7 @@ object IntroductionPages {
 
         kotlin("""
                 repositories {
-                    jcenter()
+                    mavenCentral()
                 }
                 dependencies {
                     implementation("io.kotless", "kotless-lang", "0.1.1")

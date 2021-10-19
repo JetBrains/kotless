@@ -16,7 +16,7 @@ dependencies {
     implementation("commons-validator", "commons-validator", "1.6")
     implementation("com.amazonaws", "aws-java-sdk-dynamodb", "1.11.650")
 
-    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
+    implementation("io.ktor", "ktor-html-builder", "1.5.0")
 }
 
 kotless {

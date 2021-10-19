@@ -13,8 +13,6 @@ dependencies {
     implementation("io.kotless", "kotless-lang", "0.2.0")
 
     implementation(project(":common:site-shared"))
-
-    implementation("org.jetbrains.kotlinx", "kotlinx-html-jvm", "0.6.11")
 }
 
 kotless {

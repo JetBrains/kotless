@@ -1,8 +1,6 @@
 <h1> <img width="40" height="40" src="https://s3-eu-west-1.amazonaws.com/public.s3.ktls.aws.intellij.net/resources/favicon.apng" alt="Kotless Icon"> Kotless </h1>
 
 [![JetBrains incubator project](https://jb.gg/badges/incubator.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![Download](https://img.shields.io/badge/dynamic/json.svg?label=latest&query=name&style=flat&url=https%3A%2F%2Fapi.bintray.com%2Fpackages%2Ftanvd%2Fio.kotless%2Fkotless-lang%2Fversions%2F_latest) ](https://bintray.com/tanvd/io.kotless/lang/_latestVersion)
-[![gradlePluginPortal](https://img.shields.io/maven-metadata/v.svg?label=gradlePluginPortal&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fio.kotless%2Fio.kotless.gradle.plugin%2Fmaven-metadata.xml?style=flat)](https://plugins.gradle.org/plugin/io.kotless)
 [![KotlinLang slack](https://img.shields.io/static/v1?label=kotlinlang&message=kotless&color=brightgreen&logo=slack&style=flat)](https://app.slack.com/client/T09229ZC6/CKS388069)
 
 Kotless stands for Kotlin serverless framework.
@@ -11,9 +9,7 @@ Its focus lies in reducing the routine of serverless deployment creation by gene
 from the code of the application itself.
 
 So, simply speaking, Kotless gives you one magic button to deploy your Web application as a
-serverless application on AWS!
-
-** The version of Kotless 0.2.0 will also support Microsoft Azure, you can try it out already by compiling branch 0.2.0. In the near future we will publish SNAPSHOT version.**
+serverless application on AWS and Azure!
 
 Kotless consists of two main parts:
 
@@ -35,8 +31,11 @@ super easy deployment of existing Spring and Ktor applications to AWS serverless
 
 ## Getting started
 
-Kotless uses Gradle to wrap around the existing build process and insert the deployment into it.
-Consider using one of the latest versions of Gradle: starting from the 7.0.2.
+### Setting up project
+
+Kotless uses Gradle to wrap around the existing building process and insert the deployment into it.
+
+Consider using one of the latest versions of Gradle, starting with the **7.2** version.
 
 Basically, if you already use Gradle, you only need to do two things.
 
@@ -55,9 +54,9 @@ version = "0.1.0"
 
 plugins {
     //Version of Kotlin should be 1.3.72+
-    kotlin("jvm") version "1.3.72" apply true
+    kotlin("jvm") version "1.5.31" apply true
 
-    id("io.kotless") version "0.1.6" apply true
+    id("io.kotless") version "0.2.0" apply true
 }
 ```
 
@@ -65,17 +64,25 @@ Secondly, add Kotless DSL (or Ktor, or Spring Boot) as a library to your applica
 
 ```kotlin
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    implementation("io.kotless", "kotless-lang", "0.1.6")
+    implementation("io.kotless", "kotless-lang", "0.2.0")
+    implementation("io.kotless", "kotless-lang-aws", "0.2.0")
+//    if you want to deploy to Microsoft Azure, just replace -aws with -azure    
+//    implementation("io.kotless", "ktor-lang-azure", "0.2.0")
+
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.3.2)
-    //implementation("io.kotless", "ktor-lang", "0.1.6")
+    //implementation("io.kotless", "ktor-lang", "0.2.0")
+    //implementation("io.kotless", "ktor-lang-aws", "0.2.0")
+    //implementation("io.kotless", "ktor-lang-azuer", "0.2.0")
 
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 2.3.0.RELEASE)
-    //implementation("io.kotless", "spring-boot-lang", "0.1.6")
+    //implementation("io.kotless", "spring-boot-lang", "0.2.0")
+    //implementation("io.kotless", "spring-boot-lang-aws", "0.2.0")
+    //implementation("io.kotless", "spring-boot-lang-azure", "0.2.0")
 }
 ```
 
@@ -87,10 +94,17 @@ version of dependent libraries (like Spring Security) with version bundled in `*
 This gives you access to DSL interfaces in your code and sets up a Lambda dispatcher inside your
 application.
 
-If you don't have an AWS account &mdash; stop here. Now you can use `local` task to run the
-application locally and debug it. If you want to continue &mdash; create AWS accounts following
-simple [instruction](https://hadihariri.com/2020/05/12/from-zero-to-lamda-with-kotless/) by Hadi
-Hariri.
+### Deploying to the cloud
+
+Depending on a use case, you may want to deploy application either in an AWS or Microsoft Azure.
+
+Note, that if you even don't have a cloud account, you can still use Kotless locally to run and
+debug your application -- just use `local` Gradle task.
+
+#### Deploying to AWS
+
+If you don't have an AWS account, you can create it following simple
+[instruction](https://hadihariri.com/2020/05/12/from-zero-to-lamda-with-kotless/) by Hadi Hariri.
 
 If you have an AWS account and want to perform the real deployment &mdash; let's set up everything
 for it! It's rather simple:
@@ -124,6 +138,7 @@ Then we set up a specific application to deploy:
   record).
 
 And that's the whole setup!
+
 
 Now you can create your first serverless application with Kotless DSL:
 
@@ -187,7 +202,7 @@ kotless {
 }
 ```
 
-During local run, LocalStack will be started and all clients will be pointed to its endpoint
+During the local run, LocalStack will be started and all clients will be pointed to its endpoint
 automatically.
 
 Local start functionality does not require any access to cloud provider, so you may check how your
@@ -222,8 +237,8 @@ many more features covering different areas of application.
 Including, but not limited to:
 
 * **Lambdas auto-warming** &mdash; Kotless creates schedulers to execute warming sequences to never
-  leave your lambdas cold. As a result, applications under moderate load are not vulnerable
-  to cold-start problem.
+  leave your lambdas cold. As a result, applications under moderate load are not vulnerable to
+  cold-start problem.
 * **Permissions management** &mdash; you can declare which permissions to which AWS resources are
   required for the application via annotations on Kotlin functions, classes or objects. Permissions
   will be granted automatically.

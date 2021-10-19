@@ -1,30 +1,56 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
-import tanvd.kosogor.defaults.configureIdea
 
 group = "io.kotless"
 version = "0.2.0"
 
 plugins {
-    id("tanvd.kosogor") version "1.0.12" apply true
     id("io.gitlab.arturbosch.detekt") version ("1.15.0") apply true
     kotlin("jvm") version "1.5.31" apply false
+    `maven-publish`
 }
-
-configureIdea {
-    exclude += files("examples/.gradle", "examples/gradle", "examples/.idea", "examples/build", "examples/gradlew", "examples/gradlew.bat")
-}
-
 
 subprojects {
     apply {
         plugin("kotlin")
-        plugin("tanvd.kosogor")
+        plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
     }
 
     repositories {
-        jcenter()
+        mavenCentral()
         gradlePluginPortal()
+    }
+
+    val sourceSets = this.extensions.getByName("sourceSets") as SourceSetContainer
+
+
+    task<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets["main"]!!.allSource)
+    }
+
+    publishing {
+        publications {
+            this.create("jarPublication", MavenPublication::class.java) {
+                artifactId = project.name
+
+                from (project.components.getByName("java"))
+
+                artifact(tasks["sourcesJar"])
+            }
+        }
+
+        repositories {
+            maven {
+                name = "SpacePackages"
+                url = uri("https://packages.jetbrains.team/maven/p/ktls/maven")
+
+                credentials {
+                    username = System.getenv("JB_SPACE_CLIENT_ID")
+                    password = System.getenv("JB_SPACE_CLIENT_SECRET")
+                }
+            }
+        }
     }
 
     tasks.withType<KotlinJvmCompile> {

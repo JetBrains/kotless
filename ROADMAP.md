@@ -2,12 +2,7 @@
 
 ## 0.1.*
 
-* Documentation and accessibility
-    * Add chatbot creation examples
-    * Rework a bit documentation to make it more clear
-    * Add some introduction on serverless development
 * Support of Google Cloud Platform
-* Support of GraalVM
 
 ## 0.2.*
 

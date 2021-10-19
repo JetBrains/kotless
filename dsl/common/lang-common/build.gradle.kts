@@ -1,5 +1,4 @@
 import io.kotless.buildsrc.Versions
-import tanvd.kosogor.proxy.publishJar
 
 group = rootProject.group
 version = rootProject.version
@@ -27,17 +26,3 @@ dependencies {
 
     api("com.amazonaws", "aws-lambda-java-core", Versions.lambdaJavaCore)
 }
-
-publishJar {
-    bintray {
-        username = "tanvd"
-        repository = "io.kotless"
-        info {
-            description = "Kotless Lang Common"
-            githubRepo = "https://github.com/JetBrains/kotless"
-            vcsUrl = "https://github.com/JetBrains/kotless"
-            labels.addAll(listOf("kotlin", "serverless", "web", "devops", "faas", "lambda"))
-        }
-    }
-}
-

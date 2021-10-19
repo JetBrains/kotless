@@ -19,6 +19,7 @@ dependencies {
 
 kotless {
     config {
+
         bucket = "eu.ktor-site.s3.ktls.aws.intellij.net"
         prefix = "ktor-site"
 
@@ -31,8 +32,5 @@ kotless {
     webapp {
         route53 = Route53("ktor.site", "kotless.io")
 
-        lambda {
-            runtime = Runtime.GraalVM
-        }
     }
 }
