@@ -22,12 +22,13 @@ Kotless consists of two main parts:
       standard Spring syntax and Kotless will generate deployment.
 * Kotless Gradle Plugin provides a way of deploying serverless application. For that, it:
     * performs the tasks of generating Terraform code from the application code and, subsequently,
-      deploying it to AWS;
-    * runs application locally, emulates the AWS environment and provides the possibility for in-IDE
-      debugging.
+      deploying it to AWS or Azure;
+    * runs application locally, emulates the AWS environment (if necessary) and provides the
+      possibility for IDE debugging.
 
 One of the key features of Kotless is its ability to embed into existing applications. Kotless makes
-super easy deployment of existing Spring and Ktor applications to AWS serverless platform.
+super easy deployment of existing Spring and Ktor applications to AWS and Microsoft Azure serverless
+platforms.
 
 ## Getting started
 
@@ -39,9 +40,10 @@ Consider using one of the latest versions of Gradle, starting with the **7.2** v
 
 Basically, if you already use Gradle, you only need to do two things.
 
-Firstly, set up the Kotless Gradle plugin. 
+Firstly, set up the Kotless Gradle plugin.
 
 You will have to tell Gradle where to find the plugin by editing `settings.gradle.kts`:
+
 ```kotlin
 pluginManagement {
     resolutionStrategy {
@@ -51,7 +53,7 @@ pluginManagement {
             }
         }
     }
-    
+
     repositories {
         maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
         gradlePluginPortal()
@@ -200,7 +202,7 @@ Here we set up the config of Kotless itself:
 
 Then we set up a specific application to deploy:
 
-* Azure DNS alias for the resulting application (you need to pre-create  certificate for the DNS
+* Azure DNS alias for the resulting application (you need to pre-create certificate for the DNS
   record).
 
 And that's the whole setup!
@@ -290,8 +292,8 @@ version
 For **Spring Boot** you should replace the starter you use (
 e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "2.3.0.RELASE)`)
 with `implementation("io.kotless", "spring-boot-lang", "0.1.6")`. Note that this dependency bundles
-Spring Boot of version `2.4.2`, so you also may need to upgrade other Spring Boot libraries
-to this version.
+Spring Boot of version `2.4.2`, so you also may need to upgrade other Spring Boot libraries to this
+version.
 
 Once it is done, you may hit `deploy` task and make your application serverless. Note, that you will
 still be able to run application locally via `local` Gradle task.
@@ -307,7 +309,7 @@ Including, but not limited to:
   leave your lambdas cold. As a result, applications under moderate load are not vulnerable to
   cold-start problem.
 * **Permissions management** &mdash; you can declare which permissions to which AWS resources are
-  required for the application via annotations on Kotlin functions, classes or objects. Permissions
+  required for application via annotations on Kotlin functions, classes or objects. Permissions
   will be granted automatically.
 * **Static resources** &mdash; Kotless will deploy static resources to S3 and set up CDN for them.
   It may greatly improve the response time of your application and is supported by all DSLs.
