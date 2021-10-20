@@ -17,7 +17,7 @@ object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, 
     override fun generate(entity: Application.Events.Scheduled, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val lambda = context.schema.lambdas[entity.lambda]!!
         val binding = timeBinding(lambda, entity.cron)
-        val timerName = entity.fqId
+        val timerName = entity.fqId.replace(".", "_")
         val resourceName = "timer_binding_$timerName"
         val path = timerName
         val result = FilesCreationTf.localFile(resourceName, binding, path(lambda.file.parentFile.resolve(path).resolve("function.json")))
