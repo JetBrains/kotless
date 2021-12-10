@@ -19,7 +19,7 @@ dependencies {
     implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.1")
 
     //local start
-    implementation("org.testcontainers", "localstack", "1.15.0-rc2")
+    implementation("org.testcontainers", "localstack", "1.16.2")
 
     //utils
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")

@@ -13,5 +13,6 @@ dependencies {
 
     api("org.springframework.boot", "spring-boot-starter-web", Versions.springBoot) {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+        exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
     }
 }
