@@ -18,7 +18,7 @@ dependencies {
     implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
     implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.1")
 
-    implementation("org.apache.logging.log4j", "log4j-core", "2.15.0")
+    implementation("org.apache.logging.log4j", "log4j-core", "2.16.0")
 
     //local start
     implementation("org.testcontainers", "localstack", "1.16.2")
