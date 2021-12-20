@@ -16,14 +16,16 @@ object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Outp
     override fun mayRun(entity: Application, context: GenerationContext) =
         context.webapp.api.dynamics.all { context.output.check(it, DynamicRouteFactory) }
             && context.webapp.api.statics.all { context.output.check(it, StaticRouteFactory) }
-            && entity.events.scheduled.all { context.output.check(it, ScheduledEventsFactory) }
+            && entity.events.events.filter { it is Application.Events.Scheduled }
+            .all { context.output.check(it as Application.Events.Scheduled, ScheduledEventsFactory) }
 
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<ZipArchiveFactory.Output> {
         val lambdas = context.schema.lambdas.all
         val directory = lambdas.first().file.parentFile
         val dynamicCreateFile = entity.api.dynamics.map { context.output.get(it, DynamicRouteFactory).fileCreationRef }
         val staticCreateFile = entity.api.statics.map { context.output.get(it, StaticRouteFactory).proxyPart }
-        val scheduledCreateFile = entity.events.scheduled.map { context.output.get(it, ScheduledEventsFactory).fileCreationRef }
+        val scheduledCreateFile = entity.events.events.filter { it is Application.Events.Scheduled }
+            .map { context.output.get(it as Application.Events.Scheduled, ScheduledEventsFactory).fileCreationRef }
         val proxyParts = entity.api.dynamics.map { context.output.get(it, DynamicRouteFactory).proxyPart }
 
         val hostJson = LambdaDescription.host()

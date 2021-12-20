@@ -92,7 +92,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
                 dynamics = parsed.routes.dynamics,
                 statics = parsed.routes.statics
             ),
-            events = Application.Events(parsed.events.scheduled)
+            events = Application.Events(parsed.events.events)
         )
 
         return Schema(

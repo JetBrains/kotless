@@ -11,7 +11,7 @@ import kotlin.reflect.jvm.kotlinFunction
 internal object EventsStorage {
     private val logger = LoggerFactory.getLogger(EventsStorage::class.java)
 
-    private val cache = HashMap<String, KFunction<*>>()
+    private val cache = mutableListOf<Pair<EventKey, KFunction<*>>>()
 
     private var scanned = false
 
@@ -21,7 +21,7 @@ internal object EventsStorage {
         for ((ids, method, _) in EventsReflectionScanner.getEvents()) {
             val kFunc = method.kotlinFunction!!
             for (id in ids) {
-                cache[id] = kFunc
+                cache.add(id to kFunc)
                 logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
             }
         }
@@ -29,8 +29,15 @@ internal object EventsStorage {
         scanned = true
     }
 
-    operator fun get(key: String): KFunction<*>? {
+    operator fun get(key: EventKey): KFunction<*>? {
         scan()
-        return cache[key] ?: return null
+        return cache.firstOrNull { it.first.cover(key) }?.second ?: return null
     }
+
+    fun getAll(key: EventKey): List<KFunction<*>> {
+        scan()
+        return cache.filter { it.first.cover(key) }.map { it.second }
+    }
+
+
 }

@@ -21,7 +21,7 @@ open class Parser(private val processors: Set<Processor<*>>) {
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
         data class Routes(val dynamics: Set<Application.API.DynamicRoute>, val statics: Set<Application.API.StaticRoute>)
         data class Resources(val dynamics: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>)
-        data class Events(val scheduled: Set<Application.Events.Scheduled>)
+        data class Events(val events: Set<Application.Events.Event>)
     }
 
     fun parse(sources: Set<File>, resources: Set<File>, jar: File, config: KotlessConfig, lambda: Lambda.Config, libs: Set<File>): Result {
@@ -48,7 +48,7 @@ open class Parser(private val processors: Set<Processor<*>>) {
         return Result(
             Result.Routes(context.routes.dynamics, context.routes.statics),
             Result.Resources(context.resources.dynamics, context.resources.statics),
-            Result.Events(context.events.scheduled)
+            Result.Events(context.events.events)
         )
     }
 

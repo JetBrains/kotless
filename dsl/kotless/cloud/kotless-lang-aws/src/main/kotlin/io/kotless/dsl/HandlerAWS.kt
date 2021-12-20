@@ -9,6 +9,7 @@ import io.kotless.dsl.app.http.RoutesDispatcher
 import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
 import io.kotless.dsl.lang.http.serverError
+import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.JSON
 import org.slf4j.LoggerFactory
@@ -39,6 +40,12 @@ class HandlerAWS : RequestStreamHandler {
             logger.trace("Request is {}", jsonRequest)
 
             Application.init()
+
+            if (jsonRequest.contains("\"aws:s3\"")) {
+                val s3Event = JSON.parse(AwsEvent.serializer(), jsonRequest)
+                EventsDispatcher.process(s3Event)
+                return
+            }
 
             if (jsonRequest.contains("Scheduled Event")) {
                 val event = JSON.parse(CloudWatch.serializer(), jsonRequest)

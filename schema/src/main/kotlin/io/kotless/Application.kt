@@ -30,7 +30,13 @@ data class Application(val dns: DNS?, val api: API, val events: Events) : Visita
      *
      * @param scheduled scheduled functions of Webapp
      */
-    data class Events(val scheduled: Set<Scheduled>) : Visitable {
+    data class Events(val events: Set<Event>) : Visitable {
+
+        open class Event(private val id: String) : Visitable
+
+        val scheduled: Set<Scheduled>
+            get() = events.filterIsInstance<Scheduled>().toSet()
+
         /**
          * Definition of scheduled event
          *
@@ -38,12 +44,20 @@ data class Application(val dns: DNS?, val api: API, val events: Events) : Visita
          * @param cron expression in a crontab-like syntax defining scheduler
          * @param lambda function to trigger by scheduled event
          */
-        data class Scheduled(private val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Visitable {
+        data class Scheduled(private val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
             val fqId = "${type.prefix}-$id"
         }
 
+        /**
+         * Definition of s3 event
+         *
+         */
+        data class S3(val id: String, val bucket: String, val types: List<String>, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
+            val fqId = "${types.joinToString("-") { it }}-$id"
+        }
+
         override fun visit(visitor: (Any) -> Unit) {
-            scheduled.forEach { visitor(it) }
+            events.forEach { visitor(it) }
             visitor(this)
         }
     }

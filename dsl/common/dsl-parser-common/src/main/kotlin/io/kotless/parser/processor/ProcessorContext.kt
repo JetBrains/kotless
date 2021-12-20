@@ -63,12 +63,17 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
 
     val routes = Routes()
 
-    class Events(private val myScheduled: MutableSet<Application.Events.Scheduled> = HashSet()) {
-        val scheduled: Set<Application.Events.Scheduled>
-            get() = myScheduled.toSet()
+    class Events(private val myEvents: MutableSet<Application.Events.Event> = HashSet()) {
+
+        val events: Set<Application.Events.Event>
+            get() = myEvents
 
         fun register(scheduled: Application.Events.Scheduled) {
-            myScheduled.add(scheduled)
+            myEvents.add(scheduled)
+        }
+
+        fun register(s3Event: Application.Events.S3) {
+            myEvents.add(s3Event)
         }
     }
 

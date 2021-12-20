@@ -2,11 +2,13 @@ package io.kotless.gen
 
 import io.kotless.*
 import io.kotless.gen.factory.aws.apigateway.*
+import io.kotless.gen.factory.aws.event.S3EventsFactory
 import io.kotless.gen.factory.aws.event.ScheduledEventsFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
 import io.kotless.gen.factory.aws.infra.ProvidersFactory
 import io.kotless.gen.factory.aws.infra.TFConfigFactory
 import io.kotless.gen.factory.aws.resource.dynamic.LambdaFactory
+import io.kotless.gen.factory.aws.resource.static.S3DataFactory
 import io.kotless.gen.factory.aws.resource.static.StaticResourceFactory
 import io.kotless.gen.factory.aws.route.dynamic.DynamicRouteFactory
 import io.kotless.gen.factory.aws.route.static.StaticRoleFactory
@@ -30,6 +32,7 @@ object AWSGenerator {
         Lambda::class to setOf(LambdaFactory),
 
         Application.Events.Scheduled::class to setOf(ScheduledEventsFactory),
+        Application.Events.S3::class to setOf(S3DataFactory, S3EventsFactory),
 
         Application.API.StaticRoute::class to setOf(StaticRouteFactory),
         Application.API.DynamicRoute::class to setOf(DynamicRouteFactory)

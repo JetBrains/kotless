@@ -13,7 +13,7 @@ import java.util.*
  * @param body payload of response
  */
 @Serializable
-data class HttpResponse(val statusCode: Int, val headers: HashMap<String, String> = HashMap(), val body: String?, val isBase64Encoded: Boolean) {
+data class HttpResponse(val statusCode: Int, val headers: HashMap<String, String> = HashMap(), val body: String?, val isBase64Encoded: Boolean): Response(statusCode) {
 
     constructor(statusCode: Int, headers: HashMap<String, String>, body: String) : this(statusCode, headers, body, false)
     constructor(statusCode: Int, headers: HashMap<String, String>, body: ByteArray) : this(statusCode, headers, Base64.getEncoder().encodeToString(body), true)
