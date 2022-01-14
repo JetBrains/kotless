@@ -5,12 +5,14 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.InternalAPI
 import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
-import io.kotless.dsl.ktor.app.KotlessCall
-import io.kotless.dsl.ktor.app.KotlessEngine
+import io.kotless.dsl.ktor.app.*
 import io.kotless.dsl.ktor.lang.LambdaWarming
+import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.JSON
 import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.util.pipeline.*
 import kotlinx.coroutines.runBlocking
@@ -37,6 +39,10 @@ abstract class KotlessAWS : RequestStreamHandler {
         }).also {
             it.start()
         }
+
+        public fun Route.s3(bucket: String, event: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
+            return route("$bucket/${event.replace(":", "/").replace("*", "{method}").lowercase()}", HttpMethod("s3")) { handle(body) }
+        }
     }
 
     abstract fun prepare(app: Application)
@@ -54,6 +60,16 @@ abstract class KotlessAWS : RequestStreamHandler {
 
                 logger.info("Started handling request")
                 logger.debug("Request is {}", json)
+                logger.info(json)
+                if (json.contains("\"aws:s3\"")) {
+                    logger.info("Request is S3 event!")
+                    val s3Event = JSON.parse(AwsEvent.serializer(), json)
+                    val call = AwsEventCall(engine.application, s3Event.records.first())
+                    logger.info("Method of s3Event: ${call.request.local.uri}")
+                    engine.pipeline.execute(call)
+
+                    return@runBlocking call.response.toHttp()
+                }
 
                 if (json.contains("Scheduled Event")) {
                     val event = JSON.parse(CloudWatch.serializer(), json)

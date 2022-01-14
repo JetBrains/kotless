@@ -18,6 +18,7 @@ import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
+import kotlin.math.absoluteValue
 
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     private val functions = mapOf(
@@ -28,6 +29,10 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         "io.ktor.routing.delete" to HttpMethod.DELETE,
         "io.ktor.routing.head" to HttpMethod.HEAD,
         "io.ktor.routing.options" to HttpMethod.OPTIONS
+    )
+
+    private val events = mapOf(
+        "io.kotless.dsl.ktor.KotlessAWS.Companion.s3" to AwsResource.S3
     )
 
     override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
@@ -58,6 +63,33 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     context.resources.register(key, function)
                     context.routes.register(Application.API.DynamicRoute(method, path, key))
+
+                    if (context.config.optimization.autoWarm.enable) {
+                        context.events.register(
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
+                        )
+                    }
+                }
+                func.visitCallExpressionsWithReferences(binding = binding, filter = { it.getFqName(binding) in events.keys }) { element ->
+                    val permissions = PermissionsProcessor.process(element, binding, context) + globalPermissions
+
+                    val name = func.fqName!!.asString().hashCode().absoluteValue.toString()
+
+                    val key = TypedStorage.Key<Lambda>()
+                    val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
+
+                    context.resources.register(key, function)
+
+                    val bucket = element.getArgument("bucket", binding).asString(binding)
+                    val eventType = element.getArgument("event", binding).asString(binding)
+
+                    context.events.register(
+                        Events.S3(
+                            func.fqName!!.asString().hashCode().absoluteValue.toString(),
+                            bucket, listOf(eventType),
+                            key
+                        )
+                    )
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
