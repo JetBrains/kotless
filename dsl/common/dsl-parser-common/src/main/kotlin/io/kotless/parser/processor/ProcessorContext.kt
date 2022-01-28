@@ -72,8 +72,8 @@ class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lam
             myEvents.add(scheduled)
         }
 
-        fun register(s3Event: Application.Events.S3) {
-            myEvents.add(s3Event)
+        fun register(event: Application.Events.Event) {
+            myEvents.add(event)
         }
     }
 

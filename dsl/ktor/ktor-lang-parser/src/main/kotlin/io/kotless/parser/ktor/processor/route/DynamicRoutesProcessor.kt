@@ -5,6 +5,7 @@ import io.kotless.Application.Events
 import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.ktor.processor.action.GlobalActionsProcessor
+import io.kotless.parser.ktor.processor.route.events.*
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -32,7 +33,8 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     )
 
     private val events = mapOf(
-        "io.kotless.dsl.ktor.KotlessAWS.Companion.s3" to AwsResource.S3
+        "io.kotless.dsl.ktor.KotlessAWS.Companion.s3" to S3EventProcessor,
+        "io.kotless.dsl.ktor.KotlessAWS.Companion.sqs" to SQSEventProcessor
     )
 
     override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
@@ -79,17 +81,9 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
                     val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
 
                     context.resources.register(key, function)
-
-                    val bucket = element.getArgument("bucket", binding).asString(binding)
-                    val eventType = element.getArgument("event", binding).asString(binding)
-
-                    context.events.register(
-                        Events.S3(
-                            func.fqName!!.asString().hashCode().absoluteValue.toString(),
-                            bucket, listOf(eventType),
-                            key
-                        )
-                    )
+                    events[element.getFqName(binding)]!!.process(element, binding, func, key).forEach {
+                        context.events.register(it)
+                    }
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(

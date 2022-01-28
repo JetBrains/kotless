@@ -1,20 +1,35 @@
 package io.kotless.dsl.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import io.kotless.dsl.model.events.AwsEventInformation
+import kotlinx.serialization.*
+import kotlinx.serialization.builtins.*
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.json.*
 
-@Serializable
+@Serializable(with = AwsEvent.AwsEventSerializer::class)
 data class AwsEvent(@SerialName("Records") val records: List<Record>) {
-    @Serializable
-    data class  Record(val eventTime: String, val eventName: String, val eventSource: String, val awsRegion: String, val s3: S3Event? = null) {
-        @Serializable
-        data class S3Event(val bucket: Bucket, @SerialName("object") val s3Object: S3Object) {
-            @Serializable
-            data class Bucket(val name: String, val arn: String)
 
-            @Serializable
-            data class S3Object(val key: String, val size: Long, val eTag: String, val versionId: String? = null)
+    @Serializer(forClass = AwsEvent::class)
+    object AwsEventSerializer {
+        override val descriptor: SerialDescriptor =
+            buildClassSerialDescriptor("io.kotless.dsl.model.AwsEvent")
+
+        override fun deserialize(decoder: Decoder): AwsEvent {
+            val records = decoder.decodeSerializableValue(MapSerializer(String.serializer(), ListSerializer(AwsEventInformation.serializer())))["Records"]!!
+            return AwsEvent(records.map {
+                Record(
+                    eventSource = it.eventSource,
+                    awsRegion = it.awsRegion,
+                    event = it
+                )
+            })
         }
     }
+
+
+    @Serializable
+    data class Record(val eventSource: String, val awsRegion: String, val event: AwsEventInformation)
 
 }

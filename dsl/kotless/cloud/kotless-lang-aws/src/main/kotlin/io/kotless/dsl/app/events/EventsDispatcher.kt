@@ -33,9 +33,7 @@ object EventsDispatcher {
 
     fun process(event: AwsEvent) {
         for (record in event.records) {
-            val source = record.s3!!.bucket.name
-            val type = record.eventName
-            val key = "$source:$type"
+            val key = record.event.path
             logger.info("Executing aws event with key $key")
             val eventProcessors = EventsStorage.getAll(EventKey(key))
             eventProcessors.forEach { eventProcessor ->

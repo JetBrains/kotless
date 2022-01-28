@@ -9,6 +9,7 @@ import io.kotless.dsl.ktor.app.*
 import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.model.HttpResponse
+import io.kotless.dsl.model.events.*
 import io.kotless.dsl.utils.JSON
 import io.ktor.application.*
 import io.ktor.http.*
@@ -33,6 +34,10 @@ abstract class KotlessAWS : RequestStreamHandler {
 
         private var prepared = false
 
+        fun registerAwsEvent(eventSource: String, deserialization: (String) -> AwsEventInformation) {
+            AwsEventInformation.eventSerializers.put(eventSource, deserialization)
+        }
+
         @EngineAPI
         val engine = KotlessEngine(applicationEngineEnvironment {
             log = logger
@@ -40,9 +45,21 @@ abstract class KotlessAWS : RequestStreamHandler {
             it.start()
         }
 
-        public fun Route.s3(bucket: String, event: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
-            return route("$bucket/${event.replace(":", "/").replace("*", "{method}").lowercase()}", HttpMethod("s3")) { handle(body) }
+        fun Route.s3(bucket: String, event: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
+            return route(
+                "$bucket/${event.replace(":", "/").replace("*", "{method}").lowercase()}",
+                HttpMethod("aws:s3")
+            ) { handle(body) }
         }
+
+        fun Route.sqs(queueArn: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
+            return route(queueArn.lowercase().replace(":", "/"), HttpMethod("aws:sqs")) { handle(body) }
+        }
+    }
+
+    init {
+        registerAwsEvent("aws:s3", S3EventInformation::deserialize)
+        registerAwsEvent("aws:sqs", SQSEventInformation::deserialize)
     }
 
     abstract fun prepare(app: Application)
@@ -61,10 +78,10 @@ abstract class KotlessAWS : RequestStreamHandler {
                 logger.info("Started handling request")
                 logger.debug("Request is {}", json)
                 logger.info(json)
-                if (json.contains("\"aws:s3\"")) {
+                if (json.contains("\"aws:s3\"") || json.contains("\"aws:sqs\"")) {
                     logger.info("Request is S3 event!")
-                    val s3Event = JSON.parse(AwsEvent.serializer(), json)
-                    val call = AwsEventCall(engine.application, s3Event.records.first())
+                    val event = JSON.parse(AwsEvent.serializer(), json)
+                    val call = AwsEventCall(engine.application, event.records.first())
                     logger.info("Method of s3Event: ${call.request.local.uri}")
                     engine.pipeline.execute(call)
 
