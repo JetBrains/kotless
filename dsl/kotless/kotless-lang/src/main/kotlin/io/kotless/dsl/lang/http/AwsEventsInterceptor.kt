@@ -2,8 +2,8 @@ package io.kotless.dsl.lang.http
 
 import io.kotless.InternalAPI
 import io.kotless.dsl.app.http.RouteKey
-import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.model.Response
+import io.kotless.dsl.model.events.AwsEvent
 
 
 /**

@@ -5,9 +5,7 @@ import io.kotless.Application.Events
 import io.kotless.HttpMethod
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.config.KotlessAppConfig
-import io.kotless.dsl.lang.event.S3Event
 import io.kotless.dsl.lang.http.*
-import io.kotless.dsl.model.AwsEvent
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.action.GlobalActionsProcessor

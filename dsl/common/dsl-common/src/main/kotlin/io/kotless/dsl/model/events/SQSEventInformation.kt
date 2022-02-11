@@ -1,9 +1,21 @@
 package io.kotless.dsl.model.events
 
-import io.kotless.InternalAPI
-import io.kotless.dsl.utils.JSON
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+
+class SQSEventInformationGenerator : AwsEventGenerator() {
+    override fun mayDeserialize(jsonObject: String): Boolean {
+        return jsonObject.contains(SQSEventInformation.eventSource)
+    }
+
+    override val serializer: KSerializer<out AwsEvent> = SQSEvent.serializer()
+}
+
+
+@Serializable
+class SQSEvent(@SerialName("Records") val records: List<SQSEventInformation>): AwsEvent() {
+    override fun records(): List<AwsEventInformation> = records
+}
+
 
 @Serializable
 data class SQSEventInformation(
@@ -12,24 +24,21 @@ data class SQSEventInformation(
     val body: String,
     val attributes: SQSEventAttributes,
     val md5OfBody: String,
-    override val awsRegion: String,
+    val awsRegion: String,
     val eventSourceARN: String,
     // TODO: check this field one more time
     val messageAttributes: Map<String, String>
 ) : AwsEventInformation() {
-    override val eventSource: String = "aws:sqs"
     override val parameters: Map<String, String> = mapOf(
         "body" to body,
         "md5OfBody" to md5OfBody
     )
-    override val path: String
-        get() = eventSourceARN
+
+    override val path: String = eventSourceARN
+    override val eventSource: String = SQSEventInformation.eventSource
 
     companion object {
-        @OptIn(InternalAPI::class)
-        fun deserialize(record: String): AwsEventInformation {
-            return JSON.parse(serializer(), record)
-        }
+        val eventSource: String = "aws:sqs"
     }
 
     @Serializable

@@ -3,7 +3,6 @@ package io.kotless.dsl.app.http
 import io.kotless.*
 import io.kotless.dsl.lang.event.S3Event
 import io.kotless.dsl.lang.http.*
-import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KFunction

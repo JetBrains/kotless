@@ -1,6 +1,6 @@
 package io.kotless.dsl.ktor.app
 
-import io.kotless.dsl.model.AwsEvent
+import io.kotless.dsl.model.events.AwsEventInformation
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -10,7 +10,7 @@ import io.ktor.utils.io.*
 /**
  * Ktor Request used by Kotless. It will be created from APIGateway request.
  */
-class AwsEventRequest(val event: AwsEvent.Record, call: ApplicationCall) : BaseApplicationRequest(call) {
+class AwsEventRequest(val event: AwsEventInformation, call: ApplicationCall) : BaseApplicationRequest(call) {
     override val pipeline = ApplicationReceivePipeline().apply {
         merge(call.application.receivePipeline)
     }
@@ -27,12 +27,12 @@ class AwsEventRequest(val event: AwsEvent.Record, call: ApplicationCall) : BaseA
         override val port: Int = -1
         override val remoteHost: String = event.eventSource
         override val scheme: String = "https"
-        override val uri: String = event.event.path.replace(":", "/").lowercase()
+        override val uri: String = event.path.replace(":", "/").lowercase()
         override val version: String = "version"
     }
 
     override val queryParameters: Parameters = Parameters.build {
-        event.event.parameters.forEach { (key, value) ->
+        event.parameters.forEach { (key, value) ->
             append(key, value)
         }
     }

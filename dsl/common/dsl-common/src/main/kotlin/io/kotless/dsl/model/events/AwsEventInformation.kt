@@ -1,38 +1,47 @@
 package io.kotless.dsl.model.events
 
 import kotlinx.serialization.*
+import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.json.*
 
-@OptIn(InternalSerializationApi::class)
-@Serializable(with = AwsEventInformation.AwsEventInformationSerializer::class)
-abstract class AwsEventInformation {
-    abstract val eventSource: String
-    abstract val awsRegion: String
-    abstract val parameters: Map<String, String>
+abstract class AwsEventGenerator {
+    abstract fun mayDeserialize(jsonObject: String): Boolean
+
+    abstract val serializer: KSerializer<out AwsEvent>
+}
+
+@Serializable(with = AwsEvent.AwsEventSerializer::class)
+abstract class AwsEvent() {
+
+    abstract fun records(): List<AwsEventInformation>
 
     companion object {
-        val eventSerializers = mutableMapOf<String, (String) -> AwsEventInformation>()
+        fun isEventRequest(jsonRequest: String): Boolean {
+            return eventKSerializers.any { it.mayDeserialize(jsonRequest) }
+        }
+
+        val eventKSerializers = mutableListOf<AwsEventGenerator>()
     }
 
-    @Serializer(forClass = AwsEventInformation::class)
-    object AwsEventInformationSerializer {
+    @Serializer(forClass = AwsEvent::class)
+    class AwsEventSerializer : JsonContentPolymorphicSerializer<AwsEvent>(AwsEvent::class) {
         override val descriptor: SerialDescriptor =
             buildClassSerialDescriptor("io.kotless.dsl.model.events.AwsEventInformation")
 
-        override fun deserialize(decoder: Decoder): AwsEventInformation {
-
-            val input = decoder as? JsonDecoder ?: throw SerializationException("Expected Json Input")
-
-            val body = input.decodeJsonElement() as? JsonObject ?: throw SerializationException("Expected JsonObject")
-            val eventSource = body["eventSource"] ?: throw SerializationException("Expected \"eventSource\" field in the AWS event")
-
-            return eventSerializers[eventSource.jsonPrimitive.content]?.invoke(body.jsonObject.toString())!!
-
+        override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out AwsEvent> {
+            return eventKSerializers.firstOrNull { it.mayDeserialize(element.jsonObject.toString()) }?.serializer ?: error("Serializer for this object doesn't found")
         }
     }
+}
+
+
+abstract class AwsEventInformation {
+    abstract val parameters: Map<String, String>
+
+    abstract val eventSource: String
 
     abstract val path: String
 }

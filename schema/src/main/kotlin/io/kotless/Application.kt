@@ -56,6 +56,22 @@ data class Application(val dns: DNS?, val api: API, val events: Events) : Visita
             val fqId = "${types.joinToString("-") { it }}-$id"
         }
 
+        /**
+         * Definition of sqs event
+         *
+         */
+        data class SQS(val id: String, val queueArn: String, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
+            val fqId = "$queueArn-$id"
+        }
+
+        /**
+         * Definition of custom aws event
+         *
+         */
+        data class CustomAwsEvent(val id: String, val path: String, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
+            val fqId = "$path-$id"
+        }
+
         override fun visit(visitor: (Any) -> Unit) {
             events.forEach { visitor(it) }
             visitor(this)

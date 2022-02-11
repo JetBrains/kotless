@@ -4,15 +4,16 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.InternalAPI
 import io.kotless.dsl.app.events.EventsDispatcher
+import io.kotless.dsl.app.events.processors.CustomAwsEventGeneratorAnnotationProcessor
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
 import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
 import io.kotless.dsl.lang.http.serverError
-import io.kotless.dsl.model.AwsEvent
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.model.events.*
 import io.kotless.dsl.utils.JSON
+import kotlinx.serialization.KSerializer
 import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.io.OutputStream
@@ -33,13 +34,14 @@ class HandlerAWS : RequestStreamHandler {
         private val logger = LoggerFactory.getLogger(HandlerAWS::class.java)
     }
 
-    fun registerAwsEvent(eventSource: String, deserialization: (String) -> AwsEventInformation) {
-        AwsEventInformation.eventSerializers.put(eventSource, deserialization)
+    fun registerAwsEvent(generator: AwsEventGenerator) {
+        AwsEvent.eventKSerializers.add(generator)
     }
 
     init {
-        registerAwsEvent("aws:s3", S3EventInformation::deserialize)
-        registerAwsEvent("aws:sqs", SQSEventInformation::deserialize)
+        registerAwsEvent(S3EventInformationGenerator())
+        registerAwsEvent(SQSEventInformationGenerator())
+        CustomAwsEventGeneratorAnnotationProcessor.process()
     }
 
     override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context?) {
@@ -51,7 +53,7 @@ class HandlerAWS : RequestStreamHandler {
 
             Application.init()
 
-            if (jsonRequest.contains("\"aws:s3\"") || jsonRequest.contains("\"aws:sqs\"")) {
+            if (AwsEvent.isEventRequest(jsonRequest)) {
                 val event = JSON.parse(AwsEvent.serializer(), jsonRequest)
                 EventsDispatcher.process(event)
                 return
