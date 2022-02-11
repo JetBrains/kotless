@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless.examples"
-version = "0.2.0"
+version = "0.2.1"
 
 plugins {
     kotlin("jvm") version "1.5.31" apply false
