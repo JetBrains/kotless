@@ -15,13 +15,13 @@ import io.terraformkt.hcl.ref
 object StaticRouteFactory : GenerationFactory<Application.API.StaticRoute, StaticRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)
 
-    override fun mayRun(entity: Application.API.StaticRoute, context: GenerationContext) = context.output.check(context.webapp.api!!, RestAPIFactory)
+    override fun mayRun(entity: Application.API.StaticRoute, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
         && context.output.check(context.schema.statics[entity.resource]!!, StaticResourceFactory)
         && context.output.check(context.webapp, InfoFactory)
         && context.output.check(context.webapp, StaticRoleFactory)
 
     override fun generate(entity: Application.API.StaticRoute, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val api = context.output.get(context.webapp.api!!, RestAPIFactory)
+        val api = context.output.get(context.webapp.api, RestAPIFactory)
         val resource = context.output.get(context.schema.statics[entity.resource]!!, StaticResourceFactory)
         val info = context.output.get(context.webapp, InfoFactory)
         val static_role = context.output.get(context.webapp, StaticRoleFactory)

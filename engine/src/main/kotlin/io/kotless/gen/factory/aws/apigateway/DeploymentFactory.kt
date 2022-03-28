@@ -15,14 +15,14 @@ import io.terraformkt.utils.link
 object DeploymentFactory : GenerationFactory<Application.API.Deployment, DeploymentFactory.Output> {
     data class Output(val stage_name: String)
 
-    override fun mayRun(entity: Application.API.Deployment, context: GenerationContext) = context.output.check(context.webapp.api!!, RestAPIFactory)
-        && context.webapp.api!!.dynamics.all { context.output.check(it, DynamicRouteFactory) }
-        && context.webapp.api!!.statics.all { context.output.check(it, StaticRouteFactory) }
+    override fun mayRun(entity: Application.API.Deployment, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
+        && context.webapp.api.dynamics.all { context.output.check(it, DynamicRouteFactory) }
+        && context.webapp.api.statics.all { context.output.check(it, StaticRouteFactory) }
 
     override fun generate(entity: Application.API.Deployment, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val api = context.output.get(context.webapp.api!!, RestAPIFactory)
-        val statics = context.webapp.api!!.statics.map { context.output.get(it, StaticRouteFactory).integration }
-        val dynamics = context.webapp.api!!.dynamics.map { context.output.get(it, DynamicRouteFactory).integration }
+        val api = context.output.get(context.webapp.api, RestAPIFactory)
+        val statics = context.webapp.api.statics.map { context.output.get(it, StaticRouteFactory).integration }
+        val dynamics = context.webapp.api.dynamics.map { context.output.get(it, DynamicRouteFactory).integration }
 
         val deployment = api_gateway_deployment(context.names.tf(entity.name)) {
             depends_on = (statics + dynamics).map { link(it) }.toTypedArray()
