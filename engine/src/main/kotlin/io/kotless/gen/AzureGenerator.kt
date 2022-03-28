@@ -54,6 +54,6 @@ object AzureGenerator {
             }
         }
 
-        return setOf(TFFile(context.webapp.api.name, ArrayList(context.entities.all())))
+        return setOf(TFFile(context.webapp.api.name, ArrayList(context.entities.all().map { it.hclEntity })))
     }
 }

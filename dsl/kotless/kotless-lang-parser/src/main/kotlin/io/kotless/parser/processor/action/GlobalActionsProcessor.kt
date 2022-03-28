@@ -2,6 +2,7 @@ package io.kotless.parser.processor.action
 
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
+import io.kotless.dsl.lang.http.AwsEventsInterceptor
 import io.kotless.dsl.lang.http.HttpRequestInterceptor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
@@ -20,7 +21,8 @@ internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcesso
     private val functions = mapOf(
         LambdaInit::class to LambdaInit::init.name,
         LambdaWarming::class to LambdaWarming::warmup.name,
-        HttpRequestInterceptor::class to HttpRequestInterceptor::intercept.name
+        HttpRequestInterceptor::class to HttpRequestInterceptor::intercept.name,
+        AwsEventsInterceptor::class to AwsEventsInterceptor::intercept.name,
     )
 
     override val klasses: Set<KClass<*>> = functions.keys

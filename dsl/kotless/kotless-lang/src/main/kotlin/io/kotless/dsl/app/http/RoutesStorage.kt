@@ -1,6 +1,7 @@
 package io.kotless.dsl.app.http
 
 import io.kotless.*
+import io.kotless.dsl.lang.event.S3Event
 import io.kotless.dsl.lang.http.*
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
@@ -60,6 +61,7 @@ internal object RoutesStorage {
         is Delete -> RouteKey(HttpMethod.DELETE, path)
         is Head -> RouteKey(HttpMethod.HEAD, path)
         is Options -> RouteKey(HttpMethod.OPTIONS, path)
+        is S3Event -> RouteKey(HttpMethod.GET, bucket)
         else -> error("Unsupported annotation $this")
     }
 

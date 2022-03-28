@@ -53,9 +53,15 @@ object ReflectionScanner {
     }
 
     inline fun <reified T : Annotation> methodsWithAnnotation() = methodsWithAnnotation(T::class)
+    inline fun <reified T : Annotation> classesWithAnnotation() = classesWithAnnotation(T::class)
 
     fun <T : Annotation> methodsWithAnnotation(annotation: KClass<T>): Set<Method> {
         val methods = reflections.getMethodsAnnotatedWith(annotation.java)
+        return methods.mapNotNull { it }.toSet()
+    }
+
+    fun <T : Annotation> classesWithAnnotation(annotation: KClass<T>): Set<Class<*>> {
+        val methods = reflections.getTypesAnnotatedWith(annotation.java)
         return methods.mapNotNull { it }.toSet()
     }
 

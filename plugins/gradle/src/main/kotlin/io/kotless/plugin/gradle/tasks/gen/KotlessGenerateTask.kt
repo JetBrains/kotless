@@ -57,18 +57,50 @@ internal open class KotlessGenerateTask : DefaultTask() {
     val myGenDirectory: File
         get() = project.kotless.config.deployGenDirectory
 
+
+    @get:OutputDirectory
+    val myPreDeployGenDirectory: File
+        get() = project.kotless.config.preDeployGenDirectory
+
+    @get:OutputDirectory
+    val myPostDeployGenDirectory: File
+        get() = project.kotless.config.postDeployGenDirectory
+
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    val myTerraformPreAdditional: Set<File>
+        get() = project.kotless.extensions.terraform.files.preFiles
+
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    val myTerraformPostAdditional: Set<File>
+        get() = project.kotless.extensions.terraform.files.postFiles
+
+
     @TaskAction
     fun act() {
         myGenDirectory.clearDirectory()
+        myPreDeployGenDirectory.clearDirectory()
+        myPostDeployGenDirectory.clearDirectory()
 
-        val schema = parseSources()
-        val generated = KotlessEngine.generate(schema)
+        val deploySchema = parseSources(myKotless.toSchema(Stage.Deploy))
+        val generated = KotlessEngine.generate(deploySchema)
         dumpGeneratedFiles(generated)
+
+        val preDeploySchema = parseSources(myKotless.toSchema(Stage.PreDeploy))
+        val postDeploySchema = parseSources(myKotless.toSchema(Stage.PostDeploy))
+
+        val preDeployGenerated = KotlessEngine.generate(preDeploySchema).filter { it.name == "infra" }.toSet()
+        val postDeployGenerated = KotlessEngine.generate(postDeploySchema).filter { it.name == "infra" }.toSet()
+
+        dumpFiles(myPreDeployGenDirectory, myTerraformPreAdditional, preDeployGenerated)
+        dumpFiles(myPostDeployGenDirectory, myTerraformPostAdditional, postDeployGenerated)
     }
 
-    private fun parseSources(): Schema {
+    private fun parseSources(config: KotlessConfig): Schema {
         val dsl = myKotless.config.dsl.typeOrDefault
-        val config = myKotless.toSchema()
         val webapp = myKotless.webapp
         val jar = (project.tasks[myKotless.config.myArchiveTask] as AbstractArchiveTask).archiveFile.get().asFile
         val target = myTargetVersion ?: error("Unable to find Kotlin compile-target version.")
@@ -92,7 +124,7 @@ internal open class KotlessGenerateTask : DefaultTask() {
                 dynamics = parsed.routes.dynamics,
                 statics = parsed.routes.statics
             ),
-            events = Application.Events(parsed.events.scheduled)
+            events = Application.Events(parsed.events.events)
         )
 
         return Schema(
@@ -101,6 +133,16 @@ internal open class KotlessGenerateTask : DefaultTask() {
             lambdas = parsed.resources.dynamics,
             statics = parsed.resources.statics
         )
+    }
+
+    private fun dumpFiles(destination: File, filesToCopy: Set<File>, generated: Set<TFFile>) {
+        if (filesToCopy.isNotEmpty()) {
+            KotlessEngine.dump(destination, generated)
+            filesToCopy.forEach { file ->
+                require(generated.all { it.name != file.name }) { "Extending terraform file `${file.absolutePath}` clashes with generated file" }
+                FileUtils.copyFile(file, File(destination, file.name))
+            }
+        }
     }
 
     private fun dumpGeneratedFiles(generated: Set<TFFile>) {

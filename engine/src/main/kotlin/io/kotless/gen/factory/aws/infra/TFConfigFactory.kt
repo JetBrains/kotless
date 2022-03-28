@@ -10,6 +10,8 @@ import io.terraformkt.terraform.terraform
 object TFConfigFactory : GenerationFactory<Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, Unit> {
     override fun mayRun(entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, context: GenerationContext) = true
 
+    override fun destination(entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, context: GenerationContext): String = "infra"
+
     override fun generate(
         entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>,
         context: GenerationContext

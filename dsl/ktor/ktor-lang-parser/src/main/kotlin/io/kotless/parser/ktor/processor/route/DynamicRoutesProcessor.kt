@@ -5,6 +5,7 @@ import io.kotless.Application.Events
 import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.ktor.processor.action.GlobalActionsProcessor
+import io.kotless.parser.ktor.processor.route.events.*
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.SubTypesProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -18,6 +19,7 @@ import io.kotless.utils.TypedStorage
 import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
+import kotlin.math.absoluteValue
 
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     private val functions = mapOf(
@@ -28,6 +30,11 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
         "io.ktor.routing.delete" to HttpMethod.DELETE,
         "io.ktor.routing.head" to HttpMethod.HEAD,
         "io.ktor.routing.options" to HttpMethod.OPTIONS
+    )
+
+    private val events = mapOf(
+        "io.kotless.dsl.ktor.KotlessAWS.Companion.s3" to S3EventProcessor,
+        "io.kotless.dsl.ktor.KotlessAWS.Companion.sqs" to SQSEventProcessor
     )
 
     override val klasses = setOf(KotlessAWS::class, KotlessAzure::class)
@@ -58,6 +65,25 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     context.resources.register(key, function)
                     context.routes.register(Application.API.DynamicRoute(method, path, key))
+
+                    if (context.config.optimization.autoWarm.enable) {
+                        context.events.register(
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
+                        )
+                    }
+                }
+                func.visitCallExpressionsWithReferences(binding = binding, filter = { it.getFqName(binding) in events.keys }) { element ->
+                    val permissions = PermissionsProcessor.process(element, binding, context) + globalPermissions
+
+                    val name = func.fqName!!.asString().hashCode().absoluteValue.toString()
+
+                    val key = TypedStorage.Key<Lambda>()
+                    val function = Lambda(name, context.jar, entrypoint, context.lambda, permissions)
+
+                    context.resources.register(key, function)
+                    events[element.getFqName(binding)]!!.process(element, binding, func, key).forEach {
+                        context.events.register(it)
+                    }
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(

@@ -21,6 +21,17 @@ object FunctionCaller {
         return func.callBy(args)
     }
 
+    fun <T> callWithParams(func: KCallable<T>, params: Map<String, Any?>): T {
+        func.isAccessible = true
+
+        val args = func.parameters.map { param ->
+            val value = params[param.name]
+            param to value
+        }.filter { it.second != NULL }.toMap()
+
+        return func.callBy(args)
+    }
+
     private fun transformToArg(func: KCallable<*>, param: KParameter, value: String?): Any? {
         val isNullable = param.type.isMarkedNullable
         return when {

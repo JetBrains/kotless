@@ -1,10 +1,10 @@
 package io.kotless.dsl.app.http
 
+import io.kotless.HttpMethod
 import io.kotless.InternalAPI
 import io.kotless.dsl.lang.KotlessContext
 import io.kotless.dsl.lang.http.*
-import io.kotless.dsl.model.HttpRequest
-import io.kotless.dsl.model.HttpResponse
+import io.kotless.dsl.model.*
 import io.kotless.dsl.reflection.FunctionCaller
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory

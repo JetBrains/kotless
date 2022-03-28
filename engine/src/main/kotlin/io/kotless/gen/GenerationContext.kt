@@ -36,13 +36,14 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
     val entities = Entities()
 
     class Entities {
-        private val all: HashSet<HCLEntity.Named> = HashSet()
+        data class Entity(val name: String, val hclEntity: HCLEntity.Named)
+        private val all: HashSet<Entity> = HashSet()
 
-        fun register(entities: Iterable<HCLEntity.Named>) {
+        fun register(entities: Iterable<Entity>) {
             this.all.addAll(entities)
         }
 
-        fun register(vararg entities: HCLEntity.Named) {
+        fun register(vararg entities: Entity) {
             register(entities.toList())
         }
 
@@ -53,7 +54,8 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
         fun tf(vararg name: String) = tf(name.toList())
         fun tf(part: String, parts: Iterable<String>) = tf(part.plusIterable(parts))
         fun tf(parts: Iterable<String>, part: String) = tf(parts.plus(part))
-        fun tf(name: Iterable<String>) = name.flatMap { Text.deall(it) }.joinToString(separator = "_") { it.toLowerCase() }
+        fun tf(name: Iterable<String>) =
+            name.flatMap { Text.deall(it) }.joinToString(separator = "_") { it.toLowerCase() }.replace(Regex("[*:.{}]"), "_")
 
         fun aws(vararg name: String) = aws(name.toList())
         fun azure(vararg name: String) = azure(name.toList())
@@ -61,6 +63,7 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
         fun aws(parts: Iterable<String>, part: String) = aws(parts.plus(part))
         fun aws(name: Iterable<String>): String {
             return (schema.config.cloud.prefix.plusIterable(name)).flatMap { Text.deall(it) }.joinToString(separator = "-") { it.toLowerCase() }
+                .replace(Regex("[*:.{}]"), "_").takeLast(64)
         }
 
         fun azure(name: Iterable<String>): String {

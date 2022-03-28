@@ -39,6 +39,7 @@ internal open class TerraformOperationTask : DefaultTask() {
 
     @TaskAction
     fun act() {
+        if (root.listFiles()?.isEmpty() == true) return
         CommandLine.executeOrFail(
             exec = TerraformDownloadTask.tfBin(project).absolutePath,
             args = operation.op,

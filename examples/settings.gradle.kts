@@ -4,9 +4,11 @@ include(":common:site-shared")
 
 include(":kotless:site")
 include(":kotless:shortener")
+include(":kotless:eventshandler")
 
 include(":ktor:site")
 include(":ktor:shortener")
+include(":ktor:eventshandler")
 
 include(":spring:site")
 include(":spring:shortener")

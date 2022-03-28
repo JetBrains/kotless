@@ -18,6 +18,7 @@ object DomainFactory : GenerationFactory<Application.API, DomainFactory.Output> 
         && context.output.check(context.webapp.dns!!, ZoneFactory)
         && context.output.check(context.webapp.dns!!, CertificateFactory)
         && context.output.check(context.webapp.api.deployment, DeploymentFactory)
+        && (entity.dynamics.isNotEmpty() || entity.statics.isNotEmpty())
 
     override fun generate(entity: Application.API, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val zone = context.output.get(context.webapp.dns!!, ZoneFactory)

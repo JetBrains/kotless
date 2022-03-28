@@ -5,12 +5,14 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler
 import io.kotless.InternalAPI
 import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
-import io.kotless.dsl.ktor.app.KotlessCall
-import io.kotless.dsl.ktor.app.KotlessEngine
+import io.kotless.dsl.ktor.app.*
 import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.kotless.dsl.model.HttpResponse
+import io.kotless.dsl.model.events.*
 import io.kotless.dsl.utils.JSON
 import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.util.pipeline.*
 import kotlinx.coroutines.runBlocking
@@ -31,11 +33,31 @@ abstract class KotlessAWS : RequestStreamHandler {
 
         private var prepared = false
 
+        fun registerAwsEvent(generator: AwsEventGenerator) {
+            AwsEvent.eventKSerializers.add(generator)
+        }
+
+        init {
+            registerAwsEvent(S3EventInformationGenerator())
+            registerAwsEvent(SQSEventInformationGenerator())
+        }
+
         @EngineAPI
         val engine = KotlessEngine(applicationEngineEnvironment {
             log = logger
         }).also {
             it.start()
+        }
+
+        fun Route.s3(bucket: String, event: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
+            return route(
+                "$bucket/${event.replace(":", "/").replace("*", "{method}").lowercase()}",
+                HttpMethod("aws:s3")
+            ) { handle(body) }
+        }
+
+        fun Route.sqs(queueArn: String, body: PipelineInterceptor<Unit, ApplicationCall>): Route {
+            return route(queueArn.lowercase().replace(":", "/"), HttpMethod("aws:sqs")) { handle(body) }
         }
     }
 
@@ -54,6 +76,17 @@ abstract class KotlessAWS : RequestStreamHandler {
 
                 logger.info("Started handling request")
                 logger.debug("Request is {}", json)
+                logger.info(json)
+                if (AwsEvent.isEventRequest(json)) {
+                    logger.info("Request is known AWS event!")
+                    val event = JSON.parse(AwsEvent.serializer(), json)
+                    return@runBlocking event.records().map { record ->
+                        val call = AwsEventCall(engine.application, record)
+                        engine.pipeline.execute(call)
+                        call.response.toHttp()
+                    }.last()
+
+                }
 
                 if (json.contains("Scheduled Event")) {
                     val event = JSON.parse(CloudWatch.serializer(), json)

@@ -4,7 +4,7 @@ object Versions {
     //Note, that it also should be changed in dependencies of buildSrc and in plugins blocks
     //Due to limitations of Gradle DSL
     const val kotlin = "1.5.31"
-    const val serialization = "1.0.1"
+    const val serialization = "1.3.2"
 
     const val aws = "1.11.788"
     const val lambdaJavaCore = "1.2.0"

@@ -8,6 +8,8 @@ import io.terraformkt.aws.provider.provider
 object ProvidersFactory : GenerationFactory<Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, ProvidersFactory.Output> {
     class Output(val us_east_provider: String?)
 
+    override fun destination(entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, context: GenerationContext): String = "infra"
+
     override fun mayRun(entity: Terraform<Terraform.Backend.AWS, Terraform.Provider.AWS>, context: GenerationContext) = true
 
     override fun generate(

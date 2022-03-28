@@ -15,7 +15,7 @@ import io.terraformkt.hcl.ref
 
 
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
-    data class Output(val lambda_arn: String, val lambda_name: String)
+    data class Output(val lambda_arn: String, val lambda_name: String, val lambda_instance_role_name: String)
 
     override fun mayRun(entity: Lambda, context: GenerationContext) = context.output.check(context.webapp, InfoFactory)
 
@@ -84,7 +84,7 @@ object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
         }
 
         return GenerationFactory.GenerationResult(
-            Output(lambda::arn.ref, lambda::function_name.ref), obj, lambda, assume, iam_role, policy_document, role_policy
+            Output(lambda::arn.ref, lambda::function_name.ref, iam_role::name.ref), obj, lambda, assume, iam_role, policy_document, role_policy
         )
     }
 }
