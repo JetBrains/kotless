@@ -36,13 +36,14 @@ class GenerationContext(val schema: Schema, val webapp: Application) {
     val entities = Entities()
 
     class Entities {
-        private val all: HashSet<HCLEntity.Named> = HashSet()
+        // TODO: Remake pair with normal class
+        private val all: HashSet<Pair<String, HCLEntity.Named>> = HashSet()
 
-        fun register(entities: Iterable<HCLEntity.Named>) {
+        fun register(entities: Iterable<Pair<String, HCLEntity.Named>>) {
             this.all.addAll(entities)
         }
 
-        fun register(vararg entities: HCLEntity.Named) {
+        fun register(vararg entities: Pair<String, HCLEntity.Named>) {
             register(entities.toList())
         }
 

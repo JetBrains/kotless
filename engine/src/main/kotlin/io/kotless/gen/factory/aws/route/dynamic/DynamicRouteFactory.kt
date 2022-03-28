@@ -16,12 +16,12 @@ import io.terraformkt.aws.resource.lambda.lambda_permission
 object DynamicRouteFactory : GenerationFactory<Application.API.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)
 
-    override fun mayRun(entity: Application.API.DynamicRoute, context: GenerationContext) = context.output.check(context.webapp.api, RestAPIFactory)
+    override fun mayRun(entity: Application.API.DynamicRoute, context: GenerationContext) = context.output.check(context.webapp.api!!, RestAPIFactory)
         && context.output.check(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
         && context.output.check(context.webapp, InfoFactory)
 
     override fun generate(entity: Application.API.DynamicRoute, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
-        val api = context.output.get(context.webapp.api, RestAPIFactory)
+        val api = context.output.get(context.webapp.api!!, RestAPIFactory)
         val lambda = context.output.get(context.schema.lambdas[entity.lambda]!!, LambdaFactory)
         val info = context.output.get(context.webapp, InfoFactory)
 

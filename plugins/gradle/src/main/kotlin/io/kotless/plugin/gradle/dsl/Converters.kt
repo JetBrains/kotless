@@ -3,10 +3,16 @@ package io.kotless.plugin.gradle.dsl
 import io.kotless.CloudPlatform
 import io.kotless.KotlessConfig
 
-internal fun KotlessDSL.toSchema(): KotlessConfig {
+enum class Stage {
+    PreDeploy,
+    Deploy,
+    PostDeploy
+}
+
+internal fun KotlessDSL.toSchema(stage: Stage = Stage.Deploy): KotlessConfig {
     return with(config) {
         KotlessConfig(
-            cloud!!.toSchema(),
+            cloud!!.toSchema(stage),
             KotlessConfig.DSL(dsl.typeOrDefault, dsl.resolvedStaticsRoot),
             KotlessConfig.Optimization(
                 optimization.mergeLambda,
@@ -16,14 +22,14 @@ internal fun KotlessDSL.toSchema(): KotlessConfig {
     }
 }
 
-internal fun KotlessGradleConfig.CloudGradle<*, *>.toSchema(): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle<*, *>.toSchema(stage: Stage): KotlessConfig.Cloud<*, *> {
     return when (type) {
-        CloudPlatform.AWS -> (this as KotlessGradleConfig.CloudGradle.AWS).toSchema()
+        CloudPlatform.AWS -> (this as KotlessGradleConfig.CloudGradle.AWS).toSchema(stage)
         CloudPlatform.Azure -> (this as KotlessGradleConfig.CloudGradle.Azure).toSchema()
     }
 }
 
-internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(): KotlessConfig.Cloud<*, *> {
+internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(stage: Stage): KotlessConfig.Cloud<*, *> {
     return KotlessConfig.Cloud.AWS(
         prefix,
         KotlessConfig.Cloud.Storage.S3(
@@ -37,7 +43,11 @@ internal fun KotlessGradleConfig.CloudGradle.AWS.toSchema(): KotlessConfig.Cloud
                     terraform.backend.s3?.bucket ?: storage.bucket,
                     terraform.backend.s3?.region ?: storage.region ?: region
                 ),
-                terraform.backend.key,
+                when (stage) {
+                    Stage.PreDeploy -> terraform.backend.preDeployKey
+                    Stage.Deploy -> terraform.backend.key
+                    Stage.PostDeploy -> terraform.backend.postDeployKey
+                },
                 terraform.backend.profile ?: profile,
             ),
             KotlessConfig.Cloud.Terraform.Provider.AWS(

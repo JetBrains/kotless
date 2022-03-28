@@ -9,7 +9,6 @@ import io.kotless.gen.factory.aws.infra.TFConfigFactory
 import io.kotless.gen.factory.aws.resource.dynamic.LambdaFactory
 import io.kotless.gen.factory.aws.resource.static.*
 import io.kotless.gen.factory.aws.route.dynamic.DynamicRouteFactory
-import io.kotless.gen.factory.aws.route.static.StaticRoleFactory
 import io.kotless.gen.factory.aws.route.static.StaticRouteFactory
 import io.kotless.gen.factory.aws.route53.*
 import io.kotless.resource.Lambda
@@ -19,7 +18,7 @@ import kotlin.reflect.KClass
 
 object AWSGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
-        Application::class to setOf(InfoFactory, StaticRoleFactory),
+        Application::class to setOf(InfoFactory/*, StaticRoleFactory*/),
         KotlessConfig.Cloud.Terraform.AWS::class to setOf(TFConfigFactory, ProvidersFactory),
 
         Application.API::class to setOf(DomainFactory, RestAPIFactory),
@@ -57,6 +56,12 @@ object AWSGenerator {
             }
         }
 
-        return setOf(TFFile(context.webapp.api.name, ArrayList(context.entities.all())))
+        return context.entities.all().groupBy({ it.first }, { it.second })
+            .map {
+                TFFile(it.key, it.value.toMutableList())
+            }.toSet()
+//        return setOf(
+//            TFFile(context.webapp.api?.name ?: "infra" , ArrayList(context.entities.all())),
+//        )
     }
 }

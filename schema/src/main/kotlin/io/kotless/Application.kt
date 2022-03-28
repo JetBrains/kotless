@@ -12,7 +12,7 @@ import io.kotless.utils.Visitable
  *
  * @param dns alias to ApiGateway, if present
  */
-data class Application(val dns: DNS?, val api: API, val events: Events) : Visitable {
+data class Application(val dns: DNS?, val api: API?, val events: Events) : Visitable {
     /**
      * Route53 CNAME alias
      *
@@ -122,7 +122,7 @@ data class Application(val dns: DNS?, val api: API, val events: Events) : Visita
 
     override fun visit(visitor: (Any) -> Unit) {
         dns?.visit(visitor)
-        api.visit(visitor)
+        api?.visit(visitor)
         events.visit(visitor)
         visitor(this)
     }

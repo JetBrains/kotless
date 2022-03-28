@@ -14,7 +14,7 @@ import io.terraformkt.hcl.ref
 object S3EventsFactory : GenerationFactory<Application.Events.S3, Unit> {
     override fun mayRun(entity: Application.Events.S3, context: GenerationContext): Boolean {
         return context.output.check(context.schema.lambdas[entity.lambda]!!, LambdaFactory) &&
-            context.entities.all().firstOrNull { it.hcl_ref == "data.aws_s3_bucket.${context.names.tf(entity.bucket)}" } != null
+            context.entities.all().firstOrNull { it.second.hcl_ref == "data.aws_s3_bucket.${context.names.tf(entity.bucket)}" } != null
     }
 
     override fun generate(entity: Application.Events.S3, context: GenerationContext): GenerationFactory.GenerationResult<Unit> {

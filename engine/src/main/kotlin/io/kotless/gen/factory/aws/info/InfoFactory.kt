@@ -13,6 +13,8 @@ object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
 
     override fun mayRun(entity: Application, context: GenerationContext) = true
 
+    override fun destination(entity: Application, context: GenerationContext): String = "infra"
+
     override fun generate(entity: Application, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val caller_identity = caller_identity("current") {}
         val region = region("current") {}

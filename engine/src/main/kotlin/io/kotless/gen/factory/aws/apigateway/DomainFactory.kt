@@ -17,13 +17,13 @@ object DomainFactory : GenerationFactory<Application.API, DomainFactory.Output> 
         && context.webapp.dns != null
         && context.output.check(context.webapp.dns!!, ZoneFactory)
         && context.output.check(context.webapp.dns!!, CertificateFactory)
-        && context.output.check(context.webapp.api.deployment, DeploymentFactory)
+        && context.output.check(context.webapp.api!!.deployment, DeploymentFactory)
 
     override fun generate(entity: Application.API, context: GenerationContext): GenerationFactory.GenerationResult<Output> {
         val zone = context.output.get(context.webapp.dns!!, ZoneFactory)
         val certificate = context.output.get(context.webapp.dns!!, CertificateFactory)
-        val api = context.output.get(context.webapp.api, RestAPIFactory)
-        val deployment = context.output.get(context.webapp.api.deployment, DeploymentFactory)
+        val api = context.output.get(context.webapp.api!!, RestAPIFactory)
+        val deployment = context.output.get(context.webapp.api!!.deployment, DeploymentFactory)
 
         val domain = api_gateway_domain_name(context.names.tf(entity.name)) {
             domain_name = zone.fqdn

@@ -27,7 +27,13 @@ class KotlessGradleConfig(project: Project) : Serializable {
 
 
     internal val deployGenDirectory: File
-        get() = File(genDirectory, "deploy")
+        get() = File(genDirectory, "main-deploy")
+
+    internal val preDeployGenDirectory: File
+        get() = File(genDirectory, "pre-deploy")
+
+    internal val postDeployGenDirectory: File
+        get() = File(genDirectory, "post-deploy")
 
     internal val localGenDirectory: File
         get() = File(genDirectory, "local")
@@ -167,6 +173,8 @@ class KotlessGradleConfig(project: Project) : Serializable {
                      * By default it is `kotless-state/state.tfstate`
                      */
                     var key: String = "kotless-state/state.tfstate"
+                    var preDeployKey: String = "kotless-state/predeploy-state.tfstate"
+                    var postDeployKey: String = "kotless-state/postdeploy-state.tfstate"
 
                     var profile: String? = null
                 }
@@ -184,6 +192,8 @@ class KotlessGradleConfig(project: Project) : Serializable {
                      * By default it is `kotless-state/state.tfstate`
                      */
                     var key: String = "kotless-state/state.tfstate"
+                    var preDeployKey: String = "kotless-state/predeploy-state.tfstate"
+                    var postDeployKey: String = "kotless-state/postdeploy-state.tfstate"
 
                     lateinit var resourceGroup: String
                 }
