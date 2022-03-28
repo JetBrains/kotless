@@ -54,6 +54,6 @@ object AzureGenerator {
             }
         }
 
-        return setOf(TFFile(context.webapp.api?.name ?: "infra", ArrayList(context.entities.all().map { it.second })))
+        return setOf(TFFile(context.webapp.api.name, ArrayList(context.entities.all().map { it.hclEntity })))
     }
 }

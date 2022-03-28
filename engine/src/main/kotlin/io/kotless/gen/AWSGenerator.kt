@@ -57,12 +57,9 @@ object AWSGenerator {
             }
         }
 
-        return context.entities.all().groupBy({ it.first }, { it.second })
+        return context.entities.all().groupBy({ it.name }, { it.hclEntity })
             .map {
                 TFFile(it.key, it.value.toMutableList())
             }.toSet()
-//        return setOf(
-//            TFFile(context.webapp.api?.name ?: "infra" , ArrayList(context.entities.all())),
-//        )
     }
 }
