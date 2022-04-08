@@ -11,7 +11,7 @@ class S3EventInformationGenerator : AwsEventGenerator() {
 }
 
 @Serializable
-class S3Event(@SerialName("Records") val records: List<S3EventInformation>): AwsEvent() {
+class S3Event(@SerialName("Records") val records: List<S3EventInformation>) : AwsEvent() {
     override fun records(): List<AwsEventInformation> = records
 }
 
@@ -28,7 +28,8 @@ data class S3EventInformation(
         "object_name" to s3.s3Object.key,
         "object_eTag" to s3.s3Object.eTag,
         "object_size" to s3.s3Object.size.toString()
-    )
+    ).filter { it.value != null }.mapValues { it.value!! }
+
     override val path: String = "${s3.bucket.name}:${eventName}"
     override val eventSource: String = S3EventInformation.eventSource
 
@@ -43,6 +44,6 @@ data class S3EventInformation(
         data class Bucket(val name: String, val arn: String)
 
         @Serializable
-        data class S3Object(val key: String, val size: Long, val eTag: String, val versionId: String? = null)
+        data class S3Object(val key: String, val size: Long? = null, val eTag: String? = null, val versionId: String? = null)
     }
 }

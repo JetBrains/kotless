@@ -1,7 +1,6 @@
 package io.kotless.dsl.model.events
 
 import kotlinx.serialization.*
-import kotlinx.serialization.builtins.*
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -14,7 +13,7 @@ abstract class AwsEventGenerator {
 }
 
 @Serializable(with = AwsEvent.AwsEventSerializer::class)
-abstract class AwsEvent() {
+abstract class AwsEvent {
 
     abstract fun records(): List<AwsEventInformation>
 
@@ -27,12 +26,26 @@ abstract class AwsEvent() {
     }
 
     @Serializer(forClass = AwsEvent::class)
-    class AwsEventSerializer : JsonContentPolymorphicSerializer<AwsEvent>(AwsEvent::class) {
+    class AwsEventSerializer : DeserializationStrategy<AwsEvent> {
         override val descriptor: SerialDescriptor =
             buildClassSerialDescriptor("io.kotless.dsl.model.events.AwsEventInformation")
 
-        override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out AwsEvent> {
-            return eventKSerializers.firstOrNull { it.mayDeserialize(element.jsonObject.toString()) }?.serializer ?: error("Serializer for this object doesn't found")
+        private fun selectDeserializer(element: JsonElement): List<DeserializationStrategy<out AwsEvent>> {
+            return eventKSerializers.filter { it.mayDeserialize(element.jsonObject.toString()) }.map { it.serializer }
+        }
+
+        override fun deserialize(decoder: Decoder): AwsEvent {
+            val input = decoder as? JsonDecoder
+            val tree = input?.decodeJsonElement() ?: error("")
+            val serializers = selectDeserializer(tree)
+            serializers.forEach { serializer ->
+                @Suppress("UNCHECKED_CAST")
+                val actualSerializer = serializer as KSerializer<AwsEvent>
+                try {
+                    return input.json.decodeFromJsonElement(actualSerializer, tree)
+                } catch (e: SerializationException) { }
+            }
+            error("Failed to define serializer for event")
         }
     }
 }
