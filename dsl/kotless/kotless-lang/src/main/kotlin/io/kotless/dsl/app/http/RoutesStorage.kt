@@ -50,7 +50,7 @@ internal object RoutesStorage {
 
     operator fun get(key: RouteKey): Descriptor? {
         scan()
-        return cache[key] ?: return null
+        return cache[key]
     }
 
     private fun Annotation.toRouteKey(): RouteKey = when (this) {
@@ -61,7 +61,6 @@ internal object RoutesStorage {
         is Delete -> RouteKey(HttpMethod.DELETE, path)
         is Head -> RouteKey(HttpMethod.HEAD, path)
         is Options -> RouteKey(HttpMethod.OPTIONS, path)
-        is S3Event -> RouteKey(HttpMethod.GET, bucket)
         else -> error("Unsupported annotation $this")
     }
 

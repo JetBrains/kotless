@@ -7,10 +7,10 @@ import java.lang.reflect.Method
 
 @InternalAPI
 object EventsReflectionScanner {
-    data class Data(val ids: Set<EventKey>, val method: Method, val annotation: Annotation)
+    data class Data(val ids: Set<AwsEventKey>, val method: Method, val annotation: Annotation)
 
     val processors = listOf(
-        ScheduledAnnotationProcessor,
+        CloudwatchAnnotationProcessor,
         S3AnnotationProcessor,
         SQSAnnotationProcessor,
         CustomAwsEventAnnotationProcessor,

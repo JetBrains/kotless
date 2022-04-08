@@ -1,7 +1,7 @@
 package io.kotless.dsl.app.events.processors
 
 import io.kotless.InternalAPI
-import io.kotless.dsl.app.events.EventKey
+import io.kotless.dsl.app.events.AwsEventKey
 import io.kotless.dsl.app.events.EventsReflectionScanner
 import io.kotless.dsl.lang.event.S3Event
 import io.kotless.dsl.reflection.ReflectionScanner
@@ -20,8 +20,8 @@ object S3AnnotationProcessor : AnnotationProcessor {
     }
 
     private fun Method.toS3Annotation() = (kotlinFunction as KFunction<*>).findAnnotation<S3Event>()
-    private fun Method.s3IDs(): Set<EventKey> {
+    private fun Method.s3IDs(): Set<AwsEventKey> {
         val annotation = toS3Annotation()!!
-        return "${annotation.bucket}:${annotation.type}".takeIf { it.isNotBlank() }?.let { setOf(EventKey(it)) } ?: emptySet()
+        return "${annotation.bucket}:${annotation.type}".takeIf { it.isNotBlank() }?.let { setOf(AwsEventKey(it)) } ?: emptySet()
     }
 }

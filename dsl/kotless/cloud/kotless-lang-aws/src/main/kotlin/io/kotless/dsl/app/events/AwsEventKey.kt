@@ -1,7 +1,7 @@
 package io.kotless.dsl.app.events
 
-class EventKey(val key: String) {
-    fun cover(other: EventKey): Boolean {
+class AwsEventKey(val key: String) {
+    fun cover(other: AwsEventKey): Boolean {
         val thisParts = key.split(":")
         val otherParts = other.key.split(":")
 

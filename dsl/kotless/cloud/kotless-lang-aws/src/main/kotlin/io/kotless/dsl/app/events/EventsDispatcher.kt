@@ -24,7 +24,7 @@ object EventsDispatcher {
                     val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
 
                     logger.trace("Executing scheduled lambda with key $key")
-                    EventsStorage[EventKey(key)]?.let { FunctionCaller.call(it, emptyMap()) }
+                    EventsStorage[AwsEventKey(key)]?.let { FunctionCaller.call(it, emptyMap()) }
                     logger.trace("Scheduled lambda with key $key was executed")
                 }
             }
@@ -35,7 +35,7 @@ object EventsDispatcher {
         for (record in event.records()) {
             val key = record.path
             logger.info("Executing aws event with key $key")
-            val eventProcessors = EventsStorage.getAll(EventKey(key))
+            val eventProcessors = EventsStorage.getAll(AwsEventKey(key))
             eventProcessors.forEach { eventProcessor ->
                 FunctionCaller.callWithParams(eventProcessor, mapOf(eventProcessor.parameters.first().name!! to record))
                 logger.info("Aws event with key $key was handled")

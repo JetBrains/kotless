@@ -11,7 +11,7 @@ import kotlin.reflect.jvm.kotlinFunction
 internal object EventsStorage {
     private val logger = LoggerFactory.getLogger(EventsStorage::class.java)
 
-    private val cache = mutableListOf<Pair<EventKey, KFunction<*>>>()
+    private val cache = mutableListOf<Pair<AwsEventKey, KFunction<*>>>()
 
     private var scanned = false
 
@@ -29,12 +29,12 @@ internal object EventsStorage {
         scanned = true
     }
 
-    operator fun get(key: EventKey): KFunction<*>? {
+    operator fun get(key: AwsEventKey): KFunction<*>? {
         scan()
         return cache.firstOrNull { it.first.cover(key) }?.second ?: return null
     }
 
-    fun getAll(key: EventKey): List<KFunction<*>> {
+    fun getAll(key: AwsEventKey): List<KFunction<*>> {
         scan()
         return cache.filter { it.first.cover(key) }.map { it.second }
     }
