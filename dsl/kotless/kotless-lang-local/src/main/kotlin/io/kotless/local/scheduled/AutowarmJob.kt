@@ -1,6 +1,6 @@
 package io.kotless.local.scheduled
 
-import io.kotless.ScheduledEventType
+import io.kotless.CloudwatchEventType
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.utils.JSON
@@ -16,7 +16,7 @@ internal class AutowarmJob : Job {
         fun getJob(handler: HandlerAWS): Pair<Trigger, JobDetail>? {
             val minutes = Environment.autowarmMinutes ?: return null
 
-            val id = ScheduledEventType.Autowarm.prefix
+            val id = CloudwatchEventType.Autowarm.prefix
 
             val map = JobDataMap().apply {
                 this[HANDLER_KEY] = handler
@@ -45,7 +45,7 @@ internal class AutowarmJob : Job {
         val apiRequest = CloudWatch(
             `detail-type` = "Scheduled Event",
             source = "aws.events",
-            resources = setOf(ScheduledEventType.Autowarm.prefix)
+            resources = setOf(CloudwatchEventType.Autowarm.prefix)
         )
 
         handler.handleRequest(

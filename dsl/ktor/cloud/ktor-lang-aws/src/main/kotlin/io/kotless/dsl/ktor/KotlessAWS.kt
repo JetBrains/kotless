@@ -40,6 +40,7 @@ abstract class KotlessAWS : RequestStreamHandler {
         init {
             registerAwsEvent(S3EventInformationGenerator())
             registerAwsEvent(SQSEventInformationGenerator())
+            registerAwsEvent(CloudwatchEventInformationGenerator())
         }
 
         @EngineAPI

@@ -7,7 +7,6 @@ import io.kotless.dsl.app.events.EventsDispatcher
 import io.kotless.dsl.app.events.processors.CustomAwsEventGeneratorAnnotationProcessor
 import io.kotless.dsl.app.http.RouteKey
 import io.kotless.dsl.app.http.RoutesDispatcher
-import io.kotless.dsl.cloud.aws.CloudWatch
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
 import io.kotless.dsl.lang.http.serverError
 import io.kotless.dsl.model.HttpResponse
@@ -41,6 +40,7 @@ class HandlerAWS : RequestStreamHandler {
     init {
         registerAwsEvent(S3EventInformationGenerator())
         registerAwsEvent(SQSEventInformationGenerator())
+        registerAwsEvent(CloudwatchEventInformationGenerator())
         CustomAwsEventGeneratorAnnotationProcessor.process()
     }
 
@@ -59,14 +59,14 @@ class HandlerAWS : RequestStreamHandler {
                 return
             }
 
-            if (jsonRequest.contains("Scheduled Event")) {
-                val event = JSON.parse(CloudWatch.serializer(), jsonRequest)
-                if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
-                    logger.debug("Request is Scheduled Event")
-                    EventsDispatcher.process(event)
-                    return
-                }
-            }
+//            if (jsonRequest.contains("Scheduled Event")) {
+//                val event = JSON.parse(CloudWatch.serializer(), jsonRequest)
+//                if (event.`detail-type` == "Scheduled Event" && event.source == "aws.events") {
+//                    logger.debug("Request is Scheduled Event")
+//                    EventsDispatcher.process(event)
+//                    return
+//                }
+//            }
 
             logger.debug("Request is HTTP Event")
 

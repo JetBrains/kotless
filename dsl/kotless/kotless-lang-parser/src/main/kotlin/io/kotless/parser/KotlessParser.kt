@@ -4,7 +4,7 @@ import io.kotless.parser.processor.action.GlobalActionsProcessor
 import io.kotless.parser.processor.config.EntrypointProcessor
 import io.kotless.parser.processor.events.S3EventsProcessor
 import io.kotless.parser.processor.events.SQSEventsProcessor
-import io.kotless.parser.processor.events.ScheduledEventsProcessor
+import io.kotless.parser.processor.events.CloudwatchEventsProcessor
 import io.kotless.parser.processor.route.DynamicRoutesProcessor
 import io.kotless.parser.processor.route.StaticRoutesProcessor
 
@@ -17,7 +17,7 @@ import io.kotless.parser.processor.route.StaticRoutesProcessor
  */
 object KotlessParser : Parser(
     setOf(
-        EntrypointProcessor, GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor, ScheduledEventsProcessor,
+        EntrypointProcessor, GlobalActionsProcessor, DynamicRoutesProcessor, StaticRoutesProcessor, CloudwatchEventsProcessor,
         S3EventsProcessor, SQSEventsProcessor
     )
 )

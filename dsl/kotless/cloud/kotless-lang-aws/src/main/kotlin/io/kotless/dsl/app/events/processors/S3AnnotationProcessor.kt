@@ -15,7 +15,7 @@ object S3AnnotationProcessor : AnnotationProcessor {
     override fun process(): Set<EventsReflectionScanner.Data> {
         return ReflectionScanner.methodsWithAnnotation<S3Event>().mapNotNull { method ->
             val annotation = method.toS3Annotation() ?: return@mapNotNull null
-            EventsReflectionScanner.Data(method.s3IDs(), method, annotation)
+            EventsReflectionScanner.Data(method.s3IDs(), method.kotlinFunction!!, annotation)
         }.toSet()
     }
 

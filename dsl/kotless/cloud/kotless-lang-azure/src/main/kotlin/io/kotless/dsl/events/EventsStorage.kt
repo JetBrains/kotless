@@ -1,7 +1,7 @@
 package io.kotless.dsl.app.events
 
 import io.kotless.InternalAPI
-import io.kotless.dsl.lang.event.Scheduled
+import io.kotless.dsl.lang.event.Cloudwatch
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.kotlinFunction
@@ -22,7 +22,7 @@ internal object EventsStorage {
             val kFunc = method.kotlinFunction!!
             for (id in ids) {
                 cache[id] = kFunc
-                logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
+                logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Cloudwatch::class.simpleName}")
             }
         }
 

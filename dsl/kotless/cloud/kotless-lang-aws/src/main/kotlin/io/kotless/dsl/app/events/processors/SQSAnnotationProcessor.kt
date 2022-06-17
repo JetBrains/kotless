@@ -15,7 +15,7 @@ object SQSAnnotationProcessor : AnnotationProcessor {
     override fun process(): Set<EventsReflectionScanner.Data> {
         return ReflectionScanner.methodsWithAnnotation<SQSEvent>().mapNotNull { method ->
             val annotation = method.toSQSAnnotation() ?: return@mapNotNull null
-            EventsReflectionScanner.Data(method.sqsIDs(), method, annotation)
+            EventsReflectionScanner.Data(method.sqsIDs(), method.kotlinFunction!!, annotation)
         }.toSet()
     }
 

@@ -1,8 +1,8 @@
 package io.kotless
 
-@InternalAPI
-/** Type of scheduled event -- either user one [ScheduledEventType.General] or autowarm [ScheduledEventType.Autowarm] */
-enum class ScheduledEventType(val prefix: String) {
+
+/** Type of scheduled event -- either user one [CloudwatchEventType.General] or autowarm [CloudwatchEventType.Autowarm] */
+enum class CloudwatchEventType(val prefix: String) {
     General("general"),
     Autowarm("autowarm")
 }

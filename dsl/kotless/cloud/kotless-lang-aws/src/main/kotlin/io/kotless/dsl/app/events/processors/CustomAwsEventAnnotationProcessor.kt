@@ -15,7 +15,7 @@ object CustomAwsEventAnnotationProcessor : AnnotationProcessor {
     override fun process(): Set<EventsReflectionScanner.Data> {
         return ReflectionScanner.methodsWithAnnotation<CustomAwsEvent>().mapNotNull { method ->
             val annotation = method.toCustomAwsEventAnnotation() ?: return@mapNotNull null
-            EventsReflectionScanner.Data(method.eventKeys(), method, annotation)
+            EventsReflectionScanner.Data(method.eventKeys(), method.kotlinFunction!!, annotation)
         }.toSet()
     }
 

@@ -24,9 +24,11 @@ object FunctionCaller {
     fun <T> callWithParams(func: KCallable<T>, params: Map<String, Any?>): T {
         func.isAccessible = true
 
-        val args = func.parameters.map { param ->
-            val value = params[param.name]
-            param to value
+        val args = func.parameters.mapNotNull { param ->
+            if(param.name != null) {
+                val value = params[param.name]
+                param to value
+            } else null
         }.filter { it.second != NULL }.toMap()
 
         return func.callBy(args)

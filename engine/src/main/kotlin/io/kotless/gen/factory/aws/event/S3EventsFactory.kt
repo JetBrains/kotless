@@ -32,7 +32,7 @@ object S3EventsFactory : GenerationFactory<Application.Events.S3, Unit> {
             bucket = s3Bucket::bucket.ref
             lambdaFunction {
                 lambda_function_arn = lambda.lambda_arn
-                events = entity.types.map { "s3:$it" }.toTypedArray()
+                events = entity.types.distinct().map { "s3:$it" }.toTypedArray()
             }
         }
         return GenerationFactory.GenerationResult(Unit, s3Bucket, permission, notification)

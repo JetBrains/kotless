@@ -68,7 +68,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
-                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), CloudwatchEventType.Autowarm, key)
                         )
                     }
                 }
@@ -87,7 +87,7 @@ internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
-                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), CloudwatchEventType.Autowarm, key)
                         )
                     }
                 }

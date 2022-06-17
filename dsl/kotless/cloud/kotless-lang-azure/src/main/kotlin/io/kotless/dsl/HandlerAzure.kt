@@ -58,13 +58,13 @@ class HandlerAzure : AzureRequestHandler {
     override fun timer(@TimerTrigger(name = "timer", schedule = "* * * * * *") timer: String, context: ExecutionContext) {
         val resource = context.functionName
         when {
-            resource.contains(ScheduledEventType.Autowarm.prefix) -> {
+            resource.contains(CloudwatchEventType.Autowarm.prefix) -> {
                 logger.trace("Executing warmup sequence")
                 Application.warmup()
                 logger.trace("Warmup sequence executed")
             }
-            resource.contains(ScheduledEventType.General.prefix) -> {
-                val key = resource.substring(resource.lastIndexOf(ScheduledEventType.General.prefix))
+            resource.contains(CloudwatchEventType.General.prefix) -> {
+                val key = resource.substring(resource.lastIndexOf(CloudwatchEventType.General.prefix))
 
                 logger.trace("Executing scheduled lambda with key $key")
                 EventsStorage[key]?.let { FunctionCaller.call(it, emptyMap()) }

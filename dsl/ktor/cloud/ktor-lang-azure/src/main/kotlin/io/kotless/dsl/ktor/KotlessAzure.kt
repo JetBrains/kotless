@@ -3,7 +3,6 @@ package io.kotless.dsl.ktor
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import io.kotless.InternalAPI
-import io.kotless.ScheduledEventType
 import io.kotless.dsl.cloud.azure.AzureRequestHandler
 import io.kotless.dsl.cloud.azure.model.toRequest
 import io.kotless.dsl.ktor.app.KotlessCall

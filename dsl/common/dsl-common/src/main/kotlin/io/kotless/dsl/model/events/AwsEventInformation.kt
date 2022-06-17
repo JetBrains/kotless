@@ -5,6 +5,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.json.*
+import org.slf4j.LoggerFactory
 
 abstract class AwsEventGenerator {
     abstract fun mayDeserialize(jsonObject: String): Boolean
@@ -18,6 +19,8 @@ abstract class AwsEvent {
     abstract fun records(): List<AwsEventInformation>
 
     companion object {
+        private val logger = LoggerFactory.getLogger(AwsEventGenerator::class.java)
+
         fun isEventRequest(jsonRequest: String): Boolean {
             return eventKSerializers.any { it.mayDeserialize(jsonRequest) }
         }
@@ -43,9 +46,11 @@ abstract class AwsEvent {
                 val actualSerializer = serializer as KSerializer<AwsEvent>
                 try {
                     return input.json.decodeFromJsonElement(actualSerializer, tree)
-                } catch (e: SerializationException) { }
+                } catch (e: SerializationException) {
+                    logger.warn("Error while deserialization", e)
+                }
             }
-            error("Failed to define serializer for event")
+            error("Failed to define serializer for event: $tree")
         }
     }
 }

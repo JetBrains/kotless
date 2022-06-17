@@ -4,6 +4,7 @@ import io.kotless.InternalAPI
 import io.kotless.dsl.app.http.RoutesStorage
 import io.kotless.dsl.lang.LambdaInit
 import io.kotless.dsl.lang.LambdaWarming
+import io.kotless.dsl.lang.event.Cloudwatch
 import io.kotless.dsl.reflection.ReflectionScanner
 import org.slf4j.LoggerFactory
 
@@ -27,7 +28,10 @@ object Application {
         isInitialized = true
     }
 
-    fun warmup() = executeForObjects<LambdaWarming> { it.warmup() }
+    fun warmup() = executeForObjects<LambdaWarming> {
+        logger.info("warmup!")
+        it.warmup()
+    }
 
     private inline fun <reified T : Any> executeForObjects(body: (T) -> Unit) {
         ReflectionScanner.objectsWithSubtype<T>().forEach {

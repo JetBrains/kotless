@@ -22,7 +22,7 @@ interface GenerationFactory<Input : Any, Output : Any> {
 
     fun run(entity: Input, context: GenerationContext) = (destination(entity, context) to generate(entity, context)).also {
         context.output.register(this, entity, it.second.output)
-        context.entities.register(it.second.entities.map { entity -> GenerationContext.Entities.Entity(it.first, entity) })
+        context.entities.register(it.second.entities.map { entity -> GenerationContext.Entities.FileAssociatedHCLEntity(it.first, entity) })
     }
 }
 

@@ -1,8 +1,9 @@
 package io.kotless.dsl.app.events
 
 import io.kotless.InternalAPI
-import io.kotless.dsl.lang.event.Scheduled
+import io.kotless.dsl.lang.event.Cloudwatch
 import org.slf4j.LoggerFactory
+import java.lang.reflect.Modifier
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.kotlinFunction
 
@@ -19,10 +20,9 @@ internal object EventsStorage {
         if (scanned) return
 
         for ((ids, method, _) in EventsReflectionScanner.getEvents()) {
-            val kFunc = method.kotlinFunction!!
             for (id in ids) {
-                cache.add(id to kFunc)
-                logger.debug("Saved with key $id function ${kFunc.name} for annotation ${Scheduled::class.simpleName}")
+                cache.add(id to method)
+                logger.debug("Saved with key ${id.key} function ${method.name}")
             }
         }
 

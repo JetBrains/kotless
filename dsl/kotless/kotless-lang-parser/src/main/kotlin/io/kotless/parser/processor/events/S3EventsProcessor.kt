@@ -32,7 +32,7 @@ internal object S3EventsProcessor : AnnotationProcessor<Unit>() {
 
         processStaticFunctions(files, binding) { func, entry, _ ->
             require(func, func.fqName != null) { "@S3Event cannot be applied to anonymous function" }
-            require(func, func.valueParameters.size == 1) { "@S3Event cannot be applied to ${func.fqName!!.asString()} since it has parameters" }
+            require(func, func.valueParameters.size == 1) { "@S3Event cannot be applied to ${func.fqName!!.asString()}. It should have only one parameter" }
 
             val routePermissions = PermissionsProcessor.process(func, binding, context) + permissions
 

@@ -2,7 +2,7 @@ package io.kotless.parser.spring.processor.route
 
 import io.kotless.Application.API
 import io.kotless.Application.Events
-import io.kotless.ScheduledEventType
+import io.kotless.CloudwatchEventType
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.processor.config.EntrypointProcessor
@@ -38,7 +38,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
 
                     if (context.config.optimization.autoWarm.enable) {
                         context.events.register(
-                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key)
+                            Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), CloudwatchEventType.Autowarm, key)
                         )
                     }
                 }

@@ -3,7 +3,7 @@ package io.kotless.parser.processor.route
 import io.kotless.Application.API
 import io.kotless.Application.Events
 import io.kotless.HttpMethod
-import io.kotless.ScheduledEventType
+import io.kotless.CloudwatchEventType
 import io.kotless.dsl.config.KotlessAppConfig
 import io.kotless.dsl.lang.http.*
 import io.kotless.parser.processor.AnnotationProcessor
@@ -54,7 +54,7 @@ internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
             context.routes.register(API.DynamicRoute(method, path, key))
 
             if (context.config.optimization.autoWarm.enable) {
-                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), ScheduledEventType.Autowarm, key))
+                context.events.register(Events.Scheduled(name, everyNMinutes(context.config.optimization.autoWarm.minutes), CloudwatchEventType.Autowarm, key))
             }
         }
     }

@@ -16,7 +16,7 @@ package io.kotless.dsl.lang.event
  * @param id optional id of event, otherwise it will be generated from function
  */
 @Target(AnnotationTarget.FUNCTION)
-annotation class Scheduled(val cron: String, val id: String = "") {
+annotation class Cloudwatch(val cron: String, val id: String = "") {
     @Suppress("unused")
     companion object {
         const val everyMinute = "0/1 * * * ? *"

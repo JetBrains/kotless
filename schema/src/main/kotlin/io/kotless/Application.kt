@@ -12,7 +12,7 @@ import io.kotless.utils.Visitable
  *
  * @param dns alias to ApiGateway, if present
  */
-data class Application(val dns: DNS?, val api: API?, val events: Events) : Visitable {
+data class Application(val dns: DNS?, val api: API, val events: Events) : Visitable {
     /**
      * Route53 CNAME alias
      *
@@ -44,7 +44,7 @@ data class Application(val dns: DNS?, val api: API?, val events: Events) : Visit
          * @param cron expression in a crontab-like syntax defining scheduler
          * @param lambda function to trigger by scheduled event
          */
-        data class Scheduled(private val id: String, val cron: String, val type: ScheduledEventType, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
+        data class Scheduled(private val id: String, val cron: String, val type: CloudwatchEventType, val lambda: TypedStorage.Key<Lambda>) : Event(id) {
             val fqId = "${type.prefix}-$id"
         }
 
@@ -122,7 +122,7 @@ data class Application(val dns: DNS?, val api: API?, val events: Events) : Visit
 
     override fun visit(visitor: (Any) -> Unit) {
         dns?.visit(visitor)
-        api?.visit(visitor)
+        api.visit(visitor)
         events.visit(visitor)
         visitor(this)
     }

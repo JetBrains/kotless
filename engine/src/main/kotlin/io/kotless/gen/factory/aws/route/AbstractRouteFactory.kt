@@ -40,7 +40,7 @@ open class AbstractRouteFactory {
                     parent_id = resources[prev]!!.id
                     path_part = part
                 }
-                context.entities.register(GenerationContext.Entities.Entity("environment", resource))
+                context.entities.register(GenerationContext.Entities.FileAssociatedHCLEntity("environment", resource))
                 resources[path] = ResourceDescriptor(resource.hcl_ref, resource::id.ref)
             }
         }
