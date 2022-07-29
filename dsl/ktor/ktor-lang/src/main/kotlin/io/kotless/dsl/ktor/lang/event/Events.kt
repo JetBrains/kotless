@@ -1,6 +1,7 @@
 package io.kotless.dsl.ktor.lang.event
 
-import io.ktor.application.*
+import io.ktor.server.application.Application
+import io.ktor.events.Events
 
 /**
  * DSL Marker for DSL to define events in Ktor
@@ -13,6 +14,6 @@ annotation class EventsDsl
  * Configuration method to define applications events
  */
 @EventsDsl
-fun Application.events(body: ApplicationEvents.() -> Unit) {
+fun Application.events(body: Events.() -> Unit) {
     this.environment.monitor.body()
 }

@@ -6,7 +6,6 @@ import io.ktor.server.engine.*
  * Kotless implementation of Ktor engine.
  * Optimized for serverless use-case.
  */
-@EngineAPI
 class KotlessEngine(environment: ApplicationEngineEnvironment) : BaseApplicationEngine(environment) {
     override fun start(wait: Boolean): ApplicationEngine {
         environment.start()

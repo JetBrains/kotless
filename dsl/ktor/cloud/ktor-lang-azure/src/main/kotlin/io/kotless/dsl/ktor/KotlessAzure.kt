@@ -3,18 +3,16 @@ package io.kotless.dsl.ktor
 import com.microsoft.azure.functions.*
 import com.microsoft.azure.functions.annotation.*
 import io.kotless.InternalAPI
-import io.kotless.ScheduledEventType
 import io.kotless.dsl.cloud.azure.AzureRequestHandler
 import io.kotless.dsl.cloud.azure.model.toRequest
 import io.kotless.dsl.ktor.app.KotlessCall
 import io.kotless.dsl.ktor.app.KotlessEngine
 import io.kotless.dsl.ktor.lang.LambdaWarming
-import io.ktor.application.*
-import io.ktor.server.engine.*
-import io.ktor.util.pipeline.*
+import io.ktor.server.application.Application
+import io.ktor.server.engine.applicationEngineEnvironment
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.Optional
 
 
 /**
@@ -30,7 +28,6 @@ abstract class KotlessAzure : AzureRequestHandler {
 
         private var prepared = false
 
-        @EngineAPI
         val engine = KotlessEngine(applicationEngineEnvironment {
             log = logger
         }).also {
@@ -41,13 +38,13 @@ abstract class KotlessAzure : AzureRequestHandler {
     abstract fun prepare(app: Application)
 
     @InternalAPI
-    @EngineAPI
     override fun run(
         @HttpTrigger(
             name = "req",
             methods = [HttpMethod.GET, HttpMethod.POST],
             authLevel = AuthorizationLevel.FUNCTION
-        ) request: HttpRequestMessage<Optional<String>>, context: ExecutionContext
+        ) request: HttpRequestMessage<Optional<String>>,
+        context: ExecutionContext,
     ): HttpResponseMessage {
         if (!prepared) {
             prepare(engine.application)
@@ -63,7 +60,7 @@ abstract class KotlessAzure : AzureRequestHandler {
 
                 val call = KotlessCall(engine.application, myRequest)
 
-                engine.pipeline.execute(call)
+                engine.pipeline.execute(call, Unit)
 
                 call.response.toHttp()
             }
@@ -83,7 +80,6 @@ abstract class KotlessAzure : AzureRequestHandler {
         return outputResponse.build()
     }
 
-    @OptIn(InternalAPI::class, EngineAPI::class)
     override fun timer(@TimerTrigger(name = "timer", schedule = "* * * * * *") timer: String, context: ExecutionContext) {
         logger.trace("Executing warmup sequence")
         engine.environment.monitor.raise(LambdaWarming, engine.application)

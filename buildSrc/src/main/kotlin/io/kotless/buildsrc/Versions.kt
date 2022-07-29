@@ -14,7 +14,7 @@ object Versions {
 
     const val serverlessContainers = "1.5.2"
 
-    const val ktor = "1.5.0"
+    const val ktor = "2.0.3"
 
     const val springBoot = "2.4.2"
     const val spring = "5.3.3"

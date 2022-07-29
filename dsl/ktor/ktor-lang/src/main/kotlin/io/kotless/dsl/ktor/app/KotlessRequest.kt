@@ -1,11 +1,15 @@
 package io.kotless.dsl.ktor.app
 
 import io.kotless.dsl.model.HttpRequest
-import io.ktor.application.*
-import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.server.engine.*
-import io.ktor.utils.io.*
+import io.ktor.http.Headers
+import io.ktor.http.HttpMethod
+import io.ktor.http.Parameters
+import io.ktor.http.RequestConnectionPoint
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.engine.BaseApplicationRequest
+import io.ktor.server.request.ApplicationReceivePipeline
+import io.ktor.server.request.RequestCookies
+import io.ktor.utils.io.ByteReadChannel
 
 /**
  * Ktor Request used by Kotless. It will be created from APIGateway request.
@@ -36,6 +40,7 @@ class KotlessRequest(val query: HttpRequest, call: ApplicationCall) : BaseApplic
     override val queryParameters: Parameters = Parameters.build {
         query.params.forEach { append(it.key, it.value) }
     }
+    override val rawQueryParameters: Parameters = queryParameters
 
     override fun receiveChannel() = ByteReadChannel(query.body?.bytes ?: ByteArray(0))
 }

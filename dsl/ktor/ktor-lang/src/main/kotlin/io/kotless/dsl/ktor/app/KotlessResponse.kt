@@ -2,11 +2,11 @@ package io.kotless.dsl.ktor.app
 
 import io.kotless.MimeType
 import io.kotless.dsl.model.HttpResponse
-import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.response.*
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.engine.*
+import io.ktor.server.response.ResponseHeaders
 import io.ktor.utils.io.*
 import io.ktor.utils.io.CancellationException
 import io.ktor.utils.io.core.*
