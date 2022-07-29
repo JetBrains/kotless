@@ -10,7 +10,7 @@ import io.kotless.dsl.ktor.app.KotlessEngine
 import io.kotless.dsl.ktor.lang.LambdaWarming
 import io.kotless.dsl.model.HttpResponse
 import io.kotless.dsl.utils.JSON
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.util.pipeline.*
 import kotlinx.coroutines.runBlocking
@@ -31,7 +31,6 @@ abstract class KotlessAWS : RequestStreamHandler {
 
         private var prepared = false
 
-        @EngineAPI
         val engine = KotlessEngine(applicationEngineEnvironment {
             log = logger
         }).also {
@@ -41,7 +40,7 @@ abstract class KotlessAWS : RequestStreamHandler {
 
     abstract fun prepare(app: Application)
 
-    @OptIn(InternalAPI::class, EngineAPI::class)
+    @OptIn(InternalAPI::class)
     override fun handleRequest(input: InputStream, output: OutputStream, @Suppress("UNUSED_PARAMETER") any: Context?) {
         if (!prepared) {
             prepare(engine.application)
