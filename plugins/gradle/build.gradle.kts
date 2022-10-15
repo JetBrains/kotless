@@ -21,7 +21,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-core", "2.16.0")
 
     //local start
-    implementation("org.testcontainers", "localstack", "1.16.2")
+    implementation("org.testcontainers", "localstack", "1.17.5")
 
     //utils
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
