@@ -1,5 +1,6 @@
 package io.kotless.resource
 
+import io.kotless.InternalAPI
 import io.kotless.permission.AWSPermission
 import io.kotless.permission.Permission
 import io.kotless.utils.Visitable
@@ -19,6 +20,7 @@ import java.io.File
  * @param config config of function: defines memory and time limit, etc.
  * @param config permissions to access other resources granted to this lambda
  */
+@OptIn(InternalAPI::class)
 data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, val config: Config, val permissions: Set<Permission>) : Visitable {
 
     /**
@@ -39,6 +41,7 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
         enum class Runtime(val aws: String) {
             Java8("java8"),
             Java11("java11"),
+            Java17("java17"),
             GraalVM("provided"),
             Provided("provided")
         }

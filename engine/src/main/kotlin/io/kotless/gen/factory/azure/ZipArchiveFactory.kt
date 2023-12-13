@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.azure
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.event.ScheduledEventsFactory
@@ -10,6 +11,7 @@ import io.kotless.gen.factory.azure.route.static.StaticRouteFactory
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
 import io.kotless.terraform.functions.path
 
+@OptIn(InternalAPI::class)
 object ZipArchiveFactory : GenerationFactory<Application, ZipArchiveFactory.Output> {
     data class Output(val artifactCompleteRef: String)
 

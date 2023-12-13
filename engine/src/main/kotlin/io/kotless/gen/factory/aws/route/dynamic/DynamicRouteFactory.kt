@@ -1,7 +1,6 @@
 package io.kotless.gen.factory.aws.route.dynamic
 
-import io.kotless.Application
-import io.kotless.HttpMethod
+import io.kotless.*
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.apigateway.RestAPIFactory
@@ -13,6 +12,7 @@ import io.terraformkt.aws.resource.apigateway.api_gateway_integration
 import io.terraformkt.aws.resource.apigateway.api_gateway_method
 import io.terraformkt.aws.resource.lambda.lambda_permission
 
+@OptIn(InternalAPI::class)
 object DynamicRouteFactory : GenerationFactory<Application.API.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)
 

@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.azure.route.dynamic
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.route.AbstractRouteFactory
@@ -9,6 +10,7 @@ import io.kotless.gen.factory.azure.info.InfoFactory
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
 import io.kotless.terraform.functions.path
 
+@OptIn(InternalAPI::class)
 object DynamicRouteFactory : GenerationFactory<Application.API.DynamicRoute, DynamicRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val fileCreationRef: String, val proxyPart: String)
 

@@ -6,6 +6,7 @@ import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
 import java.io.File
 
+@OptIn(InternalAPI::class)
 object StaticRoutesProcessor {
     fun process(resources: Set<File>, context: ProcessorContext) {
         val resourcesPaths = resources.map { it.toPath() }.toSet()

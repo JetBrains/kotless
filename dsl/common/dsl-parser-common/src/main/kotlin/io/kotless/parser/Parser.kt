@@ -1,7 +1,6 @@
 package io.kotless.parser
 
-import io.kotless.Application
-import io.kotless.KotlessConfig
+import io.kotless.*
 import io.kotless.parser.processor.Processor
 import io.kotless.parser.processor.ProcessorContext
 import io.kotless.parser.utils.psi.analysis.*
@@ -17,6 +16,7 @@ import java.io.File
  * The result of parsing is a number of Lambdas and StaticResources and associated
  * with them Dynamic and Static routes.
  */
+@OptIn(InternalAPI::class)
 open class Parser(private val processors: Set<Processor<*>>) {
     data class Result(val routes: Routes, val resources: Resources, val events: Events) {
         data class Routes(val dynamics: Set<Application.API.DynamicRoute>, val statics: Set<Application.API.StaticRoute>)

@@ -9,6 +9,6 @@ dependencies {
 
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xuse-experimental=io.kotless.InternalAPI")
+        freeCompilerArgs = freeCompilerArgs
     }
 }

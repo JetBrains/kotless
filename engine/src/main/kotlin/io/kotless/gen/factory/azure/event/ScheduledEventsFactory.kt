@@ -1,13 +1,14 @@
 package io.kotless.gen.factory.azure.event
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.filescontent.LambdaDescription.timeBinding
 import io.kotless.gen.factory.azure.utils.FilesCreationTf
 import io.kotless.terraform.functions.path
 
-
+@OptIn(InternalAPI::class)
 object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, ScheduledEventsFactory.Output> {
 
     data class Output(val fileCreationRef: String)

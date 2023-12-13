@@ -1,7 +1,6 @@
 package io.kotless.resource
 
-import io.kotless.MimeType
-import io.kotless.URIPath
+import io.kotless.*
 import io.kotless.utils.Visitable
 import java.io.File
 
@@ -20,4 +19,5 @@ import java.io.File
  * @param file File with actual content of resource
  * @param mime MIME type of content, will be used to set right headers on http response
  */
+@OptIn(InternalAPI::class)
 data class StaticResource(val path: URIPath, val file: File, val mime: MimeType) : Visitable

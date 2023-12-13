@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.aws.event
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.resource.dynamic.LambdaFactory
@@ -9,6 +10,7 @@ import io.terraformkt.aws.resource.cloudwatch.cloudwatch_event_target
 import io.terraformkt.aws.resource.lambda.lambda_permission
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object ScheduledEventsFactory : GenerationFactory<Application.Events.Scheduled, Unit> {
     override fun mayRun(entity: Application.Events.Scheduled, context: GenerationContext): Boolean {
         return context.output.check(context.schema.lambdas[entity.lambda]!!, LambdaFactory)

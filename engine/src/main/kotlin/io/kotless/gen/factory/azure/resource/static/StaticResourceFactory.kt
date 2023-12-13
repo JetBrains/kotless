@@ -1,5 +1,6 @@
 package io.kotless.gen.factory.azure.resource.static
 
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
@@ -8,6 +9,7 @@ import io.kotless.terraform.functions.path
 import io.terraformkt.azurerm.resource.storage.storage_blob
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceFactory.Output> {
     data class Output(val blobName: String)
 

@@ -1,7 +1,6 @@
 package io.kotless.gen
 
-import io.kotless.Application
-import io.kotless.Schema
+import io.kotless.*
 import io.kotless.utils.*
 import io.terraformkt.hcl.HCLEntity
 
@@ -10,6 +9,7 @@ import io.terraformkt.hcl.HCLEntity
  *
  * It is populated by outputs of [GenerationFactory] and resources created by them as well
  */
+@OptIn(InternalAPI::class)
 class GenerationContext(val schema: Schema, val webapp: Application) {
 
     val output = Output()

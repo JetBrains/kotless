@@ -1,5 +1,6 @@
 package io.kotless.gen.factory.aws.resource.static
 
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.resource.StaticResource
@@ -7,6 +8,7 @@ import io.kotless.terraform.functions.*
 import io.terraformkt.aws.resource.s3.s3_bucket_object
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object StaticResourceFactory : GenerationFactory<StaticResource, StaticResourceFactory.Output> {
     data class Output(val key: String, val bucket: String)
 

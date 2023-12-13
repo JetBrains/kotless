@@ -1,5 +1,6 @@
 package io.kotless.gen.factory.aws.route
 
+import io.kotless.InternalAPI
 import io.kotless.URIPath
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.factory.aws.apigateway.RestAPIFactory
@@ -13,6 +14,7 @@ import io.terraformkt.hcl.ref
  *
  * Will create all intermediate resources
  */
+@OptIn(InternalAPI::class)
 open class AbstractRouteFactory {
     data class ResourceDescriptor(val ref: String, val id: String)
 

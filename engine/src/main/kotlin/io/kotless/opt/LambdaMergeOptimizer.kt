@@ -5,6 +5,7 @@ import io.kotless.KotlessConfig.Optimization
 import io.kotless.resource.Lambda
 import io.kotless.utils.*
 
+@OptIn(InternalAPI::class)
 object LambdaMergeOptimizer : SchemaOptimizer {
     private val key = Storage.Key<Int>()
 

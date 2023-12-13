@@ -12,6 +12,7 @@ import io.kotless.utils.Visitable
  *
  * @param dns alias to ApiGateway, if present
  */
+@OptIn(InternalAPI::class)
 data class Application(val dns: DNS?, val api: API, val events: Events) : Visitable {
     /**
      * Route53 CNAME alias

@@ -28,7 +28,11 @@ class Webapp(project: Project) : Serializable {
 
         @OptIn(InternalAPI::class)
         internal val mergedEnvironment: Map<String, String>
-            get() = environment + mapOf(KotlessAppConfig.PACKAGE_ENV_NAME to kotlessDSL.packages.joinToString(separator = ","))
+            get() = mapOf("JAVA_TOOL_OPTIONS" to "-XX:+TieredCompilation -XX:TieredStopAtLevel=1") + environment + mapOf(
+                KotlessAppConfig.PACKAGE_ENV_NAME to kotlessDSL.packages.joinToString(
+                    separator = ","
+                )
+            )
 
         @KotlessDSLTag
         class KotlessDSLRuntime(project: Project) : Serializable {

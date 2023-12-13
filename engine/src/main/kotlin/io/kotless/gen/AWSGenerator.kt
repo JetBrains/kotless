@@ -17,6 +17,7 @@ import io.kotless.resource.StaticResource
 import io.terraformkt.terraform.TFFile
 import kotlin.reflect.KClass
 
+@OptIn(InternalAPI::class)
 object AWSGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, StaticRoleFactory),

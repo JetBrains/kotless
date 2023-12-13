@@ -1,5 +1,6 @@
 package io.kotless.local.scheduled
 
+import io.kotless.InternalAPI
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.cloud.aws.CloudWatch
@@ -9,6 +10,7 @@ import io.kotless.utils.everyNMinutes
 import org.quartz.*
 import java.io.ByteArrayOutputStream
 
+@OptIn(InternalAPI::class)
 internal class AutowarmJob : Job {
     companion object {
         const val HANDLER_KEY = "LAMBDA_HANDLER"

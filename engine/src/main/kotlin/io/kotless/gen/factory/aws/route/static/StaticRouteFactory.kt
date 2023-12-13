@@ -1,7 +1,6 @@
 package io.kotless.gen.factory.aws.route.static
 
-import io.kotless.Application
-import io.kotless.HttpMethod
+import io.kotless.*
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.apigateway.RestAPIFactory
@@ -12,6 +11,7 @@ import io.kotless.terraform.functions.link
 import io.terraformkt.aws.resource.apigateway.*
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object StaticRouteFactory : GenerationFactory<Application.API.StaticRoute, StaticRouteFactory.Output>, AbstractRouteFactory() {
     data class Output(val integration: String)
 

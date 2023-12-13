@@ -1,7 +1,6 @@
 package io.kotless.parser.processor
 
-import io.kotless.Application
-import io.kotless.KotlessConfig
+import io.kotless.*
 import io.kotless.resource.Lambda
 import io.kotless.resource.StaticResource
 import io.kotless.utils.TypedStorage
@@ -13,6 +12,7 @@ import java.io.File
  * It includes resulting elements of Kotless Schema, set of already ran processors
  * and part of schema explicitly defined by user
  */
+@OptIn(InternalAPI::class)
 class ProcessorContext(val jar: File, val config: KotlessConfig, val lambda: Lambda.Config) {
     class Output(private val outputs: MutableMap<Processor<*>, Any> = HashMap()) {
         fun <T : Any> register(processor: Processor<T>, output: T) {

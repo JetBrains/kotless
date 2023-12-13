@@ -1,5 +1,6 @@
 package io.kotless.parser.ktor.processor.action
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.ktor.KotlessAzure
 import io.kotless.parser.processor.ProcessorContext
@@ -13,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
-
+@OptIn(InternalAPI::class)
 internal object GlobalActionsProcessor : SubTypesProcessor<GlobalActionsProcessor.Output>() {
     data class Output(val permissions: Set<Permission>)
 

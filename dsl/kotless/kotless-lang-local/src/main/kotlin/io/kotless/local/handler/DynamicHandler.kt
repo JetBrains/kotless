@@ -1,6 +1,7 @@
 package io.kotless.local.handler
 
 import io.kotless.HttpMethod
+import io.kotless.InternalAPI
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.cloud.aws.model.AwsHttpRequest
 import io.kotless.dsl.model.HttpResponse
@@ -12,7 +13,7 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
+@OptIn(InternalAPI::class)
 internal class DynamicHandler(private val handler: HandlerAWS) : AbstractHandler() {
     override fun handle(target: String, baseRequest: Request, request: HttpServletRequest, response: HttpServletResponse) {
         val apiRequest = AwsHttpRequest(

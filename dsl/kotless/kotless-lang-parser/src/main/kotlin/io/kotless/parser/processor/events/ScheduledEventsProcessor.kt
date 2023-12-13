@@ -1,6 +1,7 @@
 package io.kotless.parser.processor.events
 
 import io.kotless.Application.Events
+import io.kotless.InternalAPI
 import io.kotless.ScheduledEventType
 import io.kotless.dsl.lang.event.Scheduled
 import io.kotless.parser.processor.AnnotationProcessor
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import kotlin.math.absoluteValue
 
+@OptIn(InternalAPI::class)
 internal object ScheduledEventsProcessor : AnnotationProcessor<Unit>() {
     override val annotations = setOf(Scheduled::class)
 

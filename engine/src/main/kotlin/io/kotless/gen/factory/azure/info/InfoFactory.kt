@@ -1,7 +1,6 @@
 package io.kotless.gen.factory.azure.info
 
-import io.kotless.Application
-import io.kotless.KotlessConfig
+import io.kotless.*
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.terraformkt.azurerm.data.client.ClientConfig
@@ -15,6 +14,7 @@ import io.terraformkt.azurerm.data.subscription.subscription
 import io.terraformkt.azurerm.resource.storage.StorageContainer
 import io.terraformkt.azurerm.resource.storage.storage_container
 
+@OptIn(InternalAPI::class)
 object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
     data class Output(val resourceGroup: ResourceGroup, val storageAccount: StorageAccount,
                       val staticStorageContainer: StorageContainer,

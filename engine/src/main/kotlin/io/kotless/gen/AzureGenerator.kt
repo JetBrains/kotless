@@ -1,8 +1,6 @@
 package io.kotless.gen
 
-import io.kotless.Application
-import io.kotless.KotlessConfig
-import io.kotless.Schema
+import io.kotless.*
 import io.kotless.gen.factory.azure.event.ScheduledEventsFactory
 import io.kotless.gen.factory.azure.ZipArchiveFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
@@ -18,6 +16,7 @@ import io.kotless.resource.StaticResource
 import io.terraformkt.terraform.TFFile
 import kotlin.reflect.KClass
 
+@OptIn(InternalAPI::class)
 object AzureGenerator {
     private val factories: Map<KClass<*>, Set<GenerationFactory<*, *>>> = mapOf(
         Application::class to setOf(InfoFactory, ZipArchiveFactory, StorageFactory),

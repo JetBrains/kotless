@@ -17,6 +17,7 @@ import io.kotless.utils.Visitable
  * @param lambdas lambdas used in application
  * @param statics static resources used in application
  */
+@OptIn(InternalAPI::class)
 data class Schema(
     val config: KotlessConfig, val application: Application, val lambdas: TypedStorage<Lambda>, val statics: TypedStorage<StaticResource>
 ) : Visitable {

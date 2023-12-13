@@ -1,5 +1,6 @@
 package io.kotless.gen.factory.aws.resource.dynamic
 
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.aws.info.InfoFactory
@@ -14,6 +15,7 @@ import io.terraformkt.aws.resource.s3.s3_bucket_object
 import io.terraformkt.hcl.ref
 
 
+@OptIn(InternalAPI::class)
 object LambdaFactory : GenerationFactory<Lambda, LambdaFactory.Output> {
     data class Output(val lambda_arn: String, val lambda_name: String)
 

@@ -19,6 +19,7 @@ import io.kotless.utils.everyNMinutes
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 
+@OptIn(InternalAPI::class)
 internal object DynamicRoutesProcessor : SubTypesProcessor<Unit>() {
     private val functions = mapOf(
         "io.ktor.routing.get" to HttpMethod.GET,

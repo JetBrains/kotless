@@ -2,6 +2,7 @@ package io.kotless.parser.spring.processor.route
 
 import io.kotless.Application.API
 import io.kotless.Application.Events
+import io.kotless.InternalAPI
 import io.kotless.ScheduledEventType
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.springframework.web.bind.annotation.RestController
 
+@OptIn(InternalAPI::class)
 internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
     override val annotations = setOf(RestController::class)
 

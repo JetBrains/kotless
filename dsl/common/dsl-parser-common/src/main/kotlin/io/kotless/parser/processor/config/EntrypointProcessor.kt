@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
+@OptIn(InternalAPI::class)
 object EntrypointProcessor : SubTypesProcessor<EntrypointProcessor.Output>() {
     data class Output(val entrypoint: Lambda.Entrypoint)
 

@@ -10,6 +10,8 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.testcontainers.containers.localstack.LocalStackContainer
 import org.testcontainers.utility.ResourceReaper
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Class composing tasks to work with LocalStack.
@@ -91,6 +93,6 @@ internal class LocalStackRunner(private val isEnabled: Boolean, resources: Set<A
         logger.lifecycle("LocalStack stopped...")
     }
 
-    private fun AwsResource.toService() = LocalStackContainer.Service.valueOf(prefix.toUpperCase())
-    private fun LocalStackContainer.Service.toResource() = AwsResource.values().find { it.prefix.toUpperCase() == name }!!
+    private fun AwsResource.toService() = LocalStackContainer.Service.valueOf(prefix.uppercase(Locale.getDefault()))
+    private fun LocalStackContainer.Service.toResource() = AwsResource.values().find { it.prefix.uppercase(Locale.getDefault()) == name }!!
 }

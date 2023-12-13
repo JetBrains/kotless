@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
+@OptIn(InternalAPI::class)
 internal object StaticRoutesProcessor : SubTypesProcessor<Unit>() {
     private val functions = setOf(
         "io.ktor.http.content.file",

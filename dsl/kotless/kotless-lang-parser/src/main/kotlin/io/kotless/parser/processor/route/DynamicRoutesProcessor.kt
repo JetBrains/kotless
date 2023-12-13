@@ -1,9 +1,8 @@
 package io.kotless.parser.processor.route
 
+import io.kotless.*
 import io.kotless.Application.API
 import io.kotless.Application.Events
-import io.kotless.HttpMethod
-import io.kotless.ScheduledEventType
 import io.kotless.dsl.config.KotlessAppConfig
 import io.kotless.dsl.lang.http.*
 import io.kotless.parser.processor.AnnotationProcessor
@@ -20,6 +19,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 
+@OptIn(InternalAPI::class)
 internal object DynamicRoutesProcessor : AnnotationProcessor<Unit>() {
     private val methodAnnotations = mapOf(
         Get::class to HttpMethod.GET,

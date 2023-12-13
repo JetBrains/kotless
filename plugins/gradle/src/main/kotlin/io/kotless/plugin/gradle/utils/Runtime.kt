@@ -20,6 +20,7 @@ internal fun Project.getTargetVersion(): JavaVersion? {
 internal fun Runtime.isCompatible(target: JavaVersion) = when (this) {
     Runtime.Java8 -> JavaVersion.VERSION_1_8.isCompatibleWith(target)
     Runtime.Java11 -> JavaVersion.VERSION_11.isCompatibleWith(target)
+    Runtime.Java17 -> JavaVersion.VERSION_17.isCompatibleWith(target)
     Runtime.GraalVM -> JavaVersion.VERSION_11.isCompatibleWith(target)
     Runtime.Provided -> true
 }
@@ -28,6 +29,7 @@ internal fun Project.getRuntimeVersion(target: JavaVersion, config: KotlessConfi
     if (config.cloud.platform == CloudPlatform.Azure) return Runtime.Java8
     if (Runtime.Java8.isCompatible(target)) return Runtime.Java8
     if (Runtime.Java11.isCompatible(target)) return Runtime.Java11
+    if (Runtime.Java17.isCompatible(target)) return Runtime.Java17
 
     return null
 }

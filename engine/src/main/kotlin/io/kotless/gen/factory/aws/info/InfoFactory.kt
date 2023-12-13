@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.aws.info
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.terraformkt.aws.data.caller.caller_identity
@@ -8,6 +9,7 @@ import io.terraformkt.aws.data.region.region
 import io.terraformkt.aws.data.s3.s3_bucket
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object InfoFactory : GenerationFactory<Application, InfoFactory.Output> {
     data class Output(val account_id: String, val region_name: String, val kotless_bucket_arn: String)
 

@@ -1,6 +1,7 @@
 package io.kotless.gen.factory.azure.route53
 
 import io.kotless.Application
+import io.kotless.InternalAPI
 import io.kotless.gen.GenerationContext
 import io.kotless.gen.GenerationFactory
 import io.kotless.gen.factory.azure.info.InfoFactory
@@ -11,6 +12,7 @@ import io.terraformkt.azurerm.resource.dns.dns_cname_record
 import io.terraformkt.azurerm.resource.dns.dns_txt_record
 import io.terraformkt.hcl.ref
 
+@OptIn(InternalAPI::class)
 object RecordFactory : GenerationFactory<Application.DNS, RecordFactory.Output> {
     data class Output(val hostnameBinding: AppServiceCustomHostnameBinding)
 

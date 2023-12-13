@@ -199,7 +199,7 @@ class KotlessGradleConfig(project: Project) : Serializable {
                 @KotlessDSLTag
                 class AWS : ProviderGradle() {
                     /** Version of AWS provider to use */
-                    var version = "2.70.0"
+                    var version = "5.30.0"
 
                     var profile: String? = null
 

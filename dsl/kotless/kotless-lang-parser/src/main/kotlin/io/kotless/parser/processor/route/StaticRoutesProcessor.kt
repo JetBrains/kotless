@@ -1,7 +1,6 @@
 package io.kotless.parser.processor.route
 
-import io.kotless.Application
-import io.kotless.URIPath
+import io.kotless.*
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.parser.processor.AnnotationProcessor
 import io.kotless.parser.processor.ProcessorContext
@@ -17,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.io.File
 
+@OptIn(InternalAPI::class)
 internal object StaticRoutesProcessor : AnnotationProcessor<Unit>() {
     override fun mayRun(context: ProcessorContext) = true
 

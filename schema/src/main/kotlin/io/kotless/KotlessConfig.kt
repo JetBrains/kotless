@@ -11,6 +11,7 @@ import java.io.File
  * @param dsl configuration of DSL that will be used for Kotless application
  * @param optimization optimizations considered during generation of code
  */
+@OptIn(InternalAPI::class)
 data class KotlessConfig(
     val cloud: Cloud<*, *>,
     val dsl: DSL,

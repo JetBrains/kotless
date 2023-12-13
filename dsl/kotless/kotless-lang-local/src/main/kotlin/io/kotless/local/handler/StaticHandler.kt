@@ -1,5 +1,6 @@
 package io.kotless.local.handler
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.lang.http.StaticGet
 import io.kotless.dsl.reflection.ReflectionScanner
 import io.kotless.local.Environment
@@ -10,6 +11,7 @@ import java.io.File
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+@OptIn(InternalAPI::class)
 internal class StaticHandler : AbstractHandler() {
     private val fields by lazy { ReflectionScanner.fieldsWithAnnotation<StaticGet, File>().mapValues { File(Environment.workingDir, it.value.path) } }
 

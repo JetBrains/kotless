@@ -1,5 +1,6 @@
 package io.kotless.local.scheduled
 
+import io.kotless.InternalAPI
 import io.kotless.dsl.HandlerAWS
 import io.kotless.dsl.app.events.EventsReflectionScanner
 import io.kotless.dsl.cloud.aws.CloudWatch
@@ -7,6 +8,7 @@ import io.kotless.dsl.utils.JSON
 import org.quartz.*
 import java.io.ByteArrayOutputStream
 
+@OptIn(InternalAPI::class)
 internal class ScheduledJob : Job {
     companion object {
         const val ID_KEY = "SCHEDULED_ID"
