@@ -45,6 +45,9 @@ class Extensions : Serializable {
 
         /** Run AWS Mock for local development */
         var useAWSEmulation: Boolean = false
+
+        var debugPort: Int? = null
+        var suspendDebug: Boolean = false
     }
 
     internal val local = Local()

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless"
-version = "0.2.1"
+version = "0.2.2"
 
 plugins {
     id("io.gitlab.arturbosch.detekt") version ("1.15.0") apply true

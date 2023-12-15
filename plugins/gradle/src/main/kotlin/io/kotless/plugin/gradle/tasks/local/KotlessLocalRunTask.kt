@@ -83,6 +83,15 @@ internal open class KotlessLocalRunTask : DefaultTask() {
             }
 
             isIgnoreExitValue = true
+
+            if(myKotless.extensions.local.debugPort != null) {
+                debugOptions {
+                    it.enabled.set(true)
+                    it.server.set(true)
+                    it.port.set(myKotless.extensions.local.debugPort)
+                    it.suspend.set(myKotless.extensions.local.suspendDebug)
+                }
+            }
         }
 
         try {
