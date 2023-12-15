@@ -7,7 +7,7 @@ version = rootProject.version
 dependencies {
     api(project(":dsl:common:cloud:dsl-common-aws"))
 
-    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot2", Versions.serverlessContainers) {
+    api("com.amazonaws.serverless", "aws-serverless-java-container-springboot3", Versions.serverlessContainers) {
         exclude("org.slf4j", "slf4j-api")
     }
 

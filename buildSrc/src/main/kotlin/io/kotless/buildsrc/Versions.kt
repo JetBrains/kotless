@@ -14,8 +14,8 @@ object Versions {
 
     const val ktor = "1.5.0"
 
-    const val serverlessContainers = "1.9.3"
-    const val springBoot = "2.7.18"
+    const val serverlessContainers = "2.0.0-M2"
+    const val springBoot = "3.2.0"
     const val spring = "6.0.11"
 
     const val quartz = "2.3.2"
