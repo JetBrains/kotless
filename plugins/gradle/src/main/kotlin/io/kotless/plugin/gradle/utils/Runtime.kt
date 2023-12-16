@@ -5,7 +5,7 @@ import io.kotless.KotlessConfig
 import io.kotless.resource.Lambda.Config.Runtime
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.getTargetVersion(): JavaVersion? {
     val target = tasks.withType(KotlinJvmCompile::class.java).map { it.kotlinOptions.jvmTarget }.distinct()
@@ -21,6 +21,7 @@ internal fun Runtime.isCompatible(target: JavaVersion) = when (this) {
     Runtime.Java8 -> JavaVersion.VERSION_1_8.isCompatibleWith(target)
     Runtime.Java11 -> JavaVersion.VERSION_11.isCompatibleWith(target)
     Runtime.Java17 -> JavaVersion.VERSION_17.isCompatibleWith(target)
+    Runtime.Java21 -> JavaVersion.VERSION_21.isCompatibleWith(target)
     Runtime.GraalVM -> JavaVersion.VERSION_11.isCompatibleWith(target)
     Runtime.Provided -> true
 }
@@ -30,6 +31,7 @@ internal fun Project.getRuntimeVersion(target: JavaVersion, config: KotlessConfi
     if (Runtime.Java8.isCompatible(target)) return Runtime.Java8
     if (Runtime.Java11.isCompatible(target)) return Runtime.Java11
     if (Runtime.Java17.isCompatible(target)) return Runtime.Java17
+    if (Runtime.Java21.isCompatible(target)) return Runtime.Java21
 
     return null
 }

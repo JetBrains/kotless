@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 
+# 0.3.1 - 2023-12-16
+
+## Changed
+
+* Support java 21
+
 # 0.3.0 - 2023-12-16
 
 ## Changed

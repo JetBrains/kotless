@@ -6,12 +6,12 @@ version = rootProject.version
 
 
 plugins {
-    id("io.kotless") version "0.3.0" apply true
+    id("io.kotless") version "0.3.1" apply true
 }
 
 dependencies {
-    implementation("io.kotless", "ktor-lang-aws", "0.3.0")
-    implementation("io.kotless", "ktor-lang", "0.3.0")
+    implementation("io.kotless", "ktor-lang-aws", "0.3.1")
+    implementation("io.kotless", "ktor-lang", "0.3.1")
 
     implementation(project(":common:site-shared"))
 }

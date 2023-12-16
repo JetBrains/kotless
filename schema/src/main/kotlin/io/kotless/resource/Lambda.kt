@@ -42,6 +42,7 @@ data class Lambda(val name: String, val file: File, val entrypoint: Entrypoint, 
             Java8("java8"),
             Java11("java11"),
             Java17("java17"),
+            Java21("java21"),
             GraalVM("provided"),
             Provided("provided")
         }

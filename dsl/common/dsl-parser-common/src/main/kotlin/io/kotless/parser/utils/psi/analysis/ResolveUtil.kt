@@ -30,4 +30,4 @@ object ResolveUtil {
 }
 
 /** Forcefully resolves all contents inside KtElement or Descriptor */
-fun <T> T.forced(): T = ForceResolveUtil.forceResolveAllContents(this)
+fun <T : Any> T.forced(): T = ForceResolveUtil.forceResolveAllContents(this)

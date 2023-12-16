@@ -15,7 +15,7 @@ dependencies {
     implementation(project(":engine"))
 
     //Bundled plugins
-    implementation("com.github.jengelman.gradle.plugins", "shadow", "6.0.0")
+    implementation("com.github.johnrengelman", "shadow", "8.1.1")
     implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.1")
 
     implementation("org.apache.logging.log4j", "log4j-core", "2.16.0")

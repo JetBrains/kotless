@@ -36,7 +36,7 @@ platforms.
 
 Kotless uses Gradle to wrap around the existing building process and insert the deployment into it.
 
-Consider using one of the latest versions of Gradle, starting with the **7.6.3** version.
+Consider using one of the latest versions of Gradle, starting with the **8.5** version.
 
 Basically, if you already use Gradle, you only need to do two things.
 
@@ -79,7 +79,7 @@ plugins {
     //Version of Kotlin should be 1.9.21+
     kotlin("jvm") version "1.9.21" apply true
 
-    id("io.kotless") version "0.3.0" apply true
+    id("io.kotless") version "0.3.1" apply true
 }
 ```
 
@@ -93,21 +93,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "kotless-lang", "0.3.0")
-    implementation("io.kotless", "kotless-lang-aws", "0.3.0")
+    implementation("io.kotless", "kotless-lang", "0.3.1")
+    implementation("io.kotless", "kotless-lang-aws", "0.3.1")
 //    if you want to deploy to Microsoft Azure, just replace -aws with -azure    
-//    implementation("io.kotless", "ktor-lang-azure", "0.3.0")
+//    implementation("io.kotless", "ktor-lang-azure", "0.3.1")
 
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.5.0)
-    //implementation("io.kotless", "ktor-lang", "0.3.0")
-    //implementation("io.kotless", "ktor-lang-aws", "0.3.0")
-    //implementation("io.kotless", "ktor-lang-azure", "0.3.0")
+    //implementation("io.kotless", "ktor-lang", "0.3.1")
+    //implementation("io.kotless", "ktor-lang-aws", "0.3.1")
+    //implementation("io.kotless", "ktor-lang-azure", "0.3.1")
 
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 3.2.0)
-    //implementation("io.kotless", "spring-boot-lang", "0.3.0")
-    //implementation("io.kotless", "spring-boot-lang-aws", "0.3.0")
-    //implementation("io.kotless", "spring-boot-lang-azure", "0.3.0")
+    //implementation("io.kotless", "spring-boot-lang", "0.3.1")
+    //implementation("io.kotless", "spring-boot-lang-aws", "0.3.1")
+    //implementation("io.kotless", "spring-boot-lang-azure", "0.3.1")
 }
 ```
 
@@ -300,7 +300,7 @@ version
 
 For **Spring Boot** you should replace the starter you use (
 e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "3.2.0)`)
-with `implementation("io.kotless", "spring-boot-lang", "0.3.0")`. Note that this dependency bundles
+with `implementation("io.kotless", "spring-boot-lang", "0.3.1")`. Note that this dependency bundles
 Spring Boot of version `3.2.0`, so you also may need to upgrade other Spring Boot libraries to this
 version.
 

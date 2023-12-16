@@ -1,10 +1,10 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 group = "io.kotless"
-version = "0.3.0"
+version = "0.3.1"
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version ("1.15.0") apply true
+    id("io.gitlab.arturbosch.detekt") version ("1.23.4") apply true
     kotlin("jvm") version "1.9.21" apply false
     `maven-publish`
 }
@@ -56,9 +56,9 @@ subprojects {
 
     tasks.withType<KotlinJvmCompile> {
         kotlinOptions {
-            jvmTarget = "17"
-            languageVersion = "1.7"
-            apiVersion = "1.7"
+            jvmTarget = "21"
+            languageVersion = "2.1"
+            apiVersion = "2.1"
 
             freeCompilerArgs = freeCompilerArgs
         }
