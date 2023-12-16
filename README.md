@@ -36,7 +36,7 @@ platforms.
 
 Kotless uses Gradle to wrap around the existing building process and insert the deployment into it.
 
-Consider using one of the latest versions of Gradle, starting with the **7.2** version.
+Consider using one of the latest versions of Gradle, starting with the **7.6.3** version.
 
 Basically, if you already use Gradle, you only need to do two things.
 
@@ -76,10 +76,10 @@ version = "0.1.0"
 
 
 plugins {
-    //Version of Kotlin should be 1.3.72+
-    kotlin("jvm") version "1.5.31" apply true
+    //Version of Kotlin should be 1.9.21+
+    kotlin("jvm") version "1.9.21" apply true
 
-    id("io.kotless") version "0.2.0" apply true
+    id("io.kotless") version "0.3.0" apply true
 }
 ```
 
@@ -93,21 +93,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "kotless-lang", "0.2.0")
-    implementation("io.kotless", "kotless-lang-aws", "0.2.0")
+    implementation("io.kotless", "kotless-lang", "0.3.0")
+    implementation("io.kotless", "kotless-lang-aws", "0.3.0")
 //    if you want to deploy to Microsoft Azure, just replace -aws with -azure    
-//    implementation("io.kotless", "ktor-lang-azure", "0.2.0")
+//    implementation("io.kotless", "ktor-lang-azure", "0.3.0")
 
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.5.0)
-    //implementation("io.kotless", "ktor-lang", "0.2.0")
-    //implementation("io.kotless", "ktor-lang-aws", "0.2.0")
-    //implementation("io.kotless", "ktor-lang-azure", "0.2.0")
+    //implementation("io.kotless", "ktor-lang", "0.3.0")
+    //implementation("io.kotless", "ktor-lang-aws", "0.3.0")
+    //implementation("io.kotless", "ktor-lang-azure", "0.3.0")
 
-    //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 2.3.0.RELEASE)
-    //implementation("io.kotless", "spring-boot-lang", "0.2.0")
-    //implementation("io.kotless", "spring-boot-lang-aws", "0.2.0")
-    //implementation("io.kotless", "spring-boot-lang-azure", "0.2.0")
+    //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 3.2.0)
+    //implementation("io.kotless", "spring-boot-lang", "0.3.0")
+    //implementation("io.kotless", "spring-boot-lang-aws", "0.3.0")
+    //implementation("io.kotless", "spring-boot-lang-azure", "0.3.0")
 }
 ```
 
@@ -266,6 +266,15 @@ kotless {
         local {
             //enables AWS emulation (disabled by default)
             useAWSEmulation = true
+
+            //8080 is default if not supplied, this is mainly used when u want to run multiple kotless services local (give different port to each)
+            port = 8080
+            
+            //when supplying debug port the app with allow remote debug via this port (if you want to run multiple kotless locally provide different debug ports to each)
+            debugPort = 5005
+
+            //when set to 'true' the local kotless will wait until remote debug is attached 
+            suspendDebug = false
         }
     }
 }
@@ -290,9 +299,9 @@ version
 `1.5.0`, so you may need to upgrade other Ktor libraries (like `ktor-html-builder`) to this version.
 
 For **Spring Boot** you should replace the starter you use (
-e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "2.3.0.RELASE)`)
-with `implementation("io.kotless", "spring-boot-lang", "0.1.6")`. Note that this dependency bundles
-Spring Boot of version `2.4.2`, so you also may need to upgrade other Spring Boot libraries to this
+e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "3.2.0)`)
+with `implementation("io.kotless", "spring-boot-lang", "0.3.0")`. Note that this dependency bundles
+Spring Boot of version `3.2.0`, so you also may need to upgrade other Spring Boot libraries to this
 version.
 
 Once it is done, you may hit `deploy` task and make your application serverless. Note, that you will

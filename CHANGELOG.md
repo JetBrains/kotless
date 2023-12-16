@@ -3,6 +3,30 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 
+# 0.3.0 - 2023-12-16
+
+## Changed
+
+* Support spring-boot 3
+
+# 0.2.3 - 2023-12-16
+
+## Changed
+
+* Upgrade dependencies and support higher spring-boot
+
+# 0.2.2 - 2023-12-16
+
+## Added
+
+* Support remote debug of local kotless via extension args - debugPort, suspendDebug
+
+# 0.2.1 - 2023-12-16
+
+## Changed
+
+* Support java 17
+
 # 0.2.0 - 2021-10-19
 
 * Introduce support of Azure cloud 

@@ -5,11 +5,11 @@ version = rootProject.version
 
 
 plugins {
-    id("io.kotless") version "0.2.0" apply true
+    id("io.kotless") version "0.3.0" apply true
 }
 
 dependencies {
-    implementation("io.kotless", "spring-boot-lang", "0.2.0")
+    implementation("io.kotless", "spring-boot-lang", "0.3.0")
 
     implementation(project(":common:site-shared"))
 }

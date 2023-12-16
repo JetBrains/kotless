@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 
 group = "io.kotless.examples"
-version = "0.2.0"
+version = "0.3.0"
 
 plugins {
-    kotlin("jvm") version "1.5.31" apply false
+    kotlin("jvm") version "1.9.21" apply false
 }
 
 subprojects {
@@ -21,9 +21,9 @@ subprojects {
 
     tasks.withType<KotlinJvmCompile> {
         kotlinOptions {
-            jvmTarget = "11"
-            languageVersion = "1.5"
-            apiVersion = "1.5"
+            jvmTarget = "17"
+            languageVersion = "1.7"
+            apiVersion = "1.7"
         }
     }
 }
