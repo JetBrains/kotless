@@ -26,6 +26,9 @@ class Webapp(project: Project) : Serializable {
         /** Runtime used to start Lambdas. By default, would be equal to the lowest compatible version.  */
         var runtime: Runtime? = null
 
+        /** When runtime=GraalVM the given packages will be registered for reflection (to work with json serialize/deserialize).  */
+        var graalModelPackages: List<String>? = null
+
         @OptIn(InternalAPI::class)
         internal val mergedEnvironment: Map<String, String>
             get() = mapOf("JAVA_TOOL_OPTIONS" to "-XX:+TieredCompilation -XX:TieredStopAtLevel=1") + environment + mapOf(

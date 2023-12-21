@@ -26,8 +26,6 @@ internal object KotlessLocalTasks {
         with(tasks) {
             val local = LocalStackRunner(kotless.extensions.local.useAWSEmulation, AwsResource.forLocalStart)
 
-            convention.getPlugin<ApplicationPluginConvention>().mainClassName = kotless.config.dsl.typeOrDefault.descriptor.localEntryPoint
-
             if (kotless.extensions.local.useAWSEmulation) {
                 setupLocalWithAWSEmulation(local, download)
             } else {

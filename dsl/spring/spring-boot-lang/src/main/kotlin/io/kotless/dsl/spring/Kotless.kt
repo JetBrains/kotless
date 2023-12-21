@@ -11,6 +11,7 @@ import io.kotless.dsl.utils.JSON
 import org.slf4j.LoggerFactory
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 /**
@@ -24,17 +25,16 @@ abstract class Kotless : RequestStreamHandler {
     companion object {
         private val logger = LoggerFactory.getLogger(Kotless::class.java)
 
-        private var prepared: Boolean = false
+        private val classToHandler = ConcurrentHashMap<KClass<*>, SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse>>()
 
-        private var handler: SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse>? = null
+        fun getHandler(bootKlass: KClass<*>): SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> {
+            return classToHandler.computeIfAbsent(bootKlass) { SpringBootLambdaContainerHandler.getAwsProxyHandler(bootKlass.java) }
+        }
     }
 
     @InternalAPI
     override fun handleRequest(input: InputStream, output: OutputStream, context: Context) {
-        if (!prepared) {
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(bootKlass.java)
-            prepared = true
-        }
+        val handler = getHandler(bootKlass)
 
         val json = input.bufferedReader().use { it.readText() }
 

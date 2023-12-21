@@ -5,8 +5,10 @@ import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.*
 import io.kotless.plugin.gradle.utils.gradle.*
 import org.gradle.api.DefaultTask
+import org.gradle.api.plugins.ApplicationPluginConvention
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getPlugin
 import java.io.File
 
 /**
@@ -95,6 +97,7 @@ internal open class KotlessLocalRunTask : DefaultTask() {
         }
 
         try {
+            convention.getPlugin<ApplicationPluginConvention>().mainClassName = kotless.config.dsl.typeOrDefault.descriptor.localEntryPoint
             run.exec()
         } catch (e: Throwable) {
             logger.lifecycle("Gracefully shutting down Kotless local")

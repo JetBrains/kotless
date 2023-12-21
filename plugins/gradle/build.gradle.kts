@@ -17,6 +17,18 @@ dependencies {
     //Bundled plugins
     implementation("com.github.johnrengelman", "shadow", "8.1.1")
     implementation("com.kotlin.aws.runtime", "plugin-graalvm", "0.1.3")
+    implementation("org.springframework.boot", "spring-boot-gradle-plugin", "3.2.0") {
+        exclude("com.fasterxml.jackson")
+        exclude("com.fasterxml.jackson.core")
+        exclude("com.fasterxml.jackson.dataformat")
+        exclude("com.fasterxml.jackson.module")
+    }
+    implementation("org.graalvm.buildtools", "native-gradle-plugin", "0.9.28") {
+        exclude("com.fasterxml.jackson")
+        exclude("com.fasterxml.jackson.core")
+        exclude("com.fasterxml.jackson.dataformat")
+        exclude("com.fasterxml.jackson.module")
+    }
 
     implementation("org.apache.logging.log4j", "log4j-core", "2.16.0")
 
