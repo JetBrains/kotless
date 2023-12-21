@@ -16,7 +16,7 @@ dependencies {
 
     //Bundled plugins
     implementation("com.github.johnrengelman", "shadow", "8.1.1")
-    implementation("io.kcdk", "io.kcdk.gradle.plugin", "0.1.1")
+    implementation("com.kotlin.aws.runtime", "plugin-graalvm", "0.1.3")
 
     implementation("org.apache.logging.log4j", "log4j-core", "2.16.0")
 
@@ -26,7 +26,9 @@ dependencies {
     //utils
     implementation("org.codehaus.plexus", "plexus-utils", "3.3.0")
     implementation("org.codehaus.plexus", "plexus-archiver", "4.2.1")
-    implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0")
+    implementation("org.codehaus.plexus", "plexus-container-default", "2.1.0") {
+        exclude("com.google.collections", "google-collections")
+    }
 
     //terraform DSL
     implementation("io.terraformkt.providers:aws:3.14.1-0.1.4")

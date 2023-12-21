@@ -22,7 +22,7 @@ internal fun Runtime.isCompatible(target: JavaVersion) = when (this) {
     Runtime.Java11 -> JavaVersion.VERSION_11.isCompatibleWith(target)
     Runtime.Java17 -> JavaVersion.VERSION_17.isCompatibleWith(target)
     Runtime.Java21 -> JavaVersion.VERSION_21.isCompatibleWith(target)
-    Runtime.GraalVM -> JavaVersion.VERSION_11.isCompatibleWith(target)
+    Runtime.GraalVM -> JavaVersion.VERSION_21.isCompatibleWith(target)
     Runtime.Provided -> true
 }
 
