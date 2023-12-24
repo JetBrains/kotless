@@ -1,15 +1,15 @@
 package io.kotless.plugin.gradle.spring.resources
 
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 
 object RuntimeHintsSource {
     val type = GenerateAdapter.SourceType.Kotlin
-    val filePath = "com/kotlin/aws/runtime/RuntimeHints.kt"
+    val filePath = "io/kotless/graal/aws/runtime/RuntimeHints.kt"
     val data = { additionalPackages: List<String>? ->
         val packages = listOf("com.amazonaws.serverless.proxy.model") + (additionalPackages ?: emptyList())
 
         """                        
-            package com.kotlin.aws.runtime
+            package io.kotless.graal.aws.runtime
 
             import org.springframework.aot.hint.MemberCategory
             import org.springframework.aot.hint.RuntimeHints

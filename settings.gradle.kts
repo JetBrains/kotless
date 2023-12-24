@@ -25,5 +25,6 @@ include(":dsl:ktor:ktor-lang-parser")
 include(":dsl:ktor:cloud:ktor-lang-aws")
 include(":dsl:ktor:cloud:ktor-lang-azure")
 
+include(":runtimes:graal-runtime")
 include(":plugins:gradle")
 

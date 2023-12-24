@@ -1,6 +1,6 @@
 package io.kotless.plugin.gradle.spring.resources
 
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 
 object LambdaContainerHandlerSource {
     val type = GenerateAdapter.SourceType.Java

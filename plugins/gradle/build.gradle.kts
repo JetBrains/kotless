@@ -3,6 +3,10 @@ import io.kotless.buildsrc.Versions
 group = rootProject.group
 version = rootProject.version
 
+repositories {
+    mavenLocal()
+}
+
 dependencies {
     implementation(gradleApi())
     implementation(gradleKotlinDsl())
@@ -16,7 +20,7 @@ dependencies {
 
     //Bundled plugins
     implementation("com.github.johnrengelman", "shadow", "8.1.1")
-    implementation("com.kotlin.aws.runtime", "plugin-graalvm", "0.1.3")
+    implementation("com.bmuschko", "gradle-docker-plugin", "6.7.0")
     implementation("org.springframework.boot", "spring-boot-gradle-plugin", "3.2.0") {
         exclude("com.fasterxml.jackson")
         exclude("com.fasterxml.jackson.core")

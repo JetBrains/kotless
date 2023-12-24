@@ -1,10 +1,11 @@
 package io.kotless.plugin.gradle
 
-import com.kotlin.aws.runtime.dsl.runtime
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
 import io.kotless.DSLType
+import io.kotless.plugin.gradle.graal.dsl.runtime
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.*
+import io.kotless.plugin.gradle.graal.RuntimeKotlinGradlePlugin
 import io.kotless.plugin.gradle.spring.resources.*
 import io.kotless.plugin.gradle.utils.gradle.*
 import org.codehaus.plexus.util.Os
@@ -24,11 +25,19 @@ object KotlessRuntimeTasks {
             return
         }
 
+        val dsl = Dependencies.dsl(project)
+        val (_, dependency) = dsl.entries.single()
+        val version = dependency.version ?: error("Explicit version is required for Kotless DSL dependency.")
+
         dependencies {
-            myImplementation("com.kotlin.aws.runtime", "runtime-graalvm", "0.1.3")
+            myImplementation(
+                "io.kotless",
+                "graal-runtime",
+                version
+            )
         }
 
-        applyPluginSafely("com.kotlin.aws.runtime")
+        RuntimeKotlinGradlePlugin().apply(project)
 
         val qualifiedName = LocalParser.parse(project.myKtSourceSet.toSet(), Dependencies.getDependencies(project)).entrypoint.qualifiedName
         val mainClass = qualifiedName.split("::")[0]

@@ -29,6 +29,7 @@ subprojects {
     task<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
         from(sourceSets["main"]!!.allSource)
+        this.exclude("io/kotless/graal/runtime/Adapter.class")
     }
 
     publishing {
