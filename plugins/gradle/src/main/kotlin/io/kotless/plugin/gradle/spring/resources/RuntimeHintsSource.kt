@@ -1,15 +1,19 @@
 package io.kotless.plugin.gradle.spring.resources
 
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 
 object RuntimeHintsSource {
     val type = GenerateAdapter.SourceType.Kotlin
-    val filePath = "com/kotlin/aws/runtime/RuntimeHints.kt"
-    val data = { additionalPackages: List<String>? ->
-        val packages = listOf("com.amazonaws.serverless.proxy.model") + (additionalPackages ?: emptyList())
+    val filePath = "io/kotless/graal/aws/runtime/RuntimeHints.kt"
+    val data = { apiPackages: List<String>?, modelPackages: List<String>? ->
+        val fullModelPackages = listOf("com.amazonaws.serverless.proxy.model") + (modelPackages ?: emptyList())
 
+        val apiPackagesListStr = if (apiPackages != null) "listOf(${apiPackages.joinToString(", ") { "\"$it\"" }})" else "emptyList<String>()"
+        val modelPackagesListStr = "listOf(${fullModelPackages.joinToString(", "){ "\"$it\"" }})"
+
+        //language=kotlin
         """                        
-            package com.kotlin.aws.runtime
+            package io.kotless.graal.aws.runtime
 
             import org.springframework.aot.hint.MemberCategory
             import org.springframework.aot.hint.RuntimeHints
@@ -18,9 +22,27 @@ object RuntimeHintsSource {
 
             class RuntimeHints : RuntimeHintsRegistrar {
                 override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader) {
+                    val proxies = hints.proxies()
                     val reflection = hints.reflection()
 
-${packages.joinToString("\n") { readPackageLogic(it) }}
+                    val apiPackages = $apiPackagesListStr
+                    val modelPackages = $modelPackagesListStr
+                    
+                    apiPackages.forEach { apiPackage ->
+                        getPackageClasses(apiPackage).forEach { clazz ->
+                            proxies.registerJdkProxy(clazz)                            
+                        }                         
+                    }
+
+                    modelPackages.forEach { modelPackage ->
+                        getPackageClasses(modelPackage).forEach { clazz ->
+                            reflection.registerType(
+                                clazz,
+                                MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS,
+                                MemberCategory.INVOKE_PUBLIC_METHODS
+                            )
+                        }
+                    }
                 }
 
                 private fun getPackageClasses(path: String): List<Class<*>> {
@@ -33,19 +55,5 @@ ${packages.joinToString("\n") { readPackageLogic(it) }}
                 }
             }
         """.trimIndent()
-    }
-
-    private fun readPackageLogic(pkg: String): String {
-        val tabs = "    ".repeat(5)
-
-        return """
-            getPackageClasses("$pkg").forEach {
-                reflection.registerType(
-                    it,
-                    MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS,
-                    MemberCategory.INVOKE_PUBLIC_METHODS
-                )
-            }
-        """.replaceIndent(tabs)
     }
 }

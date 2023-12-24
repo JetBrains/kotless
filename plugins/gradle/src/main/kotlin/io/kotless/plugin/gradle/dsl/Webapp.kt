@@ -4,6 +4,7 @@ import io.kotless.InternalAPI
 import io.kotless.dsl.config.KotlessAppConfig
 import io.kotless.resource.Lambda.Config.Runtime
 import org.gradle.api.Project
+import java.io.File
 import java.io.Serializable
 
 /**
@@ -25,9 +26,6 @@ class Webapp(project: Project) : Serializable {
 
         /** Runtime used to start Lambdas. By default, would be equal to the lowest compatible version.  */
         var runtime: Runtime? = null
-
-        /** When runtime=GraalVM the given packages will be registered for reflection (to work with json serialize/deserialize).  */
-        var graalModelPackages: List<String>? = null
 
         @OptIn(InternalAPI::class)
         internal val mergedEnvironment: Map<String, String>
@@ -58,6 +56,34 @@ class Webapp(project: Project) : Serializable {
     @KotlessDSLTag
     fun lambda(configure: Lambda.() -> Unit) {
         lambda.configure()
+    }
+
+    @KotlessDSLTag
+    /** This only applies when runtime=GraalVM and dsl is spring-boot */
+    class Graal : Serializable {
+        /** the given binds will be added to the build image on same level as kotless dir.  */
+        var buildImageAdditionalBinds: List<File>? = null
+
+        /** the given packages will be registered for proxy.  */
+        var apiPackages: List<String>? = null
+
+        /** the given packages will be registered for reflection (to work with json serialize/deserialize).  */
+        var modelPackages: List<String>? = null
+
+        /** will add the following as build args.  */
+        var buildArgs: List<String>? = null
+
+        /** validation main - this will be invoked during compilation to make sure special cases are covered.
+         * it will be called as: ${validationClass}.run()
+        */
+        var validationMainPackage: String? = null
+    }
+
+    internal val graal: Graal = Graal()
+
+    @KotlessDSLTag
+    fun graal(configure: Graal.() -> Unit) {
+        graal.configure()
     }
 
     /** Deployment definition of ApiGateway. Recreated each redeploy. */

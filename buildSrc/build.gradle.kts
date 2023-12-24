@@ -4,7 +4,7 @@ repositories {
 }
 
 plugins {
-    id("tanvd.kosogor") version "1.0.10" apply true
+    id("tanvd.kosogor") version "1.0.21" apply true
     `kotlin-dsl` apply true
 }
 

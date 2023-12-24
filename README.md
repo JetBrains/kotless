@@ -79,7 +79,7 @@ plugins {
     //Version of Kotlin should be 1.9.21+
     kotlin("jvm") version "1.9.21" apply true
 
-    id("io.kotless") version "0.3.1" apply true
+    id("io.kotless") version "0.3.2" apply true
 }
 ```
 
@@ -93,21 +93,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.kotless", "kotless-lang", "0.3.1")
-    implementation("io.kotless", "kotless-lang-aws", "0.3.1")
+    implementation("io.kotless", "kotless-lang", "0.3.2")
+    implementation("io.kotless", "kotless-lang-aws", "0.3.2")
 //    if you want to deploy to Microsoft Azure, just replace -aws with -azure    
-//    implementation("io.kotless", "ktor-lang-azure", "0.3.1")
+//    implementation("io.kotless", "ktor-lang-azure", "0.3.2")
 
 
     //or for Ktor (Note, that `ktor-lang` depends on Ktor version 1.5.0)
-    //implementation("io.kotless", "ktor-lang", "0.3.1")
-    //implementation("io.kotless", "ktor-lang-aws", "0.3.1")
-    //implementation("io.kotless", "ktor-lang-azure", "0.3.1")
+    //implementation("io.kotless", "ktor-lang", "0.3.2")
+    //implementation("io.kotless", "ktor-lang-aws", "0.3.2")
+    //implementation("io.kotless", "ktor-lang-azure", "0.3.2")
 
     //or for Spring Boot (Note, that `spring-boot-lang` depends on Spring Boot version 3.2.0)
-    //implementation("io.kotless", "spring-boot-lang", "0.3.1")
-    //implementation("io.kotless", "spring-boot-lang-aws", "0.3.1")
-    //implementation("io.kotless", "spring-boot-lang-azure", "0.3.1")
+    //implementation("io.kotless", "spring-boot-lang", "0.3.2")
+    //implementation("io.kotless", "spring-boot-lang-aws", "0.3.2")
+    //implementation("io.kotless", "spring-boot-lang-azure", "0.3.2")
 }
 ```
 
@@ -300,7 +300,7 @@ version
 
 For **Spring Boot** you should replace the starter you use (
 e.g. `implementation("org.springframework.boot", "spring-boot-starter-web", "3.2.0)`)
-with `implementation("io.kotless", "spring-boot-lang", "0.3.1")`. Note that this dependency bundles
+with `implementation("io.kotless", "spring-boot-lang", "0.3.2")`. Note that this dependency bundles
 Spring Boot of version `3.2.0`, so you also may need to upgrade other Spring Boot libraries to this
 version.
 

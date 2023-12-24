@@ -1,15 +1,23 @@
 package io.kotless.plugin.gradle.spring.resources
 
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 
 object MainSource {
-    val className = "com.kotless.spring.boot.graal.MainKt"
+    val className = "io.kotless.spring.boot.graal.MainKt"
     val type = GenerateAdapter.SourceType.Kotlin
-    val filePath = "com/kotless/spring/boot/graal/Main.kt"
-    val data = { mainClass: String ->
+    val filePath = "io/kotless/spring/boot/graal/Main.kt"
+    val data = { mainClass: String, validationMainPackage: String? ->
+        val ident = " ".repeat(16)
+
+        val validationString = if(validationMainPackage == null) "" else """
+            else {
+            $ident    $validationMainPackage.main()
+            $ident}
+        """.trimIndent()
+
         //language=kotlin
         """                        
-            package com.kotless.spring.boot.graal
+            package io.kotless.spring.boot.graal
 
             import io.kotless.dsl.spring.Kotless
 
@@ -21,8 +29,8 @@ object MainSource {
                 val environment = System.getenv()
 
                 if (environment["_HANDLER"]?.isNotEmpty() == true) {
-                    com.kotlin.aws.runtime.main()
-                }
+                    io.kotless.graal.aws.runtime.main()
+                } $validationString
             }
         """.trimIndent()
     }

@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+# 0.3.2 - 2023-12-25
+
+## Changed
+
+* Support graal for spring-boot
 
 # 0.3.1 - 2023-12-16
 

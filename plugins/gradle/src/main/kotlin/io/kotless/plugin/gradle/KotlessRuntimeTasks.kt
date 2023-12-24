@@ -1,10 +1,11 @@
 package io.kotless.plugin.gradle
 
-import com.kotlin.aws.runtime.dsl.runtime
-import com.kotlin.aws.runtime.tasks.GenerateAdapter
 import io.kotless.DSLType
 import io.kotless.parser.LocalParser
 import io.kotless.plugin.gradle.dsl.*
+import io.kotless.plugin.gradle.graal.RuntimeKotlinGradlePlugin
+import io.kotless.plugin.gradle.graal.dsl.runtime
+import io.kotless.plugin.gradle.graal.tasks.GenerateAdapter
 import io.kotless.plugin.gradle.spring.resources.*
 import io.kotless.plugin.gradle.utils.gradle.*
 import org.codehaus.plexus.util.Os
@@ -24,11 +25,19 @@ object KotlessRuntimeTasks {
             return
         }
 
+        val dsl = Dependencies.dsl(project)
+        val (_, dependency) = dsl.entries.single()
+        val version = dependency.version ?: error("Explicit version is required for Kotless DSL dependency.")
+
         dependencies {
-            myImplementation("com.kotlin.aws.runtime", "runtime-graalvm", "0.1.3")
+            myImplementation(
+                "io.kotless",
+                "graal-runtime",
+                version
+            )
         }
 
-        applyPluginSafely("com.kotlin.aws.runtime")
+        RuntimeKotlinGradlePlugin().apply(project)
 
         val qualifiedName = LocalParser.parse(project.myKtSourceSet.toSet(), Dependencies.getDependencies(project)).entrypoint.qualifiedName
         val mainClass = qualifiedName.split("::")[0]
@@ -36,21 +45,27 @@ object KotlessRuntimeTasks {
         val homePath = getHomePath()
 
         //for caching
-        val graalGradle = File(buildDir, "graal-gradle")
+        val graalGradle = File(buildDir.parentFile.parentFile.parent, "build/graal-gradle")
 
         runtime {
             handler = qualifiedName
             classAnnotations = "@OptIn(io.kotless.InternalAPI::class)"
             config {
                 image = "ghcr.io/graalvm/graalvm-community:21"
-                additionalSources = getAdditionalResources(kotless, mainClass)
-                dockerBuildDirOverride = buildDir.parentFile.parentFile.parent
-                dockerVolumesBind = mapOf(
-                    getM2RepoPath(homePath) to "/root/.m2/repository",
-                    graalGradle.absolutePath to "/root/.gradle/"
-                )
-                dockerAdditionalInstructions = getDockerAdditionalInstructions(kotless)
-                dockerBuildCommand = getDockerBuildCommand(project.path, kotless)
+                flags = kotless.webapp.graal.buildArgs
+
+                if (kotless.config.dsl.typeOrDefault == DSLType.SpringBoot) {
+                    additionalSources = getAdditionalResources(kotless, mainClass)
+                    dockerBuildDirOverride = buildDir.parentFile.parentFile.parent
+                    dockerVolumesBind = mapOf(
+                        getM2RepoPath(homePath) to "/root/.m2/repository",
+                        graalGradle.absolutePath to "/root/.gradle/"
+                    ) + (kotless.webapp.graal.buildImageAdditionalBinds ?: emptyList()).map { file ->
+                        file.absolutePath to "/app/build/${file.name}"
+                    }
+                    dockerAdditionalInstructions = getDockerAdditionalInstructions(kotless)
+                    dockerBuildCommand = getDockerBuildCommand(project.path, kotless)
+                }
             }
         }
 
@@ -74,6 +89,12 @@ object KotlessRuntimeTasks {
                 "-Dspring.graal.remove-unused-autoconfig=true",
                 "-Dspring.graal.remove-yaml-support=true"
             )
+
+            val graalBuildArgs = kotless.webapp.graal.buildArgs
+
+            if (graalBuildArgs != null) {
+                graalVmExtensionBinaries.buildArgs(graalBuildArgs)
+            }
         } else {
             convention.getPlugin<ApplicationPluginConvention>().mainClassName = kotless.config.dsl.typeOrDefault.descriptor.localEntryPoint
         }
@@ -89,7 +110,7 @@ object KotlessRuntimeTasks {
                 ),
                 GenerateAdapter.Source(
                     filePath = MainSource.filePath,
-                    data = MainSource.data(mainClass),
+                    data = MainSource.data(mainClass, kotless.webapp.graal.validationMainPackage),
                     type = MainSource.type
                 ),
                 GenerateAdapter.Source(
@@ -99,7 +120,10 @@ object KotlessRuntimeTasks {
                 ),
                 GenerateAdapter.Source(
                     filePath = RuntimeHintsSource.filePath,
-                    data = RuntimeHintsSource.data(kotless.webapp.lambda.graalModelPackages),
+                    data = RuntimeHintsSource.data(
+                        kotless.webapp.graal.apiPackages,
+                        kotless.webapp.graal.modelPackages
+                    ),
                     type = RuntimeHintsSource.type
                 )
             )
@@ -113,6 +137,7 @@ object KotlessRuntimeTasks {
             val path = "PATH=\$PATH:\$GRADLE_HOME/bin"
 
             return listOf(
+                "RUN microdnf install -y rsync",
                 "RUN microdnf install -y wget",
                 "RUN microdnf install -y unzip",
                 "RUN wget https://services.gradle.org/distributions/gradle-8.5-all.zip",
@@ -131,17 +156,20 @@ object KotlessRuntimeTasks {
             val projectName = normalizedProjectPath.split("/").last()
             val nativeFolderDest = "/working/build$normalizedProjectPath/build/native"
             val nativeFileDest = "$nativeFolderDest/$projectName-graal"
+            val env = kotless.webapp.lambda.environment.entries.joinToString(" ") { (key, value) -> "export $key=$value;" }
 
             return """
                 rm -rf /root/.gradle/daemon; \             
-                mkdir -p /app/build; \                
-                cp -r /working/build/kotless /app/build; \
+                mkdir -p /app/build; \
+                rsync -a --exclude=build /working/build/kotless /app/build; \
                 cp /working/build/build.gradle.kts /app/build; \
                 cp /working/build/settings.gradle.kts /app/build; \
                 cd /app/build; \
-                gradle $projectPath:nativeCompile; \
+                $env gradle $projectPath:nativeCompile; \
+                rm -rf $nativeFolderDest; \
                 mkdir -p $nativeFolderDest; \
-                cp /app/build$normalizedProjectPath/build/native/nativeCompile/$projectName $nativeFileDest; \
+                cp -rp /app/build$normalizedProjectPath/build/native/nativeCompile/* $nativeFolderDest; \
+                mv $nativeFolderDest/$projectName $nativeFileDest; \
                 chmod -R 777 $nativeFolderDest; \
                 chmod +x $nativeFileDest
             """.trimIndent()
