@@ -52,6 +52,27 @@ internal object KotlessDeployTasks {
                 operation = TerraformOperationTask.Operation.APPLY
             }
 
+            val initializeExistingBuild = myCreate<TerraformOperationTask>("initializeExistingBuild") {
+                group = Groups.`kotless setup`
+
+                dependsOn(download, generate)
+
+                root = kotless.config.deployGenDirectory
+
+                operation = TerraformOperationTask.Operation.INIT
+            }
+
+            myCreate<TerraformOperationTask>("deployExistingBuild") {
+                group = Groups.kotless
+
+                dependsOn(initializeExistingBuild)
+
+                root = kotless.config.deployGenDirectory
+
+                operation = TerraformOperationTask.Operation.APPLY
+            }
+
+
             if (kotless.extensions.terraform.allowDestroy) {
                 myCreate<TerraformOperationTask>("destroy") {
                     group = Groups.kotless
