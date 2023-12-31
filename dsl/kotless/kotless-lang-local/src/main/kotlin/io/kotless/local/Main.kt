@@ -9,5 +9,13 @@ fun main() {
     val local = LocalServer(port)
 
     local.start()
-    local.join()
+
+    while (true) {
+        print("type 'exit' to close the app gracefully: ")
+        val line = readlnOrNull()
+
+        if(line == "exit") {
+            break
+        }
+    }
 }

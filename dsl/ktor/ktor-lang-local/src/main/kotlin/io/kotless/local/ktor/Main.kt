@@ -17,7 +17,20 @@ fun main() {
 
     val kotless = instance ?: error("The entry point $classToStart does not inherit from ${KotlessAWS::class.qualifiedName}!")
 
-    embeddedServer(Netty, port) {
+    val embeddedServer = embeddedServer(Netty, port) {
         kotless.prepare(this)
-    }.start(wait = true)
+    }
+
+    embeddedServer.start(wait = true)
+
+    while (true) {
+        print("type 'exit' to close the app gracefully: ")
+        val line = readlnOrNull()
+
+        if(line == "exit") {
+            break
+        }
+    }
+
+    embeddedServer.stop(0, 0)
 }

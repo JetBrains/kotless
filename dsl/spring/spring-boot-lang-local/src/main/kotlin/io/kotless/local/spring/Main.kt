@@ -4,6 +4,7 @@ import io.kotless.Constants
 import io.kotless.InternalAPI
 import io.kotless.dsl.spring.Kotless
 import org.springframework.boot.SpringApplication
+import java.util.Scanner
 import kotlin.reflect.full.primaryConstructor
 
 @OptIn(InternalAPI::class)
@@ -19,5 +20,16 @@ fun main() {
 
     val app = SpringApplication(kotless.bootKlass.java)
     app.setDefaultProperties(mapOf("server.port" to port.toString()))
-    app.run()
+    val configurableApplicationContext = app.run()
+
+    while (true) {
+        print("type 'exit' to close the app gracefully: ")
+        val line = readlnOrNull()
+
+        if(line == "exit") {
+            break
+        }
+    }
+
+    configurableApplicationContext.close()
 }
