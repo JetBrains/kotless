@@ -50,7 +50,7 @@ internal object ConfigureGraal {
             it.group = Groups.graal
             it.dependsOn(nativeBuild)
             it.from(outputDirectory)
-            it.from(generateBootstrap(buildDir, nativeFileName))
+            it.from(generateBootstrap(buildDir, nativeFileName, runtime.config.memoryMb))
         }
     }
 
@@ -144,7 +144,7 @@ internal object ConfigureGraal {
         }
     }
 
-    private fun generateBootstrap(buildDir: File, nativeFileName: String): File {
+    private fun generateBootstrap(buildDir: File, nativeFileName: String, memoryMb: Int): File {
         val file = File(buildDir, "bootstrap")
         file.delete()
 
@@ -162,7 +162,7 @@ internal object ConfigureGraal {
             """
             #!/bin/sh
             set -euo pipefail
-            ./${nativeFileName}
+            ./${nativeFileName} -Xmx${memoryMb}m
             """.trimIndent()
         )
         return file

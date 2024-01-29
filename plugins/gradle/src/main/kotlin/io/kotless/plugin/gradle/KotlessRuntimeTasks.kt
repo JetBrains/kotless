@@ -53,6 +53,7 @@ object KotlessRuntimeTasks {
             config {
                 image = "ghcr.io/graalvm/graalvm-community:21"
                 flags = kotless.webapp.graal.buildArgs
+                memoryMb = kotless.webapp.lambda.memoryMb
 
                 if (kotless.config.dsl.typeOrDefault == DSLType.SpringBoot) {
                     additionalSources = getAdditionalResources(kotless, mainClass)
@@ -87,7 +88,9 @@ object KotlessRuntimeTasks {
             val graalVmExtensionBinaries = extensions.getByType(GraalVMExtension::class.java).binaries.getByName("main")
             graalVmExtensionBinaries.buildArgs(
                 "-Dspring.graal.remove-unused-autoconfig=true",
-                "-Dspring.graal.remove-yaml-support=true"
+                "-Dspring.graal.remove-yaml-support=true",
+                "--strict-image-heap",
+                "-march=compatibility"
             )
 
             val graalBuildArgs = kotless.webapp.graal.buildArgs

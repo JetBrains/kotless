@@ -51,6 +51,7 @@ class RuntimePluginExtension : Serializable {
     class RuntimeConfig : Serializable {
         var reflectConfiguration: String? = null
         var flags: List<String>? = null
+        var memoryMb: Int = 1024
         var useFullFlgas: Boolean = false
         var image: String? = null
         var dockerBuildDirOverride: String? = null
