@@ -59,7 +59,13 @@ internal object ConfigureGraal {
         val nativeFileName = file.nameWithoutExtension
         return tasks.create("createDockerfile", Dockerfile::class.java) { dockerfile ->
             generateReflect(buildDir)
-            val graalImage = runtime.config.getImageOrDefault()
+            val graalImage = runtime.config.getImageOrDefault().let { image ->
+                if(!image.contains("--platform")) {
+                    "--platform=linux/amd64 $image"
+                } else {
+                    image
+                }
+            }
             dockerfile.group = Groups.`graal setup`
             dockerfile.from(graalImage)
             dockerfile.instruction("RUN mkdir -p /working/build")
